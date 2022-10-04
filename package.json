@@ -6,7 +6,9 @@
     ],
     "nohoist": [
       "**/typeorm/**",
-      "**/typeorm"
+      "**/typeorm",
+      "**/@nestjs",
+      "**/@nestjs/**"
     ]
   },
   "name": "app",

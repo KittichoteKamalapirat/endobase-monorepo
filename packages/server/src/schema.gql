@@ -1,0 +1,75 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Container {
+  id: ID!
+  trays: [Tray!]!
+}
+
+type Tray {
+  id: ID!
+  row: Float!
+  endo: Endo!
+  containerId: String!
+  container: Container!
+}
+
+type Endo {
+  id: ID!
+  brand: String!
+  type: String!
+  model: String!
+  trayId: String!
+  status: String!
+  tray: Tray!
+}
+
+type Query {
+  endos: [Endo!]!
+  endo(id: String!): Endo!
+  containers: [Container!]!
+  container(id: Int!): Container!
+  trays: [Tray!]!
+  tray(id: Int!): Tray!
+}
+
+type Mutation {
+  createEndo(input: CreateEndoInput!): Endo!
+  useEndo(id: String!): Endo!
+  createContainer(createContainerInput: CreateContainerInput!): Container!
+  updateContainer(updateContainerInput: UpdateContainerInput!): Container!
+  removeContainer(id: Int!): Container!
+  createTray(createTrayInput: CreateTrayInput!): Tray!
+  updateTray(updateTrayInput: UpdateTrayInput!): Tray!
+  removeTray(id: Int!): Tray!
+}
+
+input CreateEndoInput {
+  trayId: String!
+  brand: String!
+  type: String!
+  model: String!
+}
+
+input CreateContainerInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateContainerInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateTrayInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTrayInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

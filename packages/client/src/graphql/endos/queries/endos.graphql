@@ -1,0 +1,9 @@
+query endos {
+  endos {
+    id
+    trayId
+    brand
+    type
+    model
+  }
+}

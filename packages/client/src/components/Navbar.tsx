@@ -31,20 +31,15 @@ const Navbar = () => {
             <path
               fillRule="evenodd"
               d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             ></path>
           </svg>
         </button>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg  border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white   ">
             <li>
-              <a
-                href="#"
-                className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 "
-              >
-                {/* <WalletBalance /> */}
-                <Link to="/search">Search</Link>
-              </a>
+              {/* <WalletBalance /> */}
+              <Link to="/search">Search</Link>
             </li>
           </ul>
         </div>

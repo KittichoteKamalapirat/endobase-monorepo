@@ -59,14 +59,14 @@ type Container {
 type Query {
   endos: [Endo!]!
   endo(id: String!): Endo!
+  sessions: [Session!]!
+  session(id: Int!): Session!
   containers: [Container!]!
   container(id: Int!): Container!
   trays: [Tray!]!
   tray(id: Int!): Tray!
   actions: [Action!]!
   action(id: Int!): Action!
-  sessions: [Session!]!
-  session(id: Int!): Session!
   officers: [Officer!]!
   officer(id: Int!): Officer!
   patients: [Patient!]!
@@ -76,6 +76,9 @@ type Query {
 type Mutation {
   createEndo(input: CreateEndoInput!): Endo!
   useEndo(id: String!): Endo!
+  createSession(createSessionInput: CreateSessionInput!): Session!
+  updateSession(updateSessionInput: UpdateSessionInput!): Session!
+  removeSession(id: Int!): Session!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   updateContainer(updateContainerInput: UpdateContainerInput!): Container!
   removeContainer(id: Int!): Container!
@@ -85,9 +88,6 @@ type Mutation {
   createAction(createActionInput: CreateActionInput!): Action!
   updateAction(updateActionInput: UpdateActionInput!): Action!
   removeAction(id: Int!): Action!
-  createSession(createSessionInput: CreateSessionInput!): Session!
-  updateSession(updateSessionInput: UpdateSessionInput!): Session!
-  removeSession(id: Int!): Session!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
@@ -101,6 +101,17 @@ input CreateEndoInput {
   brand: String!
   type: String!
   model: String!
+}
+
+input CreateSessionInput {
+  """For create a session for an endoscope"""
+  endoId: String!
+}
+
+input UpdateSessionInput {
+  """For create a session for an endoscope"""
+  endoId: String
+  id: Int!
 }
 
 input CreateContainerInput {
@@ -135,17 +146,6 @@ input CreateActionInput {
 }
 
 input UpdateActionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreateSessionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateSessionInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

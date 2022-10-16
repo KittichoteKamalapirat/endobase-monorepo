@@ -4,12 +4,14 @@ import { Endo, ENDO_STATUS } from './entities/endo.entity';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { port } from '../serialports/serialports.service';
+import { SessionsService } from '../sessions/sessions.service';
 
 @Injectable()
 export class EndosService {
   constructor(
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
+    private sessionsService: SessionsService,
   ) {}
 
   async findAll(): Promise<Endo[]> {
@@ -23,9 +25,7 @@ export class EndosService {
   }
 
   async createEndo(input: CreateEndoInput): Promise<Endo> {
-    console.log('input', input);
     const newEndo = this.endosRepository.create(input);
-    console.log('newEndo', newEndo);
     return this.endosRepository.save(newEndo);
   }
 
@@ -47,5 +47,13 @@ export class EndosService {
       ...endo,
       status: ENDO_STATUS.BEING_USED,
     });
+  }
+
+  createSession(endoId: string) {
+    return this.sessionsService.create({ endoId });
+  }
+
+  findSessionByEndoId(endoId: string) {
+    return this.sessionsService.findByEndoId(endoId);
   }
 }

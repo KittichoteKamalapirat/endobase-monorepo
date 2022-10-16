@@ -30,7 +30,7 @@ export class Session {
   endo: Endo;
 
   // Patient
-  @Column()
+  @Column({ nullable: true })
   @Field()
   patientId: string;
 

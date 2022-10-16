@@ -1,8 +1,14 @@
 import { useMemo } from "react";
-import { useTable, Column } from "react-table";
+import { Column, useTable } from "react-table";
 import { useEndosQuery } from "../../generated/graphql";
 import { Error } from "../skeletons/Error";
 import { Loading } from "../skeletons/Loading";
+import Table from "../Table/Table";
+import TBody from "../Table/TBody";
+import TD from "../Table/TD";
+import TH from "../Table/TH";
+import THead from "../Table/THead";
+import TR from "../Table/TR";
 import { myColumns } from "./myColumns";
 
 // 1. get the data
@@ -56,35 +62,35 @@ const EndosTable = () => {
   }
 
   return (
-    <table className="table-auto" {...getTableProps()}>
-      <thead>
+    <Table {...getTableProps()}>
+      <THead>
         {headerGroups.map((group) => (
-          <tr {...group.getHeaderGroupProps}>
+          <TR {...group.getHeaderGroupProps}>
             {group.headers.map((col) => (
-              <th {...col.getHeaderProps()}>{col.render("Header")}</th>
+              <TH {...col.getHeaderProps()}>{col.render("Header")}</TH>
             ))}
-          </tr>
+          </TR>
         ))}
-      </thead>
-      <tbody {...getTableBodyProps}>
+      </THead>
+      <TBody {...getTableBodyProps}>
         {rows.map((row, index) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()} key={index}>
+            <TR {...row.getRowProps()} key={index}>
               {row.cells.map((cell: any, index) => (
-                <td
+                <TD
                   {...cell.getCellProps()}
                   isNumeric={cell.column.isNumeric}
                   key={index}
                 >
                   {cell.render("Cell")}
-                </td>
+                </TD>
               ))}
-            </tr>
+            </TR>
           );
         })}
-      </tbody>
-    </table>
+      </TBody>
+    </Table>
   );
 };
 

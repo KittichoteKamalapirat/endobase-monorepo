@@ -7,14 +7,22 @@ import { AppService } from './app.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Endo } from './endos/endo.entity';
-import { EndosModule } from './endos/endo.module';
+import { Container } from './resources/containers/entities/container.entity';
+import { Endo } from './resources/endos/entities/endo.entity';
+import { Tray } from './resources/trays/entities/tray.entity';
+import { Officer } from './resources/officers/entities/officer.entity';
+import { Patient } from './resources/patients/entities/patient.entity';
+import { Action } from './resources/actions/entities/action.entity';
+import { Session } from './resources/sessions/entities/session.entity';
 
-import { ContainersModule } from './containers/containers.module';
-import { Container } from './containers/entities/container.entity';
-import { TraysModule } from './trays/trays.module';
-import { Tray } from './trays/entities/tray.entity';
-import { SerialportsModule } from './serialports/serialports.module';
+import { ContainersModule } from './resources/containers/containers.module';
+import { ActionsModule } from './resources/actions/actions.module';
+import { EndosModule } from './resources/endos/endo.module';
+import { OfficersModule } from './resources/officers/officers.module';
+import { PatientsModule } from './resources/patients/patients.module';
+import { SerialportsModule } from './resources/serialports/serialports.module';
+import { SessionsModule } from './resources/sessions/sessions.module';
+import { TraysModule } from './resources/trays/trays.module';
 
 @Module({
   imports: [
@@ -32,7 +40,7 @@ import { SerialportsModule } from './serialports/serialports.module';
       username: 'postgres',
       password: 'chain123',
       database: 'endobase_dev',
-      entities: [Endo, Container, Tray],
+      entities: [Endo, Container, Tray, Action, Patient, Session, Officer],
       synchronize: true,
     }),
     // resoureces
@@ -40,6 +48,10 @@ import { SerialportsModule } from './serialports/serialports.module';
     ContainersModule,
     TraysModule,
     SerialportsModule,
+    ActionsModule,
+    SessionsModule,
+    OfficersModule,
+    PatientsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

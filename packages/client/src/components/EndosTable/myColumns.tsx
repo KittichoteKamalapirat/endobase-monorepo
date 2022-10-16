@@ -1,14 +1,16 @@
 // id, brand, model, type, storage time
 
+import Button from "../Buttons/Button";
+
 export const myColumns = () => {
   return [
     {
-      Header: "ID",
+      Header: "No.",
       accessor: "id",
     },
     {
       Header: "Brand",
-      accessor: "rbrand",
+      accessor: "brand",
     },
     {
       Header: "Model",
@@ -21,6 +23,13 @@ export const myColumns = () => {
     {
       Header: "Storage Time",
       accessor: "storageTime",
+    },
+    {
+      Header: "Action",
+      // accessor: "",
+      Cell: () => {
+        return <Button label="use" />;
+      },
     },
   ];
 };

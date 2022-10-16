@@ -2,9 +2,45 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Container {
+type Officer {
   id: ID!
-  trays: [Tray!]!
+  offNum: String!
+  actions: [Action!]!
+}
+
+type Action {
+  id: ID!
+  passed: Boolean!
+  sessionId: Boolean!
+  session: Session!
+  officer: Officer!
+  type: String!
+}
+
+type Patient {
+  id: ID!
+  hosNum: String!
+  sessions: [Session!]!
+}
+
+type Session {
+  id: ID!
+  endoId: String!
+  endo: Endo!
+  patientId: String!
+  patient: Patient!
+  actions: [Action!]!
+}
+
+type Endo {
+  id: ID!
+  brand: String!
+  type: String!
+  model: String!
+  trayId: String!
+  tray: Tray!
+  sessions: [Session!]!
+  status: String!
 }
 
 type Tray {
@@ -15,14 +51,9 @@ type Tray {
   container: Container!
 }
 
-type Endo {
+type Container {
   id: ID!
-  brand: String!
-  type: String!
-  model: String!
-  trayId: String!
-  status: String!
-  tray: Tray!
+  trays: [Tray!]!
 }
 
 type Query {
@@ -32,6 +63,14 @@ type Query {
   container(id: Int!): Container!
   trays: [Tray!]!
   tray(id: Int!): Tray!
+  actions: [Action!]!
+  action(id: Int!): Action!
+  sessions: [Session!]!
+  session(id: Int!): Session!
+  officers: [Officer!]!
+  officer(id: Int!): Officer!
+  patients: [Patient!]!
+  patient(id: Int!): Patient!
 }
 
 type Mutation {
@@ -40,9 +79,21 @@ type Mutation {
   createContainer(createContainerInput: CreateContainerInput!): Container!
   updateContainer(updateContainerInput: UpdateContainerInput!): Container!
   removeContainer(id: Int!): Container!
-  createTray(createTrayInput: CreateTrayInput!): Tray!
+  createTray(input: CreateTrayInput!): Tray!
   updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
+  createAction(createActionInput: CreateActionInput!): Action!
+  updateAction(updateActionInput: UpdateActionInput!): Action!
+  removeAction(id: Int!): Action!
+  createSession(createSessionInput: CreateSessionInput!): Session!
+  updateSession(updateSessionInput: UpdateSessionInput!): Session!
+  removeSession(id: Int!): Session!
+  createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
+  updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
+  removeOfficer(id: Int!): Officer!
+  createPatient(createPatientInput: CreatePatientInput!): Patient!
+  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
+  removePatient(id: Int!): Patient!
 }
 
 input CreateEndoInput {
@@ -64,11 +115,59 @@ input UpdateContainerInput {
 }
 
 input CreateTrayInput {
+  containerId: String!
+
+  """row inside a container"""
+  row: Int!
+}
+
+input UpdateTrayInput {
+  containerId: String
+
+  """row inside a container"""
+  row: Int
+  id: Int!
+}
+
+input CreateActionInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-input UpdateTrayInput {
+input UpdateActionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateSessionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSessionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateOfficerInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOfficerInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreatePatientInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePatientInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

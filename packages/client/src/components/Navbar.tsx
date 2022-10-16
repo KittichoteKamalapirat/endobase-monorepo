@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
+import { brandName } from "../constants";
+import { urlResolver } from "../lib/UrlResolver";
 import logo from "../logo.svg";
 
 const Navbar = () => {
   return (
     <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded ">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
-        <a href="https://www.gomugomu.art" className="flex items-center">
+        <a href={urlResolver.index()} className="flex items-center">
           <img src={logo} className="mr-3 h-6 sm:h-9" alt="Gomugomu logo" />
-          <span className="self-center text-xl font-semibold whitespace-nowrap ">
-            GomuGomu
+          <span className="self-center text-xl font-semibold whitespace-nowrap hover:underline">
+            {brandName}
           </span>
         </a>
         <button

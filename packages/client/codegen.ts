@@ -1,8 +1,9 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
+import { urlResolver } from "./src/lib/UrlResolver";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: "http://localhost:4001/graphql",
+  schema: urlResolver.graphql(),
   documents: "src/graphql/**/*.graphql",
   generates: {
     "src/generated/graphql.tsx": {

@@ -37,8 +37,9 @@ export class EndosResolver {
     const existingSessions = await this.endosService.findSessionByEndoId(id);
     if (existingSessions.patientId === null)
       return new Error('This endoscope is alrealdy in use');
-    const session = await this.endosService.createSession(id);
-    console.log('session', session);
+
+    // create a session
+    await this.endosService.createSession(id);
 
     return this.endosService.useEndo(id);
   }

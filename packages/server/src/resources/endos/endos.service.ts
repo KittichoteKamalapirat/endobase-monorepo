@@ -33,6 +33,8 @@ export class EndosService {
     await this.endosRepository.delete(id);
   }
 
+  // update LED color
+  // update endo status
   async useEndo(id: string): Promise<Endo> {
     const endo = await this.endosRepository.findOneBy({ id });
 

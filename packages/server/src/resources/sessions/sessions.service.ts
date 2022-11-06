@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
-import { Session } from './entities/session.entity';
+import { Session, SESSION_STATUS } from './entities/session.entity';
 
 @Injectable()
 export class SessionsService {
@@ -26,7 +26,13 @@ export class SessionsService {
   }
 
   findByEndoId(endoId: string) {
-    return this.sessionsRepository.findOne({ where: { endoId } });
+    return this.sessionsRepository.find({ where: { endoId } });
+  }
+
+  findCurrentSessionByEndoId(endoId: string) {
+    return this.sessionsRepository.findOne({
+      where: { endoId, status: SESSION_STATUS.ONGOING },
+    });
   }
 
   update(id: number, updateSessionInput: UpdateSessionInput) {

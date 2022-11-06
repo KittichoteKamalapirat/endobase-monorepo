@@ -1,8 +1,12 @@
 // edit here and in theme.ts
 
+// for showing color status
 const green = "#57B65F";
 const blue = "#4E97F3";
 const yellow = "#FDAE5B";
+const red = "#D2042D";
+const orange = "#FFA500";
+const black = "#000000";
 
 // white grey and black
 const grey0 = "#FFFFFF";
@@ -81,8 +85,11 @@ module.exports = {
         "primary-hovered": primaryHoveredColor,
         yellow: yellow,
         action: green,
+        red: red,
         green: green,
         blue: blue,
+        orange: orange,
+        black: black,
       },
     },
   },

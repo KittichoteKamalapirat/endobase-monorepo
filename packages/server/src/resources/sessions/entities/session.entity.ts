@@ -13,12 +13,23 @@ import { Patient } from '../../patients/entities/patient.entity';
 // relations
 // ManyToOne: endoscope, patient
 // OneToMany actions
+
+export const SESSION_STATUS = {
+  ONGOING: 'ongoing',
+  COMPLETE: 'complete',
+} as const;
+
+// type SESSION_STATUS = 'ongoing' | 'complete';
 @ObjectType()
 @Entity()
 export class Session {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
   id: string;
+
+  @Column({ default: SESSION_STATUS.ONGOING })
+  @Field(() => String)
+  status: string;
 
   // Endo
   @Column()

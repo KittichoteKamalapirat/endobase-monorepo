@@ -26,7 +26,7 @@ export class EndosResolver {
   }
 
   @Mutation(() => Endo)
-  async useEndo(
+  async pickEndo(
     @Args({ name: 'id', type: () => String }) id: string,
   ): Promise<Endo | Error> {
     // TODO add validation (like if the session is created already, don't do it)
@@ -34,14 +34,17 @@ export class EndosResolver {
 
     const endo = await this.endosService.findOne(id);
     if (!endo) return new Error('Cannot find the endoscope');
-    const existingSessions = await this.endosService.findSessionByEndoId(id);
-    if (existingSessions.patientId === null)
-      return new Error('This endoscope is alrealdy in use');
+    const existingSession = await this.endosService.findCurrentSessionByEndoId(
+      id,
+    );
+    if (existingSession) return;
+    // if (existingSessions.patientId === null)
+    //   return new Error('This endoscope is alrealdy in use');
 
     // create a session
     await this.endosService.createSession(id);
 
-    return this.endosService.useEndo(id);
+    return this.endosService.pickEndo(id);
   }
 
   //   @ResolveField()

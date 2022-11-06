@@ -35,7 +35,7 @@ export class EndosService {
 
   // update LED color
   // update endo status
-  async useEndo(id: string): Promise<Endo> {
+  async pickEndo(id: string): Promise<Endo> {
     const endo = await this.endosRepository.findOneBy({ id });
 
     port.write(':L00(255,000,000)\r\n)', (err) => {
@@ -55,7 +55,7 @@ export class EndosService {
     return this.sessionsService.create({ endoId });
   }
 
-  findSessionByEndoId(endoId: string) {
-    return this.sessionsService.findByEndoId(endoId);
+  findCurrentSessionByEndoId(endoId: string) {
+    return this.sessionsService.findCurrentSessionByEndoId(endoId);
   }
 }

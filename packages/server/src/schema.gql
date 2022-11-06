@@ -25,6 +25,7 @@ type Patient {
 
 type Session {
   id: ID!
+  status: String!
   endoId: String!
   endo: Endo!
   patientId: String!
@@ -75,7 +76,7 @@ type Query {
 
 type Mutation {
   createEndo(input: CreateEndoInput!): Endo!
-  useEndo(id: String!): Endo!
+  pickEndo(id: String!): Endo!
   createSession(createSessionInput: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   removeSession(id: Int!): Session!

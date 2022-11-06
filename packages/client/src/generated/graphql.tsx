@@ -15,10 +15,25 @@ export type Scalars = {
   Float: number;
 };
 
+export type Action = {
+  __typename?: 'Action';
+  id: Scalars['ID'];
+  officer: Officer;
+  passed: Scalars['Boolean'];
+  session: Session;
+  sessionId: Scalars['Boolean'];
+  type: Scalars['String'];
+};
+
 export type Container = {
   __typename?: 'Container';
   id: Scalars['ID'];
   trays: Array<Tray>;
+};
+
+export type CreateActionInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int'];
 };
 
 export type CreateContainerInput = {
@@ -33,9 +48,25 @@ export type CreateEndoInput = {
   type: Scalars['String'];
 };
 
-export type CreateTrayInput = {
+export type CreateOfficerInput = {
   /** Example field (placeholder) */
   exampleField: Scalars['Int'];
+};
+
+export type CreatePatientInput = {
+  /** Example field (placeholder) */
+  exampleField: Scalars['Int'];
+};
+
+export type CreateSessionInput = {
+  /** For create a session for an endoscope */
+  endoId: Scalars['String'];
+};
+
+export type CreateTrayInput = {
+  containerId: Scalars['String'];
+  /** row inside a container */
+  row: Scalars['Int'];
 };
 
 export type Endo = {
@@ -43,6 +74,7 @@ export type Endo = {
   brand: Scalars['String'];
   id: Scalars['ID'];
   model: Scalars['String'];
+  sessions: Array<Session>;
   status: Scalars['String'];
   tray: Tray;
   trayId: Scalars['String'];
@@ -51,14 +83,31 @@ export type Endo = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAction: Action;
   createContainer: Container;
   createEndo: Endo;
+  createOfficer: Officer;
+  createPatient: Patient;
+  createSession: Session;
   createTray: Tray;
+  pickEndo: Endo;
+  removeAction: Action;
   removeContainer: Container;
+  removeOfficer: Officer;
+  removePatient: Patient;
+  removeSession: Session;
   removeTray: Tray;
+  updateAction: Action;
   updateContainer: Container;
+  updateOfficer: Officer;
+  updatePatient: Patient;
+  updateSession: Session;
   updateTray: Tray;
-  useEndo: Endo;
+};
+
+
+export type MutationCreateActionArgs = {
+  createActionInput: CreateActionInput;
 };
 
 
@@ -72,12 +121,52 @@ export type MutationCreateEndoArgs = {
 };
 
 
+export type MutationCreateOfficerArgs = {
+  createOfficerInput: CreateOfficerInput;
+};
+
+
+export type MutationCreatePatientArgs = {
+  createPatientInput: CreatePatientInput;
+};
+
+
+export type MutationCreateSessionArgs = {
+  createSessionInput: CreateSessionInput;
+};
+
+
 export type MutationCreateTrayArgs = {
-  createTrayInput: CreateTrayInput;
+  input: CreateTrayInput;
+};
+
+
+export type MutationPickEndoArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationRemoveActionArgs = {
+  id: Scalars['Int'];
 };
 
 
 export type MutationRemoveContainerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationRemoveOfficerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationRemovePatientArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationRemoveSessionArgs = {
   id: Scalars['Int'];
 };
 
@@ -87,8 +176,28 @@ export type MutationRemoveTrayArgs = {
 };
 
 
+export type MutationUpdateActionArgs = {
+  updateActionInput: UpdateActionInput;
+};
+
+
 export type MutationUpdateContainerArgs = {
   updateContainerInput: UpdateContainerInput;
+};
+
+
+export type MutationUpdateOfficerArgs = {
+  updateOfficerInput: UpdateOfficerInput;
+};
+
+
+export type MutationUpdatePatientArgs = {
+  updatePatientInput: UpdatePatientInput;
+};
+
+
+export type MutationUpdateSessionArgs = {
+  updateSessionInput: UpdateSessionInput;
 };
 
 
@@ -96,19 +205,41 @@ export type MutationUpdateTrayArgs = {
   updateTrayInput: UpdateTrayInput;
 };
 
+export type Officer = {
+  __typename?: 'Officer';
+  actions: Array<Action>;
+  id: Scalars['ID'];
+  offNum: Scalars['String'];
+};
 
-export type MutationUseEndoArgs = {
-  id: Scalars['String'];
+export type Patient = {
+  __typename?: 'Patient';
+  hosNum: Scalars['String'];
+  id: Scalars['ID'];
+  sessions: Array<Session>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  action: Action;
+  actions: Array<Action>;
   container: Container;
   containers: Array<Container>;
   endo: Endo;
   endos: Array<Endo>;
+  officer: Officer;
+  officers: Array<Officer>;
+  patient: Patient;
+  patients: Array<Patient>;
+  session: Session;
+  sessions: Array<Session>;
   tray: Tray;
   trays: Array<Tray>;
+};
+
+
+export type QueryActionArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -122,8 +253,33 @@ export type QueryEndoArgs = {
 };
 
 
+export type QueryOfficerArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryPatientArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QuerySessionArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryTrayArgs = {
   id: Scalars['Int'];
+};
+
+export type Session = {
+  __typename?: 'Session';
+  actions: Array<Action>;
+  endo: Endo;
+  endoId: Scalars['String'];
+  id: Scalars['ID'];
+  patient: Patient;
+  patientId: Scalars['String'];
 };
 
 export type Tray = {
@@ -135,24 +291,94 @@ export type Tray = {
   row: Scalars['Float'];
 };
 
+export type UpdateActionInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
+};
+
 export type UpdateContainerInput = {
   /** Example field (placeholder) */
   exampleField?: InputMaybe<Scalars['Int']>;
   id: Scalars['Int'];
 };
 
-export type UpdateTrayInput = {
+export type UpdateOfficerInput = {
   /** Example field (placeholder) */
   exampleField?: InputMaybe<Scalars['Int']>;
   id: Scalars['Int'];
 };
 
+export type UpdatePatientInput = {
+  /** Example field (placeholder) */
+  exampleField?: InputMaybe<Scalars['Int']>;
+  id: Scalars['Int'];
+};
+
+export type UpdateSessionInput = {
+  /** For create a session for an endoscope */
+  endoId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+};
+
+export type UpdateTrayInput = {
+  containerId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
+  /** row inside a container */
+  row?: InputMaybe<Scalars['Int']>;
+};
+
+export type PickEndoMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string } };
+
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string }> };
 
 
+export const PickEndoDocument = gql`
+    mutation pickEndo($id: String!) {
+  pickEndo(id: $id) {
+    id
+    trayId
+    brand
+    type
+    model
+    status
+  }
+}
+    `;
+export type PickEndoMutationFn = Apollo.MutationFunction<PickEndoMutation, PickEndoMutationVariables>;
+
+/**
+ * __usePickEndoMutation__
+ *
+ * To run a mutation, you first call `usePickEndoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePickEndoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pickEndoMutation, { data, loading, error }] = usePickEndoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePickEndoMutation(baseOptions?: Apollo.MutationHookOptions<PickEndoMutation, PickEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PickEndoMutation, PickEndoMutationVariables>(PickEndoDocument, options);
+      }
+export type PickEndoMutationHookResult = ReturnType<typeof usePickEndoMutation>;
+export type PickEndoMutationResult = Apollo.MutationResult<PickEndoMutation>;
+export type PickEndoMutationOptions = Apollo.BaseMutationOptions<PickEndoMutation, PickEndoMutationVariables>;
 export const EndosDocument = gql`
     query endos {
   endos {
@@ -161,6 +387,7 @@ export const EndosDocument = gql`
     brand
     type
     model
+    status
   }
 }
     `;

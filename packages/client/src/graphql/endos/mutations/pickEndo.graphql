@@ -1,5 +1,5 @@
-query endos {
-  endos {
+mutation pickEndo($id: String!) {
+  pickEndo(id: $id) {
     id
     trayId
     brand

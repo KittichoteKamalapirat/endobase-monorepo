@@ -1,9 +1,18 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Officer } from '../../officers/entities/officer.entity';
 import { Session } from '../../sessions/entities/session.entity';
 
-export const ACTION_TYPE = {
+export type ACTION_TYPE = 'leak_test_and_prewash' | 'disinfect' | 'store';
+
+export const ACTION_TYPE_OBJ = {
   LEAK_TEST_AND_PREWASH: 'leak_test_and_prewash',
   // PREWASH: 'prewash',
   DISINFECT: 'disinfect',
@@ -34,11 +43,23 @@ export class Action {
   @Field(() => Session)
   session: Session;
 
+  @Column()
+  @Field()
+  officerId: string;
+
   @ManyToOne(() => Officer, (officer) => officer.actions)
   @Field(() => Officer)
   officer: Officer;
 
   @Column()
   @Field()
-  type: string;
+  type: ACTION_TYPE;
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

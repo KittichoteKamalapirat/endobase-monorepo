@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { create } from 'domain';
 import { Repository } from 'typeorm';
 import { CreateTrayInput } from './dto/create-tray.input';
 import { UpdateTrayInput } from './dto/update-tray.input';

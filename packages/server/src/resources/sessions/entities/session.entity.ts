@@ -1,10 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Action } from '../../actions/entities/action.entity';
 import { Endo } from '../../endos/entities/endo.entity';
@@ -42,7 +44,7 @@ export class Session {
 
   // Patient
   @Column({ nullable: true })
-  @Field()
+  @Field({ nullable: true })
   patientId: string;
 
   @ManyToOne(() => Patient, (patient) => patient.sessions)
@@ -51,6 +53,14 @@ export class Session {
 
   // actions
   @OneToMany(() => Action, (action) => action.session)
-  @Field(() => [Action])
+  @Field(() => [Action], { nullable: true })
   actions: Action[];
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

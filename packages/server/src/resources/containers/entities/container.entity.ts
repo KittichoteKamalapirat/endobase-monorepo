@@ -1,6 +1,13 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Tray } from '../../trays/entities/tray.entity';
 
 @Entity()
@@ -17,4 +24,12 @@ export class Container {
   @OneToMany(() => Tray, (tray) => tray.container)
   @Field(() => [Tray])
   trays: Tray[];
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

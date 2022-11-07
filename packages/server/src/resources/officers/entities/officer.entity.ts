@@ -1,6 +1,13 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Action } from '../../actions/entities/action.entity';
 
 // relations
@@ -21,4 +28,12 @@ export class Officer {
   @OneToMany(() => Action, (action) => action.officer)
   @Field(() => [Action])
   actions: Action[];
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

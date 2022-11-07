@@ -1,4 +1,5 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { ACTION_TYPE } from '../entities/action.entity';
 
 // session has endoscopeId and patientId already
 // which session? => sessionId
@@ -6,24 +7,15 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 // what kinda of aciton? => type
 // which officerId
 @InputType()
-export class CreateLeakTestActionInput {
+export class CreateActionInput {
   @Field(() => String)
   sessionId: string;
 
   @Field(() => String)
-  patientId: string;
+  type: ACTION_TYPE;
 
-  @Field(() => String)
-  officerId: string;
-}
-
-@InputType()
-export class CreateOtherActionsInput {
-  @Field(() => String)
-  sessionId: string;
-
-  @Field(() => String)
-  type: string;
+  @Field(() => Boolean)
+  passed: boolean;
 
   @Field(() => String)
   officerId: string;

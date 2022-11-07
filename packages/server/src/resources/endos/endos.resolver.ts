@@ -21,6 +21,16 @@ export class EndosResolver {
     return `${col}${row}`;
   }
 
+  @ResolveField(() => String, { nullable: true })
+  async currentSessionId(@Root() endo: Endo): Promise<string | null> {
+    const curSession = await this.endosService.findCurrentSessionByEndoId(
+      endo.id,
+    );
+
+    if (!curSession) return null;
+    return curSession.id;
+  }
+
   @Query(() => [Endo], { name: 'endos' })
   getEndos(): Promise<Endo[]> {
     return this.endosService.findAll();

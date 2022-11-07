@@ -3,10 +3,6 @@ import EndosTable from "../components/EndosTable";
 interface Props {}
 
 const Home = ({}: Props) => {
-  return (
-    <main>
-      <EndosTable />
-    </main>
-  );
+  return <EndosTable />;
 };
 export default Home;

@@ -1,17 +1,37 @@
 import React from "react";
+import Spinner from "../Spinner";
 
 interface LoadingProps {
   text?: string;
-  overlay?: boolean;
+  flexDirection?: "row" | "column";
+  isFullPage?: boolean;
 }
 
-export const Loading: React.FC<LoadingProps> = ({ text }) => {
+export const Loading: React.FC<LoadingProps> = ({
+  text,
+  flexDirection = "column",
+  isFullPage = false,
+}) => {
   return (
     <div
-      role="status"
-      className="p-4 space-y-4 max-w-md rounded border border-gray-200 divide-y divide-gray-200 shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"
+      className={`flex justify-center items-center ${
+        isFullPage ? "h-[70vh]" : ""
+      }`}
     >
-      <span className="sr-only">Loading...</span>
+      <div
+        className={`flex justify-center items-center ${
+          flexDirection === "column" ? "flex-col" : ""
+        }`}
+      >
+        <Spinner size={isFullPage ? "w-16 h-16" : undefined} />
+        <p
+          className={`text-primary-primary ${
+            isFullPage ? "text-xl mt-4" : undefined
+          } font-bold`}
+        >
+          {text ? text : "Loading..."}
+        </p>
+      </div>
     </div>
   );
 };

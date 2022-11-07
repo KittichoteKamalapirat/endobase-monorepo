@@ -7,12 +7,21 @@ import {
   statusToColor,
 } from "../../utils/statusToColor";
 import Button from "../Buttons/Button";
+import LinkButton from "../Buttons/LinkButton";
 
 export const myColumns = (pickEndo: any) => {
   const handleClick = (id: string) => {
     pickEndo({ variables: { id } });
   };
   return [
+    {
+      Header: "ID",
+      accessor: "id",
+    },
+    {
+      Header: "Location",
+      accessor: "position",
+    },
     {
       Header: "Brand",
       accessor: "brand",
@@ -25,18 +34,10 @@ export const myColumns = (pickEndo: any) => {
       Header: "Type",
       accessor: "type",
     },
-    // {
-    //   Header: "No.",
-    //   accessor: "id",
-    // },
 
     {
       Header: "Storage Time",
       accessor: "storageTime",
-    },
-    {
-      Header: "Location",
-      accessor: "position",
     },
 
     {
@@ -87,6 +88,15 @@ export const myColumns = (pickEndo: any) => {
           if (toWashStatuses.includes(currentStatus)) return "Wash";
           return "";
         })();
+
+        // direct to session page
+        if (currentStatus === ENDO_STATUS.BEING_USED)
+          return (
+            <LinkButton
+              label="wash"
+              href={`/session/${row.original.currentSessionId}`}
+            />
+          );
         return (
           <div>
             {isReady ? (

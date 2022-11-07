@@ -1,11 +1,13 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Session } from '../../sessions/entities/session.entity';
 import { Tray } from '../../trays/entities/tray.entity';
@@ -72,4 +74,12 @@ export class Endo {
   @Column({ default: ENDO_STATUS.READY })
   @Field(() => String)
   status: string; // TODO is this correct?
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

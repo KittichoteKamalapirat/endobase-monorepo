@@ -6,21 +6,33 @@ type Officer {
   id: ID!
   offNum: String!
   actions: [Action!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Action {
   id: ID!
   passed: Boolean!
   sessionId: String!
   session: Session!
+  officerId: String!
   officer: Officer!
   type: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Patient {
   id: ID!
   hosNum: String!
   sessions: [Session!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Session {
@@ -28,9 +40,11 @@ type Session {
   status: String!
   endoId: String!
   endo: Endo!
-  patientId: String!
+  patientId: String
   patient: Patient!
-  actions: [Action!]!
+  actions: [Action!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Endo {
@@ -42,7 +56,10 @@ type Endo {
   tray: Tray
   sessions: [Session!]!
   status: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   position: String!
+  currentSessionId: String
 }
 
 type Tray {
@@ -51,19 +68,25 @@ type Tray {
   endo: Endo
   containerId: String!
   container: Container!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Container {
   id: ID!
   col: String!
   trays: [Tray!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Query {
   endos: [Endo!]!
   endo(id: String!): Endo!
   sessions: [Session!]!
-  session(id: Int!): Session!
+  session(id: String!): Session!
+  patients: [Patient!]!
+  patient(id: String!): Patient!
   containers: [Container!]!
   container(id: Int!): Container!
   trays: [Tray!]!
@@ -72,31 +95,30 @@ type Query {
   action(id: Int!): Action!
   officers: [Officer!]!
   officer(id: Int!): Officer!
-  patients: [Patient!]!
-  patient(id: Int!): Patient!
 }
 
 type Mutation {
   createEndo(input: CreateEndoInput!): Endo!
   pickEndo(id: String!): Endo!
-  createSession(createSessionInput: CreateSessionInput!): Session!
+  createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
-  removeSession(id: Int!): Session!
+  updateSessionPatient(input: UpdateSessionPatientInput!): Session!
+  removeSession(id: String!): Session!
+  createPatient(createPatientInput: CreatePatientInput!): Patient!
+  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
+  removePatient(id: Int!): Patient!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   updateContainer(updateContainerInput: UpdateContainerInput!): Container!
   removeContainer(id: Int!): Container!
   createTray(input: CreateTrayInput!): Tray!
   updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
-  findAll: Action!
+  createAction(input: CreateActionInput!): Action!
   updateAction(updateActionInput: UpdateActionInput!): Action!
   removeAction(id: Int!): Action!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
-  createPatient(createPatientInput: CreatePatientInput!): Patient!
-  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
-  removePatient(id: Int!): Patient!
 }
 
 input CreateEndoInput {
@@ -114,6 +136,25 @@ input CreateSessionInput {
 input UpdateSessionInput {
   """For create a session for an endoscope"""
   endoId: String
+  id: String
+  status: String
+  patientHN: String
+  endTime: String
+}
+
+input UpdateSessionPatientInput {
+  id: String
+  patientHN: String!
+}
+
+input CreatePatientInput {
+  """Example field (placeholder)"""
+  hosNum: String!
+}
+
+input UpdatePatientInput {
+  """Example field (placeholder)"""
+  hosNum: String
   id: Int!
 }
 
@@ -143,9 +184,17 @@ input UpdateTrayInput {
   id: Int!
 }
 
+input CreateActionInput {
+  sessionId: String!
+  type: String!
+  passed: Boolean!
+  officerId: String!
+}
+
 input UpdateActionInput {
   sessionId: String
   type: String
+  passed: Boolean
   officerId: String
   id: Int!
 }
@@ -156,17 +205,6 @@ input CreateOfficerInput {
 }
 
 input UpdateOfficerInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
-}
-
-input CreatePatientInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdatePatientInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

@@ -71,14 +71,14 @@ const useClassName = ({
       return `bg-grey-100 hover:bg-grey-200 text-grey-250 text-opacity-70 text-11px font-nunito ${commonClass}`;
 
     case ButtonTypes.TEXT:
-      return `${fontColour} hover:text-blurple-hovered text-15px underline px-0 ${commonClass}`;
+      return `${fontColour} hover:text-primary-hovered text-15px underline px-0 ${commonClass}`;
 
     case ButtonTypes.ACTION:
-      return `bg-action hover:bg-blurple-hovered text-white ${commonClass}`;
+      return `bg-action hover:bg-primary-hovered text-white ${commonClass}`;
 
     case ButtonTypes.PRIMARY:
     default:
-      return `bg-primary hover:bg-blurple-hovered text-white ${commonClass}`;
+      return `bg-primary-primary hover:bg-primary-hovered text-white ${commonClass}`;
   }
 };
 

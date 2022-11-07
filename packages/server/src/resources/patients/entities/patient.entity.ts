@@ -1,5 +1,12 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Session } from '../../sessions/entities/session.entity';
 
 @Entity()
@@ -17,4 +24,12 @@ export class Patient {
   @OneToMany(() => Session, (session) => session.patient)
   @Field(() => [Session])
   sessions: Session[];
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: Date;
 }

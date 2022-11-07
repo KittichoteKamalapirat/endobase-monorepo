@@ -30,11 +30,11 @@ const Layout = ({
   return (
     <div className="pt-20 bg-grey-0 text-grey-900 h-min-screen ">
       <Navbar />
-      <div
+      <main
         className={`flex-1 h-full w-full ${justifyContent} ${alignItems} ${extraStyle} `}
       >
         <Container>{children}</Container>
-      </div>
+      </main>
 
       <Footer />
     </div>

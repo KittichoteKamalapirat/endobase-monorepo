@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
+import Session from "./pages/Session";
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="search" element={<Search />} />
+          <Route path="/session/:id" element={<Session />} />
         </Routes>
       </header>
     </div>

@@ -3,15 +3,17 @@ import { ActionsService } from './actions.service';
 import { Action } from './entities/action.entity';
 // import { CreateActionInput } from './dto/create-action.input';
 import { UpdateActionInput } from './dto/update-action.input';
+import { CreateActionInput } from './dto/create-action.input';
 
 @Resolver(() => Action)
 export class ActionsResolver {
   constructor(private readonly actionsService: ActionsService) {}
 
   @Mutation(() => Action)
-  // createAction(@Args('createActionInput') createActionInput: CreateActionInput) {
-  //   return this.actionsService.create(createActionInput);
-  // }
+  createAction(@Args('input') input: CreateActionInput) {
+    return this.actionsService.create(input);
+  }
+
   @Query(() => [Action], { name: 'actions' })
   findAll() {
     return this.actionsService.findAll();

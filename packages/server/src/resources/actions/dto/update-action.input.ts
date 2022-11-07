@@ -1,8 +1,8 @@
-import { CreateOtherActionsInput } from './create-action.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { Field, InputType, Int, PartialType } from '@nestjs/graphql';
+import { CreateActionInput } from './create-action.input';
 
 @InputType()
-export class UpdateActionInput extends PartialType(CreateOtherActionsInput) {
+export class UpdateActionInput extends PartialType(CreateActionInput) {
   @Field(() => Int)
   id: number;
 }

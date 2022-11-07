@@ -13,23 +13,36 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 export type Action = {
   __typename?: 'Action';
+  createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   officer: Officer;
+  officerId: Scalars['String'];
   passed: Scalars['Boolean'];
   session: Session;
   sessionId: Scalars['String'];
   type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Container = {
   __typename?: 'Container';
   col: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   trays: Array<Tray>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type CreateActionInput = {
+  officerId: Scalars['String'];
+  passed: Scalars['Boolean'];
+  sessionId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type CreateContainerInput = {
@@ -51,7 +64,7 @@ export type CreateOfficerInput = {
 
 export type CreatePatientInput = {
   /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
+  hosNum: Scalars['String'];
 };
 
 export type CreateSessionInput = {
@@ -68,6 +81,8 @@ export type CreateTrayInput = {
 export type Endo = {
   __typename?: 'Endo';
   brand: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  currentSessionId?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   model: Scalars['String'];
   position: Scalars['String'];
@@ -76,17 +91,18 @@ export type Endo = {
   tray?: Maybe<Tray>;
   trayId: Scalars['String'];
   type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createAction: Action;
   createContainer: Container;
   createEndo: Endo;
   createOfficer: Officer;
   createPatient: Patient;
   createSession: Session;
   createTray: Tray;
-  findAll: Action;
   pickEndo: Endo;
   removeAction: Action;
   removeContainer: Container;
@@ -99,7 +115,13 @@ export type Mutation = {
   updateOfficer: Officer;
   updatePatient: Patient;
   updateSession: Session;
+  updateSessionPatient: Session;
   updateTray: Tray;
+};
+
+
+export type MutationCreateActionArgs = {
+  input: CreateActionInput;
 };
 
 
@@ -124,7 +146,7 @@ export type MutationCreatePatientArgs = {
 
 
 export type MutationCreateSessionArgs = {
-  createSessionInput: CreateSessionInput;
+  input: CreateSessionInput;
 };
 
 
@@ -159,7 +181,7 @@ export type MutationRemovePatientArgs = {
 
 
 export type MutationRemoveSessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -193,6 +215,11 @@ export type MutationUpdateSessionArgs = {
 };
 
 
+export type MutationUpdateSessionPatientArgs = {
+  input: UpdateSessionPatientInput;
+};
+
+
 export type MutationUpdateTrayArgs = {
   updateTrayInput: UpdateTrayInput;
 };
@@ -200,15 +227,19 @@ export type MutationUpdateTrayArgs = {
 export type Officer = {
   __typename?: 'Officer';
   actions: Array<Action>;
+  createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   offNum: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Patient = {
   __typename?: 'Patient';
+  createdAt: Scalars['DateTime'];
   hosNum: Scalars['String'];
   id: Scalars['ID'];
   sessions: Array<Session>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
@@ -251,12 +282,12 @@ export type QueryOfficerArgs = {
 
 
 export type QueryPatientArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
 export type QuerySessionArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -266,27 +297,32 @@ export type QueryTrayArgs = {
 
 export type Session = {
   __typename?: 'Session';
-  actions: Array<Action>;
+  actions?: Maybe<Array<Action>>;
+  createdAt: Scalars['DateTime'];
   endo: Endo;
   endoId: Scalars['String'];
   id: Scalars['ID'];
   patient: Patient;
-  patientId: Scalars['String'];
+  patientId?: Maybe<Scalars['String']>;
   status: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Tray = {
   __typename?: 'Tray';
   container: Container;
   containerId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   endo?: Maybe<Endo>;
   id: Scalars['ID'];
   row: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UpdateActionInput = {
   id: Scalars['Int'];
   officerId?: InputMaybe<Scalars['String']>;
+  passed?: InputMaybe<Scalars['Boolean']>;
   sessionId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
 };
@@ -305,14 +341,22 @@ export type UpdateOfficerInput = {
 
 export type UpdatePatientInput = {
   /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']>;
+  hosNum?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
 };
 
 export type UpdateSessionInput = {
+  endTime?: InputMaybe<Scalars['String']>;
   /** For create a session for an endoscope */
   endoId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  id?: InputMaybe<Scalars['String']>;
+  patientHN?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateSessionPatientInput = {
+  id?: InputMaybe<Scalars['String']>;
+  patientHN: Scalars['String'];
 };
 
 export type UpdateTrayInput = {
@@ -332,7 +376,14 @@ export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+
+export type SessionQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string } }> | null } };
 
 
 export const PickEndoDocument = gql`
@@ -382,6 +433,7 @@ export const EndosDocument = gql`
     type
     model
     status
+    currentSessionId
     position
     tray {
       id
@@ -421,3 +473,50 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
+export const SessionDocument = gql`
+    query Session($id: String!) {
+  session(id: $id) {
+    id
+    endoId
+    status
+    patientId
+    actions {
+      id
+      passed
+      type
+      officerId
+      officer {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSessionQuery__
+ *
+ * To run a query within a React component, call `useSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSessionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSessionQuery(baseOptions: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+      }
+export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+        }
+export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
+export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
+export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;

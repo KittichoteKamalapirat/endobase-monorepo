@@ -9,7 +9,9 @@ export class PatientsResolver {
   constructor(private readonly patientsService: PatientsService) {}
 
   @Mutation(() => Patient)
-  createPatient(@Args('createPatientInput') createPatientInput: CreatePatientInput) {
+  createPatient(
+    @Args('createPatientInput') createPatientInput: CreatePatientInput,
+  ) {
     return this.patientsService.create(createPatientInput);
   }
 
@@ -19,13 +21,18 @@ export class PatientsResolver {
   }
 
   @Query(() => Patient, { name: 'patient' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.patientsService.findOne(id);
+  findOne(@Args('id', { type: () => String }) id: string) {
+    return this.patientsService.findOneById(id);
   }
 
   @Mutation(() => Patient)
-  updatePatient(@Args('updatePatientInput') updatePatientInput: UpdatePatientInput) {
-    return this.patientsService.update(updatePatientInput.id, updatePatientInput);
+  updatePatient(
+    @Args('updatePatientInput') updatePatientInput: UpdatePatientInput,
+  ) {
+    return this.patientsService.update(
+      updatePatientInput.id,
+      updatePatientInput,
+    );
   }
 
   @Mutation(() => Patient)

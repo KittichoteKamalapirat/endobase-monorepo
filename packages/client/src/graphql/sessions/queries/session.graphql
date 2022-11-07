@@ -1,0 +1,17 @@
+query Session($id: String!) {
+  session(id: $id) {
+    id
+    endoId
+    status
+    patientId
+    actions {
+      id
+      passed
+      type
+      officerId
+      officer {
+        id
+      }
+    }
+  }
+}

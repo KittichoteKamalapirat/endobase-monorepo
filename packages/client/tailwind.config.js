@@ -22,9 +22,20 @@ const grey800 = "#292929";
 const grey850 = "#1F1F1F";
 const grey900 = "#121212";
 
+const primaryColor = "#0018A8";
 // main
-const primaryColor = grey900;
-const primaryHoveredColor = "#FEBA72";
+const primaryColor50 = "#EBEEFF";
+const primaryColor100 = "#C2CBFF";
+const primaryColor200 = "#99A8FF";
+const primaryColor300 = "#8597FF";
+const primaryColor400 = "#7086FF";
+const primaryColor500 = "4763FF";
+const primaryColor600 = "#1F40FF";
+const primaryColor700 = primaryColor;
+const primaryColor800 = "#00158F";
+const primaryColor850 = "#000F66";
+const primaryColor900 = "#00093D";
+const primaryHoveredColor = primaryColor600;
 
 const bgColor = grey0;
 const primaryTextColor = grey900;
@@ -81,8 +92,21 @@ module.exports = {
           850: grey850,
           900: grey900,
         },
-        primary: primaryColor,
-        "primary-hovered": primaryHoveredColor,
+        primary: {
+          50: primaryColor50,
+          100: primaryColor100,
+          200: primaryColor200,
+          300: primaryColor300,
+          400: primaryColor400,
+          500: primaryColor500,
+          600: primaryColor600,
+          700: primaryColor700,
+          800: primaryColor800,
+          850: primaryColor850,
+          900: primaryColor900,
+          primary: primaryColor,
+          hovered: primaryHoveredColor,
+        },
         yellow: yellow,
         action: green,
         red: red,

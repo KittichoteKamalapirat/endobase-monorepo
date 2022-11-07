@@ -1,4 +1,11 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Query,
+  ResolveField,
+  Resolver,
+  Root,
+} from '@nestjs/graphql';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { Endo } from './entities/endo.entity';
 import { EndosService } from './endos.service';
@@ -6,6 +13,13 @@ import { EndosService } from './endos.service';
 @Resolver(() => Endo)
 export class EndosResolver {
   constructor(private endosService: EndosService) {}
+
+  @ResolveField(() => String)
+  position(@Root() endo: Endo): string {
+    const row = endo.tray.row;
+    const col = endo.tray.container.col;
+    return `${col}${row}`;
+  }
 
   @Query(() => [Endo], { name: 'endos' })
   getEndos(): Promise<Endo[]> {

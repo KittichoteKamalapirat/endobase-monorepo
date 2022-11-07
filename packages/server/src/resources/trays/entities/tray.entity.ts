@@ -20,7 +20,7 @@ export class Tray {
   row: number;
 
   // endo
-  @Field(() => Endo)
+  @Field(() => Endo, { nullable: true })
   @OneToOne(() => Endo, (endo) => endo.tray, {
     cascade: true,
   })

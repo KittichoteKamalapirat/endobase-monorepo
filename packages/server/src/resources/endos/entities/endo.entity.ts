@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Session } from '../../sessions/entities/session.entity';
@@ -56,13 +57,12 @@ export class Endo {
   @Field()
   trayId: string;
 
-  @Field(() => Tray)
+  @Field(() => Tray, { nullable: true })
   @JoinColumn()
+  @OneToOne(() => Tray, (tray) => tray.endo, {
+    onDelete: 'CASCADE',
+  })
   tray: Tray;
-
-  // @OneToOne(() => Tray, (tray) => tray.endo, {
-  //   onDelete: 'CASCADE',
-  // })
 
   // session
   @OneToMany(() => Session, (session) => session.endo)

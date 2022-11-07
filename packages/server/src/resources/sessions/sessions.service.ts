@@ -39,6 +39,11 @@ export class SessionsService {
     return `This action updates a #${id} session`;
   }
 
+  updateSessionPatientId(id: number, updateSessionInput: UpdateSessionInput) {
+    // TODO
+    return `This action updates a #${id} session`;
+  }
+
   remove(id: number) {
     return `This action removes a #${id} session`;
   }

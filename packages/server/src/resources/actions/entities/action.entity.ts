@@ -22,13 +22,13 @@ export class Action {
   @Field(() => ID)
   id: string;
 
-  @Column()
+  @Column({ default: true })
   @Field()
   passed: boolean;
 
   @Column()
   @Field()
-  sessionId: boolean;
+  sessionId: string;
 
   @ManyToOne(() => Session, (session) => session.actions)
   @Field(() => Session)

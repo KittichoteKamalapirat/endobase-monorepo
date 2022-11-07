@@ -20,7 +20,7 @@ export class TraysService {
 
   async findAll() {
     const trays = await this.traysRepository.find({
-      relations: ['container'],
+      relations: ['container', 'endo'],
     });
 
     return trays;

@@ -21,19 +21,15 @@ export type Action = {
   officer: Officer;
   passed: Scalars['Boolean'];
   session: Session;
-  sessionId: Scalars['Boolean'];
+  sessionId: Scalars['String'];
   type: Scalars['String'];
 };
 
 export type Container = {
   __typename?: 'Container';
+  col: Scalars['String'];
   id: Scalars['ID'];
   trays: Array<Tray>;
-};
-
-export type CreateActionInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
 };
 
 export type CreateContainerInput = {
@@ -74,22 +70,23 @@ export type Endo = {
   brand: Scalars['String'];
   id: Scalars['ID'];
   model: Scalars['String'];
+  position: Scalars['String'];
   sessions: Array<Session>;
   status: Scalars['String'];
-  tray: Tray;
+  tray?: Maybe<Tray>;
   trayId: Scalars['String'];
   type: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createAction: Action;
   createContainer: Container;
   createEndo: Endo;
   createOfficer: Officer;
   createPatient: Patient;
   createSession: Session;
   createTray: Tray;
+  findAll: Action;
   pickEndo: Endo;
   removeAction: Action;
   removeContainer: Container;
@@ -103,11 +100,6 @@ export type Mutation = {
   updatePatient: Patient;
   updateSession: Session;
   updateTray: Tray;
-};
-
-
-export type MutationCreateActionArgs = {
-  createActionInput: CreateActionInput;
 };
 
 
@@ -280,21 +272,23 @@ export type Session = {
   id: Scalars['ID'];
   patient: Patient;
   patientId: Scalars['String'];
+  status: Scalars['String'];
 };
 
 export type Tray = {
   __typename?: 'Tray';
   container: Container;
   containerId: Scalars['String'];
-  endo: Endo;
+  endo?: Maybe<Endo>;
   id: Scalars['ID'];
   row: Scalars['Float'];
 };
 
 export type UpdateActionInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']>;
   id: Scalars['Int'];
+  officerId?: InputMaybe<Scalars['String']>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateContainerInput = {
@@ -338,7 +332,7 @@ export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
 
 
 export const PickEndoDocument = gql`
@@ -388,6 +382,15 @@ export const EndosDocument = gql`
     type
     model
     status
+    position
+    tray {
+      id
+      row
+      container {
+        id
+        col
+      }
+    }
   }
 }
     `;

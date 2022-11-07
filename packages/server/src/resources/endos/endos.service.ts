@@ -15,7 +15,11 @@ export class EndosService {
   ) {}
 
   async findAll(): Promise<Endo[]> {
-    const endos = await this.endosRepository.find();
+    const endos = await this.endosRepository.find({
+      relations: ['tray', 'tray.container'],
+      // loadRelationIds: true,
+    });
+    console.log('hi');
     console.log('endos in service', endos);
     return endos;
   }
@@ -36,6 +40,7 @@ export class EndosService {
   // update LED color
   // update endo status
   async pickEndo(id: string): Promise<Endo> {
+    // update endoscope status from ready => being_used
     const endo = await this.endosRepository.findOneBy({ id });
 
     port.write(':L00(255,000,000)\r\n)', (err) => {

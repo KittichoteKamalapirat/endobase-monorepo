@@ -14,13 +14,31 @@ export const myColumns = (pickEndo: any) => {
   };
   return [
     {
-      Header: "No.",
-      accessor: "id",
-    },
-    {
       Header: "Brand",
       accessor: "brand",
     },
+    {
+      Header: "Model",
+      accessor: "model",
+    },
+    {
+      Header: "Type",
+      accessor: "type",
+    },
+    // {
+    //   Header: "No.",
+    //   accessor: "id",
+    // },
+
+    {
+      Header: "Storage Time",
+      accessor: "storageTime",
+    },
+    {
+      Header: "Location",
+      accessor: "position",
+    },
+
     {
       Header: "Status",
       accessor: "status",
@@ -37,25 +55,12 @@ export const myColumns = (pickEndo: any) => {
       },
     },
     {
-      Header: "Model",
-      accessor: "model",
-    },
-    {
-      Header: "Type",
-      accessor: "type",
-    },
-    {
-      Header: "Storage Time",
-      accessor: "storageTime",
-    },
-    {
       Header: "Action",
       // accessor: "id",
       Cell: ({ row }: { row: any }) => {
         const endoId = row.original.id as string;
 
         const notReadyStatuses = [
-          ENDO_STATUS.BEING_USED,
           ENDO_STATUS.PREWASHED,
           ENDO_STATUS.LEAK_TEST_FAILED,
           ENDO_STATUS.LEAK_TEST_PASSED,
@@ -72,11 +77,14 @@ export const myColumns = (pickEndo: any) => {
         console.log(toWashStatuses);
         console.log(toWashStatuses);
 
-        const isReady = readyStatuses.includes(row.original.status);
+        const currentStatus = row.original.status;
+
+        const isReady = readyStatuses.includes(currentStatus);
         const displayText = (() => {
           if (isReady) return "Use";
-          if (notReadyStatuses.includes(row.original.status)) return "Waiting";
-          if (toWashStatuses.includes(row.original.status)) return "Wash";
+          if (currentStatus === ENDO_STATUS.BEING_USED) return "wash";
+          if (notReadyStatuses.includes(currentStatus)) return "In use";
+          if (toWashStatuses.includes(currentStatus)) return "Wash";
           return "";
         })();
         return (

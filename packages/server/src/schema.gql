@@ -11,7 +11,7 @@ type Officer {
 type Action {
   id: ID!
   passed: Boolean!
-  sessionId: Boolean!
+  sessionId: String!
   session: Session!
   officer: Officer!
   type: String!
@@ -39,21 +39,23 @@ type Endo {
   type: String!
   model: String!
   trayId: String!
-  tray: Tray!
+  tray: Tray
   sessions: [Session!]!
   status: String!
+  position: String!
 }
 
 type Tray {
   id: ID!
   row: Float!
-  endo: Endo!
+  endo: Endo
   containerId: String!
   container: Container!
 }
 
 type Container {
   id: ID!
+  col: String!
   trays: [Tray!]!
 }
 
@@ -86,7 +88,7 @@ type Mutation {
   createTray(input: CreateTrayInput!): Tray!
   updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
-  createAction(createActionInput: CreateActionInput!): Action!
+  findAll: Action!
   updateAction(updateActionInput: UpdateActionInput!): Action!
   removeAction(id: Int!): Action!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
@@ -141,14 +143,10 @@ input UpdateTrayInput {
   id: Int!
 }
 
-input CreateActionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 input UpdateActionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  sessionId: String
+  type: String
+  officerId: String
   id: Int!
 }
 

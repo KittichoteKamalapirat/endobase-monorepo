@@ -23,6 +23,9 @@ import { PatientsModule } from './resources/patients/patients.module';
 import { SerialportsModule } from './resources/serialports/serialports.module';
 import { SessionsModule } from './resources/sessions/sessions.module';
 import { TraysModule } from './resources/trays/trays.module';
+import { SnapshotsModule } from './resources/snapshots/snapshots.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { Snapshot } from './resources/snapshots/entities/snapshot.entity';
 
 @Module({
   imports: [
@@ -40,9 +43,19 @@ import { TraysModule } from './resources/trays/trays.module';
       username: 'postgres',
       password: 'chain123',
       database: 'endobase_dev',
-      entities: [Endo, Container, Tray, Action, Patient, Session, Officer],
+      entities: [
+        Endo,
+        Container,
+        Tray,
+        Action,
+        Patient,
+        Session,
+        Officer,
+        Snapshot,
+      ],
       synchronize: true,
     }),
+    ScheduleModule.forRoot(),
     // resoureces
     EndosModule,
     ContainersModule,
@@ -52,6 +65,7 @@ import { TraysModule } from './resources/trays/trays.module';
     SessionsModule,
     OfficersModule,
     PatientsModule,
+    SnapshotsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

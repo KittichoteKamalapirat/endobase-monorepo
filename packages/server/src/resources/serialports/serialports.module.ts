@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { SerialportsController } from './serialports.controller';
-import { SerialHandlerService } from './serialports.service';
+import { SerialportsResolver } from './serialports.resolver';
+import { SerialportsService } from './serialports.service';
 
 @Module({
-  controllers: [SerialportsController],
-  // providers: [SerialportsService]
   providers: [
-    {
-      provide: 'SerialHandlerService',
-      useFactory: SerialHandlerService,
-    },
+    SerialportsResolver,
+    SerialportsService,
+    // {
+    //   provide: 'SerialHandlerService',
+    //   useFactory: SerialHandlerService,
+    // },
   ],
+  exports: [SerialportsService],
 })
 export class SerialportsModule {}

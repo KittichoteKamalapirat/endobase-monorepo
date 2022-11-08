@@ -8,8 +8,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Snapshot } from '../../snapshots/entities/snapshot.entity';
 import { Tray } from '../../trays/entities/tray.entity';
 
+// has many trays, has many snapshots
 @Entity()
 @ObjectType()
 export class Container {
@@ -24,6 +26,10 @@ export class Container {
   @OneToMany(() => Tray, (tray) => tray.container)
   @Field(() => [Tray])
   trays: Tray[];
+
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.container)
+  @Field(() => [Snapshot])
+  snapshots: Snapshot[];
 
   @CreateDateColumn()
   @Field()

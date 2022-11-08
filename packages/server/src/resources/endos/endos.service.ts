@@ -3,8 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
-import { port } from '../serialports/serialports.service';
+
 import { SessionsService } from '../sessions/sessions.service';
+import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
 export class EndosService {
@@ -55,7 +56,7 @@ export class EndosService {
     // create a session
     await this.createSession(id);
 
-    port.write(':L00(255,000,000)\r\n)', (err) => {
+    port1.write(':L00(255,000,000)\r\n)', (err) => {
       // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);

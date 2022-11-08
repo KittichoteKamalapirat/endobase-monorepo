@@ -39,7 +39,7 @@ export type Container = {
 };
 
 export type CreateActionInput = {
-  officerId: Scalars['String'];
+  officerNum: Scalars['String'];
   passed: Scalars['Boolean'];
   sessionId: Scalars['String'];
   type: Scalars['String'];
@@ -58,8 +58,7 @@ export type CreateEndoInput = {
 };
 
 export type CreateOfficerInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
+  officerNum: Scalars['String'];
 };
 
 export type CreatePatientInput = {
@@ -229,7 +228,7 @@ export type Officer = {
   actions: Array<Action>;
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
-  offNum: Scalars['String'];
+  officerNum: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -321,7 +320,7 @@ export type Tray = {
 
 export type UpdateActionInput = {
   id: Scalars['Int'];
-  officerId?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
   passed?: InputMaybe<Scalars['Boolean']>;
   sessionId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
@@ -334,9 +333,8 @@ export type UpdateContainerInput = {
 };
 
 export type UpdateOfficerInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']>;
   id: Scalars['Int'];
+  officerNum?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdatePatientInput = {
@@ -378,12 +376,26 @@ export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
 
+export type CreateActionMutationVariables = Exact<{
+  input: CreateActionInput;
+}>;
+
+
+export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } };
+
+export type UpdateSessionPatientMutationVariables = Exact<{
+  input: UpdateSessionPatientInput;
+}>;
+
+
+export type UpdateSessionPatientMutation = { __typename?: 'Mutation', updateSessionPatient: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null } };
+
 export type SessionQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient: { __typename?: 'Patient', id: string, hosNum: string }, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 
 export const PickEndoDocument = gql`
@@ -473,6 +485,78 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
+export const CreateActionDocument = gql`
+    mutation createAction($input: CreateActionInput!) {
+  createAction(input: $input) {
+    id
+    type
+    passed
+    sessionId
+  }
+}
+    `;
+export type CreateActionMutationFn = Apollo.MutationFunction<CreateActionMutation, CreateActionMutationVariables>;
+
+/**
+ * __useCreateActionMutation__
+ *
+ * To run a mutation, you first call `useCreateActionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateActionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createActionMutation, { data, loading, error }] = useCreateActionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateActionMutation(baseOptions?: Apollo.MutationHookOptions<CreateActionMutation, CreateActionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateActionMutation, CreateActionMutationVariables>(CreateActionDocument, options);
+      }
+export type CreateActionMutationHookResult = ReturnType<typeof useCreateActionMutation>;
+export type CreateActionMutationResult = Apollo.MutationResult<CreateActionMutation>;
+export type CreateActionMutationOptions = Apollo.BaseMutationOptions<CreateActionMutation, CreateActionMutationVariables>;
+export const UpdateSessionPatientDocument = gql`
+    mutation updateSessionPatient($input: UpdateSessionPatientInput!) {
+  updateSessionPatient(input: $input) {
+    id
+    endoId
+    status
+    patientId
+  }
+}
+    `;
+export type UpdateSessionPatientMutationFn = Apollo.MutationFunction<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>;
+
+/**
+ * __useUpdateSessionPatientMutation__
+ *
+ * To run a mutation, you first call `useUpdateSessionPatientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSessionPatientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSessionPatientMutation, { data, loading, error }] = useUpdateSessionPatientMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSessionPatientMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>(UpdateSessionPatientDocument, options);
+      }
+export type UpdateSessionPatientMutationHookResult = ReturnType<typeof useUpdateSessionPatientMutation>;
+export type UpdateSessionPatientMutationResult = Apollo.MutationResult<UpdateSessionPatientMutation>;
+export type UpdateSessionPatientMutationOptions = Apollo.BaseMutationOptions<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>;
 export const SessionDocument = gql`
     query Session($id: String!) {
   session(id: $id) {
@@ -480,6 +564,10 @@ export const SessionDocument = gql`
     endoId
     status
     patientId
+    patient {
+      id
+      hosNum
+    }
     actions {
       id
       passed
@@ -487,6 +575,7 @@ export const SessionDocument = gql`
       officerId
       officer {
         id
+        officerNum
       }
     }
   }

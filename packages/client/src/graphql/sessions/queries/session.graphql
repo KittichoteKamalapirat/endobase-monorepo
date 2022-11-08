@@ -4,6 +4,10 @@ query Session($id: String!) {
     endoId
     status
     patientId
+    patient {
+      id
+      hosNum
+    }
     actions {
       id
       passed
@@ -11,6 +15,7 @@ query Session($id: String!) {
       officerId
       officer {
         id
+        officerNum
       }
     }
   }

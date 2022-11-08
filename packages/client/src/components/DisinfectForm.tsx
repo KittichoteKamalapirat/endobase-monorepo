@@ -1,5 +1,7 @@
 import React from "react";
 import { Control, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useCreateActionMutation, useSessionQuery } from "../generated/graphql";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -9,17 +11,24 @@ interface Props {
 }
 
 enum FormNames {
-  OFFICER_ID = "officerId",
+  OFFICER_NUM = "officerNum",
 }
 
 interface FormValues {
-  [FormNames.OFFICER_ID]: string;
+  [FormNames.OFFICER_NUM]: string;
 }
 
 const initialData = {
-  officerId: "",
+  officerNum: "",
 };
 const DisinfectForm = ({ containerClass }: Props) => {
+  const { id: sessionId } = useParams();
+  const [createAction] = useCreateActionMutation();
+
+  const { refetch } = useSessionQuery({
+    variables: { id: sessionId || "" },
+  }); // to update cache
+
   const {
     control,
     formState: { errors },
@@ -28,8 +37,28 @@ const DisinfectForm = ({ containerClass }: Props) => {
     defaultValues: initialData,
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      if (!sessionId) return;
+      const input = {
+        sessionId,
+        type: "disinfect",
+        officerNum: data.officerNum,
+        passed: true,
+      };
+
+      console.log("input", input);
+      const result = await createAction({
+        variables: {
+          input,
+        },
+      });
+
+      console.log("result", result);
+      refetch();
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
@@ -37,12 +66,12 @@ const DisinfectForm = ({ containerClass }: Props) => {
       <div className="flex w-full items-end">
         <TextField
           required
-          name={FormNames.OFFICER_ID}
+          name={FormNames.OFFICER_NUM}
           control={control as unknown as Control}
           label="Officer ID"
           placeholder="Please insert officer ID"
           type={TextFieldTypes.OUTLINED}
-          error={errors[FormNames.OFFICER_ID]}
+          error={errors[FormNames.OFFICER_NUM]}
         />
         <Button
           label="Save"

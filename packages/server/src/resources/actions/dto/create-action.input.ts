@@ -18,5 +18,5 @@ export class CreateActionInput {
   passed: boolean;
 
   @Field(() => String)
-  officerId: string;
+  officerNum: string;
 }

@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Endo, ENDO_STATUS } from './entities/endo.entity';
+import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { port } from '../serialports/serialports.service';
@@ -39,9 +39,21 @@ export class EndosService {
 
   // update LED color
   // update endo status
-  async pickEndo(id: string): Promise<Endo> {
+  async pickEndo(id: string): Promise<Endo | Error> {
+    // TODO add validation (like if the session is created already, don't do it)
+    // TODO check by session with this endoId and null
     // update endoscope status from ready => being_used
     const endo = await this.endosRepository.findOneBy({ id });
+    console.log('endo', endo);
+
+    if (!endo) return new Error('Cannot find the endoscope');
+
+    const existingSession = await this.findCurrentSessionByEndoId(id);
+    console.log('existing session', existingSession);
+    if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
+
+    // create a session
+    await this.createSession(id);
 
     port.write(':L00(255,000,000)\r\n)', (err) => {
       // if (error) console.log(error?.message);
@@ -50,17 +62,34 @@ export class EndosService {
       }
       console.log('wrote');
     });
-    return this.endosRepository.save({
+
+    const pickedEndo = this.endosRepository.save({
       ...endo,
-      status: ENDO_STATUS.BEING_USED,
+      status: ENDO_STATUS_OBJ.BEING_USED,
     });
+    console.log('picked endo', pickedEndo);
+    return pickedEndo;
   }
 
+  async updateStatus(id: string, status: ENDO_STATUS): Promise<Endo | Error> {
+    const endo = await this.endosRepository.findOneBy({ id });
+
+    if (!endo) return new Error('No endoscope found');
+
+    console.log('endo', endo);
+    const updatedEndo = { ...endo, status };
+
+    return this.endosRepository.save(updatedEndo);
+  }
   createSession(endoId: string) {
     return this.sessionsService.create({ endoId });
   }
 
   findCurrentSessionByEndoId(endoId: string) {
+    // current session = status = ongoing
+    // supposed to be only one
+    // what if there are many
+
     return this.sessionsService.findCurrentSessionByEndoId(endoId);
   }
 }

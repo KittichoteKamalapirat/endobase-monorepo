@@ -1,5 +1,9 @@
-import React from "react";
 import { Control, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import {
+  useSessionQuery,
+  useUpdateSessionPatientMutation,
+} from "../generated/graphql";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -9,17 +13,23 @@ interface Props {
 }
 
 enum FormNames {
-  PATIENT_ID = "patientId",
+  PATIENT_HN_NUM = "patientHnNum",
 }
 
 interface FormValues {
-  [FormNames.PATIENT_ID]: string;
+  [FormNames.PATIENT_HN_NUM]: string;
 }
 
 const initialData = {
-  patientId: "",
+  patientHnNum: "",
 };
 const PatientForm = ({ containerClass }: Props) => {
+  const { id: sessionId } = useParams();
+  const { refetch } = useSessionQuery({
+    variables: { id: sessionId || "" },
+  }); // to update cache
+  const [updatePatientInSession] = useUpdateSessionPatientMutation();
+
   const {
     control,
     handleSubmit,
@@ -28,23 +38,38 @@ const PatientForm = ({ containerClass }: Props) => {
     defaultValues: initialData,
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      console.log(data);
+      if (!sessionId) return;
+      const result = await updatePatientInSession({
+        variables: {
+          input: {
+            id: sessionId,
+            patientHN: data.patientHnNum,
+          },
+        },
+      });
+      console.log("result", result);
+      refetch();
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Previous patient id" />
+      <SmallHeading heading="Who used this endoscope?" />
 
       <div className="flex items-end">
         <TextField
           required
-          name={FormNames.PATIENT_ID}
+          name={FormNames.PATIENT_HN_NUM}
           control={control as unknown as Control}
-          label="Patient ID"
+          label="Patient Hospital Number (HN)"
           placeholder="Please insert patient ID"
           type={TextFieldTypes.OUTLINED}
           extraClass="w-full"
-          error={errors[FormNames.PATIENT_ID]}
+          error={errors[FormNames.PATIENT_HN_NUM]}
         />
         <Button
           label="Save"

@@ -4,9 +4,16 @@ import { ActionsResolver } from './actions.resolver';
 import { Action } from './entities/action.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionsModule } from '../sessions/sessions.module';
+import { OfficersModule } from '../officers/officers.module';
+import { EndosModule } from '../endos/endo.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Action]), SessionsModule],
+  imports: [
+    TypeOrmModule.forFeature([Action]),
+    SessionsModule,
+    OfficersModule,
+    EndosModule,
+  ],
   providers: [ActionsResolver, ActionsService],
 })
 export class ActionsModule {}

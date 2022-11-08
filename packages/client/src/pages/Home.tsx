@@ -1,8 +1,6 @@
 import EndosTable from "../components/EndosTable";
 
-interface Props {}
-
-const Home = ({}: Props) => {
+const Home = () => {
   return <EndosTable />;
 };
 export default Home;

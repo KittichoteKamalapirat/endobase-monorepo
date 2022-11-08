@@ -1,5 +1,7 @@
 import React from "react";
 import { Control, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useCreateActionMutation, useSessionQuery } from "../generated/graphql";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -9,17 +11,24 @@ interface Props {
 }
 
 enum FormNames {
-  OFFICER_ID = "officerId",
+  OFFICER_NUM = "officerNum",
 }
 
 interface FormValues {
-  [FormNames.OFFICER_ID]: string;
+  [FormNames.OFFICER_NUM]: string;
 }
 
 const initialData = {
-  officerId: "",
+  officerNum: "",
 };
 const LeakTestForm = ({ containerClass }: Props) => {
+  const { id: sessionId } = useParams();
+  const [createAction] = useCreateActionMutation();
+
+  const { refetch } = useSessionQuery({
+    variables: { id: sessionId || "" },
+  });
+
   const {
     control,
     handleSubmit,
@@ -28,8 +37,28 @@ const LeakTestForm = ({ containerClass }: Props) => {
     defaultValues: initialData,
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      if (!sessionId) return;
+      const input = {
+        sessionId,
+        type: "leak_test_and_prewash",
+        officerNum: data.officerNum,
+        passed: true,
+      };
+
+      console.log("input", input);
+      const result = await createAction({
+        variables: {
+          input,
+        },
+      });
+
+      refetch();
+      console.log("result", result);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -38,12 +67,12 @@ const LeakTestForm = ({ containerClass }: Props) => {
       <div className="flex w-full items-end">
         <TextField
           required
-          name={FormNames.OFFICER_ID}
+          name={FormNames.OFFICER_NUM}
           control={control as unknown as Control}
           label="Officer ID"
           placeholder="Please insert officer ID"
           type={TextFieldTypes.OUTLINED}
-          error={errors[FormNames.OFFICER_ID]}
+          error={errors[FormNames.OFFICER_NUM]}
         />
         <Button
           label="Save"

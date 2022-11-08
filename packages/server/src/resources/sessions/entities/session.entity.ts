@@ -16,12 +16,12 @@ import { Patient } from '../../patients/entities/patient.entity';
 // ManyToOne: endoscope, patient
 // OneToMany actions
 
-export const SESSION_STATUS = {
+export const SESSION_STATUS_OBJ = {
   ONGOING: 'ongoing',
   COMPLETE: 'complete',
 } as const;
 
-// type SESSION_STATUS = 'ongoing' | 'complete';
+export type SESSION_STATUS = 'ongoing' | 'complete';
 @ObjectType()
 @Entity()
 export class Session {
@@ -29,9 +29,9 @@ export class Session {
   @Field(() => ID)
   id: string;
 
-  @Column({ default: SESSION_STATUS.ONGOING })
+  @Column({ default: SESSION_STATUS_OBJ.ONGOING })
   @Field(() => String)
-  status: string;
+  status: SESSION_STATUS;
 
   // Endo
   @Column()
@@ -48,13 +48,17 @@ export class Session {
   patientId: string;
 
   @ManyToOne(() => Patient, (patient) => patient.sessions)
-  @Field(() => Patient)
+  @Field(() => Patient, { nullable: true })
   patient: Patient;
 
   // actions
   @OneToMany(() => Action, (action) => action.session)
   @Field(() => [Action], { nullable: true })
   actions: Action[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  isoEndTime: string;
 
   @CreateDateColumn()
   @Field()

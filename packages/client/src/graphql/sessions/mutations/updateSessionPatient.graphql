@@ -1,0 +1,8 @@
+mutation updateSessionPatient($input: UpdateSessionPatientInput!) {
+  updateSessionPatient(input: $input) {
+    id
+    endoId
+    status
+    patientId
+  }
+}

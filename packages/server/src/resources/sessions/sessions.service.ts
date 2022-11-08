@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { PatientsService } from '../patients/patients.service';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
-import { Session, SESSION_STATUS } from './entities/session.entity';
+import { Session, SESSION_STATUS_OBJ } from './entities/session.entity';
 
 @Injectable()
 export class SessionsService {
@@ -28,7 +28,7 @@ export class SessionsService {
   async findOne(id: string) {
     const session = await this.sessionsRepository.findOne({
       where: { id },
-      relations: ['actions', 'actions.officer'],
+      relations: ['actions', 'actions.officer', 'patient'],
     });
     console.log('session', session);
 
@@ -43,18 +43,35 @@ export class SessionsService {
 
   findCurrentSessionByEndoId(endoId: string) {
     return this.sessionsRepository.findOne({
-      where: { endoId, status: SESSION_STATUS.ONGOING },
+      where: { endoId, status: SESSION_STATUS_OBJ.ONGOING },
     });
   }
 
   async update(id: string, updateSessionInput: UpdateSessionInput) {
     try {
-      // if update
       const session = await this.sessionsRepository.findOneBy({ id });
+      if (!session) return new Error('cannot fidn a session');
       const newSession = { ...session, ...updateSessionInput };
       console.log('new session', newSession);
       await this.sessionsRepository.save(newSession);
       return newSession;
+    } catch (error) {
+      return new Error(error);
+    }
+  }
+
+  async endSession(id: string) {
+    try {
+      console.log('end session');
+      const session = await this.sessionsRepository.findOneBy({ id });
+      if (!session) return new Error('cannot fidn a session');
+      const updatedSession: Session = {
+        ...session,
+        status: SESSION_STATUS_OBJ.COMPLETE,
+        isoEndTime: new Date().toISOString(),
+      };
+
+      return this.sessionsRepository.save(updatedSession);
     } catch (error) {
       return new Error(error);
     }
@@ -66,14 +83,16 @@ export class SessionsService {
     try {
       const existingPatient = await this.patientsService.findOneByHN(patientHN);
 
-      let newPatient = null;
+      let patient = null;
       if (!existingPatient) {
-        newPatient = await this.patientsService.create({
+        patient = await this.patientsService.create({
           hosNum: patientHN,
         });
+      } else {
+        patient = existingPatient;
       }
       const session = await this.sessionsRepository.findOneBy({ id });
-      const newSession = { ...session, patientId: newPatient.id };
+      const newSession = { ...session, patientId: patient.id };
       await this.sessionsRepository.save(newSession);
       return newSession;
     } catch (error) {

@@ -1,4 +1,5 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { SESSION_STATUS } from '../entities/session.entity';
 import { CreateSessionInput } from './create-session.input';
 
 // either
@@ -10,7 +11,7 @@ export class UpdateSessionInput extends PartialType(CreateSessionInput) {
   id: string;
 
   @Field(() => String, { nullable: true })
-  status?: string;
+  status?: SESSION_STATUS;
 
   @Field(() => String, { nullable: true })
   patientHN?: string;

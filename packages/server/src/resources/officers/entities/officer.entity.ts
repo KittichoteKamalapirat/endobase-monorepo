@@ -22,7 +22,7 @@ export class Officer {
 
   @Column()
   @Field()
-  offNum: string;
+  officerNum: string;
 
   // actions
   @OneToMany(() => Action, (action) => action.officer)

@@ -8,5 +8,6 @@ import { SessionsModule } from '../sessions/sessions.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Endo]), SessionsModule],
   providers: [EndosResolver, EndosService],
+  exports: [EndosService],
 })
 export class EndosModule {}

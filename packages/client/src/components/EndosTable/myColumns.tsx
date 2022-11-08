@@ -9,9 +9,15 @@ import {
 import Button from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
 
-export const myColumns = (pickEndo: any) => {
-  const handleClick = (id: string) => {
-    pickEndo({ variables: { id } });
+interface Props {
+  pickEndo: any;
+  refetchEndos: any;
+}
+
+export const myColumns = ({ pickEndo, refetchEndos }: Props) => {
+  const handleUseEndo = async (id: string) => {
+    await pickEndo({ variables: { id } });
+    await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
   };
   return [
     {
@@ -100,7 +106,10 @@ export const myColumns = (pickEndo: any) => {
         return (
           <div>
             {isReady ? (
-              <Button label={displayText} onClick={() => handleClick(endoId)} />
+              <Button
+                label={displayText}
+                onClick={() => handleUseEndo(endoId)}
+              />
             ) : (
               <div>{displayText}</div>
             )}

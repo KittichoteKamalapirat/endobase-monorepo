@@ -20,16 +20,17 @@ const Session = () => {
     variables: { id: sessionId },
   });
 
-  const { patientId, actions } = data?.session || {};
+  const { patientId, actions, patient } = data?.session || {};
+
   console.log("error", error);
 
   console.log("data", data?.session);
 
   const leakTestAction = actions?.find(
-    (action) => action.type === "leak_test_and_prewash"
+    (action) => action.type === "leak_test_and_prewash" && action.passed
   );
   const disinfectAction = actions?.find(
-    (action) => action.type === "disinfect"
+    (action) => action.type === "disinfect" && action.passed
   );
   const storeAction = actions?.find((action) => action.type === "store");
 
@@ -56,7 +57,10 @@ const Session = () => {
 
       <div>
         {patientId ? (
-          <div>HN : {patientId}</div>
+          <div>
+            <SubHeading heading="Patient Detail" extraClass="mt-4" />
+            <div>HN : {patient?.hosNum}</div>
+          </div>
         ) : (
           <PatientForm containerClass="my-4" />
         )}

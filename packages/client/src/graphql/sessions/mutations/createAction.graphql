@@ -1,0 +1,8 @@
+mutation createAction($input: CreateActionInput!) {
+  createAction(input: $input) {
+    id
+    type
+    passed
+    sessionId
+  }
+}

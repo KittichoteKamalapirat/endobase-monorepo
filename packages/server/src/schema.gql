@@ -4,7 +4,7 @@
 
 type Officer {
   id: ID!
-  offNum: String!
+  officerNum: String!
   actions: [Action!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -41,8 +41,9 @@ type Session {
   endoId: String!
   endo: Endo!
   patientId: String
-  patient: Patient!
+  patient: Patient
   actions: [Action!]
+  isoEndTime: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -188,24 +189,22 @@ input CreateActionInput {
   sessionId: String!
   type: String!
   passed: Boolean!
-  officerId: String!
+  officerNum: String!
 }
 
 input UpdateActionInput {
   sessionId: String
   type: String
   passed: Boolean
-  officerId: String
+  officerNum: String
   id: Int!
 }
 
 input CreateOfficerInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  officerNum: String!
 }
 
 input UpdateOfficerInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  officerNum: String
   id: Int!
 }

@@ -12,28 +12,39 @@ import {
 import { Session } from '../../sessions/entities/session.entity';
 import { Tray } from '../../trays/entities/tray.entity';
 
-export const ENDO_STATUS = {
+export const ENDO_STATUS_OBJ = {
   READY: 'ready',
   EXPIRE_SOON: 'expire_soon',
   BEING_USED: 'being_used',
   EXPIRED: 'expired',
-  PREWASHED: 'prewashed',
   LEAK_TEST_FAILED: 'leak_test_failed',
   LEAK_TEST_PASSED: 'leak_test_passed',
-  DISINFECTED: 'disinfected',
+  DISINFECTION_PASSED: 'disinfection_passed',
+  DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
 } as const;
 
+export type ENDO_STATUS =
+  | 'ready'
+  | 'expire_soon'
+  | 'being_used'
+  | 'expired'
+  | 'leak_test_failed'
+  | 'leak_test_passed'
+  | 'disinfection_failed'
+  | 'disinfection_passed'
+  | 'drying';
+
 export const statusToColor = {
-  [ENDO_STATUS.READY]: 'green',
-  [ENDO_STATUS.EXPIRE_SOON]: 'orange',
-  [ENDO_STATUS.BEING_USED]: 'black',
-  [ENDO_STATUS.EXPIRED]: 'red',
-  [ENDO_STATUS.PREWASHED]: 'black',
-  [ENDO_STATUS.LEAK_TEST_FAILED]: 'black',
-  [ENDO_STATUS.LEAK_TEST_PASSED]: 'black',
-  [ENDO_STATUS.DISINFECTED]: 'black',
-  [ENDO_STATUS.DRYING]: 'blue',
+  [ENDO_STATUS_OBJ.READY]: 'green',
+  [ENDO_STATUS_OBJ.EXPIRE_SOON]: 'orange',
+  [ENDO_STATUS_OBJ.BEING_USED]: 'black',
+  [ENDO_STATUS_OBJ.EXPIRED]: 'red',
+  [ENDO_STATUS_OBJ.LEAK_TEST_FAILED]: 'black',
+  [ENDO_STATUS_OBJ.LEAK_TEST_PASSED]: 'black',
+  [ENDO_STATUS_OBJ.DISINFECTION_PASSED]: 'black',
+  [ENDO_STATUS_OBJ.DISINFECTION_FAILED]: 'black',
+  [ENDO_STATUS_OBJ.DRYING]: 'blue',
 };
 @ObjectType()
 @Entity()
@@ -71,9 +82,9 @@ export class Endo {
   @Field(() => [Session])
   sessions: Session[];
 
-  @Column({ default: ENDO_STATUS.READY })
+  @Column({ default: ENDO_STATUS_OBJ.READY })
   @Field(() => String)
-  status: string; // TODO is this correct?
+  status: ENDO_STATUS; // TODO is this correct?
 
   @CreateDateColumn()
   @Field()

@@ -20,11 +20,14 @@ import { myColumns } from "./myColumns";
 // 6. style
 
 const EndosTable = () => {
-  const { data: endosData, loading, error } = useEndosQuery();
-  const [useEndo] = usePickEndoMutation();
+  const { data: endosData, loading, error, refetch } = useEndosQuery();
+  const [pickEndo] = usePickEndoMutation();
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(() => myColumns(useEndo), []);
+  const columns = useMemo<Column[]>(
+    () => myColumns({ pickEndo, refetchEndos: refetch }),
+    [pickEndo, refetch]
+  );
 
   console.log("data", endosData);
 

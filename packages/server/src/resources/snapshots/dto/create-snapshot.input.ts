@@ -2,8 +2,8 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateSnapshotInput {
-  @Field(() => Int)
-  systemStatus: number;
+  @Field(() => String)
+  systemStatus: string;
 
   @Field(() => String)
   hum: string;

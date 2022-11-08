@@ -6,7 +6,7 @@ type Snapshot {
   id: ID!
   hum: String!
   temp: String!
-  systemStatus: Float!
+  systemStatus: String!
   containerId: String
   container: Container
   createdAt: DateTime!
@@ -94,17 +94,16 @@ type Container {
 }
 
 type Query {
+  containers: [Container!]!
+  container(id: Int!): Container!
   endos: [Endo!]!
   endo(id: String!): Endo!
   sessions: [Session!]!
   session(id: String!): Session!
   patients: [Patient!]!
   patient(id: String!): Patient!
-  containers: [Container!]!
-  container(id: Int!): Container!
   trays: [Tray!]!
   tray(id: Int!): Tray!
-  testPort: Boolean!
   actions: [Action!]!
   action(id: Int!): Action!
   officers: [Officer!]!
@@ -112,6 +111,10 @@ type Query {
 }
 
 type Mutation {
+  createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
+  createContainer(createContainerInput: CreateContainerInput!): Container!
+  updateContainer(updateContainerInput: UpdateContainerInput!): Container!
+  removeContainer(id: Int!): Container!
   createEndo(input: CreateEndoInput!): Endo!
   pickEndo(id: String!): Endo!
   createSession(input: CreateSessionInput!): Session!
@@ -121,9 +124,6 @@ type Mutation {
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   removePatient(id: Int!): Patient!
-  createContainer(createContainerInput: CreateContainerInput!): Container!
-  updateContainer(updateContainerInput: UpdateContainerInput!): Container!
-  removeContainer(id: Int!): Container!
   createTray(input: CreateTrayInput!): Tray!
   updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
@@ -133,7 +133,24 @@ type Mutation {
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
-  createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
+}
+
+input CreateSnapshotInput {
+  systemStatus: String!
+  hum: String!
+  temp: String!
+  containerId: String!
+}
+
+input CreateContainerInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateContainerInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateEndoInput {
@@ -170,17 +187,6 @@ input CreatePatientInput {
 input UpdatePatientInput {
   """Example field (placeholder)"""
   hosNum: String
-  id: Int!
-}
-
-input CreateContainerInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateContainerInput {
-  """Example field (placeholder)"""
-  exampleField: Int
   id: Int!
 }
 
@@ -221,11 +227,4 @@ input CreateOfficerInput {
 input UpdateOfficerInput {
   officerNum: String
   id: Int!
-}
-
-input CreateSnapshotInput {
-  systemStatus: Int!
-  hum: String!
-  temp: String!
-  containerId: String!
 }

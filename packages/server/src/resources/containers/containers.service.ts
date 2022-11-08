@@ -27,6 +27,11 @@ export class ContainersService {
     return `This action returns a #${id} container`;
   }
 
+  // col = A, B, C
+  async findOneByContainerChar(col: string): Promise<Container> {
+    return this.containersRepository.findOneBy({ col });
+  }
+
   update(id: number, updateContainerInput: UpdateContainerInput) {
     return `This action updates a #${id} container`;
   }

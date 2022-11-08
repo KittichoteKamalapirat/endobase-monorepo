@@ -1,6 +1,6 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { SerialportsService } from './serialports.service';
-import { allPorts, getSystemStatus } from './serialportsInstances';
+// import { allPorts, getSystemStatus } from './serialportsInstances';
 
 @Resolver()
 export class SerialportsResolver {
@@ -10,7 +10,7 @@ export class SerialportsResolver {
     console.log('test');
     // this.serialportsService.writeRandomColor();
 
-    getSystemStatus(allPorts[0]);
+    // getSystemStatus(allPorts[0]);
 
     return true;
   }

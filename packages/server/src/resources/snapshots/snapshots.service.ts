@@ -1,14 +1,16 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SerialPort } from 'serialport';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
-import {
-  allPorts,
-  port1,
-  port2,
-  port3,
-} from '../serialports/serialportsInstances';
+import { SERIALPORTS_PROVIDER } from '../../constants';
+// import {
+//   allPorts,
+//   port1,
+//   port2,
+//   port3,
+// } from '../serialports/serialportsInstances';
 import { CreateSnapshotInput } from './dto/create-snapshot.input';
 import { Snapshot } from './entities/snapshot.entity';
 
@@ -18,6 +20,8 @@ export class SnapshotsService {
   constructor(
     @InjectRepository(Snapshot)
     private snapshotssRepository: Repository<Snapshot>,
+    @Inject(SERIALPORTS_PROVIDER)
+    private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
   ) {}
 
   @Cron(CronExpression.EVERY_10_MINUTES)
@@ -26,10 +30,17 @@ export class SnapshotsService {
     // const port1 = allPorts[0];
     // const port2 = allPorts[0];
     // const port3 = allPorts[0];
-    allPorts.forEach((port) => port.write(':STS\r\n'));
+    // allPorts.forEach((port) => port.write(':STS\r\n'));
+    console.log('sp a', this.serialports['A'].isOpen);
+    console.log('sp b', this.serialports['B'].isOpen);
+    console.log('sp c', this.serialports['C'].isOpen);
+
+    Object.keys(this.serialports).forEach((key) => {
+      this.serialports[key].write(':STS\r\n');
+    });
+
+    // this.serialports.A.write(':L00(000,000,255)\r\n');
     // port1.write(':STS\r\n');
-    // port2.write(':STS\r\n');
-    // port3.write(':STS\r\n');
     this.logger.log('Read STS every 1 sec');
   }
 

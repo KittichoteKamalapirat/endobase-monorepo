@@ -56,11 +56,12 @@ import { Snapshot } from './resources/snapshots/entities/snapshot.entity';
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
+    SerialportsModule.forRoot(),
     // resoureces
     EndosModule,
     ContainersModule,
     TraysModule,
-    SerialportsModule,
+
     ActionsModule,
     SessionsModule,
     OfficersModule,

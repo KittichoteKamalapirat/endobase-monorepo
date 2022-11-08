@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
 
 import { SessionsService } from '../sessions/sessions.service';
-import { port1 } from '../serialports/serialportsInstances';
+// import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
 export class EndosService {
@@ -56,13 +56,13 @@ export class EndosService {
     // create a session
     await this.createSession(id);
 
-    port1.write(':L00(255,000,000)\r\n)', (err) => {
-      // if (error) console.log(error?.message);
-      if (err) {
-        return console.log('Error on write: ', err.message);
-      }
-      console.log('wrote');
-    });
+    // port1.write(':L00(255,000,000)\r\n)', (err) => {
+    //   // if (error) console.log(error?.message);
+    //   if (err) {
+    //     return console.log('Error on write: ', err.message);
+    //   }
+    //   console.log('wrote');
+    // });
 
     const pickedEndo = this.endosRepository.save({
       ...endo,

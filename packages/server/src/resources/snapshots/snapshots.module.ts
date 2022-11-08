@@ -7,5 +7,6 @@ import { Snapshot } from './entities/snapshot.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Snapshot])],
   providers: [SnapshotsResolver, SnapshotsService],
+  exports: [SnapshotsService],
 })
 export class SnapshotsModule {}

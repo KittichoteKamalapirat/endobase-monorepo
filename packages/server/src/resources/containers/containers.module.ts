@@ -7,5 +7,6 @@ import { Container } from './entities/container.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Container])],
   providers: [ContainersResolver, ContainersService],
+  exports: [ContainersService],
 })
 export class ContainersModule {}

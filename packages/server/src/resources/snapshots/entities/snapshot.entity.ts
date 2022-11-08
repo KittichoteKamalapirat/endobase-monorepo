@@ -29,7 +29,7 @@ export class Snapshot {
 
   @Column()
   @Field()
-  systemStatus: number;
+  systemStatus: string;
 
   // Patient
   @Column({ nullable: true })

@@ -10,6 +10,24 @@ import {
 } from 'typeorm';
 import { Container } from '../../containers/entities/container.entity';
 import { Endo } from '../../endos/entities/endo.entity';
+
+export type RowType =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 13
+  | 14
+  | 15
+  | 16;
 @Entity()
 @ObjectType()
 export class Tray {
@@ -17,9 +35,11 @@ export class Tray {
   @Field(() => ID)
   id: number;
 
+  // 1,2,3,..., 16 for Songkla
+  // 1,2,3,..., 8 for Chonburi
   @Column()
   @Field()
-  row: number;
+  row: RowType;
 
   // endo
   @Field(() => Endo, { nullable: true })

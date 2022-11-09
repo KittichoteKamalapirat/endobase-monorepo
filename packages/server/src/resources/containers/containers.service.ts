@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateContainerInput } from './dto/create-container.input';
 import { UpdateContainerInput } from './dto/update-container.input';
-import { Container } from './entities/container.entity';
+import { ColType, Container } from './entities/container.entity';
 
 @Injectable()
 export class ContainersService {
@@ -28,7 +28,7 @@ export class ContainersService {
   }
 
   // col = A, B, C
-  async findOneByContainerChar(col: string): Promise<Container> {
+  async findOneByContainerChar(col: ColType): Promise<Container> {
     return this.containersRepository.findOneBy({ col });
   }
 

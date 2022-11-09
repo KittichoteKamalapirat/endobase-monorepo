@@ -1,9 +1,9 @@
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { Endo } from './entities/endo.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SessionsModule } from '../sessions/sessions.module';
 import { EndosResolver } from './endos.resolver';
 import { EndosService } from './endos.service';
-import { SessionsModule } from '../sessions/sessions.module';
+import { Endo } from './entities/endo.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Endo]), SessionsModule],

@@ -11,6 +11,7 @@ import {
 import { Snapshot } from '../../snapshots/entities/snapshot.entity';
 import { Tray } from '../../trays/entities/tray.entity';
 
+export type ColType = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 // has many trays, has many snapshots
 @Entity()
 @ObjectType()
@@ -19,9 +20,11 @@ export class Container {
   @Field(() => ID)
   id: string;
 
+  // A,B,C,D, ... H (8 for Songkla)
+  // A (1 for Chonburi)
   @Column({ nullable: true })
   @Field()
-  col: string;
+  col: ColType;
 
   @OneToMany(() => Tray, (tray) => tray.container)
   @Field(() => [Tray])

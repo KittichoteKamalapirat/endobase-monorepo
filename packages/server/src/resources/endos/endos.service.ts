@@ -1,9 +1,10 @@
-import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
+import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
+import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
 // import { port1 } from '../serialports/serialportsInstances';
 
@@ -13,6 +14,7 @@ export class EndosService {
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
+    private serialportsService: SerialportsService,
   ) {}
 
   async findAll(): Promise<Endo[]> {
@@ -26,7 +28,10 @@ export class EndosService {
   }
 
   async findOne(id: string): Promise<Endo> {
-    return this.endosRepository.findOneBy({ id });
+    return this.endosRepository.findOne({
+      where: { id },
+      relations: ['tray', 'tray.container'],
+    });
   }
 
   async createEndo(input: CreateEndoInput): Promise<Endo> {
@@ -44,7 +49,7 @@ export class EndosService {
     // TODO add validation (like if the session is created already, don't do it)
     // TODO check by session with this endoId and null
     // update endoscope status from ready => being_used
-    const endo = await this.endosRepository.findOneBy({ id });
+    const endo = await this.findOne(id);
     console.log('endo', endo);
 
     if (!endo) return new Error('Cannot find the endoscope');
@@ -56,13 +61,12 @@ export class EndosService {
     // create a session
     await this.createSession(id);
 
-    // port1.write(':L00(255,000,000)\r\n)', (err) => {
-    //   // if (error) console.log(error?.message);
-    //   if (err) {
-    //     return console.log('Error on write: ', err.message);
-    //   }
-    //   console.log('wrote');
-    // });
+    // write color
+    this.serialportsService.writeColor({
+      col: endo.tray.container.col,
+      row: endo.tray.row,
+      endoStatus: ENDO_STATUS_OBJ.BEING_USED,
+    });
 
     const pickedEndo = this.endosRepository.save({
       ...endo,

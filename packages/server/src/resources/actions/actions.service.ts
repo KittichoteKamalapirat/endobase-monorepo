@@ -6,6 +6,7 @@ import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
 import { Officer } from '../officers/entities/officer.entity';
 import { OfficersService } from '../officers/officers.service';
+import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { CreateActionInput } from './dto/create-action.input';
 import { UpdateActionInput } from './dto/update-action.input';
@@ -18,6 +19,7 @@ export class ActionsService {
     private actionsRepository: Repository<Action>, // use database, make sure forFeature is in module
     private officersService: OfficersService,
     private sessionsService: SessionsService,
+    private serialportsService: SerialportsService,
     private endosService: EndosService,
   ) {}
 
@@ -25,7 +27,7 @@ export class ActionsService {
   // otherwise, create one!
 
   // if type = leak test or disinfect, have to update endo status
-  // if type = store, have to update endo status, end session
+  // if type = store, have to update endo status, end session, and change light color
   async create(input: CreateActionInput) {
     // make sure, an action is not already created
     const action = await this.actionsRepository.findOneBy({
@@ -92,7 +94,16 @@ export class ActionsService {
           session.endoId,
           ENDO_STATUS_OBJ.DRYING,
         );
+        // update session
         await this.sessionsService.endSession(input.sessionId);
+
+        // update color on lightbox
+        this.serialportsService.writeColor({
+          row: session.endo.tray.row,
+          col: session.endo.tray.container.col,
+          endoStatus: ENDO_STATUS_OBJ.DRYING,
+        });
+
         break;
       default:
         console.log('do nothing');

@@ -3,29 +3,13 @@ import { ReadlineParser, SerialPort } from 'serialport';
 import { SERIALPORTS_PROVIDER } from '../../constants';
 import { formatSTS } from '../../utils/formatSTS';
 import { numTo3Digits } from '../../utils/numTo3Digits';
+import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
+import { ColType } from '../containers/entities/container.entity';
+import { ENDO_STATUS } from '../endos/entities/endo.entity';
 import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
-
-// export const port1 = new SerialPort({
-//   path: serialportPath1,
-//   baudRate: 9600,
-//   autoOpen: true,
-// });
-
-// export const port2 = new SerialPort({
-//   path: serialportPath2,
-//   baudRate: 9600,
-//   autoOpen: true,
-// });
-
-// export const port3 = new SerialPort({
-//   path: serialportPath3,
-//   baudRate: 9600,
-//   autoOpen: true,
-// });
-
-// export const allPorts = [port1, port2, port3];
+import { RowType } from '../trays/entities/tray.entity';
 
 @Injectable()
 export class SerialportsService {
@@ -48,11 +32,12 @@ export class SerialportsService {
 
     const parsers = [parserA, parserB, parserC];
 
+    // event listener on controller return
     parsers.forEach((parser, index) => {
       parser.on('data', async (data: string) => {
         if (data.includes('sts')) {
           // only save snapshot if it is reading system status
-          const col = String.fromCharCode(index + 65); // 65 = A
+          const col = String.fromCharCode(index + 65) as ColType; // 65 = A
           const container = await this.containersService.findOneByContainerChar(
             col,
           );
@@ -76,43 +61,34 @@ export class SerialportsService {
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
 
-    const threeDigitR = numTo3Digits(r, 3);
-    const threeDigitG = numTo3Digits(g, 3);
-    const threeDigitB = numTo3Digits(b, 3);
+    const threeDigitR = numTo3Digits(r);
+    const threeDigitG = numTo3Digits(g);
+    const threeDigitB = numTo3Digits(b);
     const randomColor = `${threeDigitR},${threeDigitG},${threeDigitB}`;
 
     const command = `:L00(${randomColor})\r\n)`;
+  }
 
-    // this.port1.write(command, (err) => {
-    //   // if (error) console.log(error?.message);
-    //   if (err) {
-    //     return console.log('Error on write: ', err.message);
-    //   }
-    //   console.log('message written', command);
-    // });
+  writeColor({
+    col,
+    row,
+    endoStatus,
+  }: {
+    col: ColType;
+    row: RowType;
+    endoStatus: ENDO_STATUS;
+  }) {
+    const command = writeColorCommand({
+      endoStatus,
+      row,
+    });
+
+    this.serialports[col].write(command, (err) => {
+      // if (error) console.log(error?.message);
+      if (err) {
+        return console.log('Error on write: ', err.message);
+      }
+      console.log('wrote');
+    });
   }
 }
-
-// export const SerialHandlerService = () => {
-//   //   const start = () => {
-//   //     if (port.isOpen) return;
-//   //     port.open((err) => {
-//   //       if (err) console.log('is open', port.isOpen);
-//   //     });
-//   //   };
-
-//   port1.on('open', () => {
-//     console.info('port opened');
-//   });
-
-//   const white = '255,255,255';
-//   const off = '000,000,000';
-//   const command = `:L00(${off})\r\n)`;
-//   port1.write(command, (err) => {
-//     // if (error) console.log(error?.message);
-//     if (err) {
-//       return console.log('Error on write: ', err.message);
-//     }
-//     console.log('message written', command);
-//   });
-// };

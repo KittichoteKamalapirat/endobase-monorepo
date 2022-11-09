@@ -28,7 +28,14 @@ export class SessionsService {
   async findOne(id: string) {
     const session = await this.sessionsRepository.findOne({
       where: { id },
-      relations: ['actions', 'actions.officer', 'patient'],
+      relations: [
+        'actions',
+        'actions.officer',
+        'patient',
+        'endo',
+        'endo.tray',
+        'endo.tray.container',
+      ],
     });
     console.log('session', session);
 

@@ -38,3 +38,23 @@ Install my-project with npm
 | Example Color | ![#f8f8f8](https://via.placeholder.com/10/f8f8f8?text=+) #f8f8f8 |
 | Example Color | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+) #00b48a |
 | Example Color | ![#00d1a0](https://via.placeholder.com/10/00b48a?text=+) #00d1a0 |
+
+How realtime data fetching works when upadting temperate and humidity of each container.
+
+- Backend
+
+1. When instantiate serialports , add listener to listen to any returned data from serialports (in serialport service)
+2. Cron job (in serialport) to write :sts to each serialport every minute
+3. Inside listen,
+   3.1 update the container stat every write
+   3.2 only create snapshot every hour
+
+In order to create snapshot only every hour (not every time)
+A **counter** is used
+
+If there is **one** serialport
+If counter = 60, then create snapshot
+
+However, there are **8** serialports, the counter will increase by 8 every minute
+
+Therefore we only create snapshot when counter = 60 \* 8 (container_num)

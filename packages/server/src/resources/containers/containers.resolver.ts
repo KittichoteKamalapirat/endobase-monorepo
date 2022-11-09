@@ -1,8 +1,7 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ContainersService } from './containers.service';
-import { Container } from './entities/container.entity';
 import { CreateContainerInput } from './dto/create-container.input';
-import { UpdateContainerInput } from './dto/update-container.input';
+import { Container } from './entities/container.entity';
 
 @Resolver(() => Container)
 export class ContainersResolver {
@@ -25,15 +24,12 @@ export class ContainersResolver {
     return this.containersService.findOne(id);
   }
 
-  @Mutation(() => Container)
-  updateContainer(
-    @Args('updateContainerInput') updateContainerInput: UpdateContainerInput,
-  ) {
-    return this.containersService.update(
-      updateContainerInput.id,
-      updateContainerInput,
-    );
-  }
+  // @Mutation(() => Container)
+  // updateContainer(
+  //   @Args('updateContainerInput') updateContainerInput: UpdateContainerInput,
+  // ) {
+  //   return this.containersService.updateStats(updateContainerInput);
+  // }
 
   @Mutation(() => Container)
   removeContainer(@Args('id', { type: () => Int }) id: number) {

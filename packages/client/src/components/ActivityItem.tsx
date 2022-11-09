@@ -5,7 +5,6 @@ interface Props {
 }
 
 const ActivityItem = ({ action }: Props) => {
-  console.log("action", action);
   const { id, officerId, officer, type, passed } = action;
   return (
     <div key={id} className="border-solid border-grey-200 border-b-2">

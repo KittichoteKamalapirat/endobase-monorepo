@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SerialPort } from 'serialport';
 import { Repository } from 'typeorm';
+import { SERIALPORTS_PROVIDER } from '../../constants';
 import { CreateContainerInput } from './dto/create-container.input';
 import { UpdateContainerInput } from './dto/update-container.input';
 import { ColType, Container } from './entities/container.entity';
@@ -10,6 +12,8 @@ export class ContainersService {
   constructor(
     @InjectRepository(Container)
     private containersRepository: Repository<Container>,
+    @Inject(SERIALPORTS_PROVIDER)
+    private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
   ) {}
 
   create(createContainerInput: CreateContainerInput) {
@@ -32,8 +36,14 @@ export class ContainersService {
     return this.containersRepository.findOneBy({ col });
   }
 
-  update(id: number, updateContainerInput: UpdateContainerInput) {
-    return `This action updates a #${id} container`;
+  async updateStats({ col, currTemp, currHum }: UpdateContainerInput) {
+    const container = await this.containersRepository.findOne({
+      where: { col },
+    });
+
+    if (!container) return new Error('Cannot find the container');
+    const updatedContainer: Container = { ...container, currHum, currTemp };
+    return this.containersRepository.save(updatedContainer);
   }
 
   remove(id: number) {

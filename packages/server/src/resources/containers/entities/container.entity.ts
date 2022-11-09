@@ -26,6 +26,14 @@ export class Container {
   @Field()
   col: ColType;
 
+  @Column({ default: '0.0' })
+  @Field()
+  currTemp: string;
+
+  @Column({ default: '0.0' })
+  @Field()
+  currHum: string;
+
   @OneToMany(() => Tray, (tray) => tray.container)
   @Field(() => [Tray])
   trays: Tray[];

@@ -47,7 +47,6 @@ const DisinfectForm = ({ containerClass }: Props) => {
         passed: true,
       };
 
-      console.log("input", input);
       const result = await createAction({
         variables: {
           input,

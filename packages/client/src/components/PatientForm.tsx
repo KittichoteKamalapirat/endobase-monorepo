@@ -40,7 +40,6 @@ const PatientForm = ({ containerClass }: Props) => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      console.log(data);
       if (!sessionId) return;
       const result = await updatePatientInSession({
         variables: {

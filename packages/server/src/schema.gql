@@ -89,6 +89,8 @@ type Tray {
 type Container {
   id: ID!
   col: String!
+  currTemp: String!
+  currHum: String!
   trays: [Tray!]!
   snapshots: [Snapshot!]!
   createdAt: DateTime!
@@ -115,7 +117,6 @@ type Query {
 type Mutation {
   createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
-  updateContainer(updateContainerInput: UpdateContainerInput!): Container!
   removeContainer(id: Int!): Container!
   createEndo(input: CreateEndoInput!): Endo!
   pickEndo(id: String!): Endo!
@@ -147,12 +148,6 @@ input CreateSnapshotInput {
 input CreateContainerInput {
   """Example field (placeholder)"""
   exampleField: Int!
-}
-
-input UpdateContainerInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateEndoInput {

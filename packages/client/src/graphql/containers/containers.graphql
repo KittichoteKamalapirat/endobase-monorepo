@@ -1,0 +1,8 @@
+query Containers {
+  containers {
+    id
+    col
+    currTemp
+    currHum
+  }
+}

@@ -3,8 +3,6 @@ export const formatSTS = (data: string) => {
   // only format if it is sts
   // when port is connect, will get return "0SHT3x ok."
   if (!data.includes('sts')) return;
-
-  console.log('-------------------------includes!-----');
   const arr = data.split(',');
   //   const systemStatus = data.slice(4, 7);
   const systemStatus = arr[0].replace(':sts', '');

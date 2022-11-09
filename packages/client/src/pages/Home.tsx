@@ -1,4 +1,4 @@
-import ContainersTable from "../components/EndosTable";
+import ContainersTable from "../components/ContainersTable";
 import EndosTable from "../components/EndosTable";
 import Layout from "../components/layouts/Layout";
 

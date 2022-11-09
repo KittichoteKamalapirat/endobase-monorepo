@@ -1,8 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Column, useTable } from "react-table";
-import { UPDATE_STORAGE_TIME_INTERVAL } from "../../constants";
-import { useEndosQuery, usePickEndoMutation } from "../../generated/graphql";
-import Layout from "../layouts/Layout";
+import { UPDATE_CONTAINER_STATS_TIME_INTERVAL } from "../../constants";
+import { useContainersQuery } from "../../generated/graphql";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -12,31 +11,29 @@ import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
-import { myColumns } from "./myColumns";
+import { containerColumns } from "./containerColumns";
 
-// 1. get the data
-// 2. define the columns
-// 3. create a table instance
-// 4. define a table structure with HTML
-// 5. use the table instance and put in HTML
-// 6. style
-
-const EndosTable = () => {
-  const { data: endosData, loading, error, refetch } = useEndosQuery();
-  const [pickEndo] = usePickEndoMutation();
+const ContainersTable = () => {
+  const {
+    data: containersData,
+    loading,
+    error,
+    refetch,
+  } = useContainersQuery();
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(
-    () => myColumns({ pickEndo, refetchEndos: refetch }),
-    [pickEndo, refetch]
-  );
-
-  console.log("data", endosData);
+  const columns = useMemo<Column[]>(() => containerColumns(), []);
 
   const data = useMemo(() => {
-    if (error || loading || endosData?.endos.length === 0) return [];
-    return endosData?.endos || [];
-  }, [loading, endosData, error]);
+    if (error || loading || containersData?.containers.length === 0) return [];
+
+    const containers = [...(containersData?.containers || [])]; // TODO make this less confusing
+    return (
+      containers.sort((prev, curr) => {
+        return prev.col.charCodeAt(0) - curr.col.charCodeAt(0) || 0;
+      }) || []
+    );
+  }, [loading, containersData, error]);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
@@ -48,10 +45,10 @@ const EndosTable = () => {
     const intervalId = setInterval(() => {
       refetch();
       console.log("refetch");
-    }, UPDATE_STORAGE_TIME_INTERVAL * 60 * 1000);
+    }, UPDATE_CONTAINER_STATS_TIME_INTERVAL * 60 * 1000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [refetch]);
 
   if (loading) {
     return <RowsSkeleton />;
@@ -62,7 +59,7 @@ const EndosTable = () => {
 
   return (
     <div>
-      <PageHeading heading="Endoscopes" />
+      <PageHeading heading="Containers" />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -98,4 +95,4 @@ const EndosTable = () => {
   );
 };
 
-export default EndosTable;
+export default ContainersTable;

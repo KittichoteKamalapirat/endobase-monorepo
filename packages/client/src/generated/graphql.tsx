@@ -33,6 +33,8 @@ export type Container = {
   __typename?: 'Container';
   col: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  currHum: Scalars['String'];
+  currTemp: Scalars['String'];
   id: Scalars['ID'];
   snapshots: Array<Snapshot>;
   trays: Array<Tray>;
@@ -121,7 +123,6 @@ export type Mutation = {
   removeSession: Session;
   removeTray: Tray;
   updateAction: Action;
-  updateContainer: Container;
   updateOfficer: Officer;
   updatePatient: Patient;
   updateSession: Session;
@@ -207,11 +208,6 @@ export type MutationRemoveTrayArgs = {
 
 export type MutationUpdateActionArgs = {
   updateActionInput: UpdateActionInput;
-};
-
-
-export type MutationUpdateContainerArgs = {
-  updateContainerInput: UpdateContainerInput;
 };
 
 
@@ -355,12 +351,6 @@ export type UpdateActionInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
-export type UpdateContainerInput = {
-  /** Example field (placeholder) */
-  exampleField?: InputMaybe<Scalars['Int']>;
-  id: Scalars['Int'];
-};
-
 export type UpdateOfficerInput = {
   id: Scalars['Int'];
   officerNum?: InputMaybe<Scalars['String']>;
@@ -392,6 +382,11 @@ export type UpdateTrayInput = {
   /** row inside a container */
   row?: InputMaybe<Scalars['Int']>;
 };
+
+export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string }> };
 
 export type PickEndoMutationVariables = Exact<{
   id: Scalars['String'];
@@ -427,6 +422,43 @@ export type SessionQueryVariables = Exact<{
 export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 
+export const ContainersDocument = gql`
+    query Containers {
+  containers {
+    id
+    col
+    currTemp
+    currHum
+  }
+}
+    `;
+
+/**
+ * __useContainersQuery__
+ *
+ * To run a query within a React component, call `useContainersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContainersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContainersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useContainersQuery(baseOptions?: Apollo.QueryHookOptions<ContainersQuery, ContainersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ContainersQuery, ContainersQueryVariables>(ContainersDocument, options);
+      }
+export function useContainersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContainersQuery, ContainersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ContainersQuery, ContainersQueryVariables>(ContainersDocument, options);
+        }
+export type ContainersQueryHookResult = ReturnType<typeof useContainersQuery>;
+export type ContainersLazyQueryHookResult = ReturnType<typeof useContainersLazyQuery>;
+export type ContainersQueryResult = Apollo.QueryResult<ContainersQuery, ContainersQueryVariables>;
 export const PickEndoDocument = gql`
     mutation pickEndo($id: String!) {
   pickEndo(id: $id) {

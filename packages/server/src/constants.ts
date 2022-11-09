@@ -12,5 +12,5 @@ export const BLACK_COLOR_COMMAND = '000,000,000'; // endo not here: being_used, 
 export const YELLOW_COLOR_COMMAND = '255,255,000'; // expired_soon
 export const ORANGE_COLOR_COMMAND = '255,165,000';
 
-export const MAX_STORAGE_DAYS = 30;
+export const MAX_STORAGE_DAYS = 31;
 export const DRYING_TIME_MINS = 30;

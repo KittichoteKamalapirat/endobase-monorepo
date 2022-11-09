@@ -21,7 +21,7 @@ import { myColumns } from "./myColumns";
 // 5. use the table instance and put in HTML
 // 6. style
 
-const ContainersTable = () => {
+const EndosTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
   const [pickEndo] = usePickEndoMutation();
 
@@ -98,4 +98,4 @@ const ContainersTable = () => {
   );
 };
 
-export default ContainersTable;
+export default EndosTable;

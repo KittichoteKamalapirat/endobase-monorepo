@@ -112,6 +112,20 @@ export class EndosService {
 
     return this.endosRepository.save(updatedEndo);
   }
+
+  async updateLastPutBackISO(id: string): Promise<Endo | Error> {
+    const endo = await this.endosRepository.findOneBy({ id });
+
+    if (!endo) return new Error('No endoscope found');
+
+    const updatedEndo: Endo = {
+      ...endo,
+      lastPutBackISO: new Date().toISOString(),
+    };
+
+    return this.endosRepository.save(updatedEndo);
+  }
+
   createSession(endoId: string) {
     return this.sessionsService.create({ endoId });
   }
@@ -197,8 +211,14 @@ export class EndosService {
   }
 
   deleteSchedule(name: string) {
+    // TODO, this throws error when there were no previous schedules
     this.schedulerRegistry.deleteTimeout(name);
     this.logger.warn(`Timeout ${name} deleted!`);
+    // console.log('attempt to delte schedule');
+
+    // const timeout = this.schedulerRegistry.getTimeout(name);
+    // console.log('timeout exist or not', timeout);
+    // clearTimeout(timeout);
   }
 
   findCurrentSessionByEndoId(endoId: string) {

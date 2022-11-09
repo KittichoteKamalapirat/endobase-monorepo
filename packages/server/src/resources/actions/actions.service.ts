@@ -102,11 +102,14 @@ export class ActionsService {
         // update session
         await this.sessionsService.endSession(input.sessionId);
 
-        // create schedule to ready
+        // update endo's lastPutBackISO
+        await this.endosService.updateLastPutBackISO(session.endoId);
+
+        // create schedule to ready in 30 mins
         this.endosService.addSchedule(
           session.endoId,
           'ready',
-          minToMillisec(DRYING_TIME_MINS),
+          minToMillisec(session.endo.dryingTime),
         );
 
         // update color on lightbox

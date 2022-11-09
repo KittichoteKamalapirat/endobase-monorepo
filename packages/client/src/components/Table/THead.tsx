@@ -5,10 +5,7 @@ interface Props {
 }
 const THead = ({ children, ...props }: Props) => {
   return (
-    <thead
-      {...props}
-      className="text-md text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-    >
+    <thead {...props} className="text-md text-gray-700 uppercase bg-gray-50 ">
       {children}
     </thead>
   );

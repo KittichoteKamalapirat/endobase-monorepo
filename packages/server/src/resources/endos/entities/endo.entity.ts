@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, Int, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -65,6 +65,11 @@ export class Endo {
   @Field()
   model: string;
 
+  // in minutes
+  @Column({ default: '30' })
+  @Field(() => Int)
+  dryingTime: number;
+
   // tray
   @Column({ nullable: true })
   @Field()
@@ -89,6 +94,10 @@ export class Endo {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
+
+  @Column({ default: new Date().toISOString() })
+  @Field()
+  lastPutBackISO: string;
 
   @UpdateDateColumn()
   @Field()

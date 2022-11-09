@@ -64,11 +64,13 @@ type Endo {
   brand: String!
   type: String!
   model: String!
+  dryingTime: Int!
   trayId: String!
   tray: Tray
   sessions: [Session!]!
   status: String!
   createdAt: DateTime!
+  lastPutBackISO: String!
   updatedAt: DateTime!
   position: String!
   currentSessionId: String

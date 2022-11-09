@@ -34,6 +34,7 @@ export type Container = {
   col: Scalars['String'];
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  snapshots: Array<Snapshot>;
   trays: Array<Tray>;
   updatedAt: Scalars['DateTime'];
 };
@@ -71,6 +72,13 @@ export type CreateSessionInput = {
   endoId: Scalars['String'];
 };
 
+export type CreateSnapshotInput = {
+  containerId: Scalars['String'];
+  hum: Scalars['String'];
+  systemStatus: Scalars['String'];
+  temp: Scalars['String'];
+};
+
 export type CreateTrayInput = {
   containerId: Scalars['String'];
   /** row inside a container */
@@ -82,7 +90,9 @@ export type Endo = {
   brand: Scalars['String'];
   createdAt: Scalars['DateTime'];
   currentSessionId?: Maybe<Scalars['String']>;
+  dryingTime: Scalars['Int'];
   id: Scalars['ID'];
+  lastPutBackISO: Scalars['String'];
   model: Scalars['String'];
   position: Scalars['String'];
   sessions: Array<Session>;
@@ -101,6 +111,7 @@ export type Mutation = {
   createOfficer: Officer;
   createPatient: Patient;
   createSession: Session;
+  createSnapshot: Snapshot;
   createTray: Tray;
   pickEndo: Endo;
   removeAction: Action;
@@ -146,6 +157,11 @@ export type MutationCreatePatientArgs = {
 
 export type MutationCreateSessionArgs = {
   input: CreateSessionInput;
+};
+
+
+export type MutationCreateSnapshotArgs = {
+  createSnapshotInput: CreateSnapshotInput;
 };
 
 
@@ -301,9 +317,22 @@ export type Session = {
   endo: Endo;
   endoId: Scalars['String'];
   id: Scalars['ID'];
-  patient: Patient;
+  isoEndTime?: Maybe<Scalars['String']>;
+  patient?: Maybe<Patient>;
   patientId?: Maybe<Scalars['String']>;
   status: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type Snapshot = {
+  __typename?: 'Snapshot';
+  container?: Maybe<Container>;
+  containerId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  hum: Scalars['String'];
+  id: Scalars['ID'];
+  systemStatus: Scalars['String'];
+  temp: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -374,7 +403,7 @@ export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, lastPutBackISO: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -395,7 +424,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient: { __typename?: 'Patient', id: string, hosNum: string }, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 
 export const PickEndoDocument = gql`
@@ -446,6 +475,7 @@ export const EndosDocument = gql`
     model
     status
     currentSessionId
+    lastPutBackISO
     position
     tray {
       id

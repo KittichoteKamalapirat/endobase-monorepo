@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { Timeout } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { isBuffer } from 'util';
+import { AppService } from '../../app.service';
+import { DRYING_TIME_MINS, MAX_STORAGE_DAYS } from '../../constants';
+import { dayToMillisec } from '../../utils/dayToMillisec';
+import { minToMillisec } from '../../utils/minToMillisec';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
 import { Officer } from '../officers/entities/officer.entity';
@@ -14,6 +18,7 @@ import { Action, ACTION_TYPE_OBJ } from './entities/action.entity';
 
 @Injectable()
 export class ActionsService {
+  private readonly logger = new Logger(AppService.name);
   constructor(
     @InjectRepository(Action)
     private actionsRepository: Repository<Action>, // use database, make sure forFeature is in module
@@ -97,6 +102,13 @@ export class ActionsService {
         // update session
         await this.sessionsService.endSession(input.sessionId);
 
+        // create schedule to ready
+        this.endosService.addSchedule(
+          session.endoId,
+          'ready',
+          minToMillisec(DRYING_TIME_MINS),
+        );
+
         // update color on lightbox
         this.serialportsService.writeColor({
           row: session.endo.tray.row,
@@ -112,6 +124,11 @@ export class ActionsService {
     const newAction = this.actionsRepository.create(actionInput);
     return this.actionsRepository.save(newAction);
   }
+
+  // @Timeout(1000)
+  // handleTimeout() {
+  //   this.logger.debug('called after 1 sec');
+  // }
 
   findAll() {
     return `This action returns all actions`;

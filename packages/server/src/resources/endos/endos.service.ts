@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
@@ -6,15 +6,22 @@ import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { AppService } from '../../app.service';
+import { dayToMillisec } from '../../utils/dayToMillisec';
+import { MAX_STORAGE_DAYS } from '../../constants';
+import { nameSchedule } from '../../utils/nameSchedule';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
 export class EndosService {
+  private readonly logger = new Logger(AppService.name);
   constructor(
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
     private serialportsService: SerialportsService,
+    private schedulerRegistry: SchedulerRegistry,
   ) {}
 
   async findAll(): Promise<Endo[]> {
@@ -53,6 +60,8 @@ export class EndosService {
     console.log('endo', endo);
 
     if (!endo) return new Error('Cannot find the endoscope');
+    if (endo.status !== 'ready' && endo.status !== 'expire_soon')
+      return new Error('This endoscope is not ready yet');
 
     const existingSession = await this.findCurrentSessionByEndoId(id);
     console.log('existing session', existingSession);
@@ -72,22 +81,124 @@ export class EndosService {
       ...endo,
       status: ENDO_STATUS_OBJ.BEING_USED,
     });
+
+    if (endo.status === 'ready') {
+      // remove the previously scheduled to be expire_soon for this endo
+      this.deleteSchedule(
+        nameSchedule({ endoId: endo.id, status: ENDO_STATUS_OBJ.EXPIRE_SOON }),
+      );
+    } else if (endo.status === 'expire_soon') {
+      // remove the previously scheduled to be expired for this endo
+      this.deleteSchedule(
+        nameSchedule({ endoId: endo.id, status: ENDO_STATUS_OBJ.EXPIRED }),
+      );
+    }
+
     console.log('picked endo', pickedEndo);
     return pickedEndo;
   }
 
-  async updateStatus(id: string, status: ENDO_STATUS): Promise<Endo | Error> {
+  async updateStatus(
+    id: string,
+    toBeStatus: ENDO_STATUS,
+  ): Promise<Endo | Error> {
     const endo = await this.endosRepository.findOneBy({ id });
 
     if (!endo) return new Error('No endoscope found');
-
+    if (toBeStatus === 'ready' && endo.status !== 'drying')
+      return new Error('The endoscope is not drying');
     console.log('endo', endo);
-    const updatedEndo = { ...endo, status };
+    const updatedEndo = { ...endo, status: toBeStatus };
 
     return this.endosRepository.save(updatedEndo);
   }
   createSession(endoId: string) {
     return this.sessionsService.create({ endoId });
+  }
+
+  //   // update db
+  // // change lightbox
+  // async updateStatusAndLightBox(endoId: string, status: ENDO_STATUS) {
+  //   const endo = await this.findOne(endoId); // find the endo for col and row
+
+  //   // update db
+  //   this.updateStatus(endoId, status);
+
+  //   // change lightbox
+  //   this.serialportsService.writeColor({
+  //     col: endo.tray.container.col,
+  //     row: endo.tray.row,
+  //     endoStatus: status,
+  //   });
+  // }
+
+  async setReady(endoId: string) {
+    console.log(`set endo ${endoId} ready`);
+    // update endo status to ready
+    this.updateStatus(endoId, ENDO_STATUS_OBJ.READY);
+
+    // change light box color to green
+    const endo = await this.findOne(endoId); // find the endo for col and row
+    this.serialportsService.writeColor({
+      col: endo.tray.container.col,
+      row: endo.tray.row,
+      endoStatus: ENDO_STATUS_OBJ.READY,
+    });
+
+    // create a schedule to expire_soon in 29 days
+    this.addSchedule(
+      endoId,
+      'expire_soon',
+      dayToMillisec(MAX_STORAGE_DAYS - 1),
+    );
+  }
+
+  async setExpireSoon(endoId: string) {
+    console.log(`set endo ${endoId} expire soon`);
+    this.updateStatus(endoId, ENDO_STATUS_OBJ.EXPIRE_SOON);
+
+    const endo = await this.findOne(endoId);
+    this.serialportsService.writeColor({
+      col: endo.tray.container.col,
+      row: endo.tray.row,
+      endoStatus: ENDO_STATUS_OBJ.EXPIRE_SOON,
+    });
+
+    // create a schedule to expired in 1 day
+    this.addSchedule(endoId, 'expired', dayToMillisec(MAX_STORAGE_DAYS));
+  }
+
+  // update db
+  // change lightbox
+  async setExpired(endoId: string) {
+    console.log(`set endo ${endoId} expired`);
+    this.updateStatus(endoId, ENDO_STATUS_OBJ.EXPIRED);
+
+    const endo = await this.findOne(endoId);
+    this.serialportsService.writeColor({
+      col: endo.tray.container.col,
+      row: endo.tray.row,
+      endoStatus: ENDO_STATUS_OBJ.EXPIRED,
+    });
+  }
+
+  addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
+    const name = `Endo: ${endoId} is to be ${toBeStatus}`;
+    const callback = () => {
+      this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
+      if (toBeStatus === 'ready') return this.setReady(endoId);
+      if (toBeStatus === 'expire_soon') return this.setExpireSoon(endoId);
+      if (toBeStatus === 'expired') return this.setExpired(endoId);
+      return;
+    };
+
+    const establishTimeout = setTimeout(callback, milliseconds);
+    this.schedulerRegistry.addTimeout(name, establishTimeout);
+  }
+
+  deleteSchedule(name: string) {
+    this.schedulerRegistry.deleteTimeout(name);
+    this.logger.warn(`Timeout ${name} deleted!`);
   }
 
   findCurrentSessionByEndoId(endoId: string) {

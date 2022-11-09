@@ -56,7 +56,7 @@ import { Snapshot } from './resources/snapshots/entities/snapshot.entity';
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
-    SerialportsModule.forRoot(),
+    SerialportsModule.forRoot(), // can add dynamic data
     // resoureces
     EndosModule,
     ContainersModule,

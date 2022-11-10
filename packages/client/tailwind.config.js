@@ -108,10 +108,14 @@ module.exports = {
           hovered: primaryHoveredColor,
         },
         yellow: yellow,
+        "yellow-bg": "#FEF9C3", // for endo table status
         action: green,
         red: red,
+        "red-bg": "#FEE2E2", // for endo table status
         green: green,
+        "green-bg": "#F7FEE7", // for endo table status
         blue: blue,
+        "blue-bg": "#E0F2FE", // for endo table status
         orange: orange,
         black: black,
       },

@@ -2,10 +2,23 @@ import { Link } from "react-router-dom";
 import { brandName } from "../constants";
 import { urlResolver } from "../lib/UrlResolver";
 import logo from "../logo.svg";
+import { useLocation } from "react-router-dom";
+import classNames from "classnames";
 
+enum PATH_ENUM {
+  ACTIVITIES = "/activities",
+  CONTAINERS = "/containers",
+  HOME = "/",
+  SNAPSHOTS = "/snapshots",
+}
 const Navbar = () => {
+  const { pathname } = useLocation();
+
+  const currPathClassnames =
+    "text-primary-primary font-bold border-solid border-b-2 border-primary-primary rounded-t-md";
+
   return (
-    <nav className="bg-grey-0 container px-10 py-2 flex flex-wrap justify-between items-center mx-auto top-0 fixed">
+    <nav className="z-100 fixed bg-grey-0 container px-10 py-2 flex flex-wrap justify-between items-center mx-auto top-0">
       <a href={urlResolver.index()} className="flex items-center">
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Gomugomu logo" />
         <span className="self-center text-xl font-semibold whitespace-nowrap hover:underline">
@@ -35,18 +48,66 @@ const Navbar = () => {
         </svg>
       </button>
       <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-        <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg  border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white   ">
-          <li className="block py-2 pr-4 pl-3 ">
-            <Link to="/">Home</Link>
+        <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg  border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:font-medium md:border-0 md:bg-white text-grey-400">
+          <li>
+            <Link
+              to={PATH_ENUM.HOME}
+              className={classNames(
+                "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
+                `${
+                  pathname === PATH_ENUM.HOME
+                    ? currPathClassnames
+                    : "rounded-md"
+                }`
+              )}
+            >
+              Home
+            </Link>
           </li>
-          <li className="block py-2 pr-4 pl-3 ">
-            <Link to="/containers">Containers</Link>
+          <li>
+            <Link
+              to={PATH_ENUM.CONTAINERS}
+              className={classNames(
+                "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer",
+                `${
+                  pathname === PATH_ENUM.CONTAINERS
+                    ? currPathClassnames
+                    : "rounded-md"
+                }`
+              )}
+            >
+              Containers
+            </Link>
           </li>
-          <li className="block py-2 pr-4 pl-3 ">
-            <Link to="/snapshots">Data Snapshots</Link>
+          <li>
+            <Link
+              to={PATH_ENUM.SNAPSHOTS}
+              className={classNames(
+                "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
+                `${
+                  pathname === PATH_ENUM.SNAPSHOTS
+                    ? currPathClassnames
+                    : "rounded-md"
+                }`
+              )}
+            >
+              Data Snapshots
+            </Link>
           </li>
-          <li className="block py-2 pr-4 pl-3 ">
-            <Link to="/activities">Activities</Link>
+          <li>
+            <Link
+              to={PATH_ENUM.ACTIVITIES}
+              className={classNames(
+                "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
+                `${
+                  pathname === PATH_ENUM.ACTIVITIES
+                    ? currPathClassnames
+                    : "rounded-md"
+                }`
+              )}
+            >
+              Activities
+            </Link>
           </li>
         </ul>
       </div>

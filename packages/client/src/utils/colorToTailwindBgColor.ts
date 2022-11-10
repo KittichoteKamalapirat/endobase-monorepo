@@ -1,6 +1,6 @@
 export const bgConfig = {
   green: "bg-green",
-  ornage: "bg-ornage",
+  orange: "bg-orange",
   black: "bg-black",
   red: "bg-red",
 };

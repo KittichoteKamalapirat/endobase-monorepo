@@ -1,7 +1,11 @@
 import { useEffect, useMemo } from "react";
-import { Column, useTable } from "react-table";
+import { Column, useGlobalFilter, useTable } from "react-table";
 import { UPDATE_STORAGE_TIME_INTERVAL } from "../../constants";
-import { useEndosQuery, usePickEndoMutation } from "../../generated/graphql";
+import {
+  Endo,
+  useEndosQuery,
+  usePickEndoMutation,
+} from "../../generated/graphql";
 import Layout from "../layouts/Layout";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
@@ -12,7 +16,10 @@ import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
-import { myColumns } from "./myColumns";
+import { endoColumns } from "./endoColumns";
+import { GlobalFilter } from "./GlobalFilter";
+import classNames from "classnames";
+import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
 
 // 1. get the data
 // 2. define the columns
@@ -27,7 +34,7 @@ const EndosTable = () => {
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(
-    () => myColumns({ pickEndo, refetchEndos: refetch }),
+    () => endoColumns({ pickEndo, refetchEndos: refetch }),
     [pickEndo, refetch]
   );
 
@@ -38,12 +45,26 @@ const EndosTable = () => {
     return endosData?.endos || [];
   }, [loading, endosData, error]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state, // table state
+    setGlobalFilter, // for setting global filter text value
+  } = useTable(
+    {
       columns,
       data,
-    });
+    },
+    useGlobalFilter
+  );
 
+  console.log("state", state);
+  console.log("rows", rows);
+
+  const { globalFilter } = state;
   useEffect(() => {
     const intervalId = setInterval(() => {
       refetch();
@@ -63,6 +84,9 @@ const EndosTable = () => {
   return (
     <div>
       <PageHeading heading="Endoscopes" />
+      <div className="my-4">
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      </div>
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -78,8 +102,17 @@ const EndosTable = () => {
         <TBody {...getTableBodyProps}>
           {rows.map((row, index) => {
             prepareRow(row);
+            console.log("hi");
+            const rowStatus = (rows[index].original as Endo)
+              .status as ENDO_STATUS_VALUES;
+            const rowColor = statusToBgColor[rowStatus];
+
             return (
-              <TR {...row.getRowProps()} key={index}>
+              <TR
+                {...row.getRowProps()}
+                key={index}
+                className={classNames(rowColor)}
+              >
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}

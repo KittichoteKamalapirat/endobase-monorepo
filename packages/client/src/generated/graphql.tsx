@@ -405,7 +405,7 @@ export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, lastPutBackISO: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -576,6 +576,7 @@ export const EndosDocument = gql`
     model
     status
     currentSessionId
+    serialNum
     lastPutBackISO
     position
     tray {

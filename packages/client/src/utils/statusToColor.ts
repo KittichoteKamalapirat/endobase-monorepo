@@ -10,7 +10,8 @@ export const ENDO_STATUS = {
   PREWASHED: "prewashed",
   LEAK_TEST_FAILED: "leak_test_failed",
   LEAK_TEST_PASSED: "leak_test_passed",
-  DISINFECTED: "disinfected",
+  DISINFECTION_PASSED: "disinfection_passed",
+  DISINFECTION_FAILED: "disinfection_failed",
   DRYING: "drying",
 } as const;
 
@@ -25,6 +26,20 @@ export const statusToColor = {
   [ENDO_STATUS.PREWASHED]: "black",
   [ENDO_STATUS.LEAK_TEST_FAILED]: "black",
   [ENDO_STATUS.LEAK_TEST_PASSED]: "black",
-  [ENDO_STATUS.DISINFECTED]: "black",
+  [ENDO_STATUS.DISINFECTION_PASSED]: "black",
+  [ENDO_STATUS.DISINFECTION_FAILED]: "black",
   [ENDO_STATUS.DRYING]: "blue",
+};
+
+export const statusToBgColor = {
+  [ENDO_STATUS.READY]: "bg-green-bg",
+  [ENDO_STATUS.EXPIRE_SOON]: "bg-yellow-bg",
+  [ENDO_STATUS.BEING_USED]: "bg-grey-50",
+  [ENDO_STATUS.EXPIRED]: "bg-red-bg",
+  [ENDO_STATUS.PREWASHED]: "bg-grey-50",
+  [ENDO_STATUS.LEAK_TEST_FAILED]: "bg-grey-50",
+  [ENDO_STATUS.LEAK_TEST_PASSED]: "bg-grey-50",
+  [ENDO_STATUS.DISINFECTION_PASSED]: "bg-grey-50",
+  [ENDO_STATUS.DISINFECTION_FAILED]: "bg-grey-50",
+  [ENDO_STATUS.DRYING]: "bg-blue-bg",
 };

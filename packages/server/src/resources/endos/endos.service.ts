@@ -6,7 +6,7 @@ import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
-import { SchedulerRegistry } from '@nestjs/schedule';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
 import { dayToMillisec } from '../../utils/dayToMillisec';
 import { MAX_STORAGE_DAYS } from '../../constants';
@@ -84,14 +84,19 @@ export class EndosService {
 
     if (endo.status === 'ready') {
       // remove the previously scheduled to be expire_soon for this endo
-      this.deleteSchedule(
-        nameSchedule({ endoId: endo.id, status: ENDO_STATUS_OBJ.EXPIRE_SOON }),
-      );
+      const scheduleName = nameSchedule({
+        endoId: endo.id,
+        status: ENDO_STATUS_OBJ.EXPIRE_SOON,
+      });
+
+      this.deleteSchedule(scheduleName);
     } else if (endo.status === 'expire_soon') {
       // remove the previously scheduled to be expired for this endo
-      this.deleteSchedule(
-        nameSchedule({ endoId: endo.id, status: ENDO_STATUS_OBJ.EXPIRED }),
-      );
+      const scheduleName = nameSchedule({
+        endoId: endo.id,
+        status: ENDO_STATUS_OBJ.EXPIRED,
+      });
+      this.deleteSchedule(scheduleName);
     }
 
     console.log('picked endo', pickedEndo);
@@ -128,6 +133,11 @@ export class EndosService {
 
   createSession(endoId: string) {
     return this.sessionsService.create({ endoId });
+  }
+
+  getAllTimeouts() {
+    const timeouts = this.schedulerRegistry.getTimeouts();
+    return timeouts;
   }
 
   //   // update db
@@ -196,6 +206,17 @@ export class EndosService {
     });
   }
 
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  // addTestSchedule() {
+  //   const name = String(Math.random() * 100);
+  //   const callback = () => {
+  //     this.logger.warn(`Timeout ${name} executing after 1 sec!`);
+  //   };
+
+  //   const establishTimeout = setTimeout(callback, 1000);
+  //   this.schedulerRegistry.addTimeout(`Name: ${name}`, establishTimeout);
+  // }
+
   addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
     const name = `Endo: ${endoId} is to be ${toBeStatus}`;
     const callback = () => {
@@ -211,7 +232,9 @@ export class EndosService {
   }
 
   deleteSchedule(name: string) {
-    // TODO, this throws error when there were no previous schedules
+    const allSchedules = this.getAllTimeouts();
+    if (!allSchedules.includes(name)) return;
+
     this.schedulerRegistry.deleteTimeout(name);
     this.logger.warn(`Timeout ${name} deleted!`);
     // console.log('attempt to delte schedule');

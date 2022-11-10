@@ -68,7 +68,7 @@ const useClassName = ({
       return `hover:bg-grey-100 ${fontColour} ${borderClass} ${commonClass}`;
 
     case ButtonTypes.SECONDARY:
-      return `bg-grey-100 hover:bg-grey-200 text-grey-250 text-opacity-70 text-11px font-nunito ${commonClass}`;
+      return `bg-grey-0 text-grey-900 hover:bg-primary-100 ${commonClass}`;
 
     case ButtonTypes.TEXT:
       return `${fontColour} hover:text-primary-hovered text-15px underline px-0 ${commonClass}`;

@@ -10,21 +10,22 @@ import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useState } from "react";
 
 interface Props {
   pickEndo: any;
   refetchEndos: any;
 }
 
-export const myColumns = ({ pickEndo, refetchEndos }: Props) => {
+export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
   const handleUseEndo = async (id: string) => {
     await pickEndo({ variables: { id } });
     await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
   };
   return [
     {
-      Header: "ID",
-      accessor: "id",
+      Header: "Serial",
+      accessor: "serialNum",
     },
     {
       Header: "Location",
@@ -62,7 +63,7 @@ export const myColumns = ({ pickEndo, refetchEndos }: Props) => {
 
         return (
           <div className="flex items-center">
-            <div className={`rounded-full w-4 h-4 mr-1 ${twBg}`}></div>
+            <div className={`rounded-full w-2 h-2 mr-1 ${twBg}`}></div>
             <div>{value}</div>
           </div>
         );
@@ -78,7 +79,8 @@ export const myColumns = ({ pickEndo, refetchEndos }: Props) => {
           ENDO_STATUS.PREWASHED,
           ENDO_STATUS.LEAK_TEST_FAILED,
           ENDO_STATUS.LEAK_TEST_PASSED,
-          ENDO_STATUS.DISINFECTED,
+          ENDO_STATUS.DISINFECTION_PASSED,
+          ENDO_STATUS.DISINFECTION_FAILED,
           ENDO_STATUS.DRYING,
         ];
 
@@ -111,7 +113,7 @@ export const myColumns = ({ pickEndo, refetchEndos }: Props) => {
             <LinkButton
               label="wash"
               href={`/session/${row.original.currentSessionId}`}
-              type={ButtonTypes.OUTLINED}
+              type={ButtonTypes.SECONDARY}
             />
           );
         return (

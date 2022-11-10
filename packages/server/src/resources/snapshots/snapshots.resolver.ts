@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateSnapshotInput } from './dto/create-snapshot.input';
 import { Snapshot } from './entities/snapshot.entity';
 import { SnapshotsService } from './snapshots.service';
@@ -12,5 +12,10 @@ export class SnapshotsResolver {
     @Args('createSnapshotInput') createSnapshotInput: CreateSnapshotInput,
   ) {
     return this.snapshotsService.create(createSnapshotInput);
+  }
+
+  @Query(() => [Snapshot], { name: 'snapshots' })
+  findAll() {
+    return this.snapshotsService.findAll();
   }
 }

@@ -97,6 +97,7 @@ export type Endo = {
   lastPutBackISO: Scalars['String'];
   model: Scalars['String'];
   position: Scalars['String'];
+  serialNum: Scalars['String'];
   sessions: Array<Session>;
   status: Scalars['String'];
   tray?: Maybe<Tray>;
@@ -267,6 +268,7 @@ export type Query = {
   patients: Array<Patient>;
   session: Session;
   sessions: Array<Session>;
+  snapshots: Array<Snapshot>;
   tray: Tray;
   trays: Array<Tray>;
 };
@@ -322,8 +324,8 @@ export type Session = {
 
 export type Snapshot = {
   __typename?: 'Snapshot';
-  container?: Maybe<Container>;
-  containerId?: Maybe<Scalars['String']>;
+  container: Container;
+  containerId: Scalars['String'];
   createdAt: Scalars['DateTime'];
   hum: Scalars['String'];
   id: Scalars['ID'];
@@ -383,6 +385,11 @@ export type UpdateTrayInput = {
   row?: InputMaybe<Scalars['Int']>;
 };
 
+export type ActionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
+
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -421,7 +428,69 @@ export type SessionQueryVariables = Exact<{
 
 export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
+export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type SnapshotsQuery = { __typename?: 'Query', snapshots: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, createdAt: any, containerId: string, container: { __typename?: 'Container', id: string, col: string } }> };
+
+
+export const ActionsDocument = gql`
+    query Actions {
+  actions {
+    id
+    passed
+    type
+    createdAt
+    officerId
+    officer {
+      officerNum
+    }
+    session {
+      id
+      status
+      endoId
+      endo {
+        brand
+        type
+        model
+        serialNum
+        position
+      }
+      patientId
+      patient {
+        hosNum
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useActionsQuery__
+ *
+ * To run a query within a React component, call `useActionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useActionsQuery(baseOptions?: Apollo.QueryHookOptions<ActionsQuery, ActionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActionsQuery, ActionsQueryVariables>(ActionsDocument, options);
+      }
+export function useActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActionsQuery, ActionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActionsQuery, ActionsQueryVariables>(ActionsDocument, options);
+        }
+export type ActionsQueryHookResult = ReturnType<typeof useActionsQuery>;
+export type ActionsLazyQueryHookResult = ReturnType<typeof useActionsLazyQuery>;
+export type ActionsQueryResult = Apollo.QueryResult<ActionsQuery, ActionsQueryVariables>;
 export const ContainersDocument = gql`
     query Containers {
   containers {
@@ -671,3 +740,46 @@ export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Se
 export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
 export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
 export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
+export const SnapshotsDocument = gql`
+    query Snapshots {
+  snapshots {
+    id
+    hum
+    temp
+    systemStatus
+    createdAt
+    containerId
+    container {
+      id
+      col
+    }
+  }
+}
+    `;
+
+/**
+ * __useSnapshotsQuery__
+ *
+ * To run a query within a React component, call `useSnapshotsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSnapshotsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSnapshotsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSnapshotsQuery(baseOptions?: Apollo.QueryHookOptions<SnapshotsQuery, SnapshotsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SnapshotsQuery, SnapshotsQueryVariables>(SnapshotsDocument, options);
+      }
+export function useSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SnapshotsQuery, SnapshotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SnapshotsQuery, SnapshotsQueryVariables>(SnapshotsDocument, options);
+        }
+export type SnapshotsQueryHookResult = ReturnType<typeof useSnapshotsQuery>;
+export type SnapshotsLazyQueryHookResult = ReturnType<typeof useSnapshotsLazyQuery>;
+export type SnapshotsQueryResult = Apollo.QueryResult<SnapshotsQuery, SnapshotsQueryVariables>;

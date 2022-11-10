@@ -31,13 +31,12 @@ export class Snapshot {
   @Field()
   systemStatus: string;
 
-  // Patient
-  @Column({ nullable: true })
-  @Field({ nullable: true })
+  @Column()
+  @Field()
   containerId: string;
 
   @ManyToOne(() => Container, (container) => container.snapshots)
-  @Field(() => Container, { nullable: true })
+  @Field(() => Container)
   container: Container;
 
   @CreateDateColumn()

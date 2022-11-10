@@ -57,6 +57,10 @@ export class Endo {
   @Field()
   brand: string;
 
+  @Column({ unique: true })
+  @Field()
+  serialNum: string;
+
   @Column()
   @Field()
   type: string;

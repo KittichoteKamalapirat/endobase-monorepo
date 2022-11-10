@@ -1,0 +1,14 @@
+query Snapshots {
+  snapshots {
+    id
+    hum
+    temp
+    systemStatus
+    createdAt
+    containerId
+    container {
+      id
+      col
+    }
+  }
+}

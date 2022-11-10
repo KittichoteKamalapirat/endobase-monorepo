@@ -10,11 +10,18 @@ export class SnapshotsService {
   private readonly logger = new Logger(AppService.name);
   constructor(
     @InjectRepository(Snapshot)
-    private snapshotssRepository: Repository<Snapshot>,
+    private snapshotsRepository: Repository<Snapshot>,
   ) {}
 
   create(input: CreateSnapshotInput) {
-    const newSnapshot = this.snapshotssRepository.create(input);
-    return this.snapshotssRepository.save(newSnapshot);
+    const newSnapshot = this.snapshotsRepository.create(input);
+    return this.snapshotsRepository.save(newSnapshot);
+  }
+
+  async findAll() {
+    const snapshots = await this.snapshotsRepository.find({
+      relations: ['container'],
+    });
+    return snapshots;
   }
 }

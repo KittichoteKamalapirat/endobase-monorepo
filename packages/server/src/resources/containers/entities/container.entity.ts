@@ -22,7 +22,7 @@ export class Container {
 
   // A,B,C,D, ... H (8 for Songkla)
   // A (1 for Chonburi)
-  @Column({ nullable: true })
+  @Column()
   @Field()
   col: ColType;
 

@@ -1,0 +1,28 @@
+query Actions {
+  actions {
+    id
+    passed
+    type
+    createdAt
+    officerId
+    officer {
+      officerNum
+    }
+    session {
+      id
+      status
+      endoId
+      endo {
+        brand
+        type
+        model
+        serialNum
+        position
+      }
+      patientId
+      patient {
+        hosNum
+      }
+    }
+  }
+}

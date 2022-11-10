@@ -133,8 +133,18 @@ export class ActionsService {
   //   this.logger.debug('called after 1 sec');
   // }
 
-  findAll() {
-    return `This action returns all actions`;
+  async findAll() {
+    const actions = await this.actionsRepository.find({
+      relations: [
+        'session',
+        'session.endo',
+        'session.endo.tray', // for getting position
+        'session.endo.tray.container', // for getting position
+        'session.patient',
+        'officer',
+      ],
+    });
+    return actions;
   }
 
   findOneByX(id: string, type: string) {

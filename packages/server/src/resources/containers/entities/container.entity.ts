@@ -34,11 +34,13 @@ export class Container {
   @Field()
   currHum: string;
 
-  @OneToMany(() => Tray, (tray) => tray.container)
+  @OneToMany(() => Tray, (tray) => tray.container, { cascade: true })
   @Field(() => [Tray])
   trays: Tray[];
 
-  @OneToMany(() => Snapshot, (snapshot) => snapshot.container)
+  @OneToMany(() => Snapshot, (snapshot) => snapshot.container, {
+    cascade: true,
+  })
   @Field(() => [Snapshot])
   snapshots: Snapshot[];
 

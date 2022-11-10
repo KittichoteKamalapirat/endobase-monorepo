@@ -87,7 +87,7 @@ export class Endo {
   tray: Tray;
 
   // session
-  @OneToMany(() => Session, (session) => session.endo)
+  @OneToMany(() => Session, (session) => session.endo, { cascade: true })
   @Field(() => [Session])
   sessions: Session[];
 

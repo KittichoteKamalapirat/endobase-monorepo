@@ -25,7 +25,7 @@ export class Officer {
   officerNum: string;
 
   // actions
-  @OneToMany(() => Action, (action) => action.officer)
+  @OneToMany(() => Action, (action) => action.officer, { cascade: true })
   @Field(() => [Action])
   actions: Action[];
 

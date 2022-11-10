@@ -38,7 +38,9 @@ export class Session {
   @Field()
   endoId: string;
 
-  @ManyToOne(() => Endo, (endo) => endo.sessions)
+  @ManyToOne(() => Endo, (endo) => endo.sessions, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Endo)
   endo: Endo;
 
@@ -47,12 +49,14 @@ export class Session {
   @Field({ nullable: true })
   patientId: string;
 
-  @ManyToOne(() => Patient, (patient) => patient.sessions)
+  @ManyToOne(() => Patient, (patient) => patient.sessions, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Patient, { nullable: true })
   patient: Patient;
 
   // actions
-  @OneToMany(() => Action, (action) => action.session)
+  @OneToMany(() => Action, (action) => action.session, { cascade: true })
   @Field(() => [Action], { nullable: true })
   actions: Action[];
 

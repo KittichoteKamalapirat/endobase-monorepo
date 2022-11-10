@@ -35,7 +35,9 @@ export class Snapshot {
   @Field()
   containerId: string;
 
-  @ManyToOne(() => Container, (container) => container.snapshots)
+  @ManyToOne(() => Container, (container) => container.snapshots, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Container)
   container: Container;
 

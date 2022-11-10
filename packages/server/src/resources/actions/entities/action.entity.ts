@@ -39,7 +39,9 @@ export class Action {
   @Field()
   sessionId: string;
 
-  @ManyToOne(() => Session, (session) => session.actions)
+  @ManyToOne(() => Session, (session) => session.actions, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Session)
   session: Session;
 
@@ -47,7 +49,9 @@ export class Action {
   @Field()
   officerId: string;
 
-  @ManyToOne(() => Officer, (officer) => officer.actions)
+  @ManyToOne(() => Officer, (officer) => officer.actions, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Officer)
   officer: Officer;
 

@@ -53,7 +53,9 @@ export class Tray {
   @Field()
   containerId: string;
 
-  @ManyToOne(() => Container, (container) => container.trays)
+  @ManyToOne(() => Container, (container) => container.trays, {
+    onDelete: 'CASCADE',
+  })
   @Field(() => Container)
   container: Container;
 

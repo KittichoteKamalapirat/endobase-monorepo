@@ -16,3 +16,8 @@ export const MAX_STORAGE_DAYS = 31;
 export const DRYING_TIME_MINS = 30;
 
 export const CONTAINER_NUM = 3;
+
+// config
+export const IS_PROD = process.env.NODE_ENV === 'production';
+export const COOKIE_NAME = 'qidRedis';
+export const SESSION_SECRET = 'secretkpodfqpemvqemfvef';

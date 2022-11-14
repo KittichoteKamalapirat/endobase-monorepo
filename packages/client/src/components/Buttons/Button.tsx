@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Spinner from "../Spinner";
 
 export enum ButtonTypes {
   PRIMARY = "primary",
@@ -30,7 +31,8 @@ interface Props {
   borderWidth: string;
   fontSize: string;
   startIcon?: React.ReactNode;
-  fontColour: string;
+  fontColor: string;
+  loading?: boolean;
 }
 
 interface ClassProps {
@@ -43,7 +45,7 @@ interface ClassProps {
   borderColour: string;
   borderRadius: string;
   borderWidth: string;
-  fontColour: string;
+  fontColor: string;
 }
 
 const useClassName = ({
@@ -54,7 +56,7 @@ const useClassName = ({
   borderColour,
   borderWidth,
   fontSize,
-  fontColour,
+  fontColor,
   extraClass,
   height,
 }: ClassProps) => {
@@ -65,13 +67,13 @@ const useClassName = ({
 
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `hover:bg-grey-100 ${fontColour} ${borderClass} ${commonClass}`;
+      return `hover:bg-grey-100 ${fontColor} ${borderClass} ${commonClass}`;
 
     case ButtonTypes.SECONDARY:
-      return `bg-grey-0 text-grey-900 hover:bg-primary-100 ${commonClass}`;
+      return `bg-grey-100 hover:bg-grey-200 text-grey-250 text-opacity-70 text-11px font-nunito ${commonClass}`;
 
     case ButtonTypes.TEXT:
-      return `${fontColour} hover:text-primary-hovered text-15px underline px-0 ${commonClass}`;
+      return `${fontColor} hover:text-primary-hovered text-15px underline px-0 ${commonClass}`;
 
     case ButtonTypes.ACTION:
       return `bg-action hover:bg-primary-hovered text-white ${commonClass}`;
@@ -98,7 +100,8 @@ const Button = ({
   borderRadius,
   borderWidth,
   startIcon,
-  fontColour,
+  fontColor,
+  loading,
 }: Props) => {
   const className = useClassName({
     type,
@@ -110,7 +113,7 @@ const Button = ({
     borderColour,
     borderRadius,
     borderWidth,
-    fontColour,
+    fontColor,
   });
 
   const button = (
@@ -123,6 +126,7 @@ const Button = ({
       aria-label={ariaLabel ?? label}
     >
       <div className="flex flex-row items-center justify-center">
+        {loading && <Spinner size="w-4 h-4" longColor="text-grey-0" />}
         {startIcon && <div className="mr-2.5">{startIcon}</div>}
         {label}
       </div>
@@ -141,10 +145,10 @@ Button.defaultProps = {
   buttonType: HTMLButtonType.BUTTON,
   disabled: false,
   borderRadius: "rounded-5px",
-  borderColour: "border-primary",
+  borderColour: "border-primary-primary",
   borderWidth: "border",
   fontSize: "text-13px",
-  fontColour: "text-primary",
+  fontColor: "text-primary-primary",
 };
 
 export default Button;

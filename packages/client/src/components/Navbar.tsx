@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { brandName } from "../constants";
 import { urlResolver } from "../lib/UrlResolver";
 import logo from "../logo.svg";
 import { useLocation } from "react-router-dom";
 import classNames from "classnames";
+import Button, { ButtonTypes } from "./Buttons/Button";
+import { useLogoutMutation } from "../generated/graphql";
+import { client as apolloClient } from "../lib/apollo";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
@@ -13,6 +16,15 @@ enum PATH_ENUM {
 }
 const Navbar = () => {
   const { pathname } = useLocation();
+
+  const navigate = useNavigate();
+  const [logout, { loading: logoutLoading }] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+    await apolloClient.resetStore();
+  };
 
   const currPathClassnames =
     "text-primary-primary font-bold border-solid border-b-2 border-primary-primary rounded-t-md";
@@ -108,6 +120,15 @@ const Navbar = () => {
             >
               Activities
             </Link>
+          </li>
+
+          <li>
+            <Button
+              label="Logout"
+              onClick={handleLogout}
+              loading={logoutLoading}
+              type={ButtonTypes.TEXT}
+            />
           </li>
         </ul>
       </div>

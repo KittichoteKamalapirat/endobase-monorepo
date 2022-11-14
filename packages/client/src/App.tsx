@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Actions from "./pages/Actions";
 import Containers from "./pages/Containers";
 import Home from "./pages/Home";
+import LoginPage from "./pages/Login";
 import Session from "./pages/Session";
 import Snapshots from "./pages/Snapshots";
 
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
 
           <Route path="containers" element={<Containers />} />
+          <Route path="login" element={<LoginPage />} />
           <Route path="snapshots" element={<Snapshots />} />
           <Route path="activities" element={<Actions />} />
           <Route path="/session/:id" element={<Session />} />

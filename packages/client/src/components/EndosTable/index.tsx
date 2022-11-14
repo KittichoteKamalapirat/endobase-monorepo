@@ -61,9 +61,6 @@ const EndosTable = () => {
     useGlobalFilter
   );
 
-  console.log("state", state);
-  console.log("rows", rows);
-
   const { globalFilter } = state;
   useEffect(() => {
     const intervalId = setInterval(() => {

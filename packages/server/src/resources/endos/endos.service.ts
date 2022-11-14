@@ -29,8 +29,7 @@ export class EndosService {
       relations: ['tray', 'tray.container'],
       // loadRelationIds: true,
     });
-    console.log('hi');
-    console.log('endos in service', endos);
+
     return endos;
   }
 
@@ -57,14 +56,13 @@ export class EndosService {
     // TODO check by session with this endoId and null
     // update endoscope status from ready => being_used
     const endo = await this.findOne(id);
-    console.log('endo', endo);
 
     if (!endo) return new Error('Cannot find the endoscope');
     if (endo.status !== 'ready' && endo.status !== 'expire_soon')
       return new Error('This endoscope is not ready yet');
 
     const existingSession = await this.findCurrentSessionByEndoId(id);
-    console.log('existing session', existingSession);
+
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
 
     // create a session
@@ -99,7 +97,6 @@ export class EndosService {
       this.deleteSchedule(scheduleName);
     }
 
-    console.log('picked endo', pickedEndo);
     return pickedEndo;
   }
 
@@ -112,7 +109,7 @@ export class EndosService {
     if (!endo) return new Error('No endoscope found');
     if (toBeStatus === 'ready' && endo.status !== 'drying')
       return new Error('The endoscope is not drying');
-    console.log('endo', endo);
+
     const updatedEndo = { ...endo, status: toBeStatus };
 
     return this.endosRepository.save(updatedEndo);
@@ -157,7 +154,6 @@ export class EndosService {
   // }
 
   async setReady(endoId: string) {
-    console.log(`set endo ${endoId} ready`);
     // update endo status to ready
     this.updateStatus(endoId, ENDO_STATUS_OBJ.READY);
 
@@ -178,7 +174,6 @@ export class EndosService {
   }
 
   async setExpireSoon(endoId: string) {
-    console.log(`set endo ${endoId} expire soon`);
     this.updateStatus(endoId, ENDO_STATUS_OBJ.EXPIRE_SOON);
 
     const endo = await this.findOne(endoId);
@@ -195,7 +190,6 @@ export class EndosService {
   // update db
   // change lightbox
   async setExpired(endoId: string) {
-    console.log(`set endo ${endoId} expired`);
     this.updateStatus(endoId, ENDO_STATUS_OBJ.EXPIRED);
 
     const endo = await this.findOne(endoId);
@@ -237,10 +231,9 @@ export class EndosService {
 
     this.schedulerRegistry.deleteTimeout(name);
     this.logger.warn(`Timeout ${name} deleted!`);
-    // console.log('attempt to delte schedule');
 
     // const timeout = this.schedulerRegistry.getTimeout(name);
-    // console.log('timeout exist or not', timeout);
+
     // clearTimeout(timeout);
   }
 

@@ -17,7 +17,7 @@ const Searchbar = ({
   return (
     <div className="flex gap-2">
       <div id="left" className="flex w-full">
-        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300 dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+        <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 rounded-l-md border border-r-0 border-gray-300 ">
           <svg
             aria-hidden="true"
             className="w-5 h-5 text-gray-500"

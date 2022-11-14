@@ -2,6 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Officer {
+  id: ID!
+  officerNum: String!
+  actions: [Action!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Snapshot {
   id: ID!
   hum: String!
@@ -13,29 +26,43 @@ type Snapshot {
   updatedAt: DateTime!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Officer {
+type Container {
   id: ID!
-  officerNum: String!
-  actions: [Action!]!
+  col: String!
+  currTemp: String!
+  currHum: String!
+  trays: [Tray!]!
+  snapshots: [Snapshot!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-type Action {
+type Tray {
   id: ID!
-  passed: Boolean!
-  sessionId: String!
-  session: Session!
-  officerId: String!
-  officer: Officer!
-  type: String!
+  row: Float!
+  endo: Endo
+  containerId: String!
+  container: Container!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Endo {
+  id: ID!
+  brand: String!
+  serialNum: String!
+  type: String!
+  model: String!
+  dryingTime: Int!
+  trayId: String!
+  tray: Tray
+  sessions: [Session!]!
+  status: String!
+  createdAt: DateTime!
+  lastPutBackISO: String!
+  updatedAt: DateTime!
+  position: String!
+  currentSessionId: String
 }
 
 type Patient {
@@ -59,43 +86,32 @@ type Session {
   updatedAt: DateTime!
 }
 
-type Endo {
+type Action {
   id: ID!
-  brand: String!
-  serialNum: String!
+  passed: Boolean!
+  sessionId: String!
+  session: Session!
+  officerId: String!
+  officer: Officer!
   type: String!
-  model: String!
-  dryingTime: Int!
-  trayId: String!
-  tray: Tray
-  sessions: [Session!]!
-  status: String!
-  createdAt: DateTime!
-  lastPutBackISO: String!
-  updatedAt: DateTime!
-  position: String!
-  currentSessionId: String
-}
-
-type Tray {
-  id: ID!
-  row: Float!
-  endo: Endo
-  containerId: String!
-  container: Container!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
-type Container {
+type User {
   id: ID!
-  col: String!
-  currTemp: String!
-  currHum: String!
-  trays: [Tray!]!
-  snapshots: [Snapshot!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  username: String!
+  password: String!
+}
+
+type FieldError {
+  field: String!
+  message: String!
+}
+
+type UserResponse {
+  errors: [FieldError!]
+  user: User
 }
 
 type Query {
@@ -114,6 +130,9 @@ type Query {
   action(id: Int!): Action!
   officers: [Officer!]!
   officer(id: Int!): Officer!
+  users: [User!]!
+  user(id: String!): User!
+  me: User
 }
 
 type Mutation {
@@ -138,6 +157,11 @@ type Mutation {
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
+  register(input: CreateUserInput!): UserResponse!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  login(input: LoginInput!): UserResponse!
+  logout: Boolean!
 }
 
 input CreateSnapshotInput {
@@ -226,4 +250,20 @@ input CreateOfficerInput {
 input UpdateOfficerInput {
   officerNum: String
   id: Int!
+}
+
+input CreateUserInput {
+  username: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  username: String
+  password: String
+  id: Int!
+}
+
+input LoginInput {
+  username: String!
+  password: String!
 }

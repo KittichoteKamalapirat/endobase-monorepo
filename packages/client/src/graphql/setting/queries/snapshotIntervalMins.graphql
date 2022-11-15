@@ -1,0 +1,9 @@
+query SnapshotIntervalMins {
+  snapshotIntervalMins {
+    id
+    name
+    value
+    label
+    description
+  }
+}

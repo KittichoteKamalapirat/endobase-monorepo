@@ -1,10 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Timeout } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
-import { DRYING_TIME_MINS, MAX_STORAGE_DAYS } from '../../constants';
-import { dayToMillisec } from '../../utils/dayToMillisec';
 import { minToMillisec } from '../../utils/minToMillisec';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';

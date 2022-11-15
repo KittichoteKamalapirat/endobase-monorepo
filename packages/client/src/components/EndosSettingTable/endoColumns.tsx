@@ -1,14 +1,9 @@
 // id, brand, model, type, storage time
 
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { useState } from "react";
 import { Control, useForm } from "react-hook-form";
 import { InputType } from "../../constants/inputType";
 import { useUpdateDryingTimeMutation } from "../../generated/graphql";
-import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../../utils/statusToColor";
-import Button, { ButtonTypes, HTMLButtonType } from "../Buttons/Button";
-import LinkButton from "../Buttons/LinkButton";
+import Button, { HTMLButtonType } from "../Buttons/Button";
 import TextField, { TextFieldTypes } from "../forms/TextField";
 
 interface Props {
@@ -60,12 +55,8 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
         const [updateDryingTime, { loading }] = useUpdateDryingTimeMutation();
 
         const {
-          register,
           handleSubmit,
-          setError,
           control,
-          reset,
-          setValue,
           formState: { errors, isDirty },
         } = useForm<FormValues>({
           defaultValues: initialData,

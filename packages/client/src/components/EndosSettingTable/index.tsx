@@ -1,13 +1,8 @@
-import classNames from "classnames";
 import { useEffect, useMemo } from "react";
 import { Column, useGlobalFilter, useTable } from "react-table";
 import { UPDATE_STORAGE_TIME_INTERVAL } from "../../constants";
-import {
-  Endo,
-  useEndosQuery,
-  usePickEndoMutation,
-} from "../../generated/graphql";
-import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
+import { useEndosQuery, usePickEndoMutation } from "../../generated/graphql";
+import HDivider from "../layouts/HDivider";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -16,7 +11,6 @@ import TD from "../Table/TD";
 import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
-import PageHeading from "../typography/PageHeading";
 import SubHeading from "../typography/SubHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
@@ -80,7 +74,7 @@ const EndosSettingTable = () => {
 
   return (
     <div>
-      <SubHeading heading="Drying Time Setting" />
+      <SubHeading heading="Endoscopes Drying Time Setting" />
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -101,7 +95,11 @@ const EndosSettingTable = () => {
             prepareRow(row);
 
             return (
-              <TR {...row.getRowProps()} key={index}>
+              <TR
+                {...row.getRowProps()}
+                key={index}
+                className="border-b-2 border-solid border-grey-50"
+              >
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}

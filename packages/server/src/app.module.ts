@@ -27,6 +27,8 @@ import { SnapshotsModule } from './resources/snapshots/snapshots.module';
 import { TraysModule } from './resources/trays/trays.module';
 import { User } from './resources/users/entities/user.entity';
 import { UsersModule } from './resources/users/users.module';
+import { SettingModule } from './setting/setting.module';
+import { Setting } from './setting/entities/setting.entity';
 
 @Module({
   imports: [
@@ -64,6 +66,7 @@ import { UsersModule } from './resources/users/users.module';
         Officer,
         Snapshot,
         User,
+        Setting,
       ],
       synchronize: true,
     }),
@@ -80,6 +83,7 @@ import { UsersModule } from './resources/users/users.module';
     SnapshotsModule,
     UsersModule,
     AuthModule,
+    SettingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

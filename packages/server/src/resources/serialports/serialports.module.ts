@@ -6,13 +6,14 @@ import {
   serialportPathC,
   SERIALPORTS_PROVIDER,
 } from '../../constants';
+import { SettingModule } from '../../setting/setting.module';
 import { ContainersModule } from '../containers/containers.module';
 import { SnapshotsModule } from '../snapshots/snapshots.module';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { SerialportsService } from './serialports.service';
 
 @Module({
-  imports: [SnapshotsModule, ContainersModule],
+  imports: [SnapshotsModule, ContainersModule, SettingModule],
   providers: [
     // SerialportsResolver,
     SerialportsService,

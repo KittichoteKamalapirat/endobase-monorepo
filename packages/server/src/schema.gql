@@ -98,6 +98,16 @@ type Action {
   updatedAt: DateTime!
 }
 
+type Setting {
+  id: ID!
+  name: String!
+  label: String!
+  description: String!
+  value: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type User {
   id: ID!
   username: String!
@@ -118,6 +128,9 @@ type Query {
   snapshots: [Snapshot!]!
   containers: [Container!]!
   container(id: Int!): Container!
+  settings: [Setting!]!
+  snapshotIntervalMins: Setting!
+  setting(id: Int!): Setting!
   endos: [Endo!]!
   endo(id: String!): Endo!
   sessions: [Session!]!
@@ -139,6 +152,8 @@ type Mutation {
   createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
+  createSetting(input: CreateSettingInput!): Setting!
+  updateSetting(input: UpdateSettingInput!): Setting!
   createEndo(input: CreateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
@@ -175,6 +190,16 @@ input CreateSnapshotInput {
 input CreateContainerInput {
   """Example field (placeholder)"""
   exampleField: Int!
+}
+
+input CreateSettingInput {
+  name: String!
+  value: String!
+}
+
+input UpdateSettingInput {
+  name: String!
+  value: String!
 }
 
 input CreateEndoInput {

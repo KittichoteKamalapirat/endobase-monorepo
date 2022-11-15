@@ -74,6 +74,11 @@ export type CreateSessionInput = {
   endoId: Scalars['String'];
 };
 
+export type CreateSettingInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type CreateSnapshotInput = {
   containerId: Scalars['String'];
   hum: Scalars['String'];
@@ -130,6 +135,7 @@ export type Mutation = {
   createOfficer: Officer;
   createPatient: Patient;
   createSession: Session;
+  createSetting: Setting;
   createSnapshot: Snapshot;
   createTray: Tray;
   login: UserResponse;
@@ -149,6 +155,7 @@ export type Mutation = {
   updatePatient: Patient;
   updateSession: Session;
   updateSessionPatient: Session;
+  updateSetting: Setting;
   updateTray: Tray;
   updateUser: User;
 };
@@ -181,6 +188,11 @@ export type MutationCreatePatientArgs = {
 
 export type MutationCreateSessionArgs = {
   input: CreateSessionInput;
+};
+
+
+export type MutationCreateSettingArgs = {
+  input: CreateSettingInput;
 };
 
 
@@ -274,6 +286,11 @@ export type MutationUpdateSessionPatientArgs = {
 };
 
 
+export type MutationUpdateSettingArgs = {
+  input: UpdateSettingInput;
+};
+
+
 export type MutationUpdateTrayArgs = {
   updateTrayInput: UpdateTrayInput;
 };
@@ -316,6 +333,9 @@ export type Query = {
   patients: Array<Patient>;
   session: Session;
   sessions: Array<Session>;
+  setting: Setting;
+  settings: Array<Setting>;
+  snapshotIntervalMins: Setting;
   snapshots: Array<Snapshot>;
   tray: Tray;
   trays: Array<Tray>;
@@ -354,6 +374,11 @@ export type QuerySessionArgs = {
 };
 
 
+export type QuerySettingArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryTrayArgs = {
   id: Scalars['Int'];
 };
@@ -375,6 +400,17 @@ export type Session = {
   patientId?: Maybe<Scalars['String']>;
   status: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type Setting = {
+  __typename?: 'Setting';
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['String'];
 };
 
 export type Snapshot = {
@@ -436,6 +472,11 @@ export type UpdateSessionInput = {
 export type UpdateSessionPatientInput = {
   id?: InputMaybe<Scalars['String']>;
   patientHN: Scalars['String'];
+};
+
+export type UpdateSettingInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type UpdateTrayInput = {
@@ -530,6 +571,23 @@ export type SessionQueryVariables = Exact<{
 
 
 export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+
+export type UpdateSettingMutationVariables = Exact<{
+  input: UpdateSettingInput;
+}>;
+
+
+export type UpdateSettingMutation = { __typename?: 'Mutation', updateSetting: { __typename?: 'Setting', id: string, name: string, value: string } };
+
+export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SettingsQuery = { __typename?: 'Query', settings: Array<{ __typename?: 'Setting', id: string, name: string, label: string, description: string, value: string }> };
+
+export type SnapshotIntervalMinsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SnapshotIntervalMinsQuery = { __typename?: 'Query', snapshotIntervalMins: { __typename?: 'Setting', id: string, name: string, value: string, label: string, description: string } };
 
 export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -984,6 +1042,117 @@ export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Se
 export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
 export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
 export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
+export const UpdateSettingDocument = gql`
+    mutation UpdateSetting($input: UpdateSettingInput!) {
+  updateSetting(input: $input) {
+    id
+    name
+    value
+  }
+}
+    `;
+export type UpdateSettingMutationFn = Apollo.MutationFunction<UpdateSettingMutation, UpdateSettingMutationVariables>;
+
+/**
+ * __useUpdateSettingMutation__
+ *
+ * To run a mutation, you first call `useUpdateSettingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSettingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSettingMutation, { data, loading, error }] = useUpdateSettingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSettingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSettingMutation, UpdateSettingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSettingMutation, UpdateSettingMutationVariables>(UpdateSettingDocument, options);
+      }
+export type UpdateSettingMutationHookResult = ReturnType<typeof useUpdateSettingMutation>;
+export type UpdateSettingMutationResult = Apollo.MutationResult<UpdateSettingMutation>;
+export type UpdateSettingMutationOptions = Apollo.BaseMutationOptions<UpdateSettingMutation, UpdateSettingMutationVariables>;
+export const SettingsDocument = gql`
+    query Settings {
+  settings {
+    id
+    name
+    label
+    description
+    value
+  }
+}
+    `;
+
+/**
+ * __useSettingsQuery__
+ *
+ * To run a query within a React component, call `useSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSettingsQuery(baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+      }
+export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+        }
+export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
+export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
+export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
+export const SnapshotIntervalMinsDocument = gql`
+    query SnapshotIntervalMins {
+  snapshotIntervalMins {
+    id
+    name
+    value
+    label
+    description
+  }
+}
+    `;
+
+/**
+ * __useSnapshotIntervalMinsQuery__
+ *
+ * To run a query within a React component, call `useSnapshotIntervalMinsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSnapshotIntervalMinsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSnapshotIntervalMinsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSnapshotIntervalMinsQuery(baseOptions?: Apollo.QueryHookOptions<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>(SnapshotIntervalMinsDocument, options);
+      }
+export function useSnapshotIntervalMinsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>(SnapshotIntervalMinsDocument, options);
+        }
+export type SnapshotIntervalMinsQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsQuery>;
+export type SnapshotIntervalMinsLazyQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsLazyQuery>;
+export type SnapshotIntervalMinsQueryResult = Apollo.QueryResult<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>;
 export const SnapshotsDocument = gql`
     query Snapshots {
   snapshots {

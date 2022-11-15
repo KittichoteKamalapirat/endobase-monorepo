@@ -1,0 +1,7 @@
+mutation UpdateSetting($input: UpdateSettingInput!) {
+  updateSetting(input: $input) {
+    id
+    name
+    value
+  }
+}

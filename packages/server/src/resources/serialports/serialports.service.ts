@@ -3,6 +3,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
 import { AppService } from '../../app.service';
 import { CONTAINER_NUM, SERIALPORTS_PROVIDER } from '../../constants';
+import { SettingService } from '../../setting/setting.service';
 import { formatSTS } from '../../utils/formatSTS';
 import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
@@ -25,6 +26,7 @@ export class SerialportsService {
     private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
     private snapshotService: SnapshotsService,
     private containersService: ContainersService,
+    private settingService: SettingService,
   ) {
     const parserA = this.serialports.A.pipe(
       new ReadlineParser({ delimiter: '\r\n' }),
@@ -42,7 +44,23 @@ export class SerialportsService {
       { parser: parserC, col: 'C' },
     ];
 
+    let INTERVAL_MINS = 60;
+    this.settingService.findSnapshotIntervalMins().then((setting) => {
+      console.log('setitng', setting);
+      INTERVAL_MINS = parseInt(setting.value);
+    });
+
+    console.log('INTERVAL_MINS', INTERVAL_MINS);
     let counter = 0;
+
+    // TODO
+    // set counter as let and update it?
+    // have to turn on the serialports
+    const xx = (async () => {
+      const time = (await this.settingService.findSnapshotIntervalMins()).value;
+      console.log('time', time);
+      return time;
+    })();
 
     // event listener on controller return
     parsers.forEach((parserAndCon, index) => {
@@ -57,6 +75,7 @@ export class SerialportsService {
           currTemp: temp,
           currHum: hum,
         });
+        console.log('counter', counter);
 
         if (data.includes('sts') && counter >= CONTAINER_NUM * 60) {
           // only save snapshot if it is reading system status

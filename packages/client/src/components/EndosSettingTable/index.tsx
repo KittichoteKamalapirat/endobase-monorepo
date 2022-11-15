@@ -17,6 +17,7 @@ import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
+import SubHeading from "../typography/SubHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
 
@@ -27,7 +28,7 @@ import { GlobalFilter } from "./GlobalFilter";
 // 5. use the table instance and put in HTML
 // 6. style
 
-const EndosTable = () => {
+const EndosSettingTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
   const [pickEndo] = usePickEndoMutation();
 
@@ -79,7 +80,7 @@ const EndosTable = () => {
 
   return (
     <div>
-      <PageHeading heading="Endoscopes" />
+      <SubHeading heading="Drying Time Setting" />
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -98,17 +99,9 @@ const EndosTable = () => {
         <TBody {...getTableBodyProps}>
           {rows.map((row, index) => {
             prepareRow(row);
-            console.log("hi");
-            const rowStatus = (rows[index].original as Endo)
-              .status as ENDO_STATUS_VALUES;
-            const rowColor = statusToBgColor[rowStatus];
 
             return (
-              <TR
-                {...row.getRowProps()}
-                key={index}
-                className={classNames(rowColor)}
-              >
+              <TR {...row.getRowProps()} key={index}>
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}
@@ -127,4 +120,4 @@ const EndosTable = () => {
   );
 };
 
-export default EndosTable;
+export default EndosSettingTable;

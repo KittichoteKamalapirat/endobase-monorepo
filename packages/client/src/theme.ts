@@ -15,7 +15,7 @@ export const grey800 = "#292929";
 export const grey850 = "#1F1F1F";
 export const grey900 = "#121212";
 // main
-export const primaryColor = grey900;
+export const primaryColor = "#0018A8";
 export const primaryHoveredColor = "#FEBA72";
 
 export const bgColor = grey0;

@@ -4,13 +4,14 @@ import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { AppService } from '../../app.service';
+import { MAX_STORAGE_DAYS } from '../../constants';
+import { dayToMillisec } from '../../utils/dayToMillisec';
+import { nameSchedule } from '../../utils/nameSchedule';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
-import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
-import { AppService } from '../../app.service';
-import { dayToMillisec } from '../../utils/dayToMillisec';
-import { MAX_STORAGE_DAYS } from '../../constants';
-import { nameSchedule } from '../../utils/nameSchedule';
+import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -111,6 +112,15 @@ export class EndosService {
       return new Error('The endoscope is not drying');
 
     const updatedEndo = { ...endo, status: toBeStatus };
+
+    return this.endosRepository.save(updatedEndo);
+  }
+
+  async updateDryingTime(input: UpdateDryingTimeInput): Promise<Endo | Error> {
+    const endo = await this.endosRepository.findOneBy({ id: input.endoId });
+
+    if (!endo) return new Error('No endoscope found');
+    const updatedEndo = { ...endo, dryingTime: input.mins };
 
     return this.endosRepository.save(updatedEndo);
   }

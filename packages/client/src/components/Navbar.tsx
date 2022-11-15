@@ -1,5 +1,9 @@
+import { AiFillSetting, AiFillHome, AiOutlineHistory } from "react-icons/ai";
+import { BsInboxesFill } from "react-icons/bs";
+import { GiWaterRecycling } from "react-icons/gi";
+
 import { Link, useNavigate } from "react-router-dom";
-import { brandName } from "../constants";
+import { brandName, ICON_SIZE } from "../constants";
 import { urlResolver } from "../lib/UrlResolver";
 import logo from "../logo.svg";
 import { useLocation } from "react-router-dom";
@@ -7,12 +11,14 @@ import classNames from "classnames";
 import Button, { ButtonTypes } from "./Buttons/Button";
 import { useLogoutMutation } from "../generated/graphql";
 import { client as apolloClient } from "../lib/apollo";
+import { primaryColor } from "../theme";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
   CONTAINERS = "/containers",
   HOME = "/",
   SNAPSHOTS = "/snapshots",
+  SETTING = "/setting",
 }
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -73,7 +79,10 @@ const Navbar = () => {
                 }`
               )}
             >
-              Home
+              <div className="flex gap-1 items-center">
+                <AiFillHome size={ICON_SIZE} color={primaryColor} />
+                <span>Home</span>
+              </div>
             </Link>
           </li>
           <li>
@@ -88,7 +97,10 @@ const Navbar = () => {
                 }`
               )}
             >
-              Containers
+              <div className="flex gap-1 items-center">
+                <BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />
+                <span>Containers</span>
+              </div>
             </Link>
           </li>
           <li>
@@ -103,7 +115,10 @@ const Navbar = () => {
                 }`
               )}
             >
-              Data Snapshots
+              <div className="flex gap-1 items-center">
+                <AiOutlineHistory size={ICON_SIZE} color={primaryColor} />
+                <span>Data Snapshots</span>
+              </div>
             </Link>
           </li>
           <li>
@@ -118,7 +133,29 @@ const Navbar = () => {
                 }`
               )}
             >
-              Activities
+              <div className="flex gap-1 items-center">
+                <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />
+                <span>Activities</span>
+              </div>
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              to={PATH_ENUM.SETTING}
+              className={classNames(
+                "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
+                `${
+                  pathname === PATH_ENUM.SETTING
+                    ? currPathClassnames
+                    : "rounded-md"
+                }`
+              )}
+            >
+              <div className="flex gap-1 items-center">
+                <AiFillSetting size={ICON_SIZE} color={primaryColor} />
+                <span>Setting</span>
+              </div>
             </Link>
           </li>
 

@@ -1,0 +1,6 @@
+mutation updateDryingTime($input: UpdateDryingTimeInput!) {
+  updateDryingTime(input: $input) {
+    id
+    dryingTime
+  }
+}

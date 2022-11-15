@@ -1,4 +1,3 @@
-import { UseGuards } from '@nestjs/common';
 import {
   Args,
   Mutation,
@@ -7,8 +6,8 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { GqlAuthGuard } from '../auth/gql-auth-guard';
 import { CreateEndoInput } from './dto/create-endo.input';
+import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
 
@@ -51,6 +50,14 @@ export class EndosResolver {
     input: CreateEndoInput,
   ): Promise<Endo> {
     return this.endosService.createEndo(input);
+  }
+
+  @Mutation(() => Endo)
+  updateDryingTime(
+    @Args({ name: 'input', type: () => UpdateDryingTimeInput })
+    input: UpdateDryingTimeInput,
+  ): Promise<Endo | Error> {
+    return this.endosService.updateDryingTime(input);
   }
 
   @Mutation(() => Endo)

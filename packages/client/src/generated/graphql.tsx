@@ -144,6 +144,7 @@ export type Mutation = {
   removeTray: Tray;
   removeUser: User;
   updateAction: Action;
+  updateDryingTime: Endo;
   updateOfficer: Officer;
   updatePatient: Patient;
   updateSession: Session;
@@ -245,6 +246,11 @@ export type MutationRemoveUserArgs = {
 
 export type MutationUpdateActionArgs = {
   updateActionInput: UpdateActionInput;
+};
+
+
+export type MutationUpdateDryingTimeArgs = {
+  input: UpdateDryingTimeInput;
 };
 
 
@@ -402,6 +408,11 @@ export type UpdateActionInput = {
   type?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateDryingTimeInput = {
+  endoId: Scalars['String'];
+  mins: Scalars['Int'];
+};
+
 export type UpdateOfficerInput = {
   id: Scalars['Int'];
   officerNum?: InputMaybe<Scalars['String']>;
@@ -487,10 +498,17 @@ export type PickEndoMutationVariables = Exact<{
 
 export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string } };
 
+export type UpdateDryingTimeMutationVariables = Exact<{
+  input: UpdateDryingTimeInput;
+}>;
+
+
+export type UpdateDryingTimeMutation = { __typename?: 'Mutation', updateDryingTime: { __typename?: 'Endo', id: string, dryingTime: number } };
+
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -756,6 +774,40 @@ export function usePickEndoMutation(baseOptions?: Apollo.MutationHookOptions<Pic
 export type PickEndoMutationHookResult = ReturnType<typeof usePickEndoMutation>;
 export type PickEndoMutationResult = Apollo.MutationResult<PickEndoMutation>;
 export type PickEndoMutationOptions = Apollo.BaseMutationOptions<PickEndoMutation, PickEndoMutationVariables>;
+export const UpdateDryingTimeDocument = gql`
+    mutation updateDryingTime($input: UpdateDryingTimeInput!) {
+  updateDryingTime(input: $input) {
+    id
+    dryingTime
+  }
+}
+    `;
+export type UpdateDryingTimeMutationFn = Apollo.MutationFunction<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
+
+/**
+ * __useUpdateDryingTimeMutation__
+ *
+ * To run a mutation, you first call `useUpdateDryingTimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDryingTimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDryingTimeMutation, { data, loading, error }] = useUpdateDryingTimeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateDryingTimeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>(UpdateDryingTimeDocument, options);
+      }
+export type UpdateDryingTimeMutationHookResult = ReturnType<typeof useUpdateDryingTimeMutation>;
+export type UpdateDryingTimeMutationResult = Apollo.MutationResult<UpdateDryingTimeMutation>;
+export type UpdateDryingTimeMutationOptions = Apollo.BaseMutationOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
 export const EndosDocument = gql`
     query endos {
   endos {
@@ -768,6 +820,7 @@ export const EndosDocument = gql`
     currentSessionId
     serialNum
     lastPutBackISO
+    dryingTime
     position
     tray {
       id

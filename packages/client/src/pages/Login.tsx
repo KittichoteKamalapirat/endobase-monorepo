@@ -107,9 +107,6 @@ const LoginPage = ({ referer }: Props) => {
     password: "",
   });
 
-  console.log("data", data);
-  console.log("error", error);
-  console.log("loading", loading);
   useEffect(() => {
     if (data?.me) {
       navigate("/");

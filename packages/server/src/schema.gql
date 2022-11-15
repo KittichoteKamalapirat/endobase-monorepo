@@ -140,6 +140,7 @@ type Mutation {
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
   createEndo(input: CreateEndoInput!): Endo!
+  updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
   createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
@@ -181,6 +182,11 @@ input CreateEndoInput {
   brand: String!
   type: String!
   model: String!
+}
+
+input UpdateDryingTimeInput {
+  endoId: String!
+  mins: Int!
 }
 
 input CreateSessionInput {

@@ -1,10 +1,8 @@
-import cors from 'cors';
-import passport from 'passport';
-import session from 'express-session';
-import Redis from 'ioredis';
-import connectRedis from 'connect-redis';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import connectRedis from 'connect-redis';
+import session from 'express-session';
+import Redis from 'ioredis';
 import { AppModule } from './app.module';
 import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
 
@@ -37,9 +35,6 @@ async function bootstrap() {
       resave: false,
     }),
   );
-
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   await app.listen(4001);
 }

@@ -2,7 +2,11 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
 import { AppService } from '../../app.service';
-import { CONTAINER_NUM, SERIALPORTS_PROVIDER } from '../../constants';
+import {
+  CONTAINER_NUM,
+  DEFAULT_SNAPSHOT_INTERVAL_MINS,
+  SERIALPORTS_PROVIDER,
+} from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import { formatSTS } from '../../utils/formatSTS';
 import { writeColorCommand } from '../../utils/writeColorCommand';
@@ -44,29 +48,23 @@ export class SerialportsService {
       { parser: parserC, col: 'C' },
     ];
 
-    let INTERVAL_MINS = 60;
-    this.settingService.findSnapshotIntervalMins().then((setting) => {
-      console.log('setitng', setting);
-      INTERVAL_MINS = parseInt(setting.value);
-    });
-
-    console.log('INTERVAL_MINS', INTERVAL_MINS);
     let counter = 0;
+    let COUNTER_CEIL = CONTAINER_NUM * DEFAULT_SNAPSHOT_INTERVAL_MINS; //by defarult
 
-    // TODO
-    // set counter as let and update it?
-    // have to turn on the serialports
-    const xx = (async () => {
-      const time = (await this.settingService.findSnapshotIntervalMins()).value;
-      console.log('time', time);
-      return time;
+    // update counterCil
+    (async () => {
+      const mins = (await this.settingService.findSnapshotIntervalMins()).value;
+      COUNTER_CEIL = CONTAINER_NUM * parseInt(mins); // update this async
+      return mins;
     })();
 
     // event listener on controller return
     parsers.forEach((parserAndCon, index) => {
       parserAndCon.parser.on('data', async (data: string) => {
-        console.log('parse and con', parserAndCon.col);
         const { systemStatus, temp, hum } = formatSTS(data);
+
+        console.log('counter', counter);
+        console.log('COUNTER_CEIL', COUNTER_CEIL);
 
         // update container stats
         // cron job defined in snapshots service
@@ -75,9 +73,8 @@ export class SerialportsService {
           currTemp: temp,
           currHum: hum,
         });
-        console.log('counter', counter);
 
-        if (data.includes('sts') && counter >= CONTAINER_NUM * 60) {
+        if (data.includes('sts') && counter >= COUNTER_CEIL) {
           // only save snapshot if it is reading system status
           const col = String.fromCharCode(index + 65) as ColType; // 65 = A
           const container = await this.containersService.findOneByContainerChar(

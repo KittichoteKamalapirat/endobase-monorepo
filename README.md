@@ -53,8 +53,15 @@ In order to create snapshot only every hour (not every time)
 A **counter** is used
 
 If there is **one** serialport
-If counter = 60, then create snapshot
+If counter = 60, then create snapshot (counter = 10 if want to update every 10 mins)
 
 However, there are **8** serialports, the counter will increase by 8 every minute
 
 Therefore we only create snapshot when counter = 60 \* 8 (container_num)
+
+counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in serialpots.service.ts
+
+1. Basically, the first time it run, it is 60 by default (on constants.ts DEFAULT_SNAPSHOT_INTERVAL_MINS)
+2. However, we update it async to whatever is in the database this.settingService.findSnapshotIntervalMins
+3. อัปเดทหลังแค่เสี้ยววินาที เลยทันตราบที่ไม่ได้แบบอัปเดททุปวินาที
+4. first min => counter = จำนวน container ถ้าไม่เกินก้อโอเค สรุปคือถ้า setting ไท่เท่ากับ 1 ไม่น่ามีปัญหาปะน้อ

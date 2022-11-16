@@ -1,6 +1,6 @@
 export const serialportPathA = '/dev/tty.usbserial-0001';
 export const serialportPathB = '/dev/tty.usbserial-5';
-export const serialportPathC = '/dev/tty.usbserial-4';
+export const serialportPathC = '/dev/tty.usbserial-3';
 
 export const SERIALPORTS_PROVIDER = 'allSerialports';
 
@@ -15,6 +15,7 @@ export const ORANGE_COLOR_COMMAND = '255,165,000';
 export const MAX_STORAGE_DAYS = 31;
 
 export const CONTAINER_NUM = 3;
+export const DEFAULT_SNAPSHOT_INTERVAL_MINS = 60;
 
 // config
 export const IS_PROD = process.env.NODE_ENV === 'production';

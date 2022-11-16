@@ -17,6 +17,7 @@ import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 @Injectable()
 export class EndosService {
   private readonly logger = new Logger(AppService.name);
+  private x = 10;
   constructor(
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module

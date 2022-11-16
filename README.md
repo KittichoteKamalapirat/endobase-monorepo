@@ -65,3 +65,9 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 2. However, we update it async to whatever is in the database this.settingService.findSnapshotIntervalMins
 3. อัปเดทหลังแค่เสี้ยววินาที เลยทันตราบที่ไม่ได้แบบอัปเดททุปวินาที
 4. first min => counter = จำนวน container ถ้าไม่เกินก้อโอเค สรุปคือถ้า setting ไท่เท่ากับ 1 ไม่น่ามีปัญหาปะน้อ
+
+### How the snapshot interval setting works?
+
+1. The setting is stored in setting table in the db
+2. When instantiate the serialports, use this value in the db (for counter ceiling)
+3. when this got updated by a user, have to update the counter ceilling value

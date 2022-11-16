@@ -2,11 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
 import { AppService } from '../../app.service';
-import {
-  CONTAINER_NUM,
-  DEFAULT_SNAPSHOT_INTERVAL_MINS,
-  SERIALPORTS_PROVIDER,
-} from '../../constants';
+import { CONTAINER_NUM, SERIALPORTS_PROVIDER } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import { formatSTS } from '../../utils/formatSTS';
 import { writeColorCommand } from '../../utils/writeColorCommand';
@@ -24,11 +20,11 @@ interface ParserAndContainer {
 @Injectable()
 export class SerialportsService {
   private readonly logger = new Logger(AppService.name);
+
   constructor(
     private snapshotsService: SnapshotsService,
     @Inject(SERIALPORTS_PROVIDER)
     private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
-    private snapshotService: SnapshotsService,
     private containersService: ContainersService,
     private settingService: SettingService,
   ) {
@@ -49,13 +45,17 @@ export class SerialportsService {
     ];
 
     let counter = 0;
-    let COUNTER_CEIL = CONTAINER_NUM * DEFAULT_SNAPSHOT_INTERVAL_MINS; //by defarult
+    let COUNTER_CEIL = this.settingService.getSnapshotInterval(); // get the default value
 
-    // update counterCil
+    // update counterCeil for the first time
     (async () => {
-      const mins = (await this.settingService.findSnapshotIntervalMins()).value;
-      COUNTER_CEIL = CONTAINER_NUM * parseInt(mins); // update this async
-      return mins;
+      const minsString = (await this.settingService.findSnapshotIntervalMins())
+        .value;
+      const minsNum = parseInt(minsString);
+
+      this.settingService.setSnapshotInterval(minsNum); // update the default value
+      COUNTER_CEIL = CONTAINER_NUM * minsNum; // update this async
+      return minsNum;
     })();
 
     // event listener on controller return
@@ -63,8 +63,8 @@ export class SerialportsService {
       parserAndCon.parser.on('data', async (data: string) => {
         const { systemStatus, temp, hum } = formatSTS(data);
 
-        console.log('counter', counter);
-        console.log('COUNTER_CEIL', COUNTER_CEIL);
+        COUNTER_CEIL =
+          CONTAINER_NUM * this.settingService.getSnapshotInterval(); // if the interval value changes => recalculate
 
         // update container stats
         // cron job defined in snapshots service
@@ -87,7 +87,7 @@ export class SerialportsService {
             hum,
             containerId: container.id,
           };
-          snapshotService.create(input);
+          this.snapshotsService.create(input);
         }
         counter += 1;
       });
@@ -97,6 +97,7 @@ export class SerialportsService {
   // @Cron(CronExpression.EVERY_HOUR)
   @Cron(CronExpression.EVERY_10_SECONDS)
   checkSystemStatus() {
+    console.log('check status cron');
     console.log('sp a', this.serialports['A'].isOpen);
     console.log('sp b', this.serialports['B'].isOpen);
     console.log('sp c', this.serialports['C'].isOpen);

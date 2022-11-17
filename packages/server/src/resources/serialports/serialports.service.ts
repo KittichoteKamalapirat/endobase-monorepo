@@ -53,8 +53,8 @@ export class SerialportsService {
         .value;
       const minsNum = parseInt(minsString);
 
-      this.settingService.setSnapshotInterval(minsNum); // update the default value
-      COUNTER_CEIL = CONTAINER_NUM * minsNum; // update this async
+      this.settingService.setSnapshotInterval(minsNum); // update the global variable too
+      COUNTER_CEIL = CONTAINER_NUM * minsNum;
       return minsNum;
     })();
 

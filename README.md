@@ -70,4 +70,4 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 
 1. The setting is stored in setting table in the db
 2. When instantiate the serialports, use this value in the db (for counter ceiling)
-3. when this got updated by a user, have to update the counter ceilling value
+3. Later on, when this got updated by a user, have to update the counter ceilling value by getting it from the setting service

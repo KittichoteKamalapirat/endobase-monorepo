@@ -7,8 +7,8 @@ export interface AlertModalState {
 }
 
 const blankAlertModal: AlertModalType = {
-  heading: "",
-  content: "",
+  heading: "Default Heading",
+  content: "Default Content",
   type: "success",
   ariaLabel: "",
 };

@@ -1,8 +1,6 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Column, useGlobalFilter, useTable } from "react-table";
-import { UPDATE_STORAGE_TIME_INTERVAL } from "../../constants";
-import { useEndosQuery, usePickEndoMutation } from "../../generated/graphql";
-import HDivider from "../layouts/HDivider";
+import { useEndosQuery } from "../../generated/graphql";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -23,14 +21,10 @@ import { GlobalFilter } from "./GlobalFilter";
 // 6. style
 
 const EndosSettingTable = () => {
-  const { data: endosData, loading, error, refetch } = useEndosQuery();
-  const [pickEndo] = usePickEndoMutation();
+  const { data: endosData, loading, error } = useEndosQuery();
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(
-    () => endoColumns({ pickEndo, refetchEndos: refetch }),
-    [pickEndo, refetch]
-  );
+  const columns = useMemo<Column[]>(() => endoColumns(), []);
 
   console.log("data", endosData);
 
@@ -56,14 +50,6 @@ const EndosSettingTable = () => {
   );
 
   const { globalFilter } = state;
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      refetch();
-      console.log("refetch");
-    }, UPDATE_STORAGE_TIME_INTERVAL * 60 * 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   if (loading) {
     return <RowsSkeleton />;

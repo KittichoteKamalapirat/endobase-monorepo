@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UPDATE_CONTAINER_STATS_TIME_INTERVAL } from "../constants";
 import {
+  ActionsQuery,
   ContainersQuery,
   EndosQuery,
   Exact,
@@ -22,7 +23,11 @@ export const useRefetchCounter = (
           }>
         >
       | undefined
-  ) => Promise<ApolloQueryResult<ContainersQuery | EndosQuery | SnapshotsQuery>>
+  ) => Promise<
+    ApolloQueryResult<
+      ContainersQuery | EndosQuery | SnapshotsQuery | ActionsQuery
+    >
+  >
 ) => {
   const lastCount = useSelector((state: RootState) => state.saveCount);
   const [refetchCounter, setRefetchCounter] = useState(lastCount);

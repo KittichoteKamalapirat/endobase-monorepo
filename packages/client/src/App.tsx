@@ -1,12 +1,13 @@
+import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import Modal from "./components/modals/Modal";
 import Actions from "./pages/Actions";
+import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
 import Session from "./pages/Session";
-import Setting from "./pages/Setting";
 import Snapshots from "./pages/Snapshots";
 import { closeAlertModal } from "./redux/slices/alertModalReducer";
 import { RootState } from "./redux/store";
@@ -24,7 +25,7 @@ function App() {
           <Route path="containers" element={<Containers />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="snapshots" element={<Snapshots />} />
-          <Route path="setting" element={<Setting />} />
+          <Route path="setting" element={<ConfigSetting />} />
           <Route path="activities" element={<Actions />} />
           <Route path="/session/:id" element={<Session />} />
         </Routes>
@@ -40,6 +41,7 @@ function App() {
       >
         {data.content}
       </Modal>
+      <Toaster />
     </div>
   );
 }

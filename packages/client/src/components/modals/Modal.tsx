@@ -1,7 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
+import { AlertType } from "../../redux/types/AlertModalType";
+import { green, grey500, grey900, red, yellow } from "../../theme";
 import IconButton from "../Buttons/IconButton";
 import SmallHeading from "../typography/SmallHeading";
 
@@ -16,10 +18,12 @@ interface Props {
   maxWidth?: string;
   modalSpacing?: string;
   zIndex?: number;
+  type?: AlertType;
 }
 
 const Modal = ({
   maxWidth,
+  type = "danger",
   contentLabel,
   isOpen,
   onAfterOpen,
@@ -30,6 +34,18 @@ const Modal = ({
   modalSpacing = "p-6",
   zIndex,
 }: Props) => {
+  const [iconColor, setIconColor] = useState(grey900);
+  const borderColor = (() => {
+    switch (type) {
+      case "success":
+        return green;
+      case "warning":
+        return yellow;
+      case "danger":
+      default:
+        return red;
+    }
+  })();
   const styles = {
     content: {
       minWidth: minWidth || "700px",
@@ -40,8 +56,9 @@ const Modal = ({
       right: "auto",
       bottom: "auto",
       marginRight: "-50%",
+      border: `2px solid ${borderColor}`,
       transform: "translate(-50%, -50%)",
-      borderRadius: "25px",
+      borderRadius: "10px",
     },
     overlay: { zIndex: zIndex || 1 },
   };
@@ -60,7 +77,14 @@ const Modal = ({
           <IconButton
             label="close"
             onClick={onRequestClose}
-            icon={<IoMdClose size={ICON_SIZE} />}
+            icon={
+              <IoMdClose
+                size={ICON_SIZE + 10}
+                color={iconColor}
+                onMouseOver={() => setIconColor(grey500)}
+                onMouseOut={() => setIconColor(grey900)}
+              />
+            }
           />
         </div>
         <div> {children}</div>

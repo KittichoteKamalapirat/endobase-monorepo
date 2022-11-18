@@ -1,4 +1,4 @@
-type AlertType = "success" | "warning" | "danger";
+export type AlertType = "success" | "warning" | "danger";
 
 export interface AlertModalType {
   heading: string;

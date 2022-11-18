@@ -1,15 +1,12 @@
 // id, brand, model, type, storage time
 
 import { Control, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { InputType } from "../../constants/inputType";
 import { useUpdateDryingTimeMutation } from "../../generated/graphql";
+import { showToast } from "../../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "../Buttons/Button";
 import TextField, { TextFieldTypes } from "../forms/TextField";
-
-interface Props {
-  pickEndo: any;
-  refetchEndos: any;
-}
 
 enum FormNames {
   TIME = "time",
@@ -19,11 +16,7 @@ interface FormValues {
   [FormNames.TIME]: string;
 }
 
-export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
-  const handleUseEndo = async (id: string) => {
-    await pickEndo({ variables: { id } });
-    await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
-  };
+export const endoColumns = () => {
   return [
     {
       Header: "Serial",
@@ -50,6 +43,8 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
       Header: "Drying Time",
       accessor: "dryingTime",
       Cell: ({ value, row }: { value: string; row: any }) => {
+        const dispatch = useDispatch();
+
         const endoId = row.original.id as string;
         const initialData = { time: value };
         const [updateDryingTime, { loading }] = useUpdateDryingTimeMutation();
@@ -69,6 +64,12 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
               input: { endoId, mins: parseInt(data[FormNames.TIME]) },
             },
           });
+          dispatch(
+            showToast({
+              message: "Drying time successfully updated!",
+              variant: "success",
+            })
+          );
         };
 
         return (

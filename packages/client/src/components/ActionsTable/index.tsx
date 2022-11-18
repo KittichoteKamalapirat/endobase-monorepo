@@ -1,7 +1,9 @@
 import { useMemo } from "react";
 import { Column, useTable } from "react-table";
 
+import dayjs from "dayjs";
 import { useActionsQuery } from "../../generated/graphql";
+import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -12,10 +14,9 @@ import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { actionColumns } from "./actionColumns";
-import dayjs from "dayjs";
 
 const ActionsTable = () => {
-  const { data: actionsData, loading, error } = useActionsQuery();
+  const { data: actionsData, loading, error, refetch } = useActionsQuery();
 
   console.log("actiondata", actionsData);
   // the lib recommedns to use useMemo
@@ -50,6 +51,8 @@ const ActionsTable = () => {
   return (
     <div>
       <PageHeading heading="Activities" />
+      <CounterIndicator refetch={refetch} />
+
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (

@@ -6,7 +6,6 @@ import {
   useEndosQuery,
   usePickEndoMutation,
 } from "../../generated/graphql";
-import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
 import CounterIndicator from "../CounterIndicator";
@@ -31,14 +30,14 @@ import { GlobalFilter } from "./GlobalFilter";
 
 const EndosTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
-  const refetchCounter = useRefetchCounter(refetch);
+  // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(
-    () => endoColumns({ pickEndo, refetchEndos: refetch }),
-    [pickEndo, refetch]
-  );
+  const columns = useMemo<Column[]>(() => {
+    console.log("rerun colum 1");
+    return endoColumns({ pickEndo, refetchEndos: refetch });
+  }, [pickEndo, refetch]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
@@ -63,6 +62,8 @@ const EndosTable = () => {
 
   const { globalFilter } = state;
 
+  console.log("re render");
+
   if (loading) {
     return <RowsSkeleton />;
   }
@@ -73,7 +74,8 @@ const EndosTable = () => {
   return (
     <div>
       <PageHeading heading="Endoscopes" />
-      <CounterIndicator refetchCounter={refetchCounter} />
+      {/* only this component will get updated every seconds */}
+      <CounterIndicator refetch={refetch} />
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>

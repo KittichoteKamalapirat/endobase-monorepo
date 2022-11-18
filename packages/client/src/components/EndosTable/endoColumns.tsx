@@ -1,5 +1,7 @@
-// id, brand, model, type, storage time
-
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { useDispatch } from "react-redux";
+import { showToast } from "../../redux/slices/toastReducer";
 import { bgConfig } from "../../utils/colorToTailwindBgColor";
 import {
   ENDO_STATUS,
@@ -8,9 +10,6 @@ import {
 } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { useState } from "react";
 
 interface Props {
   pickEndo: any;
@@ -18,10 +17,6 @@ interface Props {
 }
 
 export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
-  const handleUseEndo = async (id: string) => {
-    await pickEndo({ variables: { id } });
-    await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
-  };
   return [
     {
       Header: "Serial",
@@ -73,6 +68,28 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
       Header: "Action",
       // accessor: "id",
       Cell: ({ row }: { row: any }) => {
+        const dispatch = useDispatch();
+
+        const handleUseEndo = async (id: string) => {
+          try {
+            await pickEndo({ variables: { id } });
+            await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
+            dispatch(
+              showToast({
+                message: "Drying time successfully updated!",
+                variant: "success",
+              })
+            );
+          } catch (error) {
+            dispatch(
+              showToast({
+                message: "An error occured",
+                variant: "error",
+              })
+            );
+          }
+        };
+
         const endoId = row.original.id as string;
 
         const notReadyStatuses = [
@@ -88,19 +105,15 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
 
         const toWashStatuses = [ENDO_STATUS.EXPIRED, ENDO_STATUS.EXPIRE_SOON];
 
-        console.log(notReadyStatuses);
-        console.log(readyStatuses);
-        console.log(toWashStatuses);
-        console.log(toWashStatuses);
-
         const currentStatus = row.original.status;
 
         const isReady = readyStatuses.includes(currentStatus);
         const displayText = (() => {
           if (isReady) return "Use";
-          if (currentStatus === ENDO_STATUS.BEING_USED) return "wash";
-          if (notReadyStatuses.includes(currentStatus)) return "In use";
+          if (currentStatus === ENDO_STATUS.BEING_USED) return "Wash";
           if (toWashStatuses.includes(currentStatus)) return "Wash";
+          if (notReadyStatuses.includes(currentStatus)) return "In use";
+
           return "";
         })();
 

@@ -1,11 +1,9 @@
 import EndosSettingTable from "../components/EndosSettingTable";
 import Layout from "../components/layouts/Layout";
-import OtherSettings from "../components/OtherSettings";
+import OtherSettings from "../components/settings/OtherSettings";
 import PageHeading from "../components/typography/PageHeading";
 
-interface Props {}
-
-const Setting = ({}: Props) => {
+const ConfigSetting = () => {
   return (
     <Layout>
       <PageHeading heading="Setting" />
@@ -22,4 +20,4 @@ const Setting = ({}: Props) => {
     </Layout>
   );
 };
-export default Setting;
+export default ConfigSetting;

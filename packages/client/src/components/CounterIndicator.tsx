@@ -1,10 +1,31 @@
-import React from "react";
+import { ApolloQueryResult } from "@apollo/client";
+import {
+  ActionsQuery,
+  ContainersQuery,
+  EndosQuery,
+  Exact,
+  SnapshotsQuery,
+} from "../generated/graphql";
+import { useRefetchCounter } from "../hooks/useRefetchCounter";
 
 interface Props {
-  refetchCounter: number;
+  refetch: (
+    variables?:
+      | Partial<
+          Exact<{
+            [key: string]: never;
+          }>
+        >
+      | undefined
+  ) => Promise<
+    ApolloQueryResult<
+      ContainersQuery | EndosQuery | SnapshotsQuery | ActionsQuery
+    >
+  >;
 }
 
-const CounterIndicator = ({ refetchCounter }: Props) => {
+const CounterIndicator = ({ refetch }: Props) => {
+  const refetchCounter = useRefetchCounter(refetch);
   return (
     <div className="mt-4 text-grey-600 text-sm">
       Time to update: In <span className="font-bold">{refetchCounter}</span>{" "}

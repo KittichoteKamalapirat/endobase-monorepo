@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import alertModalReducer from "./slices/alertModalReducer";
 import saveCountReducer from "./slices/saveCountReducer";
+import toastReducer from "./slices/toastReducer";
 
 const store = configureStore({
   reducer: {
     alertModal: alertModalReducer,
     saveCount: saveCountReducer,
+    toast: toastReducer,
   },
 });
 

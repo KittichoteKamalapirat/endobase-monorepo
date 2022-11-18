@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import { useMemo } from "react";
 import { Column, useTable } from "react-table";
 import { useSnapshotsQuery } from "../../generated/graphql";
+import { useRefetchCounter } from "../../hooks/useRefetchCounter";
+import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -14,7 +16,8 @@ import PageHeading from "../typography/PageHeading";
 import { snapshotColumns } from "./snapshotColumns";
 
 const SnapshotsTable = () => {
-  const { data: snapshotsData, loading, error } = useSnapshotsQuery();
+  const { data: snapshotsData, loading, error, refetch } = useSnapshotsQuery();
+  const refetchCounter = useRefetchCounter(refetch);
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => snapshotColumns(), []);
@@ -51,6 +54,8 @@ const SnapshotsTable = () => {
   return (
     <div>
       <PageHeading heading="Snapshots" />
+
+      <CounterIndicator refetchCounter={refetchCounter} />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (

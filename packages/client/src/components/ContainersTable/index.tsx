@@ -1,7 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Column, useTable } from "react-table";
 import { UPDATE_CONTAINER_STATS_TIME_INTERVAL } from "../../constants";
 import { useContainersQuery } from "../../generated/graphql";
+import { updateSaveCount } from "../../redux/slices/saveCountReducer";
+import { RootState } from "../../redux/store";
+import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -13,6 +17,8 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { containerColumns } from "./containerColumns";
 
+const defaultSecs = UPDATE_CONTAINER_STATS_TIME_INTERVAL * 60;
+
 const ContainersTable = () => {
   const {
     data: containersData,
@@ -23,6 +29,11 @@ const ContainersTable = () => {
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => containerColumns(), []);
+  const dispatch = useDispatch();
+
+  const lastCount = useSelector((state: RootState) => state.saveCount);
+
+  const [refetchCounter, setRefetchCounter] = useState(lastCount);
 
   const data = useMemo(() => {
     if (error || loading || containersData?.containers.length === 0) return [];
@@ -41,14 +52,22 @@ const ContainersTable = () => {
       data,
     });
 
+  // count and refetch from db (db is auto updated every 1 min in the backend)
   useEffect(() => {
     const intervalId = setInterval(() => {
-      refetch();
-      console.log("refetch");
-    }, UPDATE_CONTAINER_STATS_TIME_INTERVAL * 60 * 1000);
+      if (refetchCounter <= 0) {
+        refetch();
+        setRefetchCounter(defaultSecs);
+      } else {
+        setRefetchCounter(refetchCounter - 1);
+      }
+    }, UPDATE_CONTAINER_STATS_TIME_INTERVAL * 1000);
 
-    return () => clearInterval(intervalId);
-  }, [refetch]);
+    return () => {
+      dispatch(updateSaveCount(refetchCounter)); // save the current count in global state
+      clearInterval(intervalId);
+    };
+  }, [dispatch, refetch, refetchCounter]);
 
   if (loading) {
     return <RowsSkeleton />;
@@ -60,6 +79,8 @@ const ContainersTable = () => {
   return (
     <div>
       <PageHeading heading="Containers" />
+
+      <CounterIndicator refetchCounter={refetchCounter} />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (

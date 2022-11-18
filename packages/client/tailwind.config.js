@@ -47,13 +47,14 @@ const serifFamily = ["Arial", "sans-serif"];
 const monoFamily = ["Montserrat", "Arial", "sans-serif"];
 
 // font size
-const fontSizeXS = "8px";
-const fontSizeSM = "10px";
-const fontSizeMD = "12px";
-const fontSizeLG = "16px";
+
+const fontSizeXS = "12px";
+const fontSizeSM = "14px";
+const fontSizeMD = "16px";
+const fontSizeLG = "18px";
 const fontSizeXL = "20px";
 const fontSize2XL = "24px";
-const fontSize3XL = "32px";
+const fontSize3XL = "30px";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

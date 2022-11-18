@@ -61,7 +61,7 @@ export class SerialportsService {
     // event listener on controller return
     parsers.forEach((parserAndCon, index) => {
       parserAndCon.parser.on('data', async (data: string) => {
-        const { systemStatus, temp, hum } = formatSTS(data);
+        const { systemStatus, temp, hum } = formatSTS(data) || {};
 
         COUNTER_CEIL =
           CONTAINER_NUM * this.settingService.getSnapshotInterval(); // if the interval value changes => recalculate

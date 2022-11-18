@@ -7,7 +7,10 @@ import {
   useEndosQuery,
   usePickEndoMutation,
 } from "../../generated/graphql";
+import { useRefetchCounter } from "../../hooks/useRefetchCounter";
+
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
+import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import Table from "../Table/Table";
@@ -29,6 +32,7 @@ import { GlobalFilter } from "./GlobalFilter";
 
 const EndosTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
+  const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
 
   // the lib recommedns to use useMemo
@@ -36,8 +40,6 @@ const EndosTable = () => {
     () => endoColumns({ pickEndo, refetchEndos: refetch }),
     [pickEndo, refetch]
   );
-
-  console.log("data", endosData);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
@@ -61,14 +63,6 @@ const EndosTable = () => {
   );
 
   const { globalFilter } = state;
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      refetch();
-      console.log("refetch");
-    }, UPDATE_STORAGE_TIME_INTERVAL * 60 * 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
 
   if (loading) {
     return <RowsSkeleton />;
@@ -80,6 +74,7 @@ const EndosTable = () => {
   return (
     <div>
       <PageHeading heading="Endoscopes" />
+      <CounterIndicator refetchCounter={refetchCounter} />
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -98,7 +93,7 @@ const EndosTable = () => {
         <TBody {...getTableBodyProps}>
           {rows.map((row, index) => {
             prepareRow(row);
-            console.log("hi");
+
             const rowStatus = (rows[index].original as Endo)
               .status as ENDO_STATUS_VALUES;
             const rowColor = statusToBgColor[rowStatus];

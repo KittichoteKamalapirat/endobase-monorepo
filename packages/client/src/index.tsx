@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./lib/apollo";
+import store from "./redux/store";
+import { Provider as ReduxProvider } from "react-redux";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,9 +15,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
+      <ReduxProvider store={store}>
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
+      </ReduxProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

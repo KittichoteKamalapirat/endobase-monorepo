@@ -23,7 +23,6 @@ export const alertModalSlice = createSlice({
   initialState,
   reducers: {
     toggleAlertModal: (state, action: PayloadAction<AlertModalType>) => {
-      console.log("action payload", action.payload);
       state.data = action.payload;
       state.isOpen = !state.isOpen;
       // return action.payload;
@@ -31,9 +30,14 @@ export const alertModalSlice = createSlice({
     closeAlertModal: (state) => {
       state.isOpen = false;
     },
+    openAlertModal: (state, action: PayloadAction<AlertModalType>) => {
+      state.data = action.payload;
+      state.isOpen = !state.isOpen;
+    },
   },
 });
 
-export const { toggleAlertModal, closeAlertModal } = alertModalSlice.actions;
+export const { toggleAlertModal, closeAlertModal, openAlertModal } =
+  alertModalSlice.actions;
 
 export default alertModalSlice.reducer;

@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
 import IconButton from "../Buttons/IconButton";
+import SmallHeading from "../typography/SmallHeading";
 
 interface Props {
   contentLabel: string;
@@ -11,7 +12,7 @@ interface Props {
   onRequestClose: () => void;
   minWidth?: string;
   children: ReactNode;
-  heading: ReactNode;
+  heading: string;
   maxWidth?: string;
   modalSpacing?: string;
   zIndex?: number;
@@ -55,7 +56,7 @@ const Modal = ({
     >
       <div className={modalSpacing}>
         <div className="flex justify-between items-start">
-          {heading}
+          <SmallHeading heading={heading} />
           <IconButton
             label="close"
             onClick={onRequestClose}

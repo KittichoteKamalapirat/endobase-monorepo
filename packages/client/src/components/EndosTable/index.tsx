@@ -1,7 +1,6 @@
 import classNames from "classnames";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Column, useGlobalFilter, useTable } from "react-table";
-import { UPDATE_STORAGE_TIME_INTERVAL } from "../../constants";
 import {
   Endo,
   useEndosQuery,

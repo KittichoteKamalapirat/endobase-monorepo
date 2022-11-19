@@ -31,6 +31,7 @@ interface Props {
   borderWidth: string;
   fontSize: string;
   startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
   fontColor: string;
   loading?: boolean;
 }
@@ -100,6 +101,7 @@ const Button = ({
   borderRadius,
   borderWidth,
   startIcon,
+  endIcon,
   fontColor,
   loading,
 }: Props) => {
@@ -127,8 +129,9 @@ const Button = ({
     >
       <div className="flex flex-row items-center justify-center">
         {loading && <Spinner size="w-4 h-4" longColor="text-grey-0" />}
-        {startIcon && <div className="mr-2.5">{startIcon}</div>}
+        {startIcon && <div className="mr-2">{startIcon}</div>}
         {label}
+        {endIcon && <div className="ml-2">{endIcon}</div>}
       </div>
     </button>
   );

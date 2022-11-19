@@ -80,3 +80,9 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 - container db updates every 1 minute
 - endoscope db updates everytime there is action (so it's 100 up-to-date)
 - snapshot db taken every 1 hour (can be changed in the setting)
+
+### Seeding data
+
+1. Firstly drop all the existing tables by running comment out the 01_drop.seed and run yarn seed:run
+2. start the service to recreate the database
+3. comment out the seed and run yarn seed:run again to create the data

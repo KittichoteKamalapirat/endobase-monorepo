@@ -1,6 +1,7 @@
+import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs";
 import classNames from "classnames";
-import { useMemo } from "react";
-import { Column, useGlobalFilter, useTable } from "react-table";
+import { useMemo, useState } from "react";
+import { Column, useGlobalFilter, useTable, usePagination } from "react-table";
 import {
   Endo,
   useEndosQuery,
@@ -8,6 +9,7 @@ import {
 } from "../../generated/graphql";
 
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
+import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
@@ -48,19 +50,27 @@ const EndosTable = () => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    // pagination starts
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions, // for getting all pages num
+    setPageSize, // for customize pageSize
+    // pagination ends
+
     prepareRow,
-    state, // table state
+    state: { pageIndex, globalFilter, pageSize }, // table state
     setGlobalFilter, // for setting global filter text value
   } = useTable(
     {
       columns,
       data,
     },
-    useGlobalFilter
+    useGlobalFilter,
+    usePagination
   );
-
-  const { globalFilter } = state;
 
   console.log("re render");
 
@@ -79,6 +89,42 @@ const EndosTable = () => {
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-4">
+          <Button
+            label=""
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+            type={ButtonTypes.TEXT}
+            startIcon={<BsFillCaretLeftFill />}
+          />
+
+          <div id="page-indicator">
+            <span className="font-bold">{pageIndex + 1} </span>/{" "}
+            {pageOptions.length}
+          </div>
+
+          <Button
+            label=""
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+            type={ButtonTypes.TEXT}
+            endIcon={<BsFillCaretRightFill />}
+          />
+        </div>
+
+        <select
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        >
+          {[10, 50, 100, 200].map((size) => (
+            <option key={size} value={size}>
+              Show {size}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -92,10 +138,10 @@ const EndosTable = () => {
           ))}
         </THead>
         <TBody {...getTableBodyProps}>
-          {rows.map((row, index) => {
+          {page.map((row, index) => {
             prepareRow(row);
 
-            const rowStatus = (rows[index].original as Endo)
+            const rowStatus = (page[index].original as Endo)
               .status as ENDO_STATUS_VALUES;
             const rowColor = statusToBgColor[rowStatus];
 

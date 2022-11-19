@@ -25,7 +25,7 @@ export const toastSlice = createSlice({
             (t) => (
               <div
                 className={classNames(
-                  "data-testid-toast-success bg-grey-800 mb-2 flex h-9 items-center space-x-2 rounded-md p-3 text-sm font-semibold text-grey-0 shadow-md",
+                  "data-testid-toast-success bg-green-50 mb-2 flex h-9 items-center space-x-2 rounded-md p-3 text-sm font-semibold text-green-500 shadow-md",
                   t.visible && "animate-fade-in-up"
                 )}
               >

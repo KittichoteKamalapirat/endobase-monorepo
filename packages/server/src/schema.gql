@@ -55,7 +55,7 @@ type Endo {
   model: String!
   dryingTime: Int!
   trayId: String!
-  tray: Tray
+  tray: Tray!
   sessions: [Session!]!
   status: String!
   createdAt: DateTime!
@@ -98,6 +98,12 @@ type Action {
   updatedAt: DateTime!
 }
 
+type User {
+  id: ID!
+  username: String!
+  password: String!
+}
+
 type Setting {
   id: ID!
   name: String!
@@ -106,12 +112,6 @@ type Setting {
   value: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
-
-type User {
-  id: ID!
-  username: String!
-  password: String!
 }
 
 type FieldError {

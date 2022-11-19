@@ -61,6 +61,9 @@ export class SerialportsService {
     // event listener on controller return
     parsers.forEach((parserAndCon, index) => {
       parserAndCon.parser.on('data', async (data: string) => {
+        console.log('got response from ', parserAndCon.col);
+        console.log('COUNTER_CEIL', COUNTER_CEIL);
+        console.log('counter', counter);
         const { systemStatus, temp, hum } = formatSTS(data) || {};
 
         COUNTER_CEIL =
@@ -95,14 +98,15 @@ export class SerialportsService {
   }
   // @Cron(CronExpression.EVERY_10_MINUTES)
   // @Cron(CronExpression.EVERY_HOUR)
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   checkSystemStatus() {
-    console.log('check status cron');
-    console.log('sp a', this.serialports['A'].isOpen);
-    console.log('sp b', this.serialports['B'].isOpen);
-    console.log('sp c', this.serialports['C'].isOpen);
+    console.log('-----------check status cron----------');
+    console.log('serialport A is open?', this.serialports['A'].isOpen);
+    console.log('serialport B is open?', this.serialports['B'].isOpen);
+    console.log('serialport C is open?', this.serialports['C'].isOpen);
 
     Object.keys(this.serialports).forEach((key) => {
+      console.log('write to ', key);
       this.serialports[key].write(':STS\r\n');
     });
 

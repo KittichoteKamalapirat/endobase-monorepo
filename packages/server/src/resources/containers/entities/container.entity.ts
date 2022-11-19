@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-
 import {
   Column,
   CreateDateColumn,
@@ -13,8 +12,9 @@ import { Tray } from '../../trays/entities/tray.entity';
 
 export type ColType = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 // has many trays, has many snapshots
-@Entity()
+
 @ObjectType()
+@Entity()
 export class Container {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)

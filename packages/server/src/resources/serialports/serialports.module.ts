@@ -14,14 +14,7 @@ import { SerialportsService } from './serialports.service';
 
 @Module({
   imports: [SnapshotsModule, ContainersModule, SettingModule],
-  providers: [
-    // SerialportsResolver,
-    SerialportsService,
-    // {
-    //   provide: 'SerialHandlerService',
-    //   useFactory: SerialHandlerService,
-    // },
-  ],
+  providers: [SerialportsService],
   exports: [SerialportsService],
 })
 @Injectable()

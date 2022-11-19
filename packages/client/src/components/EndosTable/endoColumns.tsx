@@ -76,7 +76,7 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
             await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
             dispatch(
               showToast({
-                message: "Drying time successfully updated!",
+                message: "Using the endoscope!",
                 variant: "success",
               })
             );

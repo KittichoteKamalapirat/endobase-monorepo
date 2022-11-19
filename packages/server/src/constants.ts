@@ -1,6 +1,6 @@
 export const serialportPathA = '/dev/tty.usbserial-0001';
-export const serialportPathB = '/dev/tty.usbserial-2';
-export const serialportPathC = '/dev/tty.usbserial-3';
+export const serialportPathB = '/dev/tty.usbserial-3';
+export const serialportPathC = '/dev/tty.usbserial-5';
 
 export const SERIALPORTS_PROVIDER = 'allSerialports';
 

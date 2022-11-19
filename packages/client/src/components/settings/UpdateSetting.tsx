@@ -56,7 +56,7 @@ const UpdateSetting = ({ setting }: Props) => {
       });
       dispatch(
         showToast({
-          message: "Drying time successfully updated!",
+          message: `Setting for ${name} successfully update`,
           variant: "success",
         })
       );

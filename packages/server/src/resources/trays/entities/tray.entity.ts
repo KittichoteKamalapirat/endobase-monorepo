@@ -33,7 +33,7 @@ export type RowType =
 export class Tray {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  id: number;
+  id: string;
 
   // 1,2,3,..., 16 for Songkla
   // 1,2,3,..., 8 for Chonburi

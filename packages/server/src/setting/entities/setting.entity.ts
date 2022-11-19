@@ -8,7 +8,10 @@ import {
 } from 'typeorm';
 
 // setting
-export type SETTING_NAMES = 'containerSnapshotIntervalMins';
+export type SETTING_NAMES =
+  | 'containerSnapshotIntervalMins'
+  | 'humidityThreshold'
+  | 'temperatureThreshold';
 
 @ObjectType()
 @Entity()

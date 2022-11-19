@@ -75,11 +75,11 @@ export class Endo {
   dryingTime: number;
 
   // tray
-  @Column({ nullable: true })
+  @Column()
   @Field()
   trayId: string;
 
-  @Field(() => Tray, { nullable: true })
+  @Field(() => Tray)
   @JoinColumn()
   @OneToOne(() => Tray, (tray) => tray.endo, {
     onDelete: 'CASCADE',

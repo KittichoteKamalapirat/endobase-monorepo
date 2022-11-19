@@ -120,12 +120,22 @@ module.exports = {
           800: "#E03130",
           900: "#C92B2B",
         },
+        green: {
+          50: "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          300: "#86efac",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+          800: "#166534",
+          900: "#14532d",
+        },
         yellow: yellow,
         "yellow-bg": "#FEF9C3", // for endo table status
         action: green,
-
         "red-bg": "#FEE2E2", // for endo table status
-        green: green,
         "green-bg": "#F7FEE7", // for endo table status
         blue: blue,
         "blue-bg": "#E0F2FE", // for endo table status

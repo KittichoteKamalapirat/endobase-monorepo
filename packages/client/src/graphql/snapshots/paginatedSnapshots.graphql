@@ -1,0 +1,23 @@
+query PaginatedSnapshots($input: PaginatedInput!) {
+  paginatedSnapshots(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      hum
+      temp
+      systemStatus
+      containerId
+      createdAt
+      container {
+        id
+        col
+      }
+    }
+  }
+}

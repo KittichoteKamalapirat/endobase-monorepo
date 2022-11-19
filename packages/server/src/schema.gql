@@ -114,6 +114,19 @@ type Setting {
   updatedAt: DateTime!
 }
 
+type IPaginationMetaClass {
+  totalItems: Int!
+  totalPages: Int!
+  itemCount: Int!
+  itemsPerPage: Int!
+  currentPage: Int!
+}
+
+type PaginatedActionOutput {
+  items: [Action!]!
+  meta: IPaginationMetaClass!
+}
+
 type FieldError {
   field: String!
   message: String!
@@ -124,10 +137,16 @@ type UserResponse {
   user: User
 }
 
+type PaginatedSnapshotOutput {
+  items: [Snapshot!]!
+  meta: IPaginationMetaClass!
+}
+
 type Query {
   snapshots: [Snapshot!]!
+  paginatedSnapshots(input: PaginatedInput!): PaginatedSnapshotOutput!
   containers: [Container!]!
-  container(id: Int!): Container!
+  container(id: String!): Container!
   settings: [Setting!]!
   snapshotIntervalMins: Setting!
   setting(id: Int!): Setting!
@@ -141,11 +160,17 @@ type Query {
   tray(id: Int!): Tray!
   actions: [Action!]!
   action(id: Int!): Action!
+  paginatedActions(input: PaginatedInput!): PaginatedActionOutput!
   officers: [Officer!]!
   officer(id: Int!): Officer!
   users: [User!]!
   user(id: String!): User!
   me: User
+}
+
+input PaginatedInput {
+  page: Int = 1
+  limit: Int = 10
 }
 
 type Mutation {

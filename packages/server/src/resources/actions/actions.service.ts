@@ -1,7 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  paginate,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
+
 import { minToMillisec } from '../../utils/minToMillisec';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
@@ -154,6 +160,23 @@ export class ActionsService {
 
   update(id: number, updateActionInput: UpdateActionInput) {
     return `This action updates a #${id} action`;
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<Action>> {
+    const paginatedResults = await paginate<Action>(
+      this.actionsRepository,
+      options,
+    );
+    // attach session, inside session there is already other stuff!
+    await Promise.all(
+      paginatedResults.items.map(async (item) => {
+        const session = await this.sessionsService.findOne(item.sessionId);
+        item.session = session;
+        return item;
+      }),
+    );
+
+    return paginatedResults;
   }
 
   remove(id: number) {

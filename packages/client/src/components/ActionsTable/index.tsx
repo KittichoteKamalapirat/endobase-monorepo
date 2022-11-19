@@ -1,11 +1,13 @@
-import { useMemo } from "react";
-import { Column, useTable } from "react-table";
+import { useEffect, useMemo, useState } from "react";
+import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
 
 import dayjs from "dayjs";
-import { useActionsQuery } from "../../generated/graphql";
+import { usePaginatedActionsQuery } from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
+import { GlobalFilter } from "../EndosSettingTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
+import PaginationControl from "../Table/PaginationControl";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -16,30 +18,83 @@ import PageHeading from "../typography/PageHeading";
 import { actionColumns } from "./actionColumns";
 
 const ActionsTable = () => {
-  const { data: actionsData, loading, error, refetch } = useActionsQuery();
+  const [currPage, setCurrPage] = useState(1);
+  const [localPageSize, setLocalPageSize] = useState(10);
 
-  console.log("actiondata", actionsData);
+  const {
+    data: pagActionsData,
+    loading,
+    error,
+    fetchMore,
+    refetch,
+  } = usePaginatedActionsQuery({
+    variables: { input: { page: currPage, limit: localPageSize } },
+  });
+
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => actionColumns(), []);
 
   const data = useMemo(() => {
-    if (error || loading || actionsData?.actions.length === 0) return [];
+    if (error || loading || pagActionsData?.paginatedActions.items.length === 0)
+      return [];
 
-    const actions = [...(actionsData?.actions || [])]; // TODO make this less confusing
+    const actions = [...(pagActionsData?.paginatedActions.items || [])]; // TODO make this less confusing
     return (
       actions.sort((prev, curr) => {
-        const dateSort =
+        const dateSort: number =
           dayjs(curr.createdAt).valueOf() - dayjs(prev.createdAt).valueOf();
         return dateSort || 0;
       }) || []
     );
-  }, [loading, actionsData, error]);
+  }, [loading, pagActionsData, error]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
+  const nextPage = () => {
+    const toFetchIndex = currPage + 1;
+    fetchMore({
+      variables: {
+        input: { page: toFetchIndex, limit: localPageSize },
+      },
+    });
+    setCurrPage(toFetchIndex);
+  };
+
+  const previousPage = () => {
+    const toFetchIndex = currPage - 1;
+    fetchMore({
+      variables: {
+        input: { page: toFetchIndex, limit: localPageSize },
+      },
+    });
+    setCurrPage(toFetchIndex);
+  };
+
+  const { totalItems, totalPages, currentPage } =
+    pagActionsData?.paginatedActions.meta || {};
+  const canNextPage = (currentPage || 1) < (totalPages || 1);
+  const canPreviousPage = (currentPage || 1) > 1;
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+
+    setPageSize,
+    prepareRow,
+    state: { globalFilter },
+    setGlobalFilter,
+  } = useTable(
+    {
       columns,
       data,
-    });
+    },
+    useGlobalFilter,
+    usePagination
+  );
+
+  useEffect(() => {
+    setPageSize(localPageSize); // without this, it only shows 10 by default (react-table)
+  }, [setPageSize, localPageSize]);
 
   if (loading) {
     return <RowsSkeleton />;
@@ -52,6 +107,22 @@ const ActionsTable = () => {
     <div>
       <PageHeading heading="Activities" />
       <CounterIndicator refetch={refetch} />
+
+      <PaginationControl
+        nextPage={nextPage}
+        previousPage={previousPage}
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+        pageNum={pagActionsData?.paginatedActions.meta.totalPages || 1}
+        setPageSize={setLocalPageSize}
+        setCurrPage={setCurrPage}
+        pageIndex={currPage}
+        pageSize={localPageSize}
+        totalItemsCount={totalItems}
+      />
+      <div className="my-4">
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      </div>
 
       <Table {...getTableProps()}>
         <THead>
@@ -66,7 +137,7 @@ const ActionsTable = () => {
           ))}
         </THead>
         <TBody {...getTableBodyProps}>
-          {rows.map((row, index) => {
+          {page.map((row, index) => {
             prepareRow(row);
             return (
               <TR {...row.getRowProps()} key={index}>

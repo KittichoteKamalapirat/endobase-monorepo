@@ -1,0 +1,36 @@
+query PaginatedActions($input: PaginatedInput!) {
+  paginatedActions(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      passed
+      type
+      createdAt
+      officerId
+      officer {
+        officerNum
+      }
+      session {
+        id
+        status
+        endoId
+        endo {
+          brand
+          type
+          model
+          position
+        }
+        patientId
+        patient {
+          hosNum
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
-import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
-import { Column, useGlobalFilter, useTable, usePagination } from "react-table";
+import { useMemo } from "react";
+import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
 import {
   Endo,
   useEndosQuery,
@@ -9,10 +8,10 @@ import {
 } from "../../generated/graphql";
 
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
-import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
+import PaginationControl from "../Table/PaginationControl";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -37,7 +36,6 @@ const EndosTable = () => {
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
-    console.log("rerun colum 1");
     return endoColumns({ pickEndo, refetchEndos: refetch });
   }, [pickEndo, refetch]);
 
@@ -89,41 +87,16 @@ const EndosTable = () => {
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
-      <div className="flex justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            label=""
-            onClick={() => previousPage()}
-            disabled={!canPreviousPage}
-            type={ButtonTypes.TEXT}
-            startIcon={<BsFillCaretLeftFill />}
-          />
-
-          <div id="page-indicator">
-            <span className="font-bold">{pageIndex + 1} </span>/{" "}
-            {pageOptions.length}
-          </div>
-
-          <Button
-            label=""
-            onClick={() => nextPage()}
-            disabled={!canNextPage}
-            type={ButtonTypes.TEXT}
-            endIcon={<BsFillCaretRightFill />}
-          />
-        </div>
-
-        <select
-          value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
-        >
-          {[10, 50, 100, 200].map((size) => (
-            <option key={size} value={size}>
-              Show {size}
-            </option>
-          ))}
-        </select>
-      </div>
+      <PaginationControl
+        nextPage={nextPage}
+        previousPage={previousPage}
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+        pageNum={pageOptions.length}
+        setPageSize={setPageSize}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+      />
 
       <Table {...getTableProps()}>
         <THead>

@@ -4,6 +4,12 @@ import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
 import { CreateSnapshotInput } from './dto/create-snapshot.input';
 import { Snapshot } from './entities/snapshot.entity';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
+import { ContainersService } from '../containers/containers.service';
 
 @Injectable()
 export class SnapshotsService {
@@ -11,11 +17,30 @@ export class SnapshotsService {
   constructor(
     @InjectRepository(Snapshot)
     private snapshotsRepository: Repository<Snapshot>,
+    private containersService: ContainersService,
   ) {}
 
   create(input: CreateSnapshotInput) {
     const newSnapshot = this.snapshotsRepository.create(input);
     return this.snapshotsRepository.save(newSnapshot);
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<Snapshot>> {
+    const paginatedResults = await paginate<Snapshot>(
+      this.snapshotsRepository,
+      options,
+    );
+    await Promise.all(
+      paginatedResults.items.map(async (item) => {
+        const container = await this.containersService.findOne(
+          item.containerId,
+        );
+        item.container = container;
+        return item;
+      }),
+    );
+
+    return paginatedResults;
   }
 
   async findAll() {

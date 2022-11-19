@@ -110,7 +110,7 @@ export type Endo = {
   serialNum: Scalars['String'];
   sessions: Array<Session>;
   status: Scalars['String'];
-  tray?: Maybe<Tray>;
+  tray: Tray;
   trayId: Scalars['String'];
   type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -120,6 +120,15 @@ export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type IPaginationMetaClass = {
+  __typename?: 'IPaginationMetaClass';
+  currentPage: Scalars['Int'];
+  itemCount: Scalars['Int'];
+  itemsPerPage: Scalars['Int'];
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
 };
 
 export type LoginInput = {
@@ -309,6 +318,23 @@ export type Officer = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type PaginatedActionOutput = {
+  __typename?: 'PaginatedActionOutput';
+  items: Array<Action>;
+  meta: IPaginationMetaClass;
+};
+
+export type PaginatedInput = {
+  limit?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+};
+
+export type PaginatedSnapshotOutput = {
+  __typename?: 'PaginatedSnapshotOutput';
+  items: Array<Snapshot>;
+  meta: IPaginationMetaClass;
+};
+
 export type Patient = {
   __typename?: 'Patient';
   createdAt: Scalars['DateTime'];
@@ -329,6 +355,8 @@ export type Query = {
   me?: Maybe<User>;
   officer: Officer;
   officers: Array<Officer>;
+  paginatedActions: PaginatedActionOutput;
+  paginatedSnapshots: PaginatedSnapshotOutput;
   patient: Patient;
   patients: Array<Patient>;
   session: Session;
@@ -350,7 +378,7 @@ export type QueryActionArgs = {
 
 
 export type QueryContainerArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -361,6 +389,16 @@ export type QueryEndoArgs = {
 
 export type QueryOfficerArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryPaginatedActionsArgs = {
+  input: PaginatedInput;
+};
+
+
+export type QueryPaginatedSnapshotsArgs = {
+  input: PaginatedInput;
 };
 
 
@@ -510,6 +548,13 @@ export type ActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
 
+export type PaginatedActionsQueryVariables = Exact<{
+  input: PaginatedInput;
+}>;
+
+
+export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -549,7 +594,7 @@ export type UpdateDryingTimeMutation = { __typename?: 'Mutation', updateDryingTi
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray?: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } | null }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } }> };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -588,6 +633,13 @@ export type SnapshotIntervalMinsQueryVariables = Exact<{ [key: string]: never; }
 
 
 export type SnapshotIntervalMinsQuery = { __typename?: 'Query', snapshotIntervalMins: { __typename?: 'Setting', id: string, name: string, value: string, label: string, description: string } };
+
+export type PaginatedSnapshotsQueryVariables = Exact<{
+  input: PaginatedInput;
+}>;
+
+
+export type PaginatedSnapshotsQuery = { __typename?: 'Query', paginatedSnapshots: { __typename?: 'PaginatedSnapshotOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, containerId: string, createdAt: any, container: { __typename?: 'Container', id: string, col: string } }> } };
 
 export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -652,6 +704,72 @@ export function useActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ac
 export type ActionsQueryHookResult = ReturnType<typeof useActionsQuery>;
 export type ActionsLazyQueryHookResult = ReturnType<typeof useActionsLazyQuery>;
 export type ActionsQueryResult = Apollo.QueryResult<ActionsQuery, ActionsQueryVariables>;
+export const PaginatedActionsDocument = gql`
+    query PaginatedActions($input: PaginatedInput!) {
+  paginatedActions(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      passed
+      type
+      createdAt
+      officerId
+      officer {
+        officerNum
+      }
+      session {
+        id
+        status
+        endoId
+        endo {
+          brand
+          type
+          model
+          position
+        }
+        patientId
+        patient {
+          hosNum
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaginatedActionsQuery__
+ *
+ * To run a query within a React component, call `usePaginatedActionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaginatedActionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaginatedActionsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaginatedActionsQuery(baseOptions: Apollo.QueryHookOptions<PaginatedActionsQuery, PaginatedActionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaginatedActionsQuery, PaginatedActionsQueryVariables>(PaginatedActionsDocument, options);
+      }
+export function usePaginatedActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedActionsQuery, PaginatedActionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaginatedActionsQuery, PaginatedActionsQueryVariables>(PaginatedActionsDocument, options);
+        }
+export type PaginatedActionsQueryHookResult = ReturnType<typeof usePaginatedActionsQuery>;
+export type PaginatedActionsLazyQueryHookResult = ReturnType<typeof usePaginatedActionsLazyQuery>;
+export type PaginatedActionsQueryResult = Apollo.QueryResult<PaginatedActionsQuery, PaginatedActionsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {
@@ -1153,6 +1271,59 @@ export function useSnapshotIntervalMinsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type SnapshotIntervalMinsQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsQuery>;
 export type SnapshotIntervalMinsLazyQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsLazyQuery>;
 export type SnapshotIntervalMinsQueryResult = Apollo.QueryResult<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>;
+export const PaginatedSnapshotsDocument = gql`
+    query PaginatedSnapshots($input: PaginatedInput!) {
+  paginatedSnapshots(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      hum
+      temp
+      systemStatus
+      containerId
+      createdAt
+      container {
+        id
+        col
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaginatedSnapshotsQuery__
+ *
+ * To run a query within a React component, call `usePaginatedSnapshotsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaginatedSnapshotsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaginatedSnapshotsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaginatedSnapshotsQuery(baseOptions: Apollo.QueryHookOptions<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>(PaginatedSnapshotsDocument, options);
+      }
+export function usePaginatedSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>(PaginatedSnapshotsDocument, options);
+        }
+export type PaginatedSnapshotsQueryHookResult = ReturnType<typeof usePaginatedSnapshotsQuery>;
+export type PaginatedSnapshotsLazyQueryHookResult = ReturnType<typeof usePaginatedSnapshotsLazyQuery>;
+export type PaginatedSnapshotsQueryResult = Apollo.QueryResult<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>;
 export const SnapshotsDocument = gql`
     query Snapshots {
   snapshots {

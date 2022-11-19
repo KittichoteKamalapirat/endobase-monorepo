@@ -1,9 +1,12 @@
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ActionsService } from './actions.service';
 import { Action } from './entities/action.entity';
 // import { CreateActionInput } from './dto/create-action.input';
 import { UpdateActionInput } from './dto/update-action.input';
 import { CreateActionInput } from './dto/create-action.input';
+import { PaginatedInput } from "../common/dto/import { InputType, Int, Field } from '@nestjs/PaginatedInput";
+import { PaginatedActionOutput } from './dto/paginated-action.output';
 
 @Resolver(() => Action)
 export class ActionsResolver {
@@ -34,5 +37,15 @@ export class ActionsResolver {
   @Mutation(() => Action)
   removeAction(@Args('id', { type: () => Int }) id: number) {
     return this.actionsService.remove(id);
+  }
+
+  @Query(() => PaginatedActionOutput, { name: 'paginatedActions' })
+  async findPaginatedActions(
+    @Args('input', { type: () => PaginatedInput })
+    input: PaginatedInput,
+  ): Promise<Pagination<Action>> {
+    const result = await this.actionsService.paginate(input);
+    console.log('result', result);
+    return result;
   }
 }

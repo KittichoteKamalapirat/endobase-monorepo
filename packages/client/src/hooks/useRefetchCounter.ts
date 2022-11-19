@@ -7,6 +7,8 @@ import {
   ContainersQuery,
   EndosQuery,
   Exact,
+  PaginatedActionsQuery,
+  PaginatedSnapshotsQuery,
   SnapshotsQuery,
 } from "../generated/graphql";
 import { updateSaveCount } from "../redux/slices/saveCountReducer";
@@ -25,7 +27,12 @@ export const useRefetchCounter = (
       | undefined
   ) => Promise<
     ApolloQueryResult<
-      ContainersQuery | EndosQuery | SnapshotsQuery | ActionsQuery
+      | ContainersQuery
+      | EndosQuery
+      | SnapshotsQuery
+      | ActionsQuery
+      | PaginatedSnapshotsQuery
+      | PaginatedActionsQuery
     >
   >
 ) => {

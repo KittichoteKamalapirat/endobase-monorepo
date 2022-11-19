@@ -27,8 +27,8 @@ export class ContainersService {
     return containers;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} container`;
+  findOne(id: string) {
+    return this.containersRepository.findOneBy({ id });
   }
 
   // col = A, B, C

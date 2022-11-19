@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { Column, useGlobalFilter, useTable } from "react-table";
+import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
 import { useEndosQuery } from "../../generated/graphql";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
+import PaginationControl from "../Table/PaginationControl";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -37,19 +38,26 @@ const EndosSettingTable = () => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    setPageSize,
+
+    state: { pageIndex, globalFilter, pageSize },
     prepareRow,
-    state, // table state
+
     setGlobalFilter, // for setting global filter text value
   } = useTable(
     {
       columns,
       data,
     },
-    useGlobalFilter
+    useGlobalFilter,
+    usePagination
   );
-
-  const { globalFilter } = state;
 
   if (loading) {
     return <RowsSkeleton />;
@@ -64,6 +72,18 @@ const EndosSettingTable = () => {
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
+
+      <PaginationControl
+        nextPage={nextPage}
+        previousPage={previousPage}
+        canNextPage={canNextPage}
+        canPreviousPage={canPreviousPage}
+        pageNum={pageOptions.length}
+        setPageSize={setPageSize}
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+      />
+
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -77,7 +97,7 @@ const EndosSettingTable = () => {
           ))}
         </THead>
         <TBody {...getTableBodyProps}>
-          {rows.map((row, index) => {
+          {page.map((row, index) => {
             prepareRow(row);
 
             return (

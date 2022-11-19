@@ -121,7 +121,7 @@ const SnapshotsTable = () => {
         pageNum={pagSnapshotsData?.paginatedSnapshots.meta.totalPages || 1}
         setPageSize={setLocalPageSize}
         setCurrPage={setCurrPage}
-        pageIndex={currPage}
+        currPage={currPage}
         pageSize={localPageSize}
         totalItemsCount={totalItems}
       />

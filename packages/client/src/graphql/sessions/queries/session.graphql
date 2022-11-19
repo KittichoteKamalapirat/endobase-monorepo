@@ -12,6 +12,7 @@ query Session($id: String!) {
       id
       passed
       type
+      createdAt
       officerId
       officer {
         id

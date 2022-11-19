@@ -10,9 +10,14 @@ import {
 import { Officer } from '../../officers/entities/officer.entity';
 import { Session } from '../../sessions/entities/session.entity';
 
-export type ACTION_TYPE = 'leak_test_and_prewash' | 'disinfect' | 'store';
+export type ACTION_TYPE =
+  | 'leak_test_and_prewash'
+  | 'disinfect'
+  | 'store'
+  | 'take_out';
 
 export const ACTION_TYPE_OBJ = {
+  TAKE_OUT: 'take_out',
   LEAK_TEST_AND_PREWASH: 'leak_test_and_prewash',
   // PREWASH: 'prewash',
   DISINFECT: 'disinfect',

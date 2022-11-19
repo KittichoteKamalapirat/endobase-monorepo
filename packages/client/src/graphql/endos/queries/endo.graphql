@@ -1,0 +1,22 @@
+query Endo($id: String!) {
+  endo(id: $id) {
+    id
+    serialNum
+    dryingTime
+    status
+    brand
+    type
+    model
+    lastPutBackISO
+    position
+    trayId
+    tray {
+      id
+      row
+      container {
+        id
+        col
+      }
+    }
+  }
+}

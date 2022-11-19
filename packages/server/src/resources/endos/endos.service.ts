@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
@@ -12,6 +12,7 @@ import { nameSchedule } from '../../utils/nameSchedule';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
+import { ActionsService } from '../actions/actions.service';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -22,8 +23,11 @@ export class EndosService {
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
+    // private actionsService: ActionsService,
     private serialportsService: SerialportsService,
     private schedulerRegistry: SchedulerRegistry,
+    @Inject(forwardRef(() => ActionsService))
+    private actionsService: ActionsService,
   ) {}
 
   async findAll(): Promise<Endo[]> {
@@ -68,7 +72,14 @@ export class EndosService {
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
 
     // create a session
-    await this.createSession(id);
+    await this.sessionsService.create({ endoId: id });
+    // create an action (take_out)
+    // await this.actionsService.create({
+    //   sessionId: session.id,
+    //   type: 'take_out',
+    //   passed: true,
+    //   officerNum: '',
+    // });
 
     // write color
     this.serialportsService.writeColor({
@@ -137,10 +148,6 @@ export class EndosService {
     };
 
     return this.endosRepository.save(updatedEndo);
-  }
-
-  createSession(endoId: string) {
-    return this.sessionsService.create({ endoId });
   }
 
   getAllTimeouts() {

@@ -1,26 +1,42 @@
+import classNames from "classnames";
 import React from "react";
+import { Endo } from "../generated/graphql";
+import { CARD_CLASSNAMES } from "../theme";
+import SubHeading from "./typography/SubHeading";
 
-interface Props {}
+interface Props {
+  endo: Endo;
+}
 
-const EndoDetail = ({}: Props) => {
+const EndoDetail = ({ endo }: Props) => {
+  const { serialNum, dryingTime, status, brand, type, model, position } =
+    endo || {};
+
+  if (!endo) return null;
+
   return (
-    <div className="flex gap-10">
-      <div id="left">
-        <div>id</div>
-        <div>location</div>
-        <div>brand</div>
-        <div>model</div>
-        <div>type</div>
-        <div>status</div>
-      </div>
+    <div className={classNames(CARD_CLASSNAMES)}>
+      <SubHeading heading="Endoscope Detail" />
+      <div className="flex gap-10 mt-4">
+        <div id="left" className="font-bold">
+          <div>Serial</div>
+          <div>Location</div>
+          <div>Brand</div>
+          <div>Model</div>
+          <div>Type</div>
+          <div>Status</div>
+          <div>Drying Time</div>
+        </div>
 
-      <div id="lerightft">
-        <div>adfasdfasdfasdf</div>
-        <div>A2</div>
-        <div>Olympus</div>
-        <div>x</div>
-        <div>Broncho</div>
-        <div>being_used</div>
+        <div id="right">
+          <div>{serialNum}</div>
+          <div>{position}</div>
+          <div>{brand}</div>
+          <div>{model}</div>
+          <div>{type}</div>
+          <div>{status}</div>
+          <div>{dryingTime} minutes</div>
+        </div>
       </div>
     </div>
   );

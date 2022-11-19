@@ -116,7 +116,7 @@ const ActionsTable = () => {
         pageNum={pagActionsData?.paginatedActions.meta.totalPages || 1}
         setPageSize={setLocalPageSize}
         setCurrPage={setCurrPage}
-        pageIndex={currPage}
+        currPage={currPage}
         pageSize={localPageSize}
         totalItemsCount={totalItems}
       />

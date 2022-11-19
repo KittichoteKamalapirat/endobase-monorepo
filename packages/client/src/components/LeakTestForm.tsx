@@ -3,6 +3,7 @@ import { Control, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useCreateActionMutation, useSessionQuery } from "../generated/graphql";
 import Button, { HTMLButtonType } from "./Buttons/Button";
+import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
@@ -12,14 +13,17 @@ interface Props {
 
 enum FormNames {
   OFFICER_NUM = "officerNum",
+  PASSED_TEST = "passedTest",
 }
 
 interface FormValues {
   [FormNames.OFFICER_NUM]: string;
+  [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
 }
 
 const initialData = {
   officerNum: "",
+  passedTest: false,
 };
 const LeakTestForm = ({ containerClass }: Props) => {
   const { id: sessionId } = useParams();
@@ -32,10 +36,14 @@ const LeakTestForm = ({ containerClass }: Props) => {
   const {
     control,
     handleSubmit,
+    register,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
+
+  const testPassed = !!watch(FormNames.PASSED_TEST);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -63,20 +71,29 @@ const LeakTestForm = ({ containerClass }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
       <SmallHeading heading="Leak Test" />
-      <div className="flex w-full items-end">
+      <div>
         <TextField
           required
           name={FormNames.OFFICER_NUM}
           control={control as unknown as Control}
-          label="Officer ID"
-          placeholder="Please insert officer ID"
+          label="Officer Number"
+          placeholder="Please insert officer number"
           type={TextFieldTypes.OUTLINED}
           error={errors[FormNames.OFFICER_NUM]}
         />
+
+        <div className="my-2">
+          <CheckboxField
+            {...register(FormNames.PASSED_TEST, { required: true })}
+            option={{ value: "true", label: "Passed" }}
+            isChecked={testPassed}
+          />
+        </div>
         <Button
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="ml-2.5 w-24"
+          disabled={!testPassed}
         />
       </div>
     </form>

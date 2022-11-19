@@ -591,6 +591,13 @@ export type UpdateDryingTimeMutationVariables = Exact<{
 
 export type UpdateDryingTimeMutation = { __typename?: 'Mutation', updateDryingTime: { __typename?: 'Endo', id: string, dryingTime: number } };
 
+export type EndoQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string, trayId: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } } };
+
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -615,7 +622,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;
@@ -984,6 +991,58 @@ export function useUpdateDryingTimeMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateDryingTimeMutationHookResult = ReturnType<typeof useUpdateDryingTimeMutation>;
 export type UpdateDryingTimeMutationResult = Apollo.MutationResult<UpdateDryingTimeMutation>;
 export type UpdateDryingTimeMutationOptions = Apollo.BaseMutationOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
+export const EndoDocument = gql`
+    query Endo($id: String!) {
+  endo(id: $id) {
+    id
+    serialNum
+    dryingTime
+    status
+    brand
+    type
+    model
+    lastPutBackISO
+    position
+    trayId
+    tray {
+      id
+      row
+      container {
+        id
+        col
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useEndoQuery__
+ *
+ * To run a query within a React component, call `useEndoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEndoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEndoQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useEndoQuery(baseOptions: Apollo.QueryHookOptions<EndoQuery, EndoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EndoQuery, EndoQueryVariables>(EndoDocument, options);
+      }
+export function useEndoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EndoQuery, EndoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EndoQuery, EndoQueryVariables>(EndoDocument, options);
+        }
+export type EndoQueryHookResult = ReturnType<typeof useEndoQuery>;
+export type EndoLazyQueryHookResult = ReturnType<typeof useEndoLazyQuery>;
+export type EndoQueryResult = Apollo.QueryResult<EndoQuery, EndoQueryVariables>;
 export const EndosDocument = gql`
     query endos {
   endos {
@@ -1123,6 +1182,7 @@ export const SessionDocument = gql`
       id
       passed
       type
+      createdAt
       officerId
       officer {
         id

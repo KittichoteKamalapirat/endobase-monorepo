@@ -5,12 +5,20 @@ import DisinfectForm from "../components/DisinfectForm";
 import EndoDetail from "../components/EndoDetail";
 import Layout from "../components/layouts/Layout";
 import LeakTestForm from "../components/LeakTestForm";
+import PatientDetail from "../components/PatientDetail";
 import PatientForm from "../components/PatientForm";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import PageHeading from "../components/typography/PageHeading";
 import SubHeading from "../components/typography/SubHeading";
-import { Action, useSessionQuery } from "../generated/graphql";
+import {
+  Action,
+  Endo,
+  Patient,
+  useEndoQuery,
+  useSessionQuery,
+} from "../generated/graphql";
+import { CARD_CLASSNAMES } from "../theme";
 
 const Session = () => {
   const { id } = useParams();
@@ -20,11 +28,13 @@ const Session = () => {
     variables: { id: sessionId },
   });
 
+  const {
+    data: endoData,
+    loading: endoLoading,
+    error: endoError,
+  } = useEndoQuery({ variables: { id: data?.session.endoId || "" } });
+
   const { patientId, actions, patient } = data?.session || {};
-
-  console.log("error", error);
-
-  console.log("data", data?.session);
 
   const leakTestAction = actions?.find(
     (action) => action.type === "leak_test_and_prewash" && action.passed
@@ -34,37 +44,36 @@ const Session = () => {
   );
   const storeAction = actions?.find((action) => action.type === "store");
 
-  if (loading)
+  if (loading || endoLoading)
     return (
       <Layout>
         <Loading isFullPage={true} />
       </Layout>
     );
 
-  if (error)
+  if (error || endoError)
     return (
       <Layout>
-        <Error text={error?.message} />
+        <Error
+          text={error?.message || endoError?.message || "An error occured"}
+        />
       </Layout>
     );
 
   return (
     <Layout>
       <PageHeading heading="Session" />
-      <SubHeading heading="Endoscope" />
+      <EndoDetail endo={endoData?.endo as Endo} />
 
-      <EndoDetail />
-
-      <div>
+      <div id="patient-details">
         {patientId ? (
-          <div>
-            <SubHeading heading="Patient Detail" extraClass="mt-4" />
-            <div>HN : {patient?.hosNum}</div>
-          </div>
+          <PatientDetail patient={patient as Patient} />
         ) : (
           <PatientForm containerClass="my-4" />
         )}
+      </div>
 
+      <div id="activities-detail" className={CARD_CLASSNAMES}>
         <SubHeading heading="Activities" extraClass="mt-4" />
 
         {leakTestAction ? (

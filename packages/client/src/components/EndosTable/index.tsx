@@ -94,7 +94,7 @@ const EndosTable = () => {
         canPreviousPage={canPreviousPage}
         pageNum={pageOptions.length}
         setPageSize={setPageSize}
-        pageIndex={pageIndex}
+        currPage={pageIndex + 1}
         pageSize={pageSize}
       />
 

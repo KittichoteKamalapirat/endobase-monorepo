@@ -152,17 +152,16 @@ type Query {
   setting(id: Int!): Setting!
   endos: [Endo!]!
   endo(id: String!): Endo!
+  actions: [Action!]!
+  action(id: Int!): Action!
+  paginatedActions(input: PaginatedInput!): PaginatedActionOutput!
   sessions: [Session!]!
   session(id: String!): Session!
   patients: [Patient!]!
   patient(id: String!): Patient!
+  officers: [Officer!]!
   trays: [Tray!]!
   tray(id: Int!): Tray!
-  actions: [Action!]!
-  action(id: Int!): Action!
-  paginatedActions(input: PaginatedInput!): PaginatedActionOutput!
-  officers: [Officer!]!
-  officer(id: Int!): Officer!
   users: [User!]!
   user(id: String!): User!
   me: User
@@ -182,6 +181,9 @@ type Mutation {
   createEndo(input: CreateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
+  createAction(input: CreateActionInput!): Action!
+  updateAction(updateActionInput: UpdateActionInput!): Action!
+  removeAction(id: Int!): Action!
   createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   updateSessionPatient(input: UpdateSessionPatientInput!): Session!
@@ -189,15 +191,12 @@ type Mutation {
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
   removePatient(id: Int!): Patient!
-  createTray(input: CreateTrayInput!): Tray!
-  updateTray(updateTrayInput: UpdateTrayInput!): Tray!
-  removeTray(id: Int!): Tray!
-  createAction(input: CreateActionInput!): Action!
-  updateAction(updateActionInput: UpdateActionInput!): Action!
-  removeAction(id: Int!): Action!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
+  createTray(input: CreateTrayInput!): Tray!
+  updateTray(updateTrayInput: UpdateTrayInput!): Tray!
+  removeTray(id: Int!): Tray!
   register(input: CreateUserInput!): UserResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
@@ -239,6 +238,21 @@ input UpdateDryingTimeInput {
   mins: Int!
 }
 
+input CreateActionInput {
+  sessionId: String!
+  type: String!
+  passed: Boolean!
+  officerNum: String!
+}
+
+input UpdateActionInput {
+  sessionId: String
+  type: String
+  passed: Boolean
+  officerNum: String
+  id: Int!
+}
+
 input CreateSessionInput {
   """For create a session for an endoscope"""
   endoId: String!
@@ -269,6 +283,15 @@ input UpdatePatientInput {
   id: Int!
 }
 
+input CreateOfficerInput {
+  officerNum: String!
+}
+
+input UpdateOfficerInput {
+  officerNum: String
+  id: Int!
+}
+
 input CreateTrayInput {
   containerId: String!
 
@@ -281,30 +304,6 @@ input UpdateTrayInput {
 
   """row inside a container"""
   row: Int
-  id: Int!
-}
-
-input CreateActionInput {
-  sessionId: String!
-  type: String!
-  passed: Boolean!
-  officerNum: String!
-}
-
-input UpdateActionInput {
-  sessionId: String
-  type: String
-  passed: Boolean
-  officerNum: String
-  id: Int!
-}
-
-input CreateOfficerInput {
-  officerNum: String!
-}
-
-input UpdateOfficerInput {
-  officerNum: String
   id: Int!
 }
 

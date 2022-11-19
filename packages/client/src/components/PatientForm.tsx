@@ -4,6 +4,7 @@ import {
   useSessionQuery,
   useUpdateSessionPatientMutation,
 } from "../generated/graphql";
+import { CARD_CLASSNAMES } from "../theme";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -56,27 +57,29 @@ const PatientForm = ({ containerClass }: Props) => {
     }
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Who used this endoscope?" />
+    <div className={CARD_CLASSNAMES}>
+      <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
+        <SmallHeading heading="Who used this endoscope?" />
 
-      <div className="flex items-end">
-        <TextField
-          required
-          name={FormNames.PATIENT_HN_NUM}
-          control={control as unknown as Control}
-          label="Patient Hospital Number (HN)"
-          placeholder="Please insert patient ID"
-          type={TextFieldTypes.OUTLINED}
-          extraClass="w-full"
-          error={errors[FormNames.PATIENT_HN_NUM]}
-        />
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="ml-2.5 w-24"
-        />
-      </div>
-    </form>
+        <div className="flex items-end">
+          <TextField
+            required
+            name={FormNames.PATIENT_HN_NUM}
+            control={control as unknown as Control}
+            label="Patient Hospital Number (HN)"
+            placeholder="Please insert patient ID"
+            type={TextFieldTypes.OUTLINED}
+            extraClass="w-full"
+            error={errors[FormNames.PATIENT_HN_NUM]}
+          />
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="ml-2.5 w-24"
+          />
+        </div>
+      </form>
+    </div>
   );
 };
 export default PatientForm;

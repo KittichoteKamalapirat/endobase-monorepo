@@ -9,7 +9,9 @@ export class OfficersResolver {
   constructor(private readonly officersService: OfficersService) {}
 
   @Mutation(() => Officer)
-  createOfficer(@Args('createOfficerInput') createOfficerInput: CreateOfficerInput) {
+  createOfficer(
+    @Args('createOfficerInput') createOfficerInput: CreateOfficerInput,
+  ) {
     return this.officersService.create(createOfficerInput);
   }
 
@@ -18,14 +20,14 @@ export class OfficersResolver {
     return this.officersService.findAll();
   }
 
-  @Query(() => Officer, { name: 'officer' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.officersService.findOne(id);
-  }
-
   @Mutation(() => Officer)
-  updateOfficer(@Args('updateOfficerInput') updateOfficerInput: UpdateOfficerInput) {
-    return this.officersService.update(updateOfficerInput.id, updateOfficerInput);
+  updateOfficer(
+    @Args('updateOfficerInput') updateOfficerInput: UpdateOfficerInput,
+  ) {
+    return this.officersService.update(
+      updateOfficerInput.id,
+      updateOfficerInput,
+    );
   }
 
   @Mutation(() => Officer)

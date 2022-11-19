@@ -19,8 +19,8 @@ export class OfficersService {
     return `This action returns all officers`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} officer`;
+  findOneById(id: string) {
+    return this.officersRepository.findOneBy({ id });
   }
 
   async findOneByofficerNum(officerNum: string): Promise<Officer> {

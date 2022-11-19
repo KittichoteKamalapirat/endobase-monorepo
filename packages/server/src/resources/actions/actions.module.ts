@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ActionsService } from './actions.service';
 import { ActionsResolver } from './actions.resolver';
 import { Action } from './entities/action.entity';
@@ -12,8 +12,9 @@ import { EndosModule } from '../endos/endo.module';
     TypeOrmModule.forFeature([Action]),
     SessionsModule,
     OfficersModule,
-    EndosModule,
+    forwardRef(() => EndosModule),
   ],
   providers: [ActionsResolver, ActionsService],
+  exports: [ActionsService],
 })
 export class ActionsModule {}

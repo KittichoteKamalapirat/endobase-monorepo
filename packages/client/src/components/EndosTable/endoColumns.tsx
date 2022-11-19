@@ -1,3 +1,5 @@
+import { MdAir } from "react-icons/md";
+import { FaFan } from "react-icons/fa";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch } from "react-redux";
@@ -10,6 +12,7 @@ import {
 } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
+import ActionColumn from "./endoActionColumn";
 
 interface Props {
   pickEndo: any;
@@ -67,81 +70,13 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
     {
       Header: "Action",
       // accessor: "id",
-      Cell: ({ row }: { row: any }) => {
-        const dispatch = useDispatch();
-
-        const handleUseEndo = async (id: string) => {
-          try {
-            await pickEndo({ variables: { id } });
-            await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
-            dispatch(
-              showToast({
-                message: "Using the endoscope!",
-                variant: "success",
-              })
-            );
-          } catch (error) {
-            dispatch(
-              showToast({
-                message: "An error occured",
-                variant: "error",
-              })
-            );
-          }
-        };
-
-        const endoId = row.original.id as string;
-
-        const notReadyStatuses = [
-          ENDO_STATUS.PREWASHED,
-          ENDO_STATUS.LEAK_TEST_FAILED,
-          ENDO_STATUS.LEAK_TEST_PASSED,
-          ENDO_STATUS.DISINFECTION_PASSED,
-          ENDO_STATUS.DISINFECTION_FAILED,
-          ENDO_STATUS.DRYING,
-        ];
-
-        const readyStatuses = [ENDO_STATUS.READY, ENDO_STATUS.EXPIRE_SOON];
-
-        const toWashStatuses = [ENDO_STATUS.EXPIRED, ENDO_STATUS.EXPIRE_SOON];
-
-        const currentStatus = row.original.status;
-
-        const isReady = readyStatuses.includes(currentStatus);
-        const displayText = (() => {
-          if (isReady) return "Use";
-          if (currentStatus === ENDO_STATUS.BEING_USED) return "Wash";
-          if (toWashStatuses.includes(currentStatus)) return "Wash";
-          if (notReadyStatuses.includes(currentStatus)) return "In use";
-
-          return "";
-        })();
-
-        // direct to session page
-        if (
-          currentStatus === ENDO_STATUS.BEING_USED ||
-          currentStatus === ENDO_STATUS.EXPIRED
-        )
-          return (
-            <LinkButton
-              label="wash"
-              href={`/session/${row.original.currentSessionId}`}
-              type={ButtonTypes.SECONDARY}
-            />
-          );
-        return (
-          <div>
-            {isReady ? (
-              <Button
-                label={displayText}
-                onClick={() => handleUseEndo(endoId)}
-              />
-            ) : (
-              <div>{displayText}</div>
-            )}
-          </div>
-        );
-      },
+      Cell: ({ row }: { row: any }) => (
+        <ActionColumn
+          row={row}
+          pickEndo={pickEndo}
+          refetchEndos={refetchEndos}
+        />
+      ),
     },
   ];
 };

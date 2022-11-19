@@ -45,7 +45,7 @@ export class ActionsResolver {
     input: PaginatedInput,
   ): Promise<Pagination<Action>> {
     const result = await this.actionsService.paginate(input);
-    console.log('result', result);
+
     return result;
   }
 }

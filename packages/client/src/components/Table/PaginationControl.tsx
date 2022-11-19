@@ -8,7 +8,7 @@ interface Props {
   canPreviousPage: boolean;
   pageNum: number;
   setPageSize: (pageSize: number) => void;
-  pageIndex: number;
+  currPage: number;
   pageSize: number;
   setCurrPage?: React.Dispatch<React.SetStateAction<number>>;
   totalItemsCount?: number;
@@ -21,7 +21,7 @@ const PaginationControl = ({
   canPreviousPage,
   pageNum,
   setPageSize,
-  pageIndex,
+  currPage,
   pageSize,
   setCurrPage,
   totalItemsCount,
@@ -38,7 +38,7 @@ const PaginationControl = ({
         />
 
         <div id="page-indicator">
-          <span className="font-bold">{pageIndex} </span>/ {pageNum}
+          <span className="font-bold">{currPage} </span> / {pageNum}
         </div>
 
         <Button

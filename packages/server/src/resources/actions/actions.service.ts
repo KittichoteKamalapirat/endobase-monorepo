@@ -167,11 +167,15 @@ export class ActionsService {
       this.actionsRepository,
       options,
     );
+
+    // console.log('paginatedResults', paginatedResults.items.map(item => item.officer))
     // attach session, inside session there is already other stuff!
     await Promise.all(
       paginatedResults.items.map(async (item) => {
+        const officer = await this.officersService.findOneById(item.officerId);
         const session = await this.sessionsService.findOne(item.sessionId);
         item.session = session;
+        item.officer = officer;
         return item;
       }),
     );

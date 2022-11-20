@@ -16,7 +16,6 @@ import { OfficersService } from '../officers/officers.service';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { CreateActionInput } from './dto/create-action.input';
-import { UpdateActionInput } from './dto/update-action.input';
 import { Action, ACTION_TYPE_OBJ } from './entities/action.entity';
 
 @Injectable()
@@ -154,13 +153,22 @@ export class ActionsService {
     return `This action returns a #${id} action`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} action`;
+  async findOneById(id: string): Promise<Action> {
+    return this.actionsRepository.findOneBy({ id });
   }
 
-  update(id: number, updateActionInput: UpdateActionInput) {
-    return `This action updates a #${id} action`;
-  }
+  // TODO rethink
+  // async update(id: string, input: UpdateActionInput): Promise<ActionResponse> {
+  //   const action = await this.findOneById(id);
+
+  //   if (!action)
+  //     return {
+  //       errors: [{ field: 'Activity', message: 'Cannot find the activity' }],
+  //     };
+  //   const updatedAction = { ...action, officerNum: input.officerNum };
+  //   const newAction = await this.actionsRepository.save(updatedAction);
+  //   return { action: newAction };
+  // }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Action>> {
     const paginatedResults = await paginate<Action>(

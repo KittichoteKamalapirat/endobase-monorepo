@@ -60,7 +60,6 @@ export class EndosResolver {
   ): Promise<BooleanResponse> {
     return this.endosService.remove(id);
   }
-  @Mutation(() => Endo)
   updateEndo(
     @Args({ name: 'id', type: () => String }) id: string,
     @Args({ name: 'input', type: () => UpdateEndoInput })

@@ -92,7 +92,6 @@ const EndosSettingTable = () => {
           type={ButtonTypes.PRIMARY}
         />
       </div>
-
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>

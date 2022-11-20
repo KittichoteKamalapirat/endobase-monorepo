@@ -134,11 +134,6 @@ type FieldError {
   message: String!
 }
 
-type PatientResponse {
-  errors: [FieldError!]
-  patient: Patient
-}
-
 type BooleanResponse {
   errors: [FieldError!]
   value: Boolean
@@ -165,7 +160,6 @@ type Query {
   endos: [Endo!]!
   endo(id: String!): Endo!
   actions: [Action!]!
-  action(id: Int!): Action!
   paginatedActions(input: PaginatedInput!): PaginatedActionOutput!
   sessions: [Session!]!
   session(id: String!): Session!
@@ -189,22 +183,20 @@ type Mutation {
   createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
+  turnLightOff(id: String!): BooleanResponse!
   createSetting(input: CreateSettingInput!): Setting!
   updateSetting(input: UpdateSettingInput!): Setting!
   createEndo(input: CreateEndoInput!): Endo!
   deleteEndo(id: String!): BooleanResponse!
-  updateEndo(id: String!, input: UpdateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
   createAction(input: CreateActionInput!): Action!
-  updateAction(updateActionInput: UpdateActionInput!): Action!
   removeAction(id: Int!): Action!
   createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
   updateSessionPatient(input: UpdateSessionPatientInput!): Session!
   removeSession(id: String!): Session!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
-  updatePatient(id: String!, input: UpdatePatientInput!): PatientResponse!
   removePatient(id: Int!): Patient!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
@@ -250,15 +242,6 @@ input CreateEndoInput {
   dryingTime: Int!
 }
 
-input UpdateEndoInput {
-  trayId: String!
-  brand: String!
-  serialNum: String!
-  type: String!
-  model: String!
-  dryingTime: Int!
-}
-
 input UpdateDryingTimeInput {
   endoId: String!
   mins: Int!
@@ -269,14 +252,6 @@ input CreateActionInput {
   type: String!
   passed: Boolean!
   officerNum: String!
-}
-
-input UpdateActionInput {
-  sessionId: String
-  type: String
-  passed: Boolean
-  officerNum: String
-  id: Int!
 }
 
 input CreateSessionInput {
@@ -300,10 +275,6 @@ input UpdateSessionPatientInput {
 
 input CreatePatientInput {
   """Example field (placeholder)"""
-  hosNum: String!
-}
-
-input UpdatePatientInput {
   hosNum: String!
 }
 

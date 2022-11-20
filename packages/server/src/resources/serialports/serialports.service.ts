@@ -2,9 +2,14 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
 import { AppService } from '../../app.service';
-import { CONTAINER_NUM, SERIALPORTS_PROVIDER } from '../../constants';
+import {
+  BLACK_COLOR_COMMAND,
+  CONTAINER_NUM,
+  SERIALPORTS_PROVIDER,
+} from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import { formatSTS } from '../../utils/formatSTS';
+import { rowNumToLEDPosition } from '../../utils/rowNumToLEDPosition';
 import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
 import { ColType } from '../containers/entities/container.entity';
@@ -113,6 +118,7 @@ export class SerialportsService {
     this.logger.log('Read STS every 1 sec');
   }
 
+  // also could be use when turn lights on
   writeColor({
     col,
     row,
@@ -128,6 +134,24 @@ export class SerialportsService {
     });
 
     this.serialports[col].write(command, (err) => {
+      // if (error) console.log(error?.message);
+      if (err) {
+        return console.log('Error on write: ', err.message);
+      }
+      console.log('wrote');
+    });
+  }
+
+  turnLightOff({ col, row }: { col: ColType; row: RowType }) {
+    console.log('55555');
+    const colorCommand = BLACK_COLOR_COMMAND;
+    const ledPosition = rowNumToLEDPosition(row);
+
+    const command = `:L${ledPosition}(${colorCommand})\r\n)`;
+
+    // TODO IMPORTANT column has to match!
+    this.serialports[col].write(command, (err) => {
+      console.log('error writing');
       // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);

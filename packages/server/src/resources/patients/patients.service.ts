@@ -28,20 +28,21 @@ export class PatientsService {
     return this.patientsRepository.findOneBy({ hosNum });
   }
 
-  async update(
-    id: string,
-    input: UpdatePatientInput,
-  ): Promise<PatientResponse> {
-    const patient = await this.findOneById(id);
+  // TODO rethink this => cannot directly update patientNum
+  // async update(
+  //   id: string,
+  //   input: UpdatePatientInput,
+  // ): Promise<PatientResponse> {
+  //   const patient = await this.findOneById(id);
 
-    if (!patient)
-      return {
-        errors: [{ field: 'Patient', message: 'Cannot find a patient' }],
-      };
-    const updatedPatient = { ...patient, hosNum: input.hosNum };
-    const newPatient = await this.patientsRepository.save(updatedPatient);
-    return { patient: newPatient };
-  }
+  //   if (!patient)
+  //     return {
+  //       errors: [{ field: 'Patient', message: 'Cannot find the patient' }],
+  //     };
+  //   const updatedPatient = { ...patient, hosNum: input.hosNum };
+  //   const newPatient = await this.patientsRepository.save(updatedPatient);
+  //   return { patient: newPatient };
+  // }
 
   remove(id: number) {
     return `This action removes a #${id} patient`;

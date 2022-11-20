@@ -26,13 +26,14 @@ export class PatientsResolver {
     return this.patientsService.findOneById(id);
   }
 
-  @Mutation(() => PatientResponse)
-  updatePatient(
-    @Args('id') id: string,
-    @Args('input') input: UpdatePatientInput,
-  ): Promise<PatientResponse> {
-    return this.patientsService.update(id, input);
-  }
+  // TODO rethink
+  // @Mutation(() => PatientResponse)
+  // updatePatient(
+  //   @Args('id') id: string,
+  //   @Args('input') input: UpdatePatientInput,
+  // ): Promise<PatientResponse> {
+  //   return this.patientsService.update(id, input);
+  // }
 
   @Mutation(() => Patient)
   removePatient(@Args('id', { type: () => Int }) id: number) {

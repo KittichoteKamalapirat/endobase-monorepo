@@ -1,4 +1,5 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import BooleanResponse from '../endos/dto/boolean-response.input';
 import { ContainersService } from './containers.service';
 import { CreateContainerInput } from './dto/create-container.input';
 import { Container } from './entities/container.entity';
@@ -34,5 +35,12 @@ export class ContainersResolver {
   @Mutation(() => Container)
   removeContainer(@Args('id', { type: () => Int }) id: number) {
     return this.containersService.remove(id);
+  }
+
+  @Mutation(() => BooleanResponse)
+  turnLightOff(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<BooleanResponse> {
+    return this.containersService.turnLightOff(id);
   }
 }

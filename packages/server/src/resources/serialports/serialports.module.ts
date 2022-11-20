@@ -1,4 +1,10 @@
-import { DynamicModule, Injectable, Module, Provider } from '@nestjs/common';
+import {
+  DynamicModule,
+  forwardRef,
+  Injectable,
+  Module,
+  Provider,
+} from '@nestjs/common';
 import { SerialPort } from 'serialport';
 import {
   serialportPathA,
@@ -13,7 +19,7 @@ import { SnapshotsService } from '../snapshots/snapshots.service';
 import { SerialportsService } from './serialports.service';
 
 @Module({
-  imports: [SnapshotsModule, ContainersModule, SettingModule],
+  imports: [SnapshotsModule, forwardRef(() => ContainersModule), SettingModule],
   providers: [SerialportsService],
   exports: [SerialportsService],
 })

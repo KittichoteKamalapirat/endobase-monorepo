@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SerialPort } from 'serialport';
 import { Repository } from 'typeorm';
 import { SERIALPORTS_PROVIDER } from '../../constants';
+import BooleanResponse from '../endos/dto/boolean-response.input';
+import { SerialportsService } from '../serialports/serialports.service';
 import { CreateContainerInput } from './dto/create-container.input';
 import { UpdateContainerInput } from './dto/update-container.input';
 import { ColType, Container } from './entities/container.entity';
@@ -12,8 +13,10 @@ export class ContainersService {
   constructor(
     @InjectRepository(Container)
     private containersRepository: Repository<Container>,
-    @Inject(SERIALPORTS_PROVIDER)
-    private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
+    // @Inject(SERIALPORTS_PROVIDER) // TODO what is this => remove this line fix
+    // private serialportsService: SerialportsService,
+    @Inject(forwardRef(() => SerialportsService))
+    private serialportsService: SerialportsService,
   ) {}
 
   create(createContainerInput: CreateContainerInput) {
@@ -28,7 +31,10 @@ export class ContainersService {
   }
 
   findOne(id: string) {
-    return this.containersRepository.findOneBy({ id });
+    return this.containersRepository.findOne({
+      where: { id },
+      relations: ['trays'],
+    });
   }
 
   // col = A, B, C
@@ -48,5 +54,39 @@ export class ContainersService {
 
   remove(id: number) {
     return `This action removes a #${id} container`;
+  }
+
+  async turnLightOff(id: string): Promise<BooleanResponse> {
+    const container = await this.findOne(id);
+    if (!container)
+      return {
+        errors: [
+          {
+            field: 'Container',
+            message: 'Cannot find a container',
+          },
+        ],
+      };
+
+    console.log('11');
+    // turn light off for every tray in that container
+    console.log('this outside loop', this.serialportsService.turnLightOff);
+    container.trays.map((tray) => {
+      console.log('22');
+
+      // because of forward ref?
+      this.serialportsService.turnLightOff({
+        col: container.col,
+        row: tray.row,
+        // endoStatus: 'ready',
+      });
+
+      console.log('this inside loop', this.serialportsService.turnLightOff);
+
+      console.log('33');
+    }, 'xxx');
+    console.log('44');
+
+    // this.se
   }
 }

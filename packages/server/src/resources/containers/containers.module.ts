@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ContainersService } from './containers.service';
-import { ContainersResolver } from './containers.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ContainersResolver } from './containers.resolver';
+import { ContainersService } from './containers.service';
 import { Container } from './entities/container.entity';
 
 @Module({

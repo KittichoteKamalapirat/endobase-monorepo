@@ -1,11 +1,10 @@
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ActionsService } from './actions.service';
 import { Action } from './entities/action.entity';
 // import { CreateActionInput } from './dto/create-action.input';
-import { UpdateActionInput } from './dto/update-action.input';
-import { CreateActionInput } from './dto/create-action.input';
 import { PaginatedInput } from "../common/dto/import { InputType, Int, Field } from '@nestjs/PaginatedInput";
+import { CreateActionInput } from './dto/create-action.input';
 import { PaginatedActionOutput } from './dto/paginated-action.output';
 
 @Resolver(() => Action)
@@ -22,17 +21,19 @@ export class ActionsResolver {
     return this.actionsService.findAll();
   }
 
-  @Query(() => Action, { name: 'action' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.actionsService.findOne(id);
-  }
+  // @Query(() => Action, { name: 'action' })
+  // findOne(@Args('id', { type: () => Int }) id: string) {
+  //   return this.actionsService.findOneById(id);
+  // }
 
-  @Mutation(() => Action)
-  updateAction(
-    @Args('updateActionInput') updateActionInput: UpdateActionInput,
-  ) {
-    return this.actionsService.update(updateActionInput.id, updateActionInput);
-  }
+  // TODO rethink this => cannot directly udpate action num
+  // @Mutation(() => ActionResponse)
+  // updateAction(
+  //   @Args('id') id: string,
+  //   @Args('input') input: UpdateActionInput,
+  // ): Promise<ActionResponse> {
+  //   return this.actionsService.update(id, input);
+  // }
 
   @Mutation(() => Action)
   removeAction(@Args('id', { type: () => Int }) id: number) {

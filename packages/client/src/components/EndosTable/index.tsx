@@ -1,12 +1,23 @@
 import classNames from "classnames";
 import { useMemo } from "react";
-import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
+import {
+  AiOutlineSortAscending,
+  AiOutlineSortDescending,
+} from "react-icons/ai";
+import {
+  Column,
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from "react-table";
 import {
   Endo,
   useEndosQuery,
   usePickEndoMutation,
 } from "../../generated/graphql";
 
+import { ICON_SIZE } from "../../constants";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
 import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
@@ -21,6 +32,7 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
+import SortHeader from "../Table/SortHeader";
 
 // 1. get the data
 // 2. define the columns
@@ -67,6 +79,7 @@ const EndosTable = () => {
       data,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
@@ -103,8 +116,17 @@ const EndosTable = () => {
           {headerGroups.map((group, index) => (
             <TR {...group.getHeaderGroupProps} key={index}>
               {group.headers.map((col, index) => (
-                <TH {...col.getHeaderProps()} key={index}>
-                  {col.render("Header")}
+                <TH
+                  {...col.getHeaderProps(col.getSortByToggleProps())}
+                  key={index}
+                >
+                  <div className="flex gap-2 items-center">
+                    {col.render("Header")}
+                    <SortHeader
+                      isSorted={col.isSorted}
+                      isSortedDesc={col.isSortedDesc}
+                    />
+                  </div>
                 </TH>
               ))}
             </TR>

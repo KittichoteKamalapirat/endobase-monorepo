@@ -1,12 +1,19 @@
 import dayjs from "dayjs";
 import { useEffect, useMemo, useState } from "react";
-import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
+import {
+  Column,
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from "react-table";
 import { usePaginatedSnapshotsQuery } from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
 import { GlobalFilter } from "../EndosTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PaginationControl from "../Table/PaginationControl";
+import SortHeader from "../Table/SortHeader";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -95,6 +102,7 @@ const SnapshotsTable = () => {
       data,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
@@ -135,8 +143,17 @@ const SnapshotsTable = () => {
           {headerGroups.map((group, index) => (
             <TR {...group.getHeaderGroupProps} key={index}>
               {group.headers.map((col, index) => (
-                <TH {...col.getHeaderProps()} key={index}>
-                  {col.render("Header")}
+                <TH
+                  {...col.getHeaderProps(col.getSortByToggleProps())}
+                  key={index}
+                >
+                  <div className="flex gap-2 items-center">
+                    {col.render("Header")}
+                    <SortHeader
+                      isSorted={col.isSorted}
+                      isSortedDesc={col.isSortedDesc}
+                    />
+                  </div>
                 </TH>
               ))}
             </TR>

@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Column, useGlobalFilter, usePagination, useTable } from "react-table";
+import {
+  Column,
+  useGlobalFilter,
+  usePagination,
+  useSortBy,
+  useTable,
+} from "react-table";
 
 import dayjs from "dayjs";
 import { usePaginatedActionsQuery } from "../../generated/graphql";
@@ -16,6 +22,7 @@ import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { actionColumns } from "./actionColumns";
+import SortHeader from "../Table/SortHeader";
 
 const ActionsTable = () => {
   const [currPage, setCurrPage] = useState(1);
@@ -89,6 +96,7 @@ const ActionsTable = () => {
       data,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 
@@ -129,8 +137,17 @@ const ActionsTable = () => {
           {headerGroups.map((group, index) => (
             <TR {...group.getHeaderGroupProps} key={index}>
               {group.headers.map((col, index) => (
-                <TH {...col.getHeaderProps()} key={index}>
-                  {col.render("Header")}
+                <TH
+                  {...col.getHeaderProps(col.getSortByToggleProps())}
+                  key={index}
+                >
+                  <div className="flex gap-2 items-center">
+                    {col.render("Header")}
+                    <SortHeader
+                      isSorted={col.isSorted}
+                      isSortedDesc={col.isSortedDesc}
+                    />
+                  </div>
                 </TH>
               ))}
             </TR>

@@ -1,7 +1,13 @@
+import { ApolloQueryResult } from "@apollo/client";
 import { Control, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useCreateActionMutation, useSessionQuery } from "../generated/graphql";
+import {
+  EndoQuery,
+  Exact,
+  useCreateActionMutation,
+  useSessionQuery,
+} from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import CheckboxField from "./forms/CheckboxField";
@@ -10,6 +16,15 @@ import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
+  refetchEndo: (
+    variables?:
+      | Partial<
+          Exact<{
+            id: string;
+          }>
+        >
+      | undefined
+  ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
 
 enum FormNames {
@@ -26,7 +41,7 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const CompleteSessionForm = ({ containerClass }: Props) => {
+const CompleteSessionForm = ({ refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
   const { refetch } = useSessionQuery({
@@ -64,7 +79,7 @@ const CompleteSessionForm = ({ containerClass }: Props) => {
       });
 
       refetch();
-
+      refetchEndo();
       dispatch(
         showToast({
           message: "Session completed",

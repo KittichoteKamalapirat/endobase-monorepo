@@ -86,3 +86,17 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 1. Firstly drop all the existing tables by running comment out the 01_drop.seed and run yarn seed:run
 2. start the service to recreate the database
 3. comment out the seed and run yarn seed:run again to create the data
+
+### How washing when expired work?
+
+1. When current status =
+
+- ready or expire_soon, you can use it (session created => status turns to being_used) and wash it
+- expired => you can take out (session created => status turns to expired_and_out) and wash
+- It is designed this way so in the session page, if expired_and_out => no need to fill-in the patient form
+
+2. in session, there is type endoWasExpired
+
+- This is so we know that when endo is drying
+- show NoPatientForm if endoWasExpired
+- show PatientDetail if !endoWasExpired

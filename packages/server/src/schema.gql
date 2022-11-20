@@ -76,6 +76,7 @@ type Patient {
 type Session {
   id: ID!
   status: String!
+  endoWasExpired: Boolean!
   endoId: String!
   endo: Endo!
   patientId: String
@@ -254,13 +255,13 @@ input UpdateActionInput {
 }
 
 input CreateSessionInput {
-  """For create a session for an endoscope"""
   endoId: String!
+  endoWasExpired: Boolean!
 }
 
 input UpdateSessionInput {
-  """For create a session for an endoscope"""
   endoId: String
+  endoWasExpired: Boolean
   id: String
   status: String
   patientHN: String

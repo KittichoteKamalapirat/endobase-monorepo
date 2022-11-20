@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
+import LinkButton from "../components/Buttons/LinkButton";
 import CompleteSessionForm from "../components/CompleteSessionForm";
 import DisinfectForm from "../components/DisinfectForm";
 import EndoDetail from "../components/EndoDetail";
 import Layout from "../components/layouts/Layout";
 import LeakTestForm from "../components/LeakTestForm";
+import NoPatientForm from "../components/NoPatientForm";
 import PatientDetail from "../components/PatientDetail";
 import PatientForm from "../components/PatientForm";
 import { Error } from "../components/skeletons/Error";
@@ -32,6 +34,7 @@ const Session = () => {
     data: endoData,
     loading: endoLoading,
     error: endoError,
+    refetch: refetchEndo,
   } = useEndoQuery({ variables: { id: data?.session.endoId || "" } });
 
   const { patientId, actions, patient } = data?.session || {};
@@ -65,13 +68,17 @@ const Session = () => {
       <PageHeading heading="Session" />
       <EndoDetail endo={endoData?.endo as Endo} />
 
-      <div id="patient-details">
-        {patientId ? (
-          <PatientDetail patient={patient as Patient} />
-        ) : (
-          <PatientForm containerClass="my-4" />
-        )}
-      </div>
+      {data?.session.endoWasExpired ? (
+        <NoPatientForm />
+      ) : (
+        <div id="patient-details">
+          {patientId ? (
+            <PatientDetail patient={patient as Patient} />
+          ) : (
+            <PatientForm containerClass="my-4" />
+          )}
+        </div>
+      )}
 
       <div id="activities-detail" className={CARD_CLASSNAMES}>
         <SubHeading heading="Activities" extraClass="mt-4" />
@@ -79,18 +86,25 @@ const Session = () => {
         {leakTestAction ? (
           <ActivityItem action={leakTestAction as Partial<Action>} />
         ) : (
-          <LeakTestForm containerClass="my-4" />
+          <LeakTestForm containerClass="my-4" refetchEndo={refetchEndo} />
         )}
         {disinfectAction ? (
           <ActivityItem action={disinfectAction as Partial<Action>} />
         ) : (
-          <DisinfectForm containerClass="my-4" />
+          <DisinfectForm containerClass="my-4" refetchEndo={refetchEndo} />
         )}
         {storeAction ? (
           <ActivityItem action={storeAction as Partial<Action>} />
         ) : (
-          <CompleteSessionForm containerClass="my-4" />
+          <CompleteSessionForm
+            containerClass="my-4"
+            refetchEndo={refetchEndo}
+          />
         )}
+      </div>
+
+      <div className="flex justify-center mt-10">
+        <LinkButton label="Back to home" href="/" />
       </div>
     </Layout>
   );

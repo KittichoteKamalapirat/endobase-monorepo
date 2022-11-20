@@ -1,7 +1,10 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateSessionInput {
-  @Field(() => String, { description: 'For create a session for an endoscope' })
+  @Field(() => String)
   endoId: string;
+
+  @Field(() => Boolean)
+  endoWasExpired: boolean;
 }

@@ -3,6 +3,7 @@ query Session($id: String!) {
     id
     endoId
     status
+    endoWasExpired
     patientId
     patient {
       id

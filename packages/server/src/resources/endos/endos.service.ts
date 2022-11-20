@@ -62,17 +62,19 @@ export class EndosService {
     // TODO check by session with this endoId and null
     // update endoscope status from ready => being_used
     const endo = await this.findOne(id);
-
     if (!endo) return new Error('Cannot find the endoscope');
-    if (endo.status !== 'ready' && endo.status !== 'expire_soon')
+    if (
+      endo.status !== 'ready' &&
+      endo.status !== 'expire_soon' &&
+      endo.status !== 'expired'
+    )
       return new Error('This endoscope is not ready yet');
-
     const existingSession = await this.findCurrentSessionByEndoId(id);
-
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
 
     // create a session
-    await this.sessionsService.create({ endoId: id });
+    const endoWasExpired = endo.status === 'expired';
+    await this.sessionsService.create({ endoId: id, endoWasExpired });
     // create an action (take_out)
     // await this.actionsService.create({
     //   sessionId: session.id,
@@ -88,13 +90,16 @@ export class EndosService {
       endoStatus: ENDO_STATUS_OBJ.BEING_USED,
     });
 
-    const pickedEndo = this.endosRepository.save({
-      ...endo,
-      status: ENDO_STATUS_OBJ.BEING_USED,
-    });
+    let pickedEndo = null;
 
     if (endo.status === 'ready') {
-      // remove the previously scheduled to be expire_soon for this endo
+      // save the new endo
+      pickedEndo = await this.endosRepository.save({
+        ...endo,
+        status: ENDO_STATUS_OBJ.BEING_USED,
+      });
+
+      // remove the previously "scheduled to be expire_soon" for this endo
       const scheduleName = nameSchedule({
         endoId: endo.id,
         status: ENDO_STATUS_OBJ.EXPIRE_SOON,
@@ -102,12 +107,24 @@ export class EndosService {
 
       this.deleteSchedule(scheduleName);
     } else if (endo.status === 'expire_soon') {
-      // remove the previously scheduled to be expired for this endo
+      // save the new endo (being_used)
+      pickedEndo = await this.endosRepository.save({
+        ...endo,
+        status: ENDO_STATUS_OBJ.BEING_USED,
+      });
+      // remove the previously scheduled "to be expired" for this endo
       const scheduleName = nameSchedule({
         endoId: endo.id,
         status: ENDO_STATUS_OBJ.EXPIRED,
       });
       this.deleteSchedule(scheduleName);
+    } else {
+      // status = "expired"
+      // do nothing keep it expired
+      pickedEndo = await this.endosRepository.save({
+        ...endo,
+        status: ENDO_STATUS_OBJ.EXPIRED_AND_OUT,
+      });
     }
 
     return pickedEndo;

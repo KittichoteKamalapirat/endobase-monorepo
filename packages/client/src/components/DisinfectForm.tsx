@@ -1,7 +1,13 @@
+import { ApolloQueryResult } from "@apollo/client";
 import React from "react";
 import { Control, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useCreateActionMutation, useSessionQuery } from "../generated/graphql";
+import {
+  EndoQuery,
+  Exact,
+  useCreateActionMutation,
+  useSessionQuery,
+} from "../generated/graphql";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
@@ -9,6 +15,15 @@ import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
+  refetchEndo: (
+    variables?:
+      | Partial<
+          Exact<{
+            id: string;
+          }>
+        >
+      | undefined
+  ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
 
 enum FormNames {
@@ -25,7 +40,7 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const DisinfectForm = ({ containerClass }: Props) => {
+const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -63,6 +78,7 @@ const DisinfectForm = ({ containerClass }: Props) => {
 
       console.log("result", result);
       refetch();
+      refetchEndo();
     } catch (error) {
       console.log("error", error);
     }

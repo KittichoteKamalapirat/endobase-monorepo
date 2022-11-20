@@ -17,6 +17,7 @@ export const ENDO_STATUS_OBJ = {
   EXPIRE_SOON: 'expire_soon',
   BEING_USED: 'being_used',
   EXPIRED: 'expired',
+  EXPIRED_AND_OUT: 'expired_and_out',
   LEAK_TEST_FAILED: 'leak_test_failed',
   LEAK_TEST_PASSED: 'leak_test_passed',
   DISINFECTION_PASSED: 'disinfection_passed',
@@ -29,6 +30,7 @@ export type ENDO_STATUS =
   | 'expire_soon'
   | 'being_used'
   | 'expired'
+  | 'expired_and_out' // session created, out to be wash soon
   | 'leak_test_failed'
   | 'leak_test_passed'
   | 'disinfection_failed'
@@ -40,6 +42,7 @@ export const statusToColor = {
   [ENDO_STATUS_OBJ.EXPIRE_SOON]: 'orange',
   [ENDO_STATUS_OBJ.BEING_USED]: 'black',
   [ENDO_STATUS_OBJ.EXPIRED]: 'red',
+  [ENDO_STATUS_OBJ.EXPIRED_AND_OUT]: 'red',
   [ENDO_STATUS_OBJ.LEAK_TEST_FAILED]: 'black',
   [ENDO_STATUS_OBJ.LEAK_TEST_PASSED]: 'black',
   [ENDO_STATUS_OBJ.DISINFECTION_PASSED]: 'black',

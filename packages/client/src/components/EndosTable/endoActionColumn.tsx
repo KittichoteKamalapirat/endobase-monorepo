@@ -51,9 +51,12 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.READY:
       return <Button label="Use" onClick={() => handleUseEndo(endoId)} />;
 
-    case ENDO_STATUS.BEING_USED:
-    case ENDO_STATUS.LEAK_TEST_FAILED:
     case ENDO_STATUS.EXPIRED:
+      return <Button label="Take out" onClick={() => handleUseEndo(endoId)} />;
+
+    case ENDO_STATUS.BEING_USED:
+    case ENDO_STATUS.EXPIRED_AND_OUT:
+    case ENDO_STATUS.LEAK_TEST_FAILED:
       return (
         <LinkButton
           label="Wash"

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
 import LinkButton from "../components/Buttons/LinkButton";
 import CompleteSessionForm from "../components/CompleteSessionForm";
@@ -24,6 +24,10 @@ import { CARD_CLASSNAMES } from "../theme";
 
 const Session = () => {
   const { id } = useParams();
+
+  // for back button
+  const { state } = useLocation();
+  const { prev } = state || {}; // read the prev route
 
   const sessionId = id || "";
   const { data, loading, error } = useSessionQuery({
@@ -104,7 +108,7 @@ const Session = () => {
       </div>
 
       <div className="flex justify-center mt-10">
-        <LinkButton label="Back to home" href="/" />
+        <LinkButton label="Back" href={prev ? `/${prev}` : "/"} />
       </div>
     </Layout>
   );

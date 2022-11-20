@@ -83,8 +83,6 @@ const EndosTable = () => {
     usePagination
   );
 
-  console.log("re render");
-
   if (loading) {
     return <RowsSkeleton />;
   }

@@ -13,6 +13,7 @@ query Endo($id: String!) {
     tray {
       id
       row
+      position
       container {
         id
         col

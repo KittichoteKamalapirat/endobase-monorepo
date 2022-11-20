@@ -1,0 +1,10 @@
+query EmptyTrays {
+  emptyTrays {
+    id
+    position
+    row
+    container {
+      id
+    }
+  }
+}

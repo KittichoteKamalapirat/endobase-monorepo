@@ -16,6 +16,7 @@ query PaginatedActions($input: PaginatedInput!) {
       officer {
         officerNum
       }
+      sessionId
       session {
         id
         status

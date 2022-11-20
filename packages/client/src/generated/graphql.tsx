@@ -29,6 +29,12 @@ export type Action = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type BooleanResponse = {
+  __typename?: 'BooleanResponse';
+  errors?: Maybe<Array<FieldError>>;
+  value?: Maybe<Scalars['Boolean']>;
+};
+
 export type Container = {
   __typename?: 'Container';
   col: Scalars['String'];
@@ -55,7 +61,9 @@ export type CreateContainerInput = {
 
 export type CreateEndoInput = {
   brand: Scalars['String'];
+  dryingTime: Scalars['Int'];
   model: Scalars['String'];
+  serialNum: Scalars['String'];
   trayId: Scalars['String'];
   type: Scalars['String'];
 };
@@ -147,6 +155,7 @@ export type Mutation = {
   createSetting: Setting;
   createSnapshot: Snapshot;
   createTray: Tray;
+  deleteEndo: BooleanResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   pickEndo: Endo;
@@ -160,6 +169,7 @@ export type Mutation = {
   removeUser: User;
   updateAction: Action;
   updateDryingTime: Endo;
+  updateEndo: Endo;
   updateOfficer: Officer;
   updatePatient: Patient;
   updateSession: Session;
@@ -212,6 +222,11 @@ export type MutationCreateSnapshotArgs = {
 
 export type MutationCreateTrayArgs = {
   input: CreateTrayInput;
+};
+
+
+export type MutationDeleteEndoArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -272,6 +287,12 @@ export type MutationUpdateActionArgs = {
 
 export type MutationUpdateDryingTimeArgs = {
   input: UpdateDryingTimeInput;
+};
+
+
+export type MutationUpdateEndoArgs = {
+  id: Scalars['String'];
+  input: UpdateEndoInput;
 };
 
 
@@ -350,6 +371,7 @@ export type Query = {
   actions: Array<Action>;
   container: Container;
   containers: Array<Container>;
+  emptyTrays: Array<Tray>;
   endo: Endo;
   endos: Array<Endo>;
   me?: Maybe<User>;
@@ -465,6 +487,7 @@ export type Tray = {
   createdAt: Scalars['DateTime'];
   endo?: Maybe<Endo>;
   id: Scalars['ID'];
+  position: Scalars['String'];
   row: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
@@ -480,6 +503,15 @@ export type UpdateActionInput = {
 export type UpdateDryingTimeInput = {
   endoId: Scalars['String'];
   mins: Scalars['Int'];
+};
+
+export type UpdateEndoInput = {
+  brand: Scalars['String'];
+  dryingTime: Scalars['Int'];
+  model: Scalars['String'];
+  serialNum: Scalars['String'];
+  trayId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UpdateOfficerInput = {
@@ -548,7 +580,7 @@ export type PaginatedActionsQueryVariables = Exact<{
 }>;
 
 
-export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
+export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -572,6 +604,20 @@ export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string }> };
 
+export type CreateEndoMutationVariables = Exact<{
+  input: CreateEndoInput;
+}>;
+
+
+export type CreateEndoMutation = { __typename?: 'Mutation', createEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, serialNum: string, dryingTime: number, type: string, model: string } };
+
+export type DeleteEndoMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteEndoMutation = { __typename?: 'Mutation', deleteEndo: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type PickEndoMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -586,12 +632,20 @@ export type UpdateDryingTimeMutationVariables = Exact<{
 
 export type UpdateDryingTimeMutation = { __typename?: 'Mutation', updateDryingTime: { __typename?: 'Endo', id: string, dryingTime: number } };
 
+export type UpdateEndoMutationVariables = Exact<{
+  id: Scalars['String'];
+  input: UpdateEndoInput;
+}>;
+
+
+export type UpdateEndoMutation = { __typename?: 'Mutation', updateEndo: { __typename?: 'Endo', id: string, trayId: string, serialNum: string, dryingTime: number, brand: string, type: string, model: string } };
+
 export type EndoQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string, trayId: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } } };
+export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string, trayId: string, tray: { __typename?: 'Tray', id: string, row: number, position: string, container: { __typename?: 'Container', id: string, col: string } } } };
 
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -647,6 +701,11 @@ export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SnapshotsQuery = { __typename?: 'Query', snapshots: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, createdAt: any, containerId: string, container: { __typename?: 'Container', id: string, col: string } }> };
+
+export type EmptyTraysQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmptyTraysQuery = { __typename?: 'Query', emptyTrays: Array<{ __typename?: 'Tray', id: string, position: string, row: number, container: { __typename?: 'Container', id: string } }> };
 
 
 export const ActionsDocument = gql`
@@ -725,6 +784,7 @@ export const PaginatedActionsDocument = gql`
       officer {
         officerNum
       }
+      sessionId
       session {
         id
         status
@@ -914,6 +974,82 @@ export function useContainersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type ContainersQueryHookResult = ReturnType<typeof useContainersQuery>;
 export type ContainersLazyQueryHookResult = ReturnType<typeof useContainersLazyQuery>;
 export type ContainersQueryResult = Apollo.QueryResult<ContainersQuery, ContainersQueryVariables>;
+export const CreateEndoDocument = gql`
+    mutation createEndo($input: CreateEndoInput!) {
+  createEndo(input: $input) {
+    id
+    trayId
+    brand
+    serialNum
+    dryingTime
+    type
+    model
+  }
+}
+    `;
+export type CreateEndoMutationFn = Apollo.MutationFunction<CreateEndoMutation, CreateEndoMutationVariables>;
+
+/**
+ * __useCreateEndoMutation__
+ *
+ * To run a mutation, you first call `useCreateEndoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEndoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEndoMutation, { data, loading, error }] = useCreateEndoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEndoMutation(baseOptions?: Apollo.MutationHookOptions<CreateEndoMutation, CreateEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEndoMutation, CreateEndoMutationVariables>(CreateEndoDocument, options);
+      }
+export type CreateEndoMutationHookResult = ReturnType<typeof useCreateEndoMutation>;
+export type CreateEndoMutationResult = Apollo.MutationResult<CreateEndoMutation>;
+export type CreateEndoMutationOptions = Apollo.BaseMutationOptions<CreateEndoMutation, CreateEndoMutationVariables>;
+export const DeleteEndoDocument = gql`
+    mutation DeleteEndo($id: String!) {
+  deleteEndo(id: $id) {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type DeleteEndoMutationFn = Apollo.MutationFunction<DeleteEndoMutation, DeleteEndoMutationVariables>;
+
+/**
+ * __useDeleteEndoMutation__
+ *
+ * To run a mutation, you first call `useDeleteEndoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEndoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEndoMutation, { data, loading, error }] = useDeleteEndoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteEndoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEndoMutation, DeleteEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEndoMutation, DeleteEndoMutationVariables>(DeleteEndoDocument, options);
+      }
+export type DeleteEndoMutationHookResult = ReturnType<typeof useDeleteEndoMutation>;
+export type DeleteEndoMutationResult = Apollo.MutationResult<DeleteEndoMutation>;
+export type DeleteEndoMutationOptions = Apollo.BaseMutationOptions<DeleteEndoMutation, DeleteEndoMutationVariables>;
 export const PickEndoDocument = gql`
     mutation pickEndo($id: String!) {
   pickEndo(id: $id) {
@@ -986,6 +1122,46 @@ export function useUpdateDryingTimeMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateDryingTimeMutationHookResult = ReturnType<typeof useUpdateDryingTimeMutation>;
 export type UpdateDryingTimeMutationResult = Apollo.MutationResult<UpdateDryingTimeMutation>;
 export type UpdateDryingTimeMutationOptions = Apollo.BaseMutationOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
+export const UpdateEndoDocument = gql`
+    mutation updateEndo($id: String!, $input: UpdateEndoInput!) {
+  updateEndo(id: $id, input: $input) {
+    id
+    trayId
+    serialNum
+    dryingTime
+    brand
+    type
+    model
+  }
+}
+    `;
+export type UpdateEndoMutationFn = Apollo.MutationFunction<UpdateEndoMutation, UpdateEndoMutationVariables>;
+
+/**
+ * __useUpdateEndoMutation__
+ *
+ * To run a mutation, you first call `useUpdateEndoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEndoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEndoMutation, { data, loading, error }] = useUpdateEndoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEndoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEndoMutation, UpdateEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEndoMutation, UpdateEndoMutationVariables>(UpdateEndoDocument, options);
+      }
+export type UpdateEndoMutationHookResult = ReturnType<typeof useUpdateEndoMutation>;
+export type UpdateEndoMutationResult = Apollo.MutationResult<UpdateEndoMutation>;
+export type UpdateEndoMutationOptions = Apollo.BaseMutationOptions<UpdateEndoMutation, UpdateEndoMutationVariables>;
 export const EndoDocument = gql`
     query Endo($id: String!) {
   endo(id: $id) {
@@ -1002,6 +1178,7 @@ export const EndoDocument = gql`
     tray {
       id
       row
+      position
       container {
         id
         col
@@ -1423,3 +1600,42 @@ export function useSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type SnapshotsQueryHookResult = ReturnType<typeof useSnapshotsQuery>;
 export type SnapshotsLazyQueryHookResult = ReturnType<typeof useSnapshotsLazyQuery>;
 export type SnapshotsQueryResult = Apollo.QueryResult<SnapshotsQuery, SnapshotsQueryVariables>;
+export const EmptyTraysDocument = gql`
+    query EmptyTrays {
+  emptyTrays {
+    id
+    position
+    row
+    container {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useEmptyTraysQuery__
+ *
+ * To run a query within a React component, call `useEmptyTraysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEmptyTraysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEmptyTraysQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useEmptyTraysQuery(baseOptions?: Apollo.QueryHookOptions<EmptyTraysQuery, EmptyTraysQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(EmptyTraysDocument, options);
+      }
+export function useEmptyTraysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EmptyTraysQuery, EmptyTraysQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(EmptyTraysDocument, options);
+        }
+export type EmptyTraysQueryHookResult = ReturnType<typeof useEmptyTraysQuery>;
+export type EmptyTraysLazyQueryHookResult = ReturnType<typeof useEmptyTraysLazyQuery>;
+export type EmptyTraysQueryResult = Apollo.QueryResult<EmptyTraysQuery, EmptyTraysQueryVariables>;

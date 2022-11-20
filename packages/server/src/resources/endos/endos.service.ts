@@ -13,6 +13,8 @@ import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { ActionsService } from '../actions/actions.service';
+import { UpdateEndoInput } from './dto/update-endo.input';
+import BooleanResponse from './dto/boolean-response.input';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -34,6 +36,11 @@ export class EndosService {
     const endos = await this.endosRepository.find({
       relations: ['tray', 'tray.container'],
       // loadRelationIds: true,
+      order: {
+        type: 'ASC',
+        brand: 'ASC',
+        model: 'ASC',
+      },
     });
 
     return endos;
@@ -51,8 +58,23 @@ export class EndosService {
     return this.endosRepository.save(newEndo);
   }
 
-  async remove(id: string): Promise<void> {
-    await this.endosRepository.delete(id);
+  async updateEndo(id: string, input: UpdateEndoInput): Promise<Endo | Error> {
+    const endo = await this.findOne(id);
+    if (!endo) return new Error('Cannot find the endoscope');
+
+    const updatedEndo = { ...endo, ...input };
+    return this.endosRepository.save(updatedEndo);
+  }
+
+  async remove(id: string): Promise<BooleanResponse> {
+    try {
+      await this.endosRepository.delete(id);
+      return { value: true };
+    } catch (error) {
+      return {
+        errors: [{ field: 'endoscope', message: 'Cannot find the endoscope ' }],
+      };
+    }
   }
 
   // update LED color

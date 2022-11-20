@@ -45,6 +45,7 @@ type Tray {
   container: Container!
   createdAt: DateTime!
   updatedAt: DateTime!
+  position: String!
 }
 
 type Endo {
@@ -133,6 +134,11 @@ type FieldError {
   message: String!
 }
 
+type BooleanResponse {
+  errors: [FieldError!]
+  value: Boolean
+}
+
 type UserResponse {
   errors: [FieldError!]
   user: User
@@ -162,6 +168,7 @@ type Query {
   patient(id: String!): Patient!
   officers: [Officer!]!
   trays: [Tray!]!
+  emptyTrays: [Tray!]!
   tray(id: Int!): Tray!
   users: [User!]!
   user(id: String!): User!
@@ -180,6 +187,8 @@ type Mutation {
   createSetting(input: CreateSettingInput!): Setting!
   updateSetting(input: UpdateSettingInput!): Setting!
   createEndo(input: CreateEndoInput!): Endo!
+  deleteEndo(id: String!): BooleanResponse!
+  updateEndo(id: String!, input: UpdateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
   createAction(input: CreateActionInput!): Action!
@@ -230,8 +239,19 @@ input UpdateSettingInput {
 input CreateEndoInput {
   trayId: String!
   brand: String!
+  serialNum: String!
   type: String!
   model: String!
+  dryingTime: Int!
+}
+
+input UpdateEndoInput {
+  trayId: String!
+  brand: String!
+  serialNum: String!
+  type: String!
+  model: String!
+  dryingTime: Int!
 }
 
 input UpdateDryingTimeInput {

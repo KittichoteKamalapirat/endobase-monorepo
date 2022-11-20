@@ -25,6 +25,17 @@ export class TraysService {
     return trays;
   }
 
+  async findEmptyTrays() {
+    // find trays that tray.endo is null
+    const trays = await this.traysRepository.find({
+      relations: ['container', 'endo'],
+    });
+
+    const emptyTrays = trays.filter((tray) => !tray.endo);
+
+    return emptyTrays;
+  }
+
   async findOne(id: number) {
     return `This action returns a #${id} container`;
   }

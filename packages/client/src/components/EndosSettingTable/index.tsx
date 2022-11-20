@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Column,
   useGlobalFilter,
@@ -6,7 +7,8 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { useEndosQuery } from "../../generated/graphql";
+import { Endo, useEndosQuery } from "../../generated/graphql";
+import Button, { ButtonTypes } from "../Buttons/Button";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PaginationControl from "../Table/PaginationControl";
@@ -30,6 +32,8 @@ import { GlobalFilter } from "./GlobalFilter";
 
 const EndosSettingTable = () => {
   const { data: endosData, loading, error } = useEndosQuery();
+
+  const navigate = useNavigate();
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => endoColumns(), []);
@@ -76,7 +80,19 @@ const EndosSettingTable = () => {
 
   return (
     <div>
-      <SubHeading heading="Endoscopes Drying Time Setting" />
+      <div className="flex justify-between">
+        <SubHeading heading="Endoscopes Setting" />
+        <Button
+          label="Add"
+          onClick={() => {
+            navigate("/endo/new", {
+              state: { prev: `setting` },
+            });
+          }}
+          type={ButtonTypes.PRIMARY}
+        />
+      </div>
+
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -121,7 +137,12 @@ const EndosSettingTable = () => {
               <TR
                 {...row.getRowProps()}
                 key={index}
-                className="border-b-2 border-solid border-grey-50"
+                onClick={() =>
+                  navigate(`/endo/${(row.original as Endo).id}`, {
+                    state: { prev: "setting" },
+                  })
+                }
+                className="border-b-2 border-solid border-grey-50 hover:bg-primary-50 hover:cursor-pointer"
               >
                 {row.cells.map((cell: any, index) => (
                   <TD

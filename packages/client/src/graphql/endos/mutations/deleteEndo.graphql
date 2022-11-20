@@ -1,0 +1,9 @@
+mutation DeleteEndo($id: String!) {
+  deleteEndo(id: $id) {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}

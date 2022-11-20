@@ -6,8 +6,10 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
+import BooleanResponse from './dto/boolean-response.input';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
+import { UpdateEndoInput } from './dto/update-endo.input';
 import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
 
@@ -50,6 +52,21 @@ export class EndosResolver {
     input: CreateEndoInput,
   ): Promise<Endo> {
     return this.endosService.createEndo(input);
+  }
+
+  @Mutation(() => BooleanResponse)
+  deleteEndo(
+    @Args({ name: 'id', type: () => String }) id: string,
+  ): Promise<BooleanResponse> {
+    return this.endosService.remove(id);
+  }
+  @Mutation(() => Endo)
+  updateEndo(
+    @Args({ name: 'id', type: () => String }) id: string,
+    @Args({ name: 'input', type: () => UpdateEndoInput })
+    input: UpdateEndoInput,
+  ): Promise<Endo | Error> {
+    return this.endosService.updateEndo(id, input);
   }
 
   @Mutation(() => Endo)

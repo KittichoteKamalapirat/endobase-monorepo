@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { useMemo } from "react";
 import { Column, useTable } from "react-table";
 import { useContainersQuery } from "../../generated/graphql";
@@ -69,7 +70,11 @@ const ContainersTable = () => {
           {rows.map((row, index) => {
             prepareRow(row);
             return (
-              <TR {...row.getRowProps()} key={index}>
+              <TR
+                {...row.getRowProps()}
+                key={index}
+                className={classNames(index % 2 !== 0 ? "bg-grey-50" : "")}
+              >
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}

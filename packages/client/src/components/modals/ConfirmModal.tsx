@@ -2,8 +2,9 @@ import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import ReactModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
-import { AlertType } from "../../redux/types/AlertModalType";
-import { green, grey500, grey900, red, yellow } from "../../theme";
+import { ConfirmType } from "../../redux/types/ConfirmModalType";
+import { grey100, grey500, grey900, red, yellow } from "../../theme";
+import Button, { ButtonTypes } from "../Buttons/Button";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
 
@@ -18,10 +19,11 @@ interface Props {
   maxWidth?: string;
   modalSpacing?: string;
   zIndex?: number;
-  type?: AlertType;
+  type?: ConfirmType;
+  toPerform: any;
 }
 
-const Modal = ({
+const ConfirmModal = ({
   maxWidth,
   type = "danger",
   contentLabel,
@@ -33,12 +35,14 @@ const Modal = ({
   heading,
   modalSpacing = "p-6",
   zIndex,
+  toPerform,
 }: Props) => {
   const [iconColor, setIconColor] = useState(grey900);
   const borderColor = (() => {
+    console.log("type", type);
     switch (type) {
-      case "success":
-        return green;
+      case "neutral":
+        return grey100;
       case "warning":
         return yellow;
       case "danger":
@@ -88,9 +92,24 @@ const Modal = ({
           />
         </div>
         <div> {children}</div>
+
+        <div className="flex gap-2 justify-end mt-4">
+          <Button
+            label="Cancel"
+            onClick={onRequestClose}
+            type={ButtonTypes.OUTLINED}
+          />
+          <Button
+            label="Yes"
+            onClick={() => {
+              toPerform();
+              onRequestClose();
+            }}
+          />
+        </div>
       </div>
     </ReactModal>
   );
 };
 
-export default Modal;
+export default ConfirmModal;

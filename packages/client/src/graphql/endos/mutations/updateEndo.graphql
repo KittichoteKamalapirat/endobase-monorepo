@@ -1,0 +1,11 @@
+mutation updateEndo($id: String!, $input: UpdateEndoInput!) {
+  updateEndo(id: $id, input: $input) {
+    id
+    trayId
+    serialNum
+    dryingTime
+    brand
+    type
+    model
+  }
+}

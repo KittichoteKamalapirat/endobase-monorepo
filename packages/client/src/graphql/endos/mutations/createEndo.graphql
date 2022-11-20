@@ -1,0 +1,11 @@
+mutation createEndo($input: CreateEndoInput!) {
+  createEndo(input: $input) {
+    id
+    trayId
+    brand
+    serialNum
+    dryingTime
+    type
+    model
+  }
+}

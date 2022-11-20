@@ -30,13 +30,13 @@ export const serifFamily = ["TTCommonsMedium", "Arial", "sans-serif"];
 export const monoFamily = ["Nunito", "Montserrat", "Arial", "sans-serif"];
 
 // font size
-export const fontSizeXS = "8px";
-export const fontSizeSM = "10px";
-export const fontSizeMD = "12px";
-export const fontSizeLG = "16px";
+export const fontSizeXS = "12px";
+export const fontSizeSM = "14px";
+export const fontSizeMD = "16px";
+export const fontSizeLG = "18px";
 export const fontSizeXL = "20px";
 export const fontSize2XL = "24px";
-export const fontSize3XL = "32px";
+export const fontSize3XL = "30px";
 
 // space
 export const space2XS = "0.125rem";

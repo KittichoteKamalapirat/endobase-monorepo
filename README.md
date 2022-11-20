@@ -100,3 +100,9 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 - This is so we know that when endo is drying
 - show NoPatientForm if endoWasExpired
 - show PatientDetail if !endoWasExpired
+
+### How sorting works
+
+- Endos table and EndosSetting table => by type, brand, and modal (in backend)
+- Container: Sort by container col in the frontend
+- Snapshots, Activities => autosort by pagination createdAt

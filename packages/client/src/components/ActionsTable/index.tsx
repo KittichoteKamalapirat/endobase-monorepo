@@ -8,7 +8,7 @@ import {
 } from "react-table";
 
 import dayjs from "dayjs";
-import { usePaginatedActionsQuery } from "../../generated/graphql";
+import { Action, usePaginatedActionsQuery } from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
 import { GlobalFilter } from "../EndosSettingTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
@@ -23,9 +23,12 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { actionColumns } from "./actionColumns";
 import SortHeader from "../Table/SortHeader";
+import { Link, useNavigate } from "react-router-dom";
+import classNames from "classnames";
 
 const ActionsTable = () => {
   const [currPage, setCurrPage] = useState(1);
+  const navigate = useNavigate();
   const [localPageSize, setLocalPageSize] = useState(10);
 
   const {
@@ -157,7 +160,21 @@ const ActionsTable = () => {
           {page.map((row, index) => {
             prepareRow(row);
             return (
-              <TR {...row.getRowProps()} key={index}>
+              // <Link to={`/session/${(row.original as Action).sessionId}`}>
+              <TR
+                {...row.getRowProps()}
+                key={index}
+                onClick={() =>
+                  navigate(`/session/${(row.original as Action).sessionId}`, {
+                    state: { prev: "activities" },
+                  })
+                }
+                className={classNames(
+                  index % 2 !== 0 ? "bg-grey-50" : "",
+                  "hover:bg-primary-50 hover:cursor-pointer"
+                )}
+              >
+                {/* <a href={`/session/${(row.original as Action).sessionId}`}> */}
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}
@@ -167,7 +184,9 @@ const ActionsTable = () => {
                     {cell.render("Cell")}
                   </TD>
                 ))}
+                {/* </a> */}
               </TR>
+              // </Link>
             );
           })}
         </TBody>

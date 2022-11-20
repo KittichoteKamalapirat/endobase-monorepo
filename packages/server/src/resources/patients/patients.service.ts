@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePatientInput } from './dto/create-patient.input';
+import PatientResponse from './dto/patient-response';
 import { UpdatePatientInput } from './dto/update-patient.input';
 import { Patient } from './entities/patient.entity';
 
@@ -27,8 +28,19 @@ export class PatientsService {
     return this.patientsRepository.findOneBy({ hosNum });
   }
 
-  update(id: number, updatePatientInput: UpdatePatientInput) {
-    return `This action updates a #${id} patient`;
+  async update(
+    id: string,
+    input: UpdatePatientInput,
+  ): Promise<PatientResponse> {
+    const patient = await this.findOneById(id);
+
+    if (!patient)
+      return {
+        errors: [{ field: 'Patient', message: 'Cannot find a patient' }],
+      };
+    const updatedPatient = { ...patient, hosNum: input.hosNum };
+    const newPatient = await this.patientsRepository.save(updatedPatient);
+    return { patient: newPatient };
   }
 
   remove(id: number) {

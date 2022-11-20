@@ -51,5 +51,4 @@ export const space3XL = "4rem";
 export const CARD_CLASSNAMES =
   "border-solid rounded-md border-2 border-grey-50 p-6 shadow-md my-4";
 
-export const ACTION_CARD_CLASSNAMES =
-  "border-solid rounded-md border-2 border-grey-50 p-2 hover:bg-primary-50 hover:cursor-pointer";
+export const ACTION_CARD_CLASSNAMES = `${CARD_CLASSNAMES} hover:bg-primary-50 hover:cursor-pointer`;

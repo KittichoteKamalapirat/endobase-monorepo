@@ -3,6 +3,7 @@ import { PatientsService } from './patients.service';
 import { Patient } from './entities/patient.entity';
 import { CreatePatientInput } from './dto/create-patient.input';
 import { UpdatePatientInput } from './dto/update-patient.input';
+import PatientResponse from './dto/patient-response';
 
 @Resolver(() => Patient)
 export class PatientsResolver {
@@ -25,14 +26,12 @@ export class PatientsResolver {
     return this.patientsService.findOneById(id);
   }
 
-  @Mutation(() => Patient)
+  @Mutation(() => PatientResponse)
   updatePatient(
-    @Args('updatePatientInput') updatePatientInput: UpdatePatientInput,
-  ) {
-    return this.patientsService.update(
-      updatePatientInput.id,
-      updatePatientInput,
-    );
+    @Args('id') id: string,
+    @Args('input') input: UpdatePatientInput,
+  ): Promise<PatientResponse> {
+    return this.patientsService.update(id, input);
   }
 
   @Mutation(() => Patient)

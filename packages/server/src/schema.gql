@@ -134,6 +134,11 @@ type FieldError {
   message: String!
 }
 
+type PatientResponse {
+  errors: [FieldError!]
+  patient: Patient
+}
+
 type BooleanResponse {
   errors: [FieldError!]
   value: Boolean
@@ -199,7 +204,7 @@ type Mutation {
   updateSessionPatient(input: UpdateSessionPatientInput!): Session!
   removeSession(id: String!): Session!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
-  updatePatient(updatePatientInput: UpdatePatientInput!): Patient!
+  updatePatient(id: String!, input: UpdatePatientInput!): PatientResponse!
   removePatient(id: Int!): Patient!
   createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
@@ -299,9 +304,7 @@ input CreatePatientInput {
 }
 
 input UpdatePatientInput {
-  """Example field (placeholder)"""
-  hosNum: String
-  id: Int!
+  hosNum: String!
 }
 
 input CreateOfficerInput {

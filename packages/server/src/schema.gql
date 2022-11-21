@@ -31,6 +31,7 @@ type Container {
   col: String!
   currTemp: String!
   currHum: String!
+  lightsAreOn: Boolean!
   trays: [Tray!]!
   snapshots: [Snapshot!]!
   createdAt: DateTime!
@@ -144,6 +145,11 @@ type UserResponse {
   user: User
 }
 
+type ContainerResponse {
+  errors: [FieldError!]
+  container: Container
+}
+
 type PaginatedSnapshotOutput {
   items: [Snapshot!]!
   meta: IPaginationMetaClass!
@@ -183,11 +189,13 @@ type Mutation {
   createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
-  turnLightOff(id: String!): BooleanResponse!
+  turnLightsOff(id: String!): ContainerResponse!
+  turnLightsOn(id: String!): ContainerResponse!
   createSetting(input: CreateSettingInput!): Setting!
   updateSetting(input: UpdateSettingInput!): Setting!
   createEndo(input: CreateEndoInput!): Endo!
   deleteEndo(id: String!): BooleanResponse!
+  updateEndo(id: String!, input: UpdateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
   createAction(input: CreateActionInput!): Action!
@@ -234,6 +242,15 @@ input UpdateSettingInput {
 }
 
 input CreateEndoInput {
+  trayId: String!
+  brand: String!
+  serialNum: String!
+  type: String!
+  model: String!
+  dryingTime: Int!
+}
+
+input UpdateEndoInput {
   trayId: String!
   brand: String!
   serialNum: String!

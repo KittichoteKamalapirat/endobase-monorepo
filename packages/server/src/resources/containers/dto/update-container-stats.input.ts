@@ -3,7 +3,9 @@ import { ColType } from '../entities/container.entity';
 import { CreateContainerInput } from './create-container.input';
 
 @InputType()
-export class UpdateContainerInput extends PartialType(CreateContainerInput) {
+export class UpdateContainerStatsInput extends PartialType(
+  CreateContainerInput,
+) {
   @Field(() => String)
   col: ColType;
 

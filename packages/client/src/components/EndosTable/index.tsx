@@ -33,6 +33,8 @@ import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
 import SortHeader from "../Table/SortHeader";
+import { useNavigate } from "react-router-dom";
+import Button, { ButtonTypes } from "../Buttons/Button";
 
 // 1. get the data
 // 2. define the columns
@@ -42,6 +44,7 @@ import SortHeader from "../Table/SortHeader";
 // 6. style
 
 const EndosTable = () => {
+  const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
@@ -92,9 +95,19 @@ const EndosTable = () => {
 
   return (
     <div>
-      <PageHeading heading="Endoscopes" />
-      {/* only this component will get updated every seconds */}
-      <CounterIndicator refetch={refetch} />
+      <div className="flex justify-between">
+        <PageHeading heading="Endoscopes" />
+        <Button
+          label="Add"
+          onClick={() => {
+            navigate("/endo/new", {
+              state: { prev: `setting` },
+            });
+          }}
+          type={ButtonTypes.PRIMARY}
+        />
+      </div>
+
       <div className="my-4">
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
@@ -107,8 +120,11 @@ const EndosTable = () => {
         setPageSize={setPageSize}
         currPage={pageIndex + 1}
         pageSize={pageSize}
+        totalItemsCount={endosData?.endos.length}
       />
 
+      {/* only this component will get updated every seconds */}
+      <CounterIndicator refetch={refetch} />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -142,13 +158,24 @@ const EndosTable = () => {
               <TR
                 {...row.getRowProps()}
                 key={index}
-                className={classNames(rowColor)}
+                className={classNames(
+                  rowColor,
+                  "border-b-2 border-solid border-grey-50 hover:bg-primary-50 hover:cursor-pointer"
+                )}
               >
                 {row.cells.map((cell: any, index) => (
                   <TD
                     {...cell.getCellProps()}
                     isnumeric={cell.column.isNumeric}
                     key={index}
+                    onClick={
+                      cell.column.Header !== "Action"
+                        ? () =>
+                            navigate(`/endo/${(row.original as Endo).id}`, {
+                              state: { prev: "setting" },
+                            })
+                        : undefined
+                    }
                   >
                     {cell.render("Cell")}
                   </TD>

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs";
 import Button, { ButtonTypes } from "../Buttons/Button";
 
@@ -65,7 +66,11 @@ const PaginationControl = ({
             </option>
           ))}
         </select>
-        {totalItemsCount ? <p>No. of results: {totalItemsCount}</p> : null}
+        {totalItemsCount ? (
+          <p className={classNames("text-grey-500 text-sm")}>
+            No. of results: {totalItemsCount}
+          </p>
+        ) : null}
       </div>
     </div>
   );

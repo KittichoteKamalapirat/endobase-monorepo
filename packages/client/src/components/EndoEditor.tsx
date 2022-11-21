@@ -66,7 +66,7 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
   ];
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-center justify-between my-2">
+      <div className="flex items-center justify-between my-4">
         <LinkButton
           label="Back"
           href={prev ? `/${prev}` : "/"}

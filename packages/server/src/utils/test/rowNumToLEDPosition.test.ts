@@ -8,7 +8,7 @@ describe('rowNumToLEDPosition', () => {
 
   const expect1 = '00';
   const expect2 = '01';
-  const expect3 = '9';
+  const expect3 = '09';
   const expect4 = '15';
 
   test('should return the correct numbers (string)', () => {

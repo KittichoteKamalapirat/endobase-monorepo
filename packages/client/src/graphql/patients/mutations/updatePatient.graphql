@@ -1,12 +1,12 @@
-mutation updatePatient($id: String!, $input: UpdatePatientInput!) {
-  updatePatient(id: $id, input: $input) {
-    patient {
-      id
-      hosNum
-    }
-    errors {
-      field
-      message
-    }
-  }
-}
+# mutation updatePatient($id: String!, $input: UpdatePatientInput!) {
+#   updatePatient(id: $id, input: $input) {
+#     patient {
+#       id
+#       hosNum
+#     }
+#     errors {
+#       field
+#       message
+#     }
+#   }
+# }

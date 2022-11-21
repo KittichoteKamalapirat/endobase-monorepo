@@ -1,17 +1,7 @@
-import { MdAir } from "react-icons/md";
-import { FaFan } from "react-icons/fa";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useDispatch } from "react-redux";
-import { showToast } from "../../redux/slices/toastReducer";
 import { bgConfig } from "../../utils/colorToTailwindBgColor";
-import {
-  ENDO_STATUS,
-  ENDO_STATUS_VALUES,
-  statusToColor,
-} from "../../utils/statusToColor";
-import Button, { ButtonTypes } from "../Buttons/Button";
-import LinkButton from "../Buttons/LinkButton";
+import { ENDO_STATUS_VALUES, statusToColor } from "../../utils/statusToColor";
 import ActionColumn from "./endoActionColumn";
 
 interface Props {

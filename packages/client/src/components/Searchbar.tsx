@@ -43,7 +43,7 @@ const Searchbar = ({
           value={query}
         />
       </div>
-      <Button label="Search" onClick={handleSearch} />
+      {/* <Button label="Search" onClick={handleSearch} /> */}
     </div>
   );
 };

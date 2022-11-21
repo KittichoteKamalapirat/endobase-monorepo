@@ -1,3 +1,5 @@
+import ContainerActionColumn from "./containerActionColumn";
+
 export const containerColumns = () => {
   return [
     {
@@ -11,6 +13,10 @@ export const containerColumns = () => {
     {
       Header: "Humidity",
       accessor: "currHum",
+    },
+    {
+      Header: "Action",
+      Cell: ({ row }: { row: any }) => <ContainerActionColumn row={row} />,
     },
   ];
 };

@@ -6,6 +6,7 @@ import EndoDetail from "../components/EndoDetail";
 import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
+import PageHeading from "../components/typography/PageHeading";
 import { HUMIDITY_THRESHOLD } from "../constants";
 import {
   Endo,
@@ -85,12 +86,16 @@ const EndoPage = ({}: Props) => {
   return (
     <Layout>
       <div>
-        <div className="flex items-center justify-between mt-10">
+        <div className="flex  justify-start my-4">
           <LinkButton
             label="Back"
             href={prev ? `/${prev}` : "/"}
             type={ButtonTypes.OUTLINED}
           />
+        </div>
+
+        <div className="flex items-center justify-between my-4">
+          <PageHeading heading="Endoscope Setting" />
           <div className="flex gap-2">
             <Button
               label="Edit"

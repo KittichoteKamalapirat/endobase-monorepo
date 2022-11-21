@@ -120,7 +120,6 @@ const SnapshotsTable = () => {
   return (
     <div>
       <PageHeading heading="Snapshots" />
-      <CounterIndicator refetch={refetch} />
 
       <PaginationControl
         nextPage={nextPage}
@@ -139,6 +138,7 @@ const SnapshotsTable = () => {
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
 
+      <CounterIndicator refetch={refetch} />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (

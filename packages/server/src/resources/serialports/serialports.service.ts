@@ -142,21 +142,35 @@ export class SerialportsService {
     });
   }
 
-  turnLightOff({ col, row }: { col: ColType; row: RowType }) {
-    console.log('55555');
+  turnLightsOff({ col, row }: { col: ColType; row: RowType }) {
     const colorCommand = BLACK_COLOR_COMMAND;
     const ledPosition = rowNumToLEDPosition(row);
 
     const command = `:L${ledPosition}(${colorCommand})\r\n)`;
+    console.log('command', command);
 
-    // TODO IMPORTANT column has to match!
     this.serialports[col].write(command, (err) => {
-      console.log('error writing');
       // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);
       }
       console.log('wrote');
+    });
+  }
+
+  turnLightsOn({
+    col,
+    row,
+    status,
+  }: {
+    col: ColType;
+    row: RowType;
+    status: ENDO_STATUS;
+  }) {
+    this.writeColor({
+      col: col,
+      row: row,
+      endoStatus: status,
     });
   }
 }

@@ -117,7 +117,6 @@ const ActionsTable = () => {
   return (
     <div>
       <PageHeading heading="Activities" />
-      <CounterIndicator refetch={refetch} />
 
       <PaginationControl
         nextPage={nextPage}
@@ -135,6 +134,7 @@ const ActionsTable = () => {
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       </div>
 
+      <CounterIndicator refetch={refetch} />
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (

@@ -42,9 +42,16 @@ export type Container = {
   currHum: Scalars['String'];
   currTemp: Scalars['String'];
   id: Scalars['ID'];
+  lightsAreOn: Scalars['Boolean'];
   snapshots: Array<Snapshot>;
   trays: Array<Tray>;
   updatedAt: Scalars['DateTime'];
+};
+
+export type ContainerResponse = {
+  __typename?: 'ContainerResponse';
+  container?: Maybe<Container>;
+  errors?: Maybe<Array<FieldError>>;
 };
 
 export type CreateActionInput = {
@@ -167,11 +174,11 @@ export type Mutation = {
   removeSession: Session;
   removeTray: Tray;
   removeUser: User;
-  updateAction: Action;
+  turnLightsOff: ContainerResponse;
+  turnLightsOn: ContainerResponse;
   updateDryingTime: Endo;
   updateEndo: Endo;
   updateOfficer: Officer;
-  updatePatient: PatientResponse;
   updateSession: Session;
   updateSessionPatient: Session;
   updateSetting: Setting;
@@ -280,8 +287,13 @@ export type MutationRemoveUserArgs = {
 };
 
 
-export type MutationUpdateActionArgs = {
-  updateActionInput: UpdateActionInput;
+export type MutationTurnLightsOffArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationTurnLightsOnArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -298,12 +310,6 @@ export type MutationUpdateEndoArgs = {
 
 export type MutationUpdateOfficerArgs = {
   updateOfficerInput: UpdateOfficerInput;
-};
-
-
-export type MutationUpdatePatientArgs = {
-  id: Scalars['String'];
-  input: UpdatePatientInput;
 };
 
 
@@ -366,15 +372,8 @@ export type Patient = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type PatientResponse = {
-  __typename?: 'PatientResponse';
-  errors?: Maybe<Array<FieldError>>;
-  patient?: Maybe<Patient>;
-};
-
 export type Query = {
   __typename?: 'Query';
-  action: Action;
   actions: Array<Action>;
   container: Container;
   containers: Array<Container>;
@@ -397,11 +396,6 @@ export type Query = {
   trays: Array<Tray>;
   user: User;
   users: Array<User>;
-};
-
-
-export type QueryActionArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -499,14 +493,6 @@ export type Tray = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type UpdateActionInput = {
-  id: Scalars['Int'];
-  officerNum?: InputMaybe<Scalars['String']>;
-  passed?: InputMaybe<Scalars['Boolean']>;
-  sessionId?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
-};
-
 export type UpdateDryingTimeInput = {
   endoId: Scalars['String'];
   mins: Scalars['Int'];
@@ -524,10 +510,6 @@ export type UpdateEndoInput = {
 export type UpdateOfficerInput = {
   id: Scalars['Int'];
   officerNum?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdatePatientInput = {
-  hosNum: Scalars['String'];
 };
 
 export type UpdateSessionInput = {
@@ -604,10 +586,24 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string } | null };
 
+export type TurnLightsOffMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type TurnLightsOffMutation = { __typename?: 'Mutation', turnLightsOff: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type TurnLightsOnMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string }> };
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean }> };
 
 export type CreateEndoMutationVariables = Exact<{
   input: CreateEndoInput;
@@ -656,14 +652,6 @@ export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } }> };
-
-export type UpdatePatientMutationVariables = Exact<{
-  id: Scalars['String'];
-  input: UpdatePatientInput;
-}>;
-
-
-export type UpdatePatientMutation = { __typename?: 'Mutation', updatePatient: { __typename?: 'PatientResponse', patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -950,6 +938,92 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const TurnLightsOffDocument = gql`
+    mutation TurnLightsOff($id: String!) {
+  turnLightsOff(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type TurnLightsOffMutationFn = Apollo.MutationFunction<TurnLightsOffMutation, TurnLightsOffMutationVariables>;
+
+/**
+ * __useTurnLightsOffMutation__
+ *
+ * To run a mutation, you first call `useTurnLightsOffMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTurnLightsOffMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [turnLightsOffMutation, { data, loading, error }] = useTurnLightsOffMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTurnLightsOffMutation(baseOptions?: Apollo.MutationHookOptions<TurnLightsOffMutation, TurnLightsOffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TurnLightsOffMutation, TurnLightsOffMutationVariables>(TurnLightsOffDocument, options);
+      }
+export type TurnLightsOffMutationHookResult = ReturnType<typeof useTurnLightsOffMutation>;
+export type TurnLightsOffMutationResult = Apollo.MutationResult<TurnLightsOffMutation>;
+export type TurnLightsOffMutationOptions = Apollo.BaseMutationOptions<TurnLightsOffMutation, TurnLightsOffMutationVariables>;
+export const TurnLightsOnDocument = gql`
+    mutation TurnLightsOn($id: String!) {
+  turnLightsOn(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type TurnLightsOnMutationFn = Apollo.MutationFunction<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
+
+/**
+ * __useTurnLightsOnMutation__
+ *
+ * To run a mutation, you first call `useTurnLightsOnMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTurnLightsOnMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [turnLightsOnMutation, { data, loading, error }] = useTurnLightsOnMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTurnLightsOnMutation(baseOptions?: Apollo.MutationHookOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TurnLightsOnMutation, TurnLightsOnMutationVariables>(TurnLightsOnDocument, options);
+      }
+export type TurnLightsOnMutationHookResult = ReturnType<typeof useTurnLightsOnMutation>;
+export type TurnLightsOnMutationResult = Apollo.MutationResult<TurnLightsOnMutation>;
+export type TurnLightsOnMutationOptions = Apollo.BaseMutationOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
 export const ContainersDocument = gql`
     query Containers {
   containers {
@@ -957,6 +1031,7 @@ export const ContainersDocument = gql`
     col
     currTemp
     currHum
+    lightsAreOn
   }
 }
     `;
@@ -1280,47 +1355,6 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
-export const UpdatePatientDocument = gql`
-    mutation updatePatient($id: String!, $input: UpdatePatientInput!) {
-  updatePatient(id: $id, input: $input) {
-    patient {
-      id
-      hosNum
-    }
-    errors {
-      field
-      message
-    }
-  }
-}
-    `;
-export type UpdatePatientMutationFn = Apollo.MutationFunction<UpdatePatientMutation, UpdatePatientMutationVariables>;
-
-/**
- * __useUpdatePatientMutation__
- *
- * To run a mutation, you first call `useUpdatePatientMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdatePatientMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updatePatientMutation, { data, loading, error }] = useUpdatePatientMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdatePatientMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePatientMutation, UpdatePatientMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdatePatientMutation, UpdatePatientMutationVariables>(UpdatePatientDocument, options);
-      }
-export type UpdatePatientMutationHookResult = ReturnType<typeof useUpdatePatientMutation>;
-export type UpdatePatientMutationResult = Apollo.MutationResult<UpdatePatientMutation>;
-export type UpdatePatientMutationOptions = Apollo.BaseMutationOptions<UpdatePatientMutation, UpdatePatientMutationVariables>;
 export const CreateActionDocument = gql`
     mutation createAction($input: CreateActionInput!) {
   createAction(input: $input) {

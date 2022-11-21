@@ -1,11 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { SERIALPORTS_PROVIDER } from '../../constants';
+import { CannotGetEntityManagerNotConnectedError, Repository } from 'typeorm';
 import BooleanResponse from '../endos/dto/boolean-response.input';
 import { SerialportsService } from '../serialports/serialports.service';
+import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
-import { UpdateContainerInput } from './dto/update-container.input';
+import { UpdateContainerStatsInput } from './dto/update-container-stats.input';
 import { ColType, Container } from './entities/container.entity';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class ContainersService {
   findOne(id: string) {
     return this.containersRepository.findOne({
       where: { id },
-      relations: ['trays'],
+      relations: ['trays', 'trays.endo'], // need this in turnLightsOn
     });
   }
 
@@ -42,7 +42,7 @@ export class ContainersService {
     return this.containersRepository.findOneBy({ col });
   }
 
-  async updateStats({ col, currTemp, currHum }: UpdateContainerInput) {
+  async updateStats({ col, currTemp, currHum }: UpdateContainerStatsInput) {
     const container = await this.containersRepository.findOne({
       where: { col },
     });
@@ -56,7 +56,14 @@ export class ContainersService {
     return `This action removes a #${id} container`;
   }
 
-  async turnLightOff(id: string): Promise<BooleanResponse> {
+  async updateContainer(id: string, input: Container): Promise<Container> {
+    const updatedInput = { ...input };
+    const updatedContainer = await this.containersRepository.save(updatedInput);
+
+    return updatedContainer;
+  }
+
+  async turnLightsOff(id: string): Promise<ContainerResponse> {
     const container = await this.findOne(id);
     if (!container)
       return {
@@ -68,25 +75,56 @@ export class ContainersService {
         ],
       };
 
-    console.log('11');
-    // turn light off for every tray in that container
-    console.log('this outside loop', this.serialportsService.turnLightOff);
-    container.trays.map((tray) => {
-      console.log('22');
+    const updatedInput = { ...container, lightsAreOn: false };
+    const updatedContainer = await this.updateContainer(
+      container.id,
+      updatedInput,
+    );
 
+    // turn light off for every tray in that container
+    container.trays.map((tray) => {
       // because of forward ref?
-      this.serialportsService.turnLightOff({
+      this.serialportsService.turnLightsOff({
         col: container.col,
         row: tray.row,
         // endoStatus: 'ready',
       });
+    });
 
-      console.log('this inside loop', this.serialportsService.turnLightOff);
+    return {
+      container: updatedContainer,
+    };
+  }
 
-      console.log('33');
-    }, 'xxx');
-    console.log('44');
+  async turnLightsOn(id: string): Promise<ContainerResponse> {
+    const container = await this.findOne(id);
 
-    // this.se
+    if (!container)
+      return {
+        errors: [
+          {
+            field: 'Container',
+            message: 'Cannot find a container',
+          },
+        ],
+      };
+    // update db
+    const updatedInput = { ...container, lightsAreOn: true };
+    const updatedContainer = await this.updateContainer(
+      container.id,
+      updatedInput,
+    );
+
+    // turn light off for every tray in that container
+    container.trays.map((tray) =>
+      this.serialportsService.turnLightsOn({
+        col: container.col,
+        row: tray.row,
+        status: tray.endo.status,
+      }),
+    );
+    return {
+      container: updatedContainer,
+    };
   }
 }

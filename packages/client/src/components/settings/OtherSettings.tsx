@@ -1,8 +1,7 @@
-import { useSettingsQuery, Setting } from "../../generated/graphql";
-import UpdateSetting from "./UpdateSetting";
+import { Setting, useSettingsQuery } from "../../generated/graphql";
 import { Error } from "../skeletons/Error";
 import { Loading } from "../skeletons/Loading";
-import SubHeading from "../typography/SubHeading";
+import UpdateSetting from "./UpdateSetting";
 
 const OtherSettings = () => {
   const { data, loading, error } = useSettingsQuery();
@@ -11,7 +10,7 @@ const OtherSettings = () => {
   if (error) return <Error text="Error retrieving setting" />;
   return (
     <>
-      <SubHeading heading="Other settings" />
+      {/* <SubHeading heading="Other settings" /> */}
       {data?.settings
         .slice()
         .sort((a, b) => (a.id < b.id ? -1 : -1))

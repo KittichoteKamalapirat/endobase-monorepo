@@ -12,20 +12,20 @@ export default class CreateContainers implements Seeder {
     await factory(Container)().create({
       col: 'C',
     });
-    await factory(Container)().create({
-      col: 'D',
-    });
-    await factory(Container)().create({
-      col: 'E',
-    });
-    await factory(Container)().create({
-      col: 'F',
-    });
-    await factory(Container)().create({
-      col: 'G',
-    });
-    await factory(Container)().create({
-      col: 'H',
-    });
+    // await factory(Container)().create({
+    //   col: 'D',
+    // });
+    // await factory(Container)().create({
+    //   col: 'E',
+    // });
+    // await factory(Container)().create({
+    //   col: 'F',
+    // });
+    // await factory(Container)().create({
+    //   col: 'G',
+    // });
+    // await factory(Container)().create({
+    //   col: 'H',
+    // });
   }
 }

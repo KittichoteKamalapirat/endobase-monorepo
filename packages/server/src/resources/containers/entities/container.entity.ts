@@ -34,6 +34,10 @@ export class Container {
   @Field()
   currHum: string;
 
+  @Column({ default: 'true' })
+  @Field()
+  lightsAreOn: boolean;
+
   @OneToMany(() => Tray, (tray) => tray.container, { cascade: true })
   @Field(() => [Tray])
   trays: Tray[];

@@ -1,8 +1,10 @@
+import { BsFillCheckCircleFill } from "react-icons/bs";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { BiCheck } from "react-icons/bi";
 import classNames from "classnames";
 import toast from "react-hot-toast";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ICON_SIZE } from "../../constants";
 
 interface Toast {
   message: string;
@@ -25,15 +27,15 @@ export const toastSlice = createSlice({
             (t) => (
               <div
                 className={classNames(
-                  "data-testid-toast-success bg-green-50 mb-2 flex h-9 items-center space-x-2 rounded-md p-3 text-sm font-semibold text-green-500 shadow-md",
+                  "data-testid-toast-success bg-green-50 mb-2 flex items-center space-x-2 rounded-md py-2 px-12 font-bold text-green-500 shadow-md",
                   t.visible && "animate-fade-in-up"
                 )}
               >
-                <BiCheck className="h-4 w-4" />
+                <BsFillCheckCircleFill size={ICON_SIZE + 4} />
                 <p>{message}</p>
               </div>
             ),
-            { duration: 3000 }
+            { duration: 3000, position: "bottom-center" }
           );
           break;
         case "error":
@@ -41,7 +43,7 @@ export const toastSlice = createSlice({
             (t) => (
               <div
                 className={classNames(
-                  "animate-fade-in-up mb-2 flex h-9 items-center space-x-2 rounded-md bg-red-100 p-3 text-sm font-semibold text-red-900 shadow-md",
+                  "animate-fade-in-up mb-2 flex items-center space-x-2 rounded-md bg-red-100 py-2 px-12 font-bold text-red-900 shadow-md",
                   t.visible && "animate-fade-in-up"
                 )}
               >
@@ -57,7 +59,7 @@ export const toastSlice = createSlice({
             (t) => (
               <div
                 className={classNames(
-                  "animate-fade-in-up bg-grey-800 mb-2 flex h-9 items-center space-x-2 rounded-md p-3 text-sm font-semibold text-grey-0 shadow-md",
+                  "animate-fade-in-up bg-grey-800 mb-2 flex items-center space-x-2 rounded-md py-2 px-12 font-bold text-grey-0 shadow-md",
                   t.visible && "animate-fade-in-up"
                 )}
               >
@@ -73,11 +75,11 @@ export const toastSlice = createSlice({
             (t) => (
               <div
                 className={classNames(
-                  "animate-fade-in-up bg-grey-800 mb-2 flex h-9 items-center space-x-2 rounded-md p-3 text-sm font-semibold text-grey-0 shadow-md",
+                  "animate-fade-in-up bg-grey-800 mb-2 flex items-center space-x-2 rounded-md py-2 px-12 font-bold text-grey-0 shadow-md",
                   t.visible && "animate-fade-in-up"
                 )}
               >
-                <BiCheck className="h-4 w-4" />
+                <BsFillCheckCircleFill size={ICON_SIZE + 4} />
                 <p>{message}</p>
               </div>
             ),

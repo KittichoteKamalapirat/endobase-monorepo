@@ -1,6 +1,7 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import BooleanResponse from '../endos/dto/boolean-response.input';
 import { ContainersService } from './containers.service';
+import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
 import { Container } from './entities/container.entity';
 
@@ -37,10 +38,17 @@ export class ContainersResolver {
     return this.containersService.remove(id);
   }
 
-  @Mutation(() => BooleanResponse)
-  turnLightOff(
+  @Mutation(() => ContainerResponse)
+  turnLightsOff(
     @Args('id', { type: () => String }) id: string,
-  ): Promise<BooleanResponse> {
-    return this.containersService.turnLightOff(id);
+  ): Promise<ContainerResponse> {
+    return this.containersService.turnLightsOff(id);
+  }
+
+  @Mutation(() => ContainerResponse)
+  turnLightsOn(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<ContainerResponse> {
+    return this.containersService.turnLightsOn(id);
   }
 }

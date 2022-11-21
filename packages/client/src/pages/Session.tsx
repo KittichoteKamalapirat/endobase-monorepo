@@ -1,5 +1,6 @@
 import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
+import { ButtonTypes } from "../components/Buttons/Button";
 import LinkButton from "../components/Buttons/LinkButton";
 import CompleteSessionForm from "../components/CompleteSessionForm";
 import DisinfectForm from "../components/DisinfectForm";
@@ -69,6 +70,14 @@ const Session = () => {
 
   return (
     <Layout>
+      <div className="flex justify-start my-4">
+        <LinkButton
+          label="Back"
+          href={prev ? `/${prev}` : "/"}
+          type={ButtonTypes.OUTLINED}
+        />
+      </div>
+
       <PageHeading heading="Session" />
       <EndoDetail endo={endoData?.endo as Endo} />
 
@@ -105,10 +114,6 @@ const Session = () => {
             refetchEndo={refetchEndo}
           />
         )}
-      </div>
-
-      <div className="flex justify-center mt-10">
-        <LinkButton label="Back" href={prev ? `/${prev}` : "/"} />
       </div>
     </Layout>
   );

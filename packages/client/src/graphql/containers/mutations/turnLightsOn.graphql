@@ -1,0 +1,15 @@
+mutation TurnLightsOn($id: String!) {
+  turnLightsOn(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

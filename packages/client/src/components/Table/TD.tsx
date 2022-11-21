@@ -1,11 +1,13 @@
-import React, { ReactNode } from "react";
+import classNames from "classnames";
+import { ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
+  className?: string;
 }
-const TD = ({ children, ...props }: Props) => {
+const TD = ({ children, className, ...props }: Props) => {
   return (
-    <td {...props} className="py-4 px-6">
+    <td {...props} className={classNames("py-4 px-6", className)}>
       {children}
     </td>
   );

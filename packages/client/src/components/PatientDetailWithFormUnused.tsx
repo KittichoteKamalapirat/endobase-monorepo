@@ -1,11 +1,8 @@
 import classNames from "classnames";
-import { Control, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Patient, useUpdatePatientMutation } from "../generated/graphql";
-import { showToast } from "../redux/slices/toastReducer";
+import { Patient } from "../generated/graphql";
 import { CARD_CLASSNAMES } from "../theme";
-import Button, { HTMLButtonType } from "./Buttons/Button";
-import TextField, { TextFieldTypes } from "./forms/TextField";
 import SubHeading from "./typography/SubHeading";
 
 interface Props {
@@ -27,7 +24,7 @@ const PatientDetail = ({ patient }: Props) => {
     hosNum: hosNum,
   };
 
-  const [updatePatient, { loading }] = useUpdatePatientMutation();
+  // const [updatePatient, { loading }] = useUpdatePatientMutation();
   const {
     control,
     formState: { errors, isDirty },
@@ -38,35 +35,35 @@ const PatientDetail = ({ patient }: Props) => {
 
   const dispatch = useDispatch();
 
-  const onSubmit = async (data: FormValues) => {
-    const result = await updatePatient({
-      variables: { id: patient.id, input: { hosNum: data.hosNum } },
-    });
+  // const onSubmit = async (data: FormValues) => {
+  //   const result = await updatePatient({
+  //     variables: { id: patient.id, input: { hosNum: data.hosNum } },
+  //   });
 
-    const resultValue = result.data?.updatePatient.patient;
+  //   const resultValue = result.data?.updatePatient.patient;
 
-    let errorMessage = "";
-    const resultUserErrors = result.data?.updatePatient.errors || [];
-    resultUserErrors.map(({ field, message }) => {
-      errorMessage += `${field} ${message}\n`;
-    });
+  //   let errorMessage = "";
+  //   const resultUserErrors = result.data?.updatePatient.errors || [];
+  //   resultUserErrors.map(({ field, message }) => {
+  //     errorMessage += `${field} ${message}\n`;
+  //   });
 
-    // show success or failure
-    if (resultValue && resultUserErrors.length === 0) {
-      dispatch(
-        showToast({
-          message: "Successfully Updated",
-          variant: "success",
-        })
-      );
-    } else
-      dispatch(
-        showToast({
-          message: errorMessage,
-          variant: "error",
-        })
-      );
-  };
+  //   // show success or failure
+  //   if (resultValue && resultUserErrors.length === 0) {
+  //     dispatch(
+  //       showToast({
+  //         message: "Successfully Updated",
+  //         variant: "success",
+  //       })
+  //     );
+  //   } else
+  //     dispatch(
+  //       showToast({
+  //         message: errorMessage,
+  //         variant: "error",
+  //       })
+  //     );
+  // };
 
   if (!patient) return null;
 
@@ -74,7 +71,7 @@ const PatientDetail = ({ patient }: Props) => {
     <div className={classNames(CARD_CLASSNAMES)}>
       <SubHeading heading="Patient Detail" />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-end">
           <TextField
             required
@@ -94,7 +91,7 @@ const PatientDetail = ({ patient }: Props) => {
             loading={loading}
           />
         </div>
-      </form>
+      </form> */}
     </div>
   );
 };

@@ -20,7 +20,6 @@ export class AuthResolver {
     @Args('input') input: LoginInput,
     @Context() { req }: MyContext,
   ): Promise<UserResponse> {
-    console.log('input', input);
     return this.authService.login(input, req);
   }
 

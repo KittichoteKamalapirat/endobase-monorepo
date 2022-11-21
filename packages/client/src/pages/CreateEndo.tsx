@@ -1,12 +1,9 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
-import PageHeading from "../components/typography/PageHeading";
 import { CreateEndoInput, useCreateEndoMutation } from "../generated/graphql";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
-
-interface Props {}
 
 const initialData: EndoFormValues = {
   serialNum: "",
@@ -17,7 +14,8 @@ const initialData: EndoFormValues = {
   tray: null,
 };
 
-const CreateEndo = ({}: Props) => {
+const CreateEndo = () => {
+  useIsAuth();
   const [createEndo] = useCreateEndoMutation();
   const dispatch = useDispatch();
   const onSubmit = async (formInput: EndoFormValues) => {

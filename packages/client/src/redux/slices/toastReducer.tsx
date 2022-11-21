@@ -1,9 +1,8 @@
-import { BsFillCheckCircleFill } from "react-icons/bs";
-import { HiOutlineInformationCircle } from "react-icons/hi";
-import { BiCheck } from "react-icons/bi";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import classNames from "classnames";
 import toast from "react-hot-toast";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 import { ICON_SIZE } from "../../constants";
 
 interface Toast {

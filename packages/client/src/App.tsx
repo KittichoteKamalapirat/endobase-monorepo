@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
+import { useIsAuth } from "./hooks/useIsAuth";
 
 import Actions from "./pages/Actions";
 import ConfigSetting from "./pages/ConfigSetting";

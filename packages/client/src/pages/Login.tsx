@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Control, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import Button, { HTMLButtonType } from "../components/Buttons/Button";
 import TextField, { TextFieldTypes } from "../components/forms/TextField";
 import PageHeading from "../components/typography/PageHeading";
@@ -29,13 +29,9 @@ interface UserError {
   message?: string;
 }
 
-interface Props {
-  referer: string;
-}
-
 type FormFields = keyof FormValues;
 
-const useLoginForm = (user: FormValues) => {
+const useLoginForm = (user: FormValues, navigate: NavigateFunction) => {
   const {
     register,
     handleSubmit,
@@ -69,7 +65,7 @@ const useLoginForm = (user: FormValues) => {
       },
     });
 
-    if (result.data?.login.user) return; // let use effect do the redirect
+    if (result.data?.login.user) navigate("/"); // let use effect do the redirect
     // handle errors
     const resultUserErrors: UserError[] = result.data?.login?.errors || [];
     resultUserErrors.map(({ field, message }) => {
@@ -96,17 +92,21 @@ const useLoginForm = (user: FormValues) => {
   };
 };
 
-const LoginPage = ({ referer }: Props) => {
-  const { data, error, loading } = useMeQuery();
+const LoginPage = () => {
+  const { data, loading } = useMeQuery();
 
   const navigate = useNavigate();
 
   // setup form
-  const { errors, submitForm, control } = useLoginForm({
-    username: "",
-    password: "",
-  });
+  const { errors, submitForm, control } = useLoginForm(
+    {
+      username: "",
+      password: "",
+    },
+    navigate
+  );
 
+  // prevent from logging in when already logged in
   useEffect(() => {
     if (data?.me) {
       navigate("/");

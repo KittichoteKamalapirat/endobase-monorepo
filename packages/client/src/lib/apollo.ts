@@ -6,6 +6,7 @@ import { urlResolver } from "./UrlResolver";
 
 const httpLink = new HttpLink({
   uri: urlResolver.graphql(),
+  credentials: "include", // without this => logged out when refresh
 });
 
 const wsLink = new GraphQLWsLink(
@@ -32,6 +33,7 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+// for no subscription
 // import { ApolloClient, InMemoryCache } from "@apollo/client";
 // import { urlResolver } from "./UrlResolver";
 

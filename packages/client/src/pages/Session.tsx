@@ -21,9 +21,11 @@ import {
   useEndoQuery,
   useSessionQuery,
 } from "../generated/graphql";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { CARD_CLASSNAMES } from "../theme";
 
 const Session = () => {
+  useIsAuth();
   const { id } = useParams();
 
   // for back button

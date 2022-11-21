@@ -10,13 +10,14 @@ import {
 } from "../components/Tabs/CONTAINER_TAB_TYPE";
 import Tab from "../components/Tabs/Tab";
 import PageHeading from "../components/typography/PageHeading";
+import { useIsAuth } from "../hooks/useIsAuth";
 
 const Containers = () => {
+  useIsAuth();
   const { state } = useLocation();
 
   const { tab } = state || {};
 
-  console.log("tab", tab);
   const [selectTab, setSelectedTab] = useState<CONTAINER_TAB_VALUES>(
     tab || "current"
   );

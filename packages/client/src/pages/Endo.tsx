@@ -7,20 +7,18 @@ import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import PageHeading from "../components/typography/PageHeading";
-import { HUMIDITY_THRESHOLD } from "../constants";
 import {
   Endo,
   useDeleteEndoMutation,
   useEndoQuery,
   useEndosQuery,
 } from "../generated/graphql";
-import { openAlertModal } from "../redux/slices/alertModalReducer";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { openConfirm } from "../redux/slices/confirmModalReducer";
 import { showToast } from "../redux/slices/toastReducer";
 
-interface Props {}
-
-const EndoPage = ({}: Props) => {
+const EndoPage = () => {
+  useIsAuth();
   const { id } = useParams();
 
   const endoId = id || "";

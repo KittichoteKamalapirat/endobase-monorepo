@@ -1,22 +1,19 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import LinkButton from "../components/Buttons/LinkButton";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import RowsSkeleton from "../components/skeletons/RowsSkeleton";
-import PageHeading from "../components/typography/PageHeading";
 import {
   UpdateEndoInput,
   useEndoQuery,
   useUpdateEndoMutation,
 } from "../generated/graphql";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 
-interface Props {}
-
-const EditEndo = ({}: Props) => {
+const EditEndo = () => {
+  useIsAuth();
   const { id } = useParams();
 
   // for back button

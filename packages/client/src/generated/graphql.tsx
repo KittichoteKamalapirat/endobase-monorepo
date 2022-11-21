@@ -223,7 +223,7 @@ export type MutationCreateSettingArgs = {
 
 
 export type MutationCreateSnapshotArgs = {
-  createSnapshotInput: CreateSnapshotInput;
+  input: CreateSnapshotInput;
 };
 
 
@@ -481,6 +481,17 @@ export type Snapshot = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  subscribeToOverHumOrTemp: Snapshot;
+};
+
+
+export type SubscriptionSubscribeToOverHumOrTempArgs = {
+  humThreshold: Scalars['String'];
+  tempThreshold: Scalars['String'];
+};
+
 export type Tray = {
   __typename?: 'Tray';
   container: Container;
@@ -702,6 +713,14 @@ export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SnapshotsQuery = { __typename?: 'Query', snapshots: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, createdAt: any, containerId: string, container: { __typename?: 'Container', id: string, col: string } }> };
+
+export type SubscribeToOverHumOrTempSubscriptionVariables = Exact<{
+  humThreshold: Scalars['String'];
+  tempThreshold: Scalars['String'];
+}>;
+
+
+export type SubscribeToOverHumOrTempSubscription = { __typename?: 'Subscription', subscribeToOverHumOrTemp: { __typename?: 'Snapshot', id: string, hum: string, temp: string, container: { __typename?: 'Container', id: string, col: string } } };
 
 export type EmptyTraysQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1688,6 +1707,46 @@ export function useSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type SnapshotsQueryHookResult = ReturnType<typeof useSnapshotsQuery>;
 export type SnapshotsLazyQueryHookResult = ReturnType<typeof useSnapshotsLazyQuery>;
 export type SnapshotsQueryResult = Apollo.QueryResult<SnapshotsQuery, SnapshotsQueryVariables>;
+export const SubscribeToOverHumOrTempDocument = gql`
+    subscription SubscribeToOverHumOrTemp($humThreshold: String!, $tempThreshold: String!) {
+  subscribeToOverHumOrTemp(
+    humThreshold: $humThreshold
+    tempThreshold: $tempThreshold
+  ) {
+    id
+    hum
+    temp
+    container {
+      id
+      col
+    }
+  }
+}
+    `;
+
+/**
+ * __useSubscribeToOverHumOrTempSubscription__
+ *
+ * To run a query within a React component, call `useSubscribeToOverHumOrTempSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToOverHumOrTempSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubscribeToOverHumOrTempSubscription({
+ *   variables: {
+ *      humThreshold: // value for 'humThreshold'
+ *      tempThreshold: // value for 'tempThreshold'
+ *   },
+ * });
+ */
+export function useSubscribeToOverHumOrTempSubscription(baseOptions: Apollo.SubscriptionHookOptions<SubscribeToOverHumOrTempSubscription, SubscribeToOverHumOrTempSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<SubscribeToOverHumOrTempSubscription, SubscribeToOverHumOrTempSubscriptionVariables>(SubscribeToOverHumOrTempDocument, options);
+      }
+export type SubscribeToOverHumOrTempSubscriptionHookResult = ReturnType<typeof useSubscribeToOverHumOrTempSubscription>;
+export type SubscribeToOverHumOrTempSubscriptionResult = Apollo.SubscriptionResult<SubscribeToOverHumOrTempSubscription>;
 export const EmptyTraysDocument = gql`
     query EmptyTrays {
   emptyTrays {

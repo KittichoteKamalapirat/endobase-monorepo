@@ -20,9 +20,14 @@ export class SnapshotsService {
     private containersService: ContainersService,
   ) {}
 
-  create(input: CreateSnapshotInput) {
+  async create(input: CreateSnapshotInput) {
     const newSnapshot = this.snapshotsRepository.create(input);
-    return this.snapshotsRepository.save(newSnapshot);
+    await this.snapshotsRepository.save(newSnapshot);
+    const withContainer = this.snapshotsRepository.findOne({
+      where: { id: newSnapshot.id },
+      relations: ['container'],
+    });
+    return withContainer;
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Snapshot>> {

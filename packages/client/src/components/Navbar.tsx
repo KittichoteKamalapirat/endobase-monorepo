@@ -11,6 +11,7 @@ import { urlResolver } from "../lib/UrlResolver";
 import logo from "../logo.svg";
 import { ACTIVE_PAGE_CLASSNAMES, primaryColor } from "../theme";
 import Button, { ButtonTypes } from "./Buttons/Button";
+import { CONTAINER_TAB_OBJ } from "./Tabs/CONTAINER_TAB_TYPE";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
@@ -82,8 +83,13 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link
-              to={PATH_ENUM.CONTAINERS}
+            <div
+              // to={PATH_ENUM.CONTAINERS}
+              onClick={() => {
+                navigate(`/containers`, {
+                  state: { tab: "current" },
+                });
+              }}
               className={classNames(
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer",
                 `${
@@ -97,7 +103,7 @@ const Navbar = () => {
                 <BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />
                 <span>Containers</span>
               </div>
-            </Link>
+            </div>
           </li>
           {/* <li>
             <Link

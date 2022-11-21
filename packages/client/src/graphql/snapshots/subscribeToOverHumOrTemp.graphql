@@ -1,0 +1,17 @@
+subscription SubscribeToOverHumOrTemp(
+  $humThreshold: String!
+  $tempThreshold: String!
+) {
+  subscribeToOverHumOrTemp(
+    humThreshold: $humThreshold
+    tempThreshold: $tempThreshold
+  ) {
+    id
+    hum
+    temp
+    container {
+      id
+      col
+    }
+  }
+}

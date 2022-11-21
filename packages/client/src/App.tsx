@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
+import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
+
 import Actions from "./pages/Actions";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
@@ -27,6 +29,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <SubscribeToOverHumOrTemp />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="containers" element={<Containers />} />

@@ -9,7 +9,7 @@ export interface ConfirmState {
 const blankConfirm: ConfirmModalType = {
   heading: "Default Heading",
   content: "Default Content",
-  toPerform: () => null,
+  toPerform: null,
   ariaLabel: "",
   type: "danger",
 };

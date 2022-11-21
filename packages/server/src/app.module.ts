@@ -32,6 +32,11 @@ import { SettingModule } from './setting/setting.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       driver: ApolloDriver,
       installSubscriptionHandlers: true,
+      subscriptions: {
+        'graphql-ws': true,
+        'subscriptions-transport-ws': true, // without this, it won't work since graphql playground does not support graphql-ws yet, so have to use both
+      },
+
       context: ({ req, res }) => {
         // get the cookie from the request
         // verify the cookie

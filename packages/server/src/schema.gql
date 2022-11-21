@@ -186,7 +186,7 @@ input PaginatedInput {
 }
 
 type Mutation {
-  createSnapshot(createSnapshotInput: CreateSnapshotInput!): Snapshot!
+  createSnapshot(input: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
   turnLightsOff(id: String!): ContainerResponse!
@@ -333,4 +333,8 @@ input UpdateUserInput {
 input LoginInput {
   username: String!
   password: String!
+}
+
+type Subscription {
+  subscribeToOverHumOrTemp(humThreshold: String!, tempThreshold: String!): Snapshot!
 }

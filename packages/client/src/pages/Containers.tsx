@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import ContainersTable from "../components/ContainersTable";
 import Layout from "../components/layouts/Layout";
 import SnapshotsTable from "../components/SnapshotsTable";
@@ -11,10 +12,14 @@ import Tab from "../components/Tabs/Tab";
 import PageHeading from "../components/typography/PageHeading";
 
 const Containers = () => {
-  const [selectedTab, setSelectedTab] =
-    useState<CONTAINER_TAB_VALUES>("current");
+  const { state } = useLocation();
 
-  console.log("select tab", selectedTab);
+  const { tab } = state || {};
+
+  console.log("tab", tab);
+  const [selectTab, setSelectedTab] = useState<CONTAINER_TAB_VALUES>(
+    tab || "current"
+  );
 
   return (
     <Layout>
@@ -24,8 +29,14 @@ const Containers = () => {
           {serviceTypeOptions.map((option) => (
             <Tab
               key={option.value}
-              isActive={selectedTab === option.value}
-              onClick={() => setSelectedTab(option.value)}
+              isActive={selectTab === option.value}
+              onClick={() => {
+                // navigate(`/container`, {
+                //   state: { tab: option.value },
+                // });
+
+                setSelectedTab(option.value);
+              }}
             >
               {option.label}
             </Tab>
@@ -34,8 +45,8 @@ const Containers = () => {
       </div>
 
       <div className="mt-10">
-        {selectedTab === "current" ? <ContainersTable /> : null}
-        {selectedTab === "snapshots" ? <SnapshotsTable /> : null}
+        {selectTab === "current" ? <ContainersTable /> : null}
+        {selectTab === "snapshots" ? <SnapshotsTable /> : null}
       </div>
     </Layout>
   );

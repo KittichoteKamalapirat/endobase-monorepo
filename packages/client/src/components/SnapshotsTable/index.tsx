@@ -21,7 +21,6 @@ import TD from "../Table/TD";
 import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
-import PageHeading from "../typography/PageHeading";
 import SubHeading from "../typography/SubHeading";
 import { snapshotColumns } from "./snapshotColumns";
 

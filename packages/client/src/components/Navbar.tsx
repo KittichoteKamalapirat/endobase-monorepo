@@ -1,23 +1,22 @@
-import { AiFillSetting, AiFillHome, AiOutlineHistory } from "react-icons/ai";
+import { AiFillHome, AiFillSetting } from "react-icons/ai";
 import { BsInboxesFill } from "react-icons/bs";
 import { GiWaterRecycling } from "react-icons/gi";
 
-import { Link, useNavigate } from "react-router-dom";
-import { brandName, ICON_SIZE } from "../constants";
-import { urlResolver } from "../lib/UrlResolver";
-import logo from "../logo.svg";
-import { useLocation } from "react-router-dom";
 import classNames from "classnames";
-import Button, { ButtonTypes } from "./Buttons/Button";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { brandName, ICON_SIZE } from "../constants";
 import { useLogoutMutation } from "../generated/graphql";
 import { client as apolloClient } from "../lib/apollo";
-import { primaryColor } from "../theme";
+import { urlResolver } from "../lib/UrlResolver";
+import logo from "../logo.svg";
+import { ACTIVE_PAGE_CLASSNAMES, primaryColor } from "../theme";
+import Button, { ButtonTypes } from "./Buttons/Button";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
   CONTAINERS = "/containers",
   HOME = "/",
-  SNAPSHOTS = "/snapshots",
+  // SNAPSHOTS = "/snapshots",
   SETTING = "/setting",
 }
 const Navbar = () => {
@@ -31,9 +30,6 @@ const Navbar = () => {
     navigate("/");
     await apolloClient.resetStore();
   };
-
-  const currPathClassnames =
-    "text-primary-primary font-bold border-solid border-b-2 border-primary-primary rounded-t-md";
 
   return (
     <nav className="z-100 fixed bg-grey-0 container px-10 py-2 flex flex-wrap justify-between items-center mx-auto top-0">
@@ -74,7 +70,7 @@ const Navbar = () => {
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
                 `${
                   pathname === PATH_ENUM.HOME
-                    ? currPathClassnames
+                    ? ACTIVE_PAGE_CLASSNAMES
                     : "rounded-md"
                 }`
               )}
@@ -92,7 +88,7 @@ const Navbar = () => {
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer",
                 `${
                   pathname === PATH_ENUM.CONTAINERS
-                    ? currPathClassnames
+                    ? ACTIVE_PAGE_CLASSNAMES
                     : "rounded-md"
                 }`
               )}
@@ -103,14 +99,14 @@ const Navbar = () => {
               </div>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to={PATH_ENUM.SNAPSHOTS}
               className={classNames(
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
                 `${
                   pathname === PATH_ENUM.SNAPSHOTS
-                    ? currPathClassnames
+                    ? ACTIVE_PAGE_CLASSNAMES
                     : "rounded-md"
                 }`
               )}
@@ -120,7 +116,7 @@ const Navbar = () => {
                 <span>Data Snapshots</span>
               </div>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               to={PATH_ENUM.ACTIVITIES}
@@ -128,7 +124,7 @@ const Navbar = () => {
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
                 `${
                   pathname === PATH_ENUM.ACTIVITIES
-                    ? currPathClassnames
+                    ? ACTIVE_PAGE_CLASSNAMES
                     : "rounded-md"
                 }`
               )}
@@ -147,7 +143,7 @@ const Navbar = () => {
                 "block py-2 pr-4 pl-3 hover:bg-primary-50 hover:cursor-pointer ",
                 `${
                   pathname === PATH_ENUM.SETTING
-                    ? currPathClassnames
+                    ? ACTIVE_PAGE_CLASSNAMES
                     : "rounded-md"
                 }`
               )}

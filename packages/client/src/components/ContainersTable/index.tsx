@@ -11,7 +11,7 @@ import TD from "../Table/TD";
 import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
-import PageHeading from "../typography/PageHeading";
+import SubHeading from "../typography/SubHeading";
 import { containerColumns } from "./containerColumns";
 
 const ContainersTable = () => {
@@ -51,7 +51,7 @@ const ContainersTable = () => {
 
   return (
     <div>
-      <PageHeading heading="Containers" />
+      <SubHeading heading="Current Status" />
       <CounterIndicator refetch={refetch} />
 
       <Table {...getTableProps()}>

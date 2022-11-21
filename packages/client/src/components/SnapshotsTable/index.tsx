@@ -22,6 +22,7 @@ import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
+import SubHeading from "../typography/SubHeading";
 import { snapshotColumns } from "./snapshotColumns";
 
 const SnapshotsTable = () => {
@@ -119,7 +120,7 @@ const SnapshotsTable = () => {
 
   return (
     <div>
-      <PageHeading heading="Snapshots" />
+      <SubHeading heading="Snapshots" />
 
       <PaginationControl
         nextPage={nextPage}

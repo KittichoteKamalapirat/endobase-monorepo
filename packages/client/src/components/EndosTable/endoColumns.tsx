@@ -51,7 +51,10 @@ export const endoColumns = ({ pickEndo, refetchEndos }: Props) => {
 
         return (
           <div className="flex items-center">
-            <div className={`rounded-full w-2 h-2 mr-1 ${twBg}`}></div>
+            <div
+              id="color-dot"
+              className={`rounded-full w-2 h-2 mr-1 ${twBg}`}
+            ></div>
             <div>{value}</div>
           </div>
         );

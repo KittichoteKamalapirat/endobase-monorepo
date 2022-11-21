@@ -12,7 +12,6 @@ import EndoPage from "./pages/Endo";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
 import Session from "./pages/Session";
-import Snapshots from "./pages/Snapshots";
 import { closeAlertModal } from "./redux/slices/alertModalReducer";
 import { closeConfirm } from "./redux/slices/confirmModalReducer";
 import { RootState } from "./redux/store";
@@ -32,7 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="containers" element={<Containers />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="snapshots" element={<Snapshots />} />
+          {/* <Route path="snapshots" element={<Snapshots />} /> */}
           <Route path="setting" element={<ConfigSetting />} />
           <Route path="activities" element={<Actions />} />
           <Route path="/session/:id" element={<Session />} />

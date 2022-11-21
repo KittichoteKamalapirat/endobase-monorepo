@@ -23,6 +23,11 @@ const ContainerActionColumn = ({ row }: Props) => {
 
   const dispatch = useDispatch();
 
+  const handleToggleLights = () => {
+    if (lightsAreOn) handleTurnLightsOff();
+    else handleTurnLightsOn();
+  };
+
   const handleTurnLightsOn = async () => {
     if (lightsAreOn) return; // do nothing
     const result = await turnLightsOn({
@@ -89,27 +94,15 @@ const ContainerActionColumn = ({ row }: Props) => {
     <div className="flex gap-2">
       <Button
         label="" // currently off
-        onClick={handleTurnLightsOff}
-        startIcon={
-          <TbBulbOff
-            color={lightsAreOn ? grey300 : primaryColor}
-            size={ICON_SIZE}
-          />
-        }
-        type={ButtonTypes.TEXT}
-        extraClass="hover:scale-110"
-      />
-      <Button
-        label="" // currently off
-        onClick={handleTurnLightsOn}
+        onClick={handleToggleLights}
         startIcon={
           <TbBulb
             color={!lightsAreOn ? grey300 : primaryColor}
-            size={ICON_SIZE}
+            size={ICON_SIZE + 10}
           />
         }
         type={ButtonTypes.TEXT}
-        extraClass="hover:scale-110"
+        extraClass="hover:scale-125"
       />
     </div>
   );

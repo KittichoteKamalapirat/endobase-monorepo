@@ -54,4 +54,7 @@ export const CARD_CLASSNAMES =
 export const BORDER_CLASSNAMES =
   "border-solid rounded-md border-2 border-grey-50 p-6 shadow-md my-4";
 
+export const ACTIVE_PAGE_CLASSNAMES =
+  "text-primary-primary font-bold border-solid border-b-2 border-primary-primary rounded-t-md";
+
 export const ACTION_CARD_CLASSNAMES = `${CARD_CLASSNAMES} hover:bg-primary-50 hover:cursor-pointer`;

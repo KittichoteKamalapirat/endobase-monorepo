@@ -12,14 +12,22 @@ export default class CreateTrays implements Seeder {
       .from(Tray, 'tray')
       .getMany();
 
+    const brands = ['Olympus', 'Fujifilm', 'PENTAX', 'Stryker'];
+    const brandRandomIndex = Math.floor(Math.random() * brands.length);
+    const brand = brands[brandRandomIndex];
+
+    const types = ['Broncho', 'Gastro', 'Colono', 'ERCP'];
+    const typeRandomIndex = Math.floor(Math.random() * types.length);
+    const type = types[typeRandomIndex];
+
     // create 16 trays (1-16) for each container
     await Promise.all(
       trays.map(async (tray) => {
         await factory(Endo)().create({
-          brand: 'Olympus',
-          serialNum: uuidv4(),
+          brand,
+          serialNum: uuidv4().slice(10),
           model: '1',
-          type: 'Gastro',
+          type,
           trayId: tray.id,
         });
       }),

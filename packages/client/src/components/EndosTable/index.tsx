@@ -1,10 +1,6 @@
 import classNames from "classnames";
 import { useMemo } from "react";
 import {
-  AiOutlineSortAscending,
-  AiOutlineSortDescending,
-} from "react-icons/ai";
-import {
   Column,
   useGlobalFilter,
   usePagination,
@@ -17,12 +13,14 @@ import {
   usePickEndoMutation,
 } from "../../generated/graphql";
 
-import { ICON_SIZE } from "../../constants";
+import { useNavigate } from "react-router-dom";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
+import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PaginationControl from "../Table/PaginationControl";
+import SortHeader from "../Table/SortHeader";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -32,9 +30,6 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
-import SortHeader from "../Table/SortHeader";
-import { useNavigate } from "react-router-dom";
-import Button, { ButtonTypes } from "../Buttons/Button";
 
 // 1. get the data
 // 2. define the columns
@@ -80,6 +75,7 @@ const EndosTable = () => {
     {
       columns,
       data,
+      initialState: { pageSize: 50 },
     },
     useGlobalFilter,
     useSortBy,
@@ -169,6 +165,7 @@ const EndosTable = () => {
                     isnumeric={cell.column.isNumeric}
                     key={index}
                     onClick={
+                      // if col is action => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action"
                         ? () =>
                             navigate(`/endo/${(row.original as Endo).id}`, {

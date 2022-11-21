@@ -69,6 +69,7 @@ const Modal = ({
       onAfterOpen={onAfterOpen}
       onRequestClose={onRequestClose}
       contentLabel={contentLabel}
+      ariaHideApp={false}
       style={styles}
     >
       <div className={modalSpacing}>

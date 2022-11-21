@@ -7,4 +7,5 @@ export interface AlertModalType {
   content: string | ReactNode;
   type: AlertType;
   ariaLabel: string;
+  actionsType?: "containerSnapshot";
 }

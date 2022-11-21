@@ -1,10 +1,10 @@
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
-import { useIsAuth } from "./hooks/useIsAuth";
 
 import Actions from "./pages/Actions";
 import ConfigSetting from "./pages/ConfigSetting";
@@ -24,6 +24,7 @@ function App() {
   const { data: confirmData, isOpen: confirmIsOpen } = useSelector(
     (state: RootState) => state.confirmModal
   );
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -53,7 +54,12 @@ function App() {
           dispatch(closeAlertModal());
         }}
       >
-        {data.content}
+        <div>
+          <p>{data.content} </p>
+          {data.actionsType === "containerSnapshot" ? (
+            <ContainerSnapshotDetailsButton />
+          ) : null}
+        </div>
       </Modal>
 
       <ConfirmModal

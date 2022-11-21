@@ -1,24 +1,19 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "../components/Buttons/Button";
 import {
   useSettingsQuery,
   useSubscribeToOverHumOrTempSubscription,
 } from "../generated/graphql";
-import {
-  closeAlertModal,
-  openAlertModal,
-} from "../redux/slices/alertModalReducer";
+import { openAlertModal } from "../redux/slices/alertModalReducer";
 
 const SubscribeToOverHumOrTemp = () => {
-  const navigate = useNavigate();
   const {
     data: settingsData,
     loading: settingsLoading,
     error: settingsError,
   } = useSettingsQuery();
 
+  console.log("settingsData", settingsData);
   const humThreshold =
     settingsData?.settings.find(
       (setting) => setting.name === "humidityThreshold"
@@ -38,18 +33,6 @@ const SubscribeToOverHumOrTemp = () => {
 
   const dispatch = useDispatch();
 
-  const SeeDetailsButton = (
-    <Button
-      label="See more details"
-      onClick={() => {
-        navigate(`/containers`, {
-          state: { tab: "snapshots" },
-        });
-        dispatch(closeAlertModal());
-      }}
-      extraClass="mt-4"
-    />
-  );
   useEffect(() => {
     if (settingsLoading || snapshotLoading) return;
 
@@ -67,31 +50,16 @@ const SubscribeToOverHumOrTemp = () => {
         const tempThresNum = parseFloat(tempThreshold);
         if (currHumNum > humThresNum && currTempNum > tempThresNum) {
           heading = `Humidity and Temperature exceed at container ${container.col}!`;
-          content = (
-            <div>
-              <p>{`The humidity is over ${humThresNum} and the temperature is over ${tempThresNum}.`}</p>
 
-              {SeeDetailsButton}
-            </div>
-          );
+          content = `The humidity is over ${humThresNum} and the temperature is over ${tempThresNum}.`;
         } else if (currHumNum > humThresNum) {
           heading = `Humidity exceeds at container ${container.col}!`;
-          content = (
-            <div>
-              <p>{`The humidity is detected to be over the expected value of ${humThresNum}.`}</p>
 
-              {SeeDetailsButton}
-            </div>
-          );
+          content = `The humidity is detected to be over the expected value of ${humThresNum}.`;
         } else if (currTempNum > tempThresNum) {
           heading = `Temperature exceeds at container ${container.col}!`;
-          content = (
-            <div>
-              <p>{`The temperature is detected to be over the expected value of ${tempThresNum}.`}</p>
 
-              {SeeDetailsButton}
-            </div>
-          );
+          content = `The temperature is detected to be over the expected value of ${tempThresNum}.`;
         }
       };
       anonymous();
@@ -102,6 +70,7 @@ const SubscribeToOverHumOrTemp = () => {
           content,
           type: "danger",
           ariaLabel: "",
+          actionsType: "containerSnapshot",
         })
       );
     }

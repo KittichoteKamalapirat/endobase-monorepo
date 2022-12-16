@@ -1,5 +1,9 @@
 import dayjs from "dayjs";
 import { Action } from "../generated/graphql";
+import {
+  ACTION_TYPE_OBJ,
+  ACTION_TYPE_VALUES,
+} from "../utils/actionTypeToLabel";
 import HDivider from "./layouts/HDivider";
 import SmallHeading from "./typography/SmallHeading";
 
@@ -12,7 +16,10 @@ const ActivityItem = ({ action }: Props) => {
 
   return (
     <div>
-      <SmallHeading heading={action.type} extraClass="text-grey-500" />
+      <SmallHeading
+        heading={ACTION_TYPE_OBJ[action.type as ACTION_TYPE_VALUES]}
+        extraClass="text-grey-500"
+      />
       <div className="flex gap-10 mt-2">
         <div id="left" className="font-bold">
           <div>Officer Number</div>

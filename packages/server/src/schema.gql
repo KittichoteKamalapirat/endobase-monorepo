@@ -165,6 +165,7 @@ type Query {
   setting(id: Int!): Setting!
   endos: [Endo!]!
   endo(id: String!): Endo!
+  getTimeouts: [String!]!
   actions: [Action!]!
   paginatedActions(input: PaginatedInput!): PaginatedActionOutput!
   sessions: [Session!]!

@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
@@ -24,7 +24,6 @@ function App() {
   const { data: confirmData, isOpen: confirmIsOpen } = useSelector(
     (state: RootState) => state.confirmModal
   );
-  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 

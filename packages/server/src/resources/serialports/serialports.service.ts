@@ -132,6 +132,29 @@ export class SerialportsService {
       endoStatus,
       row,
     });
+    console.log('color command', command, this.serialports[col]);
+    this.serialports[col].write(command, (err) => {
+      // if (error) console.log(error?.message);
+      if (err) {
+        return console.log('Error on write: ', err.message);
+      }
+      console.log('wrote');
+    });
+  }
+
+  setDryingTime({
+    col,
+    row,
+    endoStatus,
+  }: {
+    col: ColType;
+    row: RowType;
+    endoStatus: ENDO_STATUS;
+  }) {
+    const command = writeColorCommand({
+      endoStatus,
+      row,
+    });
 
     this.serialports[col].write(command, (err) => {
       // if (error) console.log(error?.message);
@@ -144,6 +167,7 @@ export class SerialportsService {
 
   turnLightsOff({ col, row }: { col: ColType; row: RowType }) {
     const colorCommand = BLACK_COLOR_COMMAND;
+
     const ledPosition = rowNumToLEDPosition(row);
 
     const command = `:L${ledPosition}(${colorCommand})\r\n)`;
@@ -167,6 +191,7 @@ export class SerialportsService {
     row: RowType;
     status: ENDO_STATUS;
   }) {
+    console.log('turn lights on', col, row, status);
     this.writeColor({
       col: col,
       row: row,

@@ -98,7 +98,7 @@ export class ContainersService {
 
   async turnLightsOn(id: string): Promise<ContainerResponse> {
     const container = await this.findOne(id);
-
+    console.log('find container', container);
     if (!container)
       return {
         errors: [

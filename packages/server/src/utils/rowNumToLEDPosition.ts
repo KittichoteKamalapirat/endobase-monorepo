@@ -3,6 +3,7 @@ import { RowType } from '../resources/trays/entities/tray.entity';
 export const rowNumToLEDPosition = (rowNum: RowType, length = 2) => {
   // 1 => 00
   // 2 => 01
+
   // 10 => 09
   // 16 => 15
   const zeroIndexRowNum = rowNum - 1;

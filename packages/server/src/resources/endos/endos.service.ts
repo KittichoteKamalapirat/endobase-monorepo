@@ -282,6 +282,12 @@ export class EndosService {
     this.schedulerRegistry.addTimeout(name, establishTimeout);
   }
 
+  getTimeouts() {
+    const timeouts = this.schedulerRegistry.getTimeouts();
+    timeouts.forEach((key) => this.logger.log(`Timeout: ${key}`));
+    return timeouts;
+  }
+
   deleteSchedule(name: string) {
     const allSchedules = this.getAllTimeouts();
     if (!allSchedules.includes(name)) return;

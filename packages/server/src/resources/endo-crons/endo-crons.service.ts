@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
 import { DAYJS_DATE_TIME_FORMAT } from '../../constants';
-import { getDateTimeDiffInMilliSec } from '../../utils/getDateTimeDiffInMilliSec';
+import { getDateTimeDiffInSec } from '../../utils/getDateTimeDiffInSec';
 import { nameSchedule } from '../../utils/nameSchedule';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS } from '../endos/entities/endo.entity';
@@ -33,45 +33,44 @@ export class EndoCronsService implements OnModuleInit {
 
   async onModuleInit() {
     // init all the jobs in db
-    // wipe everything in the db
     console.log(`EndoCronsService has been initialized.`);
     const crons = await this.findAllInDb();
 
     // add schedule for every cron in the db
-    crons.forEach((cron) => {
+    crons.forEach(async (cron) => {
       const { endoId, toBeStatus, isoDate } = cron;
-      const millisecFromNow = getDateTimeDiffInMilliSec(
-        dayjs(isoDate),
-        dayjs(),
-      );
+      const secFromNow = getDateTimeDiffInSec(dayjs(isoDate), dayjs());
       console.log(
-        `Add cron for endo ${endoId} to be ${toBeStatus} in ${millisecFromNow} millisec`,
+        `Add cron for endo ${endoId} to be ${toBeStatus} in ${secFromNow} sec`,
       );
-      this.addSchedule({
+      await this.addSchedule({
         endoId,
         toBeStatus,
-        milliseconds: millisecFromNow,
+        seconds: secFromNow,
         saveToDb: false,
       });
     });
   }
 
   async saveInDb(input: CreateEndoCronInput): Promise<EndoCron> {
-    const newCron = this.endoCronsRepository.create(input);
-    return this.endoCronsRepository.save(newCron);
+    const newInput = this.endoCronsRepository.create(input);
+    const newCron = await this.endoCronsRepository.save(newInput);
+    return newCron;
   }
 
-  addSchedule({
+  async addSchedule({
     endoId,
     toBeStatus,
-    milliseconds,
+    seconds,
     saveToDb,
   }: AddScheduleInput) {
-    const name = `Endo: ${endoId} is to be ${toBeStatus}`;
+    console.log('xxxxxxxxx', toBeStatus, seconds);
+    const name = nameSchedule({ endoId, status: toBeStatus, seconds });
     const callback = async () => {
-      this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
-      // delete since it's already called
-      await this.removeInDbByEndoId(endoId);
+      this.logger.warn(`Timeout ${name} executing after (${seconds}) seconds!`);
+      // delete when it is already called
+      await this.removeInDbByEndoIdAndStatus({ endoId, toBeStatus });
+
       if (toBeStatus === 'ready') return this.endosService.setReady(endoId);
       if (toBeStatus === 'expire_soon')
         return this.endosService.setExpireSoon(endoId);
@@ -79,18 +78,18 @@ export class EndoCronsService implements OnModuleInit {
       return;
     };
 
-    const establishTimeout = setTimeout(callback, milliseconds);
+    const establishTimeout = setTimeout(callback, seconds * 1000);
     this.schedulerRegistry.addTimeout(name, establishTimeout);
 
     const input = {
       endoId,
       toBeStatus,
-      isoDate: dayjs()
-        .add(milliseconds, 'millisecond')
-        .format(DAYJS_DATE_TIME_FORMAT),
+      isoDate: dayjs().add(seconds, 'second').format(DAYJS_DATE_TIME_FORMAT),
     };
 
-    if (saveToDb) this.saveInDb(input);
+    if (saveToDb) await this.saveInDb(input);
+
+    return;
   }
 
   async findAllInDb() {
@@ -116,7 +115,7 @@ export class EndoCronsService implements OnModuleInit {
   }
 
   // there should be only one row per endoId
-  async removeInDbByEndoId(id: string): Promise<boolean> {
+  async removeAllInDbByEndoId(id: string): Promise<boolean> {
     try {
       await this.endoCronsRepository.delete({ endoId: id });
       return true;
@@ -126,37 +125,34 @@ export class EndoCronsService implements OnModuleInit {
   }
 
   // there should be only one row per endoId
-  async removeInDbByName(id: string): Promise<boolean> {
+  async removeInDbByEndoIdAndStatus({
+    endoId,
+    toBeStatus,
+  }: {
+    endoId: string;
+    toBeStatus: ENDO_STATUS;
+  }): Promise<boolean> {
     try {
-      await this.endoCronsRepository.delete({ endoId: id });
+      await this.endoCronsRepository.delete({ endoId, toBeStatus });
       return true;
     } catch (error) {
       return false;
     }
   }
 
-  async deleteSchedule({
-    endoId,
-    toBeStatus,
-  }: {
-    endoId: string;
-    toBeStatus: ENDO_STATUS;
-  }) {
-    const scheduleName = nameSchedule({
-      endoId,
-      status: toBeStatus,
-    });
-
+  async deleteEveryScheduleByEndoId({ endoId }: { endoId: string }) {
     const allSchedules = this.getTimeouts();
-    if (!allSchedules.includes(scheduleName)) return;
+    const matchedSchedules = allSchedules.filter((name) =>
+      name.includes(endoId),
+    );
+    // remove all crons in db by endoId
+    await this.removeAllInDbByEndoId(endoId);
 
-    await this.removeInDbByEndoId(endoId);
-    this.schedulerRegistry.deleteTimeout(scheduleName);
-    this.logger.warn(`Timeout ${scheduleName} deleted!`);
-
-    // const timeout = this.schedulerRegistry.getTimeout(name);
-
-    // clearTimeout(timeout);
+    // remove all crons in memory
+    matchedSchedules.forEach((scheduleName) => {
+      this.schedulerRegistry.deleteTimeout(scheduleName);
+      this.logger.warn(`Timeout ${scheduleName} deleted!`);
+    });
   }
 
   getTimeouts() {

@@ -6,8 +6,6 @@ import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
-import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from '../../constants';
-import { dayToMillisec } from '../../utils/dayToMillisec';
 import { ActionsService } from '../actions/actions.service';
 import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { SerialportsService } from '../serialports/serialports.service';
@@ -84,7 +82,7 @@ export class EndosService {
   async pickEndo(id: string): Promise<Endo | Error> {
     // TODO add validation (like if the session is created already, don't do it)
     // TODO check by session with this endoId and null
-    // update endoscope status from ready => being_used
+    // update endoscope status from ready, expire_soon, expired => being_used
     const endo = await this.findOne(id);
     if (!endo) return new Error('Cannot find the endoscope');
     if (
@@ -92,7 +90,9 @@ export class EndosService {
       endo.status !== 'expire_soon' &&
       endo.status !== 'expired'
     )
-      return new Error('This endoscope is not ready yet');
+      return new Error(
+        'You cannot pick this endo because its status is neither ready, expire_soon, nor expired',
+      );
     const existingSession = await this.findCurrentSessionByEndoId(id);
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
 
@@ -116,36 +116,27 @@ export class EndosService {
 
     let pickedEndo = null;
 
-    const deleteInput = {
-      endoId: endo.id,
-      toBeStatus: ENDO_STATUS_OBJ.EXPIRE_SOON,
-    };
+    // const deleteInput = {
+    //   endoId: endo.id,
+    //   toBeStatus: ENDO_STATUS_OBJ.EXPIRE_SOON,
+    // };
 
-    if (endo.status === 'ready') {
+    if (endo.status === 'ready' || endo.status === 'expire_soon') {
       // save the new endo
       pickedEndo = await this.endosRepository.save({
         ...endo,
         status: ENDO_STATUS_OBJ.BEING_USED,
       });
-
-      this.endoCronsService.deleteSchedule(deleteInput);
-    } else if (endo.status === 'expire_soon') {
-      // save the new endo (being_used)
-      pickedEndo = await this.endosRepository.save({
-        ...endo,
-        status: ENDO_STATUS_OBJ.BEING_USED,
-      });
-      // remove the previously scheduled "to be expired" for this endo
-
-      this.endoCronsService.deleteSchedule(deleteInput);
     } else {
       // status = "expired"
-      // do nothing keep it expired
       pickedEndo = await this.endosRepository.save({
         ...endo,
         status: ENDO_STATUS_OBJ.EXPIRED_AND_OUT,
       });
     }
+
+    // remove all the crons in db and memory
+    this.endoCronsService.deleteEveryScheduleByEndoId({ endoId: endo.id });
 
     return pickedEndo;
   }
@@ -214,13 +205,6 @@ export class EndosService {
       row: endo.tray.row,
       endoStatus: ENDO_STATUS_OBJ.READY,
     });
-
-    // create a schedule to expire_soon in 29 days
-    this.endoCronsService.addSchedule({
-      endoId,
-      toBeStatus: 'expire_soon',
-      milliseconds: dayToMillisec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
-    });
   }
 
   async setExpireSoon(endoId: string) {
@@ -232,13 +216,6 @@ export class EndosService {
       row: endo.tray.row,
       endoStatus: ENDO_STATUS_OBJ.EXPIRE_SOON,
     });
-
-    // create a schedule to expired in 1 day
-    this.endoCronsService.addSchedule({
-      endoId,
-      toBeStatus: 'expired',
-      milliseconds: dayToMillisec(EXPIRE_SOON_DAYS),
-    }); // TODO should this be one or MAX_STOARGE_DAYS?
   }
 
   // update db

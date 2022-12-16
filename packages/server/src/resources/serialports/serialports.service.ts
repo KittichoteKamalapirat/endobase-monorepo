@@ -107,7 +107,7 @@ export class SerialportsService {
   checkSystemStatus() {
     console.log('-----------check status cron----------');
     console.log('serialport A is open?', this.serialports['A'].isOpen);
-    console.log('serialport B is open?', this.serialports['B'].isOpen);
+    // console.log('serialport B is open?', this.serialports['B'].isOpen);
     console.log('serialport C is open?', this.serialports['C'].isOpen);
 
     Object.keys(this.serialports).forEach((key) => {

@@ -10,7 +10,7 @@ export class AddScheduleInput {
   toBeStatus: ENDO_STATUS;
 
   @Field(() => Int)
-  milliseconds: number;
+  seconds: number;
 
   @Field(() => Int, { defaultValue: true })
   saveToDb?: boolean;

@@ -1,14 +1,14 @@
-import { minToMillisec } from '../minToMillisec';
+import { minToSec } from '../minToSec';
 
-describe('minToMillisec', () => {
+describe('minToSec', () => {
   const day = 1;
   const days = 2;
 
-  const expect1 = 1 * 60 * 1000;
-  const expect2 = 2 * 60 * 1000;
+  const expect1 = 1 * 60;
+  const expect2 = 2 * 60;
 
   test('should return the correct numbers (string)', () => {
-    expect(minToMillisec(day)).toEqual(expect1);
-    expect(minToMillisec(days)).toEqual(expect2);
+    expect(minToSec(day)).toEqual(expect1);
+    expect(minToSec(days)).toEqual(expect2);
   });
 });

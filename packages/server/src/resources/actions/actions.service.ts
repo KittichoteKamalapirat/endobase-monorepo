@@ -7,8 +7,10 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
+import { MAX_STORAGE_DAYS, EXPIRE_SOON_DAYS } from '../../constants';
+import { dayToSec } from '../../utils/dayToSec';
 
-import { minToMillisec } from '../../utils/minToMillisec';
+import { minToSec } from '../../utils/minToSec';
 import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
@@ -29,7 +31,7 @@ export class ActionsService {
     private sessionsService: SessionsService,
     private serialportsService: SerialportsService,
     private endosService: EndosService,
-    private endosCronService: EndoCronsService,
+    private endoCronsService: EndoCronsService,
   ) {}
 
   // if therre is existing officer (with the officerNum), use it
@@ -109,11 +111,29 @@ export class ActionsService {
         // update endo's lastPutBackISO
         await this.endosService.updateLastPutBackISO(session.endoId);
 
-        // create schedule to ready in 30 mins
-        this.endosCronService.addSchedule({
-          endoId: session.endoId,
+        // Add 3 schedules
+        const endoId = session.endoId;
+        // 1. create schedule to ready in 30 mins
+        await this.endoCronsService.addSchedule({
+          endoId,
           toBeStatus: 'ready',
-          milliseconds: minToMillisec(session.endo.dryingTime),
+          seconds: minToSec(session.endo.dryingTime),
+          saveToDb: true,
+        });
+
+        // 2. create a schedule to expire_soon in 29 days
+        await this.endoCronsService.addSchedule({
+          endoId,
+          toBeStatus: 'expire_soon',
+          seconds: dayToSec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
+          saveToDb: true,
+        });
+
+        // 3. create a schedule to expired in 1 day
+        await this.endoCronsService.addSchedule({
+          endoId,
+          toBeStatus: 'expired',
+          seconds: dayToSec(MAX_STORAGE_DAYS),
           saveToDb: true,
         });
 

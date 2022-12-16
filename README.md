@@ -139,3 +139,8 @@ When creating a cron job, in code,
 - when delete a schedule, I just need the name (could be get from endo id, and status)
 
 So in the database, I just need to store the endoId, toBeStatus, and timeStamp
+
+In the end
+
+- addTimeout does not work because 30 days in millisec exceeds 32 bit
+- use addCronJob instead to specify a specific date (see details in endoCron)

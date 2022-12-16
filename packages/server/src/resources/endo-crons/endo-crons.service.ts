@@ -7,10 +7,10 @@ import {
 } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CronJob } from 'cron';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
-import { DAYJS_DATE_TIME_FORMAT } from '../../constants';
 import { getDateTimeDiffInSec } from '../../utils/getDateTimeDiffInSec';
 import { nameSchedule } from '../../utils/nameSchedule';
 import { EndosService } from '../endos/endos.service';
@@ -46,7 +46,8 @@ export class EndoCronsService implements OnModuleInit {
       await this.addSchedule({
         endoId,
         toBeStatus,
-        seconds: secFromNow,
+        // seconds: secFromNow,
+        dateTime: new Date(cron.isoDate),
         saveToDb: false,
       });
     });
@@ -61,13 +62,16 @@ export class EndoCronsService implements OnModuleInit {
   async addSchedule({
     endoId,
     toBeStatus,
-    seconds,
+    // seconds,
+    dateTime,
     saveToDb,
   }: AddScheduleInput) {
-    console.log('xxxxxxxxx', toBeStatus, seconds);
-    const name = nameSchedule({ endoId, status: toBeStatus, seconds });
+    // console.log('xxxxxxxxx', toBeStatus, seconds);
+    const name = nameSchedule({ endoId, status: toBeStatus, dateTime });
     const callback = async () => {
-      this.logger.warn(`Timeout ${name} executing after (${seconds}) seconds!`);
+      this.logger.warn(
+        `Timeout ${name} executing at ${dateTime.toISOString()}!`,
+      );
 
       console.log('before calling the remove in db ');
 
@@ -86,19 +90,43 @@ export class EndoCronsService implements OnModuleInit {
       return;
     };
 
-    const establishTimeout = setTimeout(callback, seconds * 1000);
-    this.schedulerRegistry.addTimeout(name, establishTimeout);
+    // const establishTimeout = setTimeout(callback, seconds * 1000);
+    // this.schedulerRegistry.addTimeout(name, establishTimeout);
+
+    const date = dayjs().add(1, 'day').toDate();
+    const job = new CronJob(date, callback);
+    this.schedulerRegistry.addCronJob(name, job);
+    job.start();
+
+    // second mins hours dayOfMont month dayOfWeek
+    // every 30 mins => 0 */30 * * * *
+    // every 29 days => 0 0 */29 * * *
 
     const input = {
       endoId,
       toBeStatus,
-      isoDate: dayjs().add(seconds, 'second').format(DAYJS_DATE_TIME_FORMAT),
+      isoDate: date.toISOString(),
     };
 
     if (saveToDb) await this.saveInDb(input);
 
     return;
   }
+
+  // addCronJob(name: string, seconds: string) {
+  //   const date = new Date(2012, 11, 21, 5, 30, 0);
+
+  //   const job = new CronJob(date, () => {
+  //     this.logger.warn(`time (${seconds}) for job ${name} to run!`);
+  //   });
+
+  //   this.schedulerRegistry.addCronJob(name, job);
+  //   job.start();
+
+  //   this.logger.warn(
+  //     `job ${name} added for each minute at ${seconds} seconds!`,
+  //   );
+  // }
 
   async findAllInDb() {
     const crons = await this.endoCronsRepository.find();
@@ -167,5 +195,29 @@ export class EndoCronsService implements OnModuleInit {
     const timeouts = this.schedulerRegistry.getTimeouts();
     timeouts.forEach((key) => this.logger.log(`Timeout: ${key}`));
     return timeouts;
+  }
+
+  getCrons() {
+    const jobs = this.schedulerRegistry.getCronJobs();
+
+    const result = [];
+    console.log('jobs', jobs);
+    jobs.forEach((value, key) => {
+      // valye => a bunch of stuff
+      // key => name
+      // Map(4) {
+      // 'Schedule: Endo a8d1a912-8c4e-433b-ae23-b301228b113e is to be ready at 2022-12-17T16:49:50.823Z' => random stuff
+
+      let next;
+      try {
+        next = value.nextDates().toJSDate();
+      } catch (e) {
+        next = 'error: next fire date is in the past!';
+      }
+      const message = `job: "${key}" -> ${next}`;
+      this.logger.log(message);
+      result.push(message);
+    });
+    return result;
   }
 }

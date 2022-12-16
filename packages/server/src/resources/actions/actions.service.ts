@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import {
   IPaginationOptions,
   paginate,
@@ -112,7 +113,8 @@ export class ActionsService {
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'ready',
-          seconds: minToSec(session.endo.dryingTime),
+          // seconds: minToSec(session.endo.dryingTime),
+          dateTime: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
           saveToDb: true,
         });
 
@@ -121,7 +123,10 @@ export class ActionsService {
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expire_soon',
-          seconds: dayToSec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
+          // seconds: dayToSec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
+          dateTime: dayjs()
+            .add(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS, 'day')
+            .toDate(),
           saveToDb: true,
         });
 
@@ -129,7 +134,8 @@ export class ActionsService {
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expired',
-          seconds: dayToSec(MAX_STORAGE_DAYS),
+          // seconds: dayToSec(MAX_STORAGE_DAYS),
+          dateTime: dayjs().add(MAX_STORAGE_DAYS, 'day').toDate(),
           saveToDb: true,
         });
 

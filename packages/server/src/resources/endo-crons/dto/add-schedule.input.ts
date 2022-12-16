@@ -9,8 +9,11 @@ export class AddScheduleInput {
   @Field()
   toBeStatus: ENDO_STATUS;
 
-  @Field(() => Int)
-  seconds: number;
+  // @Field(() => Int)
+  // seconds: number;
+
+  @Field()
+  dateTime: Date;
 
   @Field(() => Int, { defaultValue: true })
   saveToDb?: boolean;

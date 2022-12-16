@@ -13,6 +13,6 @@ export class EndoCronsResolver {
 
   @Query(() => [String])
   endoCronsInMemory() {
-    return this.endoCronsService.getTimeouts();
+    return this.endoCronsService.getCrons();
   }
 }

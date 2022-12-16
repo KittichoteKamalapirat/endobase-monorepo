@@ -15,6 +15,7 @@ import { getDateTimeDiffInMilliSec } from '../../utils/getDateTimeDiffInMilliSec
 import { nameSchedule } from '../../utils/nameSchedule';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS } from '../endos/entities/endo.entity';
+import { AddScheduleInput } from './dto/add-schedule.input';
 import { CreateEndoCronInput } from './dto/create-endo-cron.input';
 import { UpdateEndoCronInput } from './dto/update-endo-cron.input';
 import { EndoCron } from './entities/endo-cron.entity';
@@ -31,8 +32,10 @@ export class EndoCronsService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    console.log(`The module has been initialized.`);
-    const crons = await this.findAll();
+    // init all the jobs in db
+    // wipe everything in the db
+    console.log(`EndoCronsService has been initialized.`);
+    const crons = await this.findAllInDb();
 
     // add schedule for every cron in the db
     crons.forEach((cron) => {
@@ -47,7 +50,12 @@ export class EndoCronsService implements OnModuleInit {
         diff,
         ' sec',
       );
-      this.addSchedule(endoId, toBeStatus, diff);
+      this.addSchedule({
+        endoId,
+        toBeStatus,
+        milliseconds: diff,
+        saveToDb: false,
+      });
     });
   }
 
@@ -56,7 +64,12 @@ export class EndoCronsService implements OnModuleInit {
     return this.endoCronsRepository.save(newCron);
   }
 
-  addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
+  addSchedule({
+    endoId,
+    toBeStatus,
+    milliseconds,
+    saveToDb,
+  }: AddScheduleInput) {
     const name = `Endo: ${endoId} is to be ${toBeStatus}`;
     const callback = async () => {
       this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
@@ -75,15 +88,16 @@ export class EndoCronsService implements OnModuleInit {
     const input = {
       endoId,
       toBeStatus,
-      isoDate: dayjs().format(DAYJS_DATE_TIME_FORMAT),
+      isoDate: dayjs()
+        .add(milliseconds, 'millisecond')
+        .format(DAYJS_DATE_TIME_FORMAT),
     };
 
-    this.saveInDb(input);
+    if (saveToDb) this.saveInDb(input);
   }
 
-  async findAll() {
+  async findAllInDb() {
     const crons = await this.endoCronsRepository.find();
-
     return crons;
   }
 

@@ -86,7 +86,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.DRYING:
       return (
         <div className="flex items-center gap-1">
-          <FaFan /> <p>Drying</p>
+          <FaFan className="animate-spin-slow" /> <p>Drying</p>
         </div>
       );
 

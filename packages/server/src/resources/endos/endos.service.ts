@@ -6,7 +6,7 @@ import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
-import { MAX_STORAGE_DAYS } from '../../constants';
+import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from '../../constants';
 import { dayToMillisec } from '../../utils/dayToMillisec';
 import { ActionsService } from '../actions/actions.service';
 import { EndoCronsService } from '../endo-crons/endo-crons.service';
@@ -216,11 +216,11 @@ export class EndosService {
     });
 
     // create a schedule to expire_soon in 29 days
-    this.endoCronsService.addSchedule(
+    this.endoCronsService.addSchedule({
       endoId,
-      'expire_soon',
-      dayToMillisec(MAX_STORAGE_DAYS - 1),
-    );
+      toBeStatus: 'expire_soon',
+      milliseconds: dayToMillisec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
+    });
   }
 
   async setExpireSoon(endoId: string) {
@@ -234,7 +234,11 @@ export class EndosService {
     });
 
     // create a schedule to expired in 1 day
-    this.endoCronsService.addSchedule(endoId, 'expired', dayToMillisec(1)); // TODO should this be one or MAX_STOARGE_DAYS?
+    this.endoCronsService.addSchedule({
+      endoId,
+      toBeStatus: 'expired',
+      milliseconds: dayToMillisec(EXPIRE_SOON_DAYS),
+    }); // TODO should this be one or MAX_STOARGE_DAYS?
   }
 
   // update db

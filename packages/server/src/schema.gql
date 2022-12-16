@@ -183,6 +183,8 @@ type Query {
   patients: [Patient!]!
   patient(id: String!): Patient!
   officers: [Officer!]!
+  endoCronsInDb: [EndoCron!]!
+  endoCronsInMemory: [String!]!
   trays: [Tray!]!
   emptyTrays: [Tray!]!
   tray(id: Int!): Tray!

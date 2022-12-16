@@ -110,11 +110,12 @@ export class ActionsService {
         await this.endosService.updateLastPutBackISO(session.endoId);
 
         // create schedule to ready in 30 mins
-        this.endosCronService.addSchedule(
-          session.endoId,
-          'ready',
-          minToMillisec(session.endo.dryingTime),
-        );
+        this.endosCronService.addSchedule({
+          endoId: session.endoId,
+          toBeStatus: 'ready',
+          milliseconds: minToMillisec(session.endo.dryingTime),
+          saveToDb: true,
+        });
 
         // update color on lightbox
         this.serialportsService.writeColor({

@@ -142,6 +142,9 @@ module.exports = {
         orange: orange,
         black: black,
       },
+      animation: {
+        "spin-slow": "spin 12s linear infinite",
+      },
     },
   },
   plugins: [],

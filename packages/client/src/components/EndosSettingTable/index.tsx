@@ -38,8 +38,6 @@ const EndosSettingTable = () => {
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => endoColumns(), []);
 
-  console.log("data", endosData);
-
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
     return endosData?.endos || [];

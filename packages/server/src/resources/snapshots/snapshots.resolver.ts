@@ -28,7 +28,6 @@ export class SnapshotsResolver {
 
   @Subscription(() => Snapshot, {
     filter: (payload, variables) => {
-      console.log('varaibles', variables);
       const humExceeds =
         parseFloat((payload.subscribeToOverHumOrTemp as Snapshot).hum) >
         parseFloat(variables.humThreshold);

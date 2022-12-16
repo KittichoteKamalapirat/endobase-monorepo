@@ -27,7 +27,6 @@ export class AuthResolver {
   me(@Context() { req }: MyContext): Promise<User | null> {
     // Destructure the parameter array to req
 
-    console.log('req sesison', req.session);
     if (!req.session.userId) {
       return null;
     }

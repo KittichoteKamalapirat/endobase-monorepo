@@ -7,7 +7,6 @@ export class SerialportsResolver {
   constructor(private serialportsService: SerialportsService) {}
   @Query(() => Boolean)
   testPort() {
-    console.log('test');
     // this.serialportsService.writeRandomColor();
 
     // getSystemStatus(allPorts[0]);

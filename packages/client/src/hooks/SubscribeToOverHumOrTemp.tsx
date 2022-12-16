@@ -13,7 +13,6 @@ const SubscribeToOverHumOrTemp = () => {
     error: settingsError,
   } = useSettingsQuery();
 
-  console.log("settingsData", settingsData);
   const humThreshold =
     settingsData?.settings.find(
       (setting) => setting.name === "humidityThreshold"

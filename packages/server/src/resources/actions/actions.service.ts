@@ -47,7 +47,6 @@ export class ActionsService {
       passed: input.passed,
     });
 
-    console.log('action', action);
     // can only pass 1 time
     // but can fail many times
     if (action && input.passed)
@@ -80,7 +79,6 @@ export class ActionsService {
     // update endo status
     switch (input.type) {
       case ACTION_TYPE_OBJ.LEAK_TEST_AND_PREWASH:
-        console.log('update endo status to leak test passed');
         // i need to know which endo
         await this.endosService.updateStatus(
           session.endoId,
@@ -90,7 +88,6 @@ export class ActionsService {
         );
         break;
       case ACTION_TYPE_OBJ.DISINFECT:
-        console.log('update status to disinfected');
         await this.endosService.updateStatus(
           session.endoId,
           input.passed
@@ -99,8 +96,6 @@ export class ActionsService {
         );
         break;
       case ACTION_TYPE_OBJ.STORE:
-        console.log('update status to drying');
-        console.log('end the session');
         await this.endosService.updateStatus(
           session.endoId,
           ENDO_STATUS_OBJ.DRYING,
@@ -121,7 +116,8 @@ export class ActionsService {
           saveToDb: true,
         });
 
-        // 2. create a schedule to expire_soon in 29 days
+        // TODO fix this // this was called right away
+        // // 2. create a schedule to expire_soon in 29 days
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expire_soon',
@@ -146,7 +142,7 @@ export class ActionsService {
 
         break;
       default:
-        console.log('do nothing');
+      // do nothing
     }
 
     const newAction = this.actionsRepository.create(actionInput);
@@ -199,7 +195,6 @@ export class ActionsService {
       options,
     );
 
-    // console.log('paginatedResults', paginatedResults.items.map(item => item.officer))
     // attach session, inside session there is already other stuff!
     await Promise.all(
       paginatedResults.items.map(async (item) => {

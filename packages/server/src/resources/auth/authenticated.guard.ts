@@ -9,7 +9,6 @@ export class AuthenticatedGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
 
     const req = ctx.getContext().req;
-    console.log('is Auth?', req.isAuthenticated());
 
     return req.isAuthenticated();
   }

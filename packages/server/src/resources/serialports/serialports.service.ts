@@ -111,7 +111,6 @@ export class SerialportsService {
     console.log('serialport C is open?', this.serialports['C'].isOpen);
 
     Object.keys(this.serialports).forEach((key) => {
-      console.log('write to ', key);
       this.serialports[key].write(':STS\r\n');
     });
 
@@ -132,7 +131,7 @@ export class SerialportsService {
       endoStatus,
       row,
     });
-    console.log('color command', command, this.serialports[col]);
+
     this.serialports[col].write(command, (err) => {
       // if (error) console.log(error?.message);
       if (err) {
@@ -161,7 +160,7 @@ export class SerialportsService {
       if (err) {
         return console.log('Error on write: ', err.message);
       }
-      console.log('wrote');
+      console.log('wrote ', command);
     });
   }
 
@@ -171,14 +170,13 @@ export class SerialportsService {
     const ledPosition = rowNumToLEDPositionTwoCols(row);
 
     const command = `:L${ledPosition}(${colorCommand})\r\n)`;
-    console.log('command', command);
 
     this.serialports[col].write(command, (err) => {
       // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);
       }
-      console.log('wrote');
+      console.log('turned lights off');
     });
   }
 
@@ -191,7 +189,6 @@ export class SerialportsService {
     row: RowType;
     status: ENDO_STATUS;
   }) {
-    console.log('turn lights on', col, row, status);
     this.writeColor({
       col: col,
       row: row,

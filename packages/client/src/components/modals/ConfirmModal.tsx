@@ -39,7 +39,6 @@ const ConfirmModal = ({
 }: Props) => {
   const [iconColor, setIconColor] = useState(grey900);
   const borderColor = (() => {
-    console.log("type", type);
     switch (type) {
       case "neutral":
         return grey100;

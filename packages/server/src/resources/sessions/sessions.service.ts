@@ -37,14 +37,13 @@ export class SessionsService {
         'endo.tray.container',
       ],
     });
-    console.log('session', session);
 
     return session;
   }
 
   findByEndoId(endoId: string) {
     const session = this.sessionsRepository.find({ where: { endoId } });
-    console.log('session', session);
+
     return session;
   }
 
@@ -59,7 +58,7 @@ export class SessionsService {
       const session = await this.sessionsRepository.findOneBy({ id });
       if (!session) return new Error('cannot fidn a session');
       const newSession = { ...session, ...updateSessionInput };
-      console.log('new session', newSession);
+
       await this.sessionsRepository.save(newSession);
       return newSession;
     } catch (error) {
@@ -69,7 +68,6 @@ export class SessionsService {
 
   async endSession(id: string) {
     try {
-      console.log('end session');
       const session = await this.sessionsRepository.findOneBy({ id });
       if (!session) return new Error('cannot fidn a session');
       const updatedSession: Session = {

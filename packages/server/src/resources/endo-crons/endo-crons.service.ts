@@ -33,7 +33,7 @@ export class EndoCronsService implements OnModuleInit {
 
   async onModuleInit() {
     // init all the jobs in db
-    console.log(`EndoCronsService has been initialized.`);
+
     const crons = await this.findAllInDb();
 
     // add schedule for every cron in the db
@@ -68,13 +68,21 @@ export class EndoCronsService implements OnModuleInit {
     const name = nameSchedule({ endoId, status: toBeStatus, seconds });
     const callback = async () => {
       this.logger.warn(`Timeout ${name} executing after (${seconds}) seconds!`);
-      // delete when it is already called
-      await this.removeInDbByEndoIdAndStatus({ endoId, toBeStatus });
+
+      console.log('before calling the remove in db ');
 
       if (toBeStatus === 'ready') return this.endosService.setReady(endoId);
-      if (toBeStatus === 'expire_soon')
+      if (toBeStatus === 'expire_soon') {
+        console.log('ทันที');
         return this.endosService.setExpireSoon(endoId);
-      if (toBeStatus === 'expired') return this.endosService.setExpired(endoId);
+      }
+
+      if (toBeStatus === 'expired') {
+        console.log('ทันที');
+        this.endosService.setExpired(endoId);
+      }
+      // delete when it is already called
+      await this.removeInDbByEndoIdAndStatus({ endoId, toBeStatus });
       return;
     };
 

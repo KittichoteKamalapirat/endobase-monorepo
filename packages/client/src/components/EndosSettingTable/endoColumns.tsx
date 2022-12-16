@@ -50,7 +50,7 @@ export const endoColumns = () => {
       //   });
 
       //   const onSubmit = async (data: FormValues) => {
-      //     console.log("clicked", data);
+
       //     await updateDryingTime({
       //       variables: {
       //         input: { endoId, mins: parseInt(data[FormNames.TIME]) },

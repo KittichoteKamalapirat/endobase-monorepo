@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useMeQuery } from "../generated/graphql";
 
 export const useIsAuth = () => {
-  console.log("useIsAuth");
   const { data, loading } = useMeQuery();
 
   const navigate = useNavigate();

@@ -38,13 +38,10 @@ export class UsersService {
       };
       const newUser = this.usersRepository.create(input);
 
-      console.log('input', input);
-      console.log('newUser', newUser);
       user = await this.usersRepository.save(newUser);
 
       return { user };
     } catch (error) {
-      console.log('err', error);
       if (error.detail.includes('username')) {
         return {
           errors: [

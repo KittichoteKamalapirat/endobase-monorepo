@@ -76,7 +76,6 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
         },
       });
 
-      console.log("result", result);
       refetch();
       refetchEndo();
     } catch (error) {

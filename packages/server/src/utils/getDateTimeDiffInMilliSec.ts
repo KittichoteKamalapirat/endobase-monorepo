@@ -6,5 +6,5 @@ export const getDateTimeDiffInMilliSec = (
 ): number => {
   // x.diff(y) => x shold be after y to be positive
   // but I'll add abs anyway
-  return Math.abs(date2.diff(date1));
+  return date2.diff(date1);
 };

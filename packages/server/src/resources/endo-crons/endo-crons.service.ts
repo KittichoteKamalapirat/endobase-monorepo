@@ -40,20 +40,17 @@ export class EndoCronsService implements OnModuleInit {
     // add schedule for every cron in the db
     crons.forEach((cron) => {
       const { endoId, toBeStatus, isoDate } = cron;
-      const diff = getDateTimeDiffInMilliSec(dayjs(isoDate), dayjs());
+      const millisecFromNow = getDateTimeDiffInMilliSec(
+        dayjs(isoDate),
+        dayjs(),
+      );
       console.log(
-        'Add cron for endo ',
-        endoId,
-        ' to be ',
-        toBeStatus,
-        ' in ',
-        diff,
-        ' sec',
+        `Add cron for endo ${endoId} to be ${toBeStatus} in ${millisecFromNow} millisec`,
       );
       this.addSchedule({
         endoId,
         toBeStatus,
-        milliseconds: diff,
+        milliseconds: millisecFromNow,
         saveToDb: false,
       });
     });

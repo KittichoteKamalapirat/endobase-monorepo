@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { EndoCron } from '../../endo-crons/entities/endo-cron.entity';
 import { Session } from '../../sessions/entities/session.entity';
 import { Tray } from '../../trays/entities/tray.entity';
 
@@ -93,6 +94,11 @@ export class Endo {
   @OneToMany(() => Session, (session) => session.endo, { cascade: true })
   @Field(() => [Session])
   sessions: Session[];
+
+  // endoCron
+  @OneToMany(() => EndoCron, (endoCrons) => endoCrons.endo, { cascade: true })
+  @Field(() => [EndoCron])
+  endoCrons: EndoCron[];
 
   @Column({ default: ENDO_STATUS_OBJ.READY })
   @Field(() => String)

@@ -8,13 +8,13 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
 import { MAX_STORAGE_DAYS } from '../../constants';
 import { dayToMillisec } from '../../utils/dayToMillisec';
-import { nameSchedule } from '../../utils/nameSchedule';
+import { ActionsService } from '../actions/actions.service';
+import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
-import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
-import { ActionsService } from '../actions/actions.service';
-import { UpdateEndoInput } from './dto/update-endo.input';
 import BooleanResponse from './dto/boolean-response.input';
+import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
+import { UpdateEndoInput } from './dto/update-endo.input';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -30,6 +30,8 @@ export class EndosService {
     private schedulerRegistry: SchedulerRegistry,
     @Inject(forwardRef(() => ActionsService))
     private actionsService: ActionsService,
+    @Inject(forwardRef(() => EndoCronsService))
+    private endoCronsService: EndoCronsService,
   ) {}
 
   async findAll(): Promise<Endo[]> {
@@ -114,6 +116,11 @@ export class EndosService {
 
     let pickedEndo = null;
 
+    const deleteInput = {
+      endoId: endo.id,
+      toBeStatus: ENDO_STATUS_OBJ.EXPIRE_SOON,
+    };
+
     if (endo.status === 'ready') {
       // save the new endo
       pickedEndo = await this.endosRepository.save({
@@ -121,13 +128,7 @@ export class EndosService {
         status: ENDO_STATUS_OBJ.BEING_USED,
       });
 
-      // remove the previously "scheduled to be expire_soon" for this endo
-      const scheduleName = nameSchedule({
-        endoId: endo.id,
-        status: ENDO_STATUS_OBJ.EXPIRE_SOON,
-      });
-
-      this.deleteSchedule(scheduleName);
+      this.endoCronsService.deleteSchedule(deleteInput);
     } else if (endo.status === 'expire_soon') {
       // save the new endo (being_used)
       pickedEndo = await this.endosRepository.save({
@@ -135,11 +136,8 @@ export class EndosService {
         status: ENDO_STATUS_OBJ.BEING_USED,
       });
       // remove the previously scheduled "to be expired" for this endo
-      const scheduleName = nameSchedule({
-        endoId: endo.id,
-        status: ENDO_STATUS_OBJ.EXPIRED,
-      });
-      this.deleteSchedule(scheduleName);
+
+      this.endoCronsService.deleteSchedule(deleteInput);
     } else {
       // status = "expired"
       // do nothing keep it expired
@@ -189,11 +187,6 @@ export class EndosService {
     return this.endosRepository.save(updatedEndo);
   }
 
-  getAllTimeouts() {
-    const timeouts = this.schedulerRegistry.getTimeouts();
-    return timeouts;
-  }
-
   //   // update db
   // // change lightbox
   // async updateStatusAndLightBox(endoId: string, status: ENDO_STATUS) {
@@ -223,7 +216,7 @@ export class EndosService {
     });
 
     // create a schedule to expire_soon in 29 days
-    this.addSchedule(
+    this.endoCronsService.addSchedule(
       endoId,
       'expire_soon',
       dayToMillisec(MAX_STORAGE_DAYS - 1),
@@ -241,7 +234,7 @@ export class EndosService {
     });
 
     // create a schedule to expired in 1 day
-    this.addSchedule(endoId, 'expired', dayToMillisec(MAX_STORAGE_DAYS));
+    this.endoCronsService.addSchedule(endoId, 'expired', dayToMillisec(1)); // TODO should this be one or MAX_STOARGE_DAYS?
   }
 
   // update db
@@ -268,37 +261,19 @@ export class EndosService {
   //   this.schedulerRegistry.addTimeout(`Name: ${name}`, establishTimeout);
   // }
 
-  addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
-    const name = `Endo: ${endoId} is to be ${toBeStatus}`;
-    const callback = () => {
-      this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
-      if (toBeStatus === 'ready') return this.setReady(endoId);
-      if (toBeStatus === 'expire_soon') return this.setExpireSoon(endoId);
-      if (toBeStatus === 'expired') return this.setExpired(endoId);
-      return;
-    };
+  // addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
+  //   const name = `Endo: ${endoId} is to be ${toBeStatus}`;
+  //   const callback = () => {
+  //     this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
+  //     if (toBeStatus === 'ready') return this.setReady(endoId);
+  //     if (toBeStatus === 'expire_soon') return this.setExpireSoon(endoId);
+  //     if (toBeStatus === 'expired') return this.setExpired(endoId);
+  //     return;
+  //   };
 
-    const establishTimeout = setTimeout(callback, milliseconds);
-    this.schedulerRegistry.addTimeout(name, establishTimeout);
-  }
-
-  getTimeouts() {
-    const timeouts = this.schedulerRegistry.getTimeouts();
-    timeouts.forEach((key) => this.logger.log(`Timeout: ${key}`));
-    return timeouts;
-  }
-
-  deleteSchedule(name: string) {
-    const allSchedules = this.getAllTimeouts();
-    if (!allSchedules.includes(name)) return;
-
-    this.schedulerRegistry.deleteTimeout(name);
-    this.logger.warn(`Timeout ${name} deleted!`);
-
-    // const timeout = this.schedulerRegistry.getTimeout(name);
-
-    // clearTimeout(timeout);
-  }
+  //   const establishTimeout = setTimeout(callback, milliseconds);
+  //   this.schedulerRegistry.addTimeout(name, establishTimeout);
+  // }
 
   findCurrentSessionByEndoId(endoId: string) {
     // current session = status = ongoing

@@ -20,6 +20,7 @@ import { SnapshotsModule } from './resources/snapshots/snapshots.module';
 import { TraysModule } from './resources/trays/trays.module';
 import { UsersModule } from './resources/users/users.module';
 import { SettingModule } from './setting/setting.module';
+import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { SettingModule } from './setting/setting.module';
     UsersModule,
     AuthModule,
     SettingModule,
+    EndoCronsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

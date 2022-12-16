@@ -6,12 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SessionsModule } from '../sessions/sessions.module';
 import { OfficersModule } from '../officers/officers.module';
 import { EndosModule } from '../endos/endo.module';
+import { EndoCronsModule } from '../endo-crons/endo-crons.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Action]),
     SessionsModule,
     OfficersModule,
+    EndoCronsModule,
     forwardRef(() => EndosModule),
   ],
   providers: [ActionsResolver, ActionsService],

@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
 
 import { minToMillisec } from '../../utils/minToMillisec';
+import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
 import { Officer } from '../officers/entities/officer.entity';
@@ -28,6 +29,7 @@ export class ActionsService {
     private sessionsService: SessionsService,
     private serialportsService: SerialportsService,
     private endosService: EndosService,
+    private endosCronService: EndoCronsService,
   ) {}
 
   // if therre is existing officer (with the officerNum), use it
@@ -108,7 +110,7 @@ export class ActionsService {
         await this.endosService.updateLastPutBackISO(session.endoId);
 
         // create schedule to ready in 30 mins
-        this.endosService.addSchedule(
+        this.endosCronService.addSchedule(
           session.endoId,
           'ready',
           minToMillisec(session.endo.dryingTime),

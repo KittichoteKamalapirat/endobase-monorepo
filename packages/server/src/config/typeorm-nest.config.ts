@@ -1,5 +1,6 @@
 import { Action } from '../resources/actions/entities/action.entity';
 import { Container } from '../resources/containers/entities/container.entity';
+import { EndoCron } from '../resources/endo-crons/entities/endo-cron.entity';
 import { Endo } from '../resources/endos/entities/endo.entity';
 import { Officer } from '../resources/officers/entities/officer.entity';
 import { Patient } from '../resources/patients/entities/patient.entity';
@@ -27,6 +28,7 @@ export const typeormConfigNest = {
     Snapshot,
     User,
     Setting,
+    EndoCron,
   ],
   synchronize: true,
   logging: false,

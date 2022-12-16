@@ -9,7 +9,7 @@ import {
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import { formatSTS } from '../../utils/formatSTS';
-import { rowNumToLEDPosition } from '../../utils/rowNumToLEDPosition';
+import { rowNumToLEDPositionTwoCols } from '../../utils/rowNumToLEDPositionTwoCols';
 import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
 import { ColType } from '../containers/entities/container.entity';
@@ -36,16 +36,16 @@ export class SerialportsService {
     const parserA = this.serialports.A.pipe(
       new ReadlineParser({ delimiter: '\r\n' }),
     );
-    const parserB = this.serialports.B.pipe(
-      new ReadlineParser({ delimiter: '\r\n' }),
-    );
+    // const parserB = this.serialports.B.pipe(
+    //   new ReadlineParser({ delimiter: '\r\n' }),
+    // );
     const parserC = this.serialports.C.pipe(
       new ReadlineParser({ delimiter: '\r\n' }),
     );
 
     const parsers: ParserAndContainer[] = [
       { parser: parserA, col: 'A' },
-      { parser: parserB, col: 'B' },
+      // { parser: parserB, col: 'B' },
       { parser: parserC, col: 'C' },
     ];
 
@@ -168,7 +168,7 @@ export class SerialportsService {
   turnLightsOff({ col, row }: { col: ColType; row: RowType }) {
     const colorCommand = BLACK_COLOR_COMMAND;
 
-    const ledPosition = rowNumToLEDPosition(row);
+    const ledPosition = rowNumToLEDPositionTwoCols(row);
 
     const command = `:L${ledPosition}(${colorCommand})\r\n)`;
     console.log('command', command);

@@ -1,5 +1,5 @@
 export const serialportPathA = '/dev/tty.usbserial-0001';
-export const serialportPathB = '/dev/tty.usbserial-7';
+export const serialportPathB = '/dev/tty.usbserial-3';
 export const serialportPathC = '/dev/tty.usbserial-5';
 
 export const SERIALPORTS_PROVIDER = 'allSerialports';
@@ -21,3 +21,5 @@ export const DEFAULT_SNAPSHOT_INTERVAL_MINS = 60;
 export const IS_PROD = process.env.NODE_ENV === 'production';
 export const COOKIE_NAME = 'qidRedis';
 export const SESSION_SECRET = 'secretkpodfqpemvqemfvef';
+
+export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db for schedule table

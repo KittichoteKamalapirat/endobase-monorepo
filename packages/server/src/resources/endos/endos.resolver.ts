@@ -70,10 +70,10 @@ export class EndosResolver {
     return this.endosService.updateEndo(id, input);
   }
 
-  @Query(() => [String])
-  getTimeouts(): string[] {
-    return this.endosService.getTimeouts();
-  }
+  // @Query(() => [String])
+  // getTimeouts(): string[] {
+  //   return this.endosService.getTimeouts();
+  // }
 
   @Mutation(() => Endo)
   updateDryingTime(

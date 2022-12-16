@@ -10,7 +10,7 @@ import {
   ENDO_STATUS_OBJ,
 } from '../resources/endos/entities/endo.entity';
 import { RowType } from '../resources/trays/entities/tray.entity';
-import { rowNumToLEDPosition } from './rowNumToLEDPosition';
+import { rowNumToLEDPositionTwoCols } from './rowNumToLEDPositionTwoCols';
 
 interface Args {
   endoStatus: ENDO_STATUS;
@@ -36,7 +36,7 @@ export const writeColorCommand = ({ endoStatus, row }: Args) => {
     }
   })();
 
-  const ledPosition = rowNumToLEDPosition(row);
+  const ledPosition = rowNumToLEDPositionTwoCols(row);
 
   const command = `:L${ledPosition}(${colorCommand})\r\n)`;
 

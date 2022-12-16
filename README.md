@@ -110,3 +110,32 @@ counterCeil = CONTAINER_NUM \* 60; => 60 can be from setting too, check in seria
 ### set LED color
 
 1. Start from L00
+2. Because in the container, the LED cord line is "U" shape. Row 1-8 => LED00-07, but Row 9 -16 => LED 15-08
+
+### How endoscope schedule works for storage time
+
+The Idea is
+
+1. After 29 days, "ready" becomes "expire_soon"
+2. AFter 30 days (1 day after expired_soon), "expire_soon" becaomse "expired"
+
+So in the code
+
+1. When drying is finished and is set from "drying" to "ready" =>
+1. 1 ADD A SCHEDULE (callback) to make it expire_soon in MAX_STORAGE_DAYS - 1.
+1. 2 Add a new row in endo_cron table
+1. When it reaches MAX_STORAGE_DAYS - 1 days and we set to "expire_soon", ADD A SCHEDULE to make it "expired" in 1 day
+   But don't forget to remoe the schedule if someone use it before it expired
+1. 1 ADD A SCHEDULE to make it "expired" in 1 day
+1. 2 Add a new row in endo_cron table
+   If someone uses it before 30 days, in pickendo => Delete a schedule base on its name (from endoId and status), `Schedule: Endo xxx is to be expired`
+
+Whenever adding a new schedule => add a new row in database too
+Whenever a scheduled callback is called or a schedule is deleted => remove an existing row in th db
+
+When creating a cron job, in code,
+
+- when create a schedule, I need an endo id, to be status, and millisec
+- when delete a schedule, I just need the name (could be get from endo id, and status)
+
+So in the database, I just need to store the endoId, toBeStatus, and timeStamp

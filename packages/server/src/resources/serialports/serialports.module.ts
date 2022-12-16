@@ -35,11 +35,11 @@ export class SerialportsModule {
       baudRate: 9600,
       autoOpen: true,
     });
-    const spForContainerB = new SerialPort({
-      path: serialportPathB,
-      baudRate: 9600,
-      autoOpen: true,
-    });
+    // const spForContainerB = new SerialPort({
+    //   path: serialportPathB,
+    //   baudRate: 9600,
+    //   autoOpen: true,
+    // });
     const spForContainerC = new SerialPort({
       path: serialportPathC,
       baudRate: 9600,
@@ -49,7 +49,7 @@ export class SerialportsModule {
     // make this match with container
     const serialports = {
       A: spForContainerA,
-      B: spForContainerB,
+      // B: spForContainerB,
       C: spForContainerC,
     };
 

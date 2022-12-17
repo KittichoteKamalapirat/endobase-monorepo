@@ -144,8 +144,9 @@ module.exports = {
       },
       animation: {
         "spin-slow": "spin 12s linear infinite",
-        "pulse-fast": "pulse 1s cubic-bezier(0.6, 0, 0.8, 1) infinite",
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "pulse-0.5": "pulse 0.5s cubic-bezier(0.6, 0, 0.8, 1) infinite",
+        "pulse-1": "pulse 1s cubic-bezier(0.6, 0, 0.8, 1) infinite",
+        "pulse-2": "pulse 2s cubic-bezier(0.6, 0, 0.8, 1) infinite",
       },
     },
   },

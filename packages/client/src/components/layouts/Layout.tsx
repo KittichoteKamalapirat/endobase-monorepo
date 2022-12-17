@@ -28,7 +28,7 @@ const Layout = ({
   extraStyle = "",
 }: Props) => {
   return (
-    <div className="pt-20 bg-grey-0 text-grey-900 h-min-screen ">
+    <div className="pt-24 bg-grey-0 text-grey-900 h-min-screen ">
       <Navbar />
       <main
         className={`flex-1 h-full w-full ${justifyContent} ${alignItems} ${extraStyle} `}

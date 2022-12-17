@@ -1,9 +1,14 @@
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
 import { FaFan } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { showToast } from "../../redux/slices/toastReducer";
 import { ENDO_STATUS } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
+import { GiWaterRecycling } from "react-icons/gi";
+import { ICON_SIZE } from "../../constants";
+import { primaryColor } from "../../theme";
 
 interface Props {
   pickEndo: any;
@@ -47,8 +52,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const endoId = row.original.id as string;
 
   const isConnected = row.original.tray.container.isConnected;
-  if (!isConnected)
-    return <div className="text-grey-500">Container is offline</div>;
+  if (!isConnected) return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
@@ -63,6 +67,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.LEAK_TEST_FAILED:
       return (
         <LinkButton
+          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
           label="Wash"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}

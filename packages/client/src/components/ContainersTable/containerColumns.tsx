@@ -23,7 +23,7 @@ export const containerColumns = () => {
       Cell: ({ value: isConnected }: { value: boolean }) => (
         <div>
           {isConnected ? (
-            <span className="text-green-500 font-bold animate-pulse-fast ">
+            <span className="text-green-500 font-bold animate-pulse-1 ">
               Online
             </span>
           ) : (

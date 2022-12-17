@@ -15,6 +15,8 @@ export default class DropDatabase implements Seeder {
     // await getManager().query('DROP TABLE if exists container cascade');
     // await getManager().query('DROP TABLE if exists tray cascade');
     // await getManager().query('DROP TABLE if exists "user" cascade');
+    // await getManager().query('DROP TABLE if exists "endo_cron" cascade');
+    // await getManager().query('DROP TABLE if exists "snapshot" cascade');
     // // await getManager().query('SET FOREIGN_KEY_CHECKS = 0');
     // // await getManager().query('TRUNCATE setting');
     // // await getManager().query('TRUNCATE endo RESTART IDENTITY CASCADE');

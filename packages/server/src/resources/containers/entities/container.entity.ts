@@ -7,10 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CONTAINER_TYPE_VALUES } from '../../../types/CONTAINER_TYPE';
 import { Snapshot } from '../../snapshots/entities/snapshot.entity';
 import { Tray } from '../../trays/entities/tray.entity';
 
-export type ColType = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H';
 // has many trays, has many snapshots
 
 @ObjectType()
@@ -24,7 +24,7 @@ export class Container {
   // A (1 for Chonburi)
   @Column()
   @Field()
-  col: ColType;
+  col: CONTAINER_TYPE_VALUES;
 
   @Column({ default: '0.0' })
   @Field()

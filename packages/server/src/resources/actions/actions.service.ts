@@ -8,10 +8,8 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
-import { MAX_STORAGE_DAYS, EXPIRE_SOON_DAYS } from '../../constants';
-import { dayToSec } from '../../utils/dayToSec';
+import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from '../../constants';
 
-import { minToSec } from '../../utils/minToSec';
 import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
@@ -114,7 +112,7 @@ export class ActionsService {
           endoId,
           toBeStatus: 'ready',
           // seconds: minToSec(session.endo.dryingTime),
-          dateTime: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
+          jsDate: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
           saveToDb: true,
         });
 
@@ -124,7 +122,7 @@ export class ActionsService {
           endoId,
           toBeStatus: 'expire_soon',
           // seconds: dayToSec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
-          dateTime: dayjs()
+          jsDate: dayjs()
             .add(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS, 'day')
             .toDate(),
           saveToDb: true,
@@ -135,7 +133,7 @@ export class ActionsService {
           endoId,
           toBeStatus: 'expired',
           // seconds: dayToSec(MAX_STORAGE_DAYS),
-          dateTime: dayjs().add(MAX_STORAGE_DAYS, 'day').toDate(),
+          jsDate: dayjs().add(MAX_STORAGE_DAYS, 'day').toDate(),
           saveToDb: true,
         });
 

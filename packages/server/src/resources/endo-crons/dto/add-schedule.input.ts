@@ -13,7 +13,7 @@ export class AddScheduleInput {
   // seconds: number;
 
   @Field()
-  dateTime: Date;
+  jsDate: Date;
 
   @Field(() => Int, { defaultValue: true })
   saveToDb?: boolean;

@@ -118,6 +118,7 @@ export type Endo = {
   createdAt: Scalars['DateTime'];
   currentSessionId?: Maybe<Scalars['String']>;
   dryingTime: Scalars['Int'];
+  endoCrons: Array<EndoCron>;
   id: Scalars['ID'];
   lastPutBackISO: Scalars['String'];
   model: Scalars['String'];
@@ -128,6 +129,17 @@ export type Endo = {
   tray: Tray;
   trayId: Scalars['String'];
   type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type EndoCron = {
+  __typename?: 'EndoCron';
+  createdAt: Scalars['DateTime'];
+  endo: Endo;
+  endoId: Scalars['String'];
+  id: Scalars['ID'];
+  isoDate: Scalars['String'];
+  toBeStatus: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -379,6 +391,8 @@ export type Query = {
   containers: Array<Container>;
   emptyTrays: Array<Tray>;
   endo: Endo;
+  endoCronsInDb: Array<EndoCron>;
+  endoCronsInMemory: Array<Scalars['String']>;
   endos: Array<Endo>;
   me?: Maybe<User>;
   officers: Array<Officer>;

@@ -5,6 +5,9 @@ export const containerColumns = () => {
     {
       Header: "Container",
       accessor: "col",
+      Cell: ({ value: col }: { value: string }) => (
+        <div>{col.toUpperCase()}</div>
+      ),
     },
     {
       Header: "Temperature",

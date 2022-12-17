@@ -144,3 +144,27 @@ In the end
 
 - addTimeout does not work because 30 days in millisec exceeds 32 bit
 - use addCronJob instead to specify a specific date (see details in endoCron)
+
+If the server is down, all the "unrun" crons are saved.
+when server comes back =>
+
+- if in the future, re init all the crons
+- if in past, run them!
+
+### how serialport works
+
+- when init serialports
+
+````{
+   a: SP,
+   b: null,
+   c: SP,
+}```
+
+- when init parsers
+```{
+   a: Parser,
+   b: null,
+   c: Parser,
+}```
+````

@@ -1,12 +1,13 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CannotGetEntityManagerNotConnectedError, Repository } from 'typeorm';
+import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import BooleanResponse from '../endos/dto/boolean-response.input';
 import { SerialportsService } from '../serialports/serialports.service';
 import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
 import { UpdateContainerStatsInput } from './dto/update-container-stats.input';
-import { ColType, Container } from './entities/container.entity';
+import { Container } from './entities/container.entity';
 
 @Injectable()
 export class ContainersService {
@@ -38,7 +39,7 @@ export class ContainersService {
   }
 
   // col = A, B, C
-  async findOneByContainerChar(col: ColType): Promise<Container> {
+  async findOneByContainerChar(col: CONTAINER_TYPE_VALUES): Promise<Container> {
     return this.containersRepository.findOneBy({ col });
   }
 

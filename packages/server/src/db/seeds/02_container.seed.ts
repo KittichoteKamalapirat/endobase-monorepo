@@ -4,28 +4,28 @@ import { Container } from '../../resources/containers/entities/container.entity'
 export default class CreateContainers implements Seeder {
   public async run(factory: Factory): Promise<any> {
     await factory(Container)().create({
-      col: 'A',
+      col: 'a',
     });
     await factory(Container)().create({
-      col: 'B',
+      col: 'b',
     });
     await factory(Container)().create({
-      col: 'C',
+      col: 'c',
     });
     // await factory(Container)().create({
-    //   col: 'D',
+    //   col: 'd',
     // });
     // await factory(Container)().create({
-    //   col: 'E',
+    //   col: 'e',
     // });
     // await factory(Container)().create({
-    //   col: 'F',
+    //   col: 'f',
     // });
     // await factory(Container)().create({
-    //   col: 'G',
+    //   col: 'g',
     // });
     // await factory(Container)().create({
-    //   col: 'H',
+    //   col: 'h',
     // });
   }
 }

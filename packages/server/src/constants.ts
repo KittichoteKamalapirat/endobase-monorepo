@@ -2,8 +2,6 @@ export const serialportPathA = '/dev/tty.usbserial-0001';
 export const serialportPathB = '/dev/tty.usbserial-3';
 export const serialportPathC = '/dev/tty.usbserial-5';
 
-export const SERIALPORTS_PROVIDER = 'allSerialports';
-
 export const RED_COLOR_COMMAND = '255,000,000'; // expired
 export const GREEN_COLOR_COMMAND = '000,255,000'; // ready
 export const BLUE_COLOR_COMMAND = '000,000,255'; // drying
@@ -24,3 +22,9 @@ export const COOKIE_NAME = 'qidRedis';
 export const SESSION_SECRET = 'secretkpodfqpemvqemfvef';
 
 export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db for schedule table
+
+// Serial Ports
+export const SERIALPORTS_PROVIDER = 'allSerialports'; // for provider in serial ports module
+
+export const ARDUINO_VENDOR_ID = '10c4';
+export const ARDUINO_PATH_REGEXP = new RegExp('/dev/tty.usb*');

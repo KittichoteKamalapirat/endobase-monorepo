@@ -6,6 +6,7 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
+import { CONTAINER_TYPE_OBJ } from '../../types/CONTAINER_TYPE';
 import BooleanResponse from './dto/boolean-response.input';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
@@ -21,7 +22,8 @@ export class EndosResolver {
   position(@Root() endo: Endo): string {
     const row = endo.tray.row;
     const col = endo.tray.container.col;
-    return `${col}${row}`;
+    const colDisplay = CONTAINER_TYPE_OBJ[col];
+    return `${colDisplay}${row}`;
   }
 
   @ResolveField(() => String, { nullable: true })

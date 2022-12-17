@@ -11,6 +11,7 @@ import { CronJob } from 'cron';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
+import { DAYJS_DATE_TIME_FORMAT } from '../../constants';
 import { getDateTimeDiffInSec } from '../../utils/getDateTimeDiffInSec';
 import { nameSchedule } from '../../utils/nameSchedule';
 import { EndosService } from '../endos/endos.service';
@@ -33,23 +34,36 @@ export class EndoCronsService implements OnModuleInit {
 
   async onModuleInit() {
     // init all the jobs in db
-
     const crons = await this.findAllInDb();
 
-    // add schedule for every cron in the db
+    // sort by date so it's run in order
+    // (ready => expiresoon => expire)
+    // not (expire => ready => expire_soon) etc
+    const sortDateAsc = (a: EndoCron, b: EndoCron) =>
+      new Date(a.isoDate).valueOf() - new Date(b.isoDate).valueOf();
+    crons.sort(sortDateAsc);
+
     crons.forEach(async (cron) => {
       const { endoId, toBeStatus, isoDate } = cron;
-      const secFromNow = getDateTimeDiffInSec(dayjs(isoDate), dayjs());
+      const secFromNow = getDateTimeDiffInSec(dayjs(), dayjs(isoDate));
       console.log(
         `Add cron for endo ${endoId} to be ${toBeStatus} in ${secFromNow} sec`,
       );
-      await this.addSchedule({
-        endoId,
-        toBeStatus,
-        // seconds: secFromNow,
-        dateTime: new Date(cron.isoDate),
-        saveToDb: false,
-      });
+
+      // if isoDate is in the future, add schedule for every cron in the db
+      // if in the past, run them now!
+      if (secFromNow > 0) {
+        await this.addSchedule({
+          endoId,
+          toBeStatus,
+          // seconds: secFromNow,
+          jsDate: new Date(cron.isoDate),
+          saveToDb: false,
+        });
+      } else {
+        //run in order so the order doees not mess up
+        await this.runPastCallbacks({ toBeStatus, endoId });
+      }
     });
   }
 
@@ -59,30 +73,47 @@ export class EndoCronsService implements OnModuleInit {
     return newCron;
   }
 
+  async runPastCallbacks({
+    toBeStatus,
+    endoId,
+  }: {
+    toBeStatus: ENDO_STATUS;
+    endoId: string;
+  }) {
+    if (toBeStatus === 'ready') return this.endosService.setReady(endoId);
+    if (toBeStatus === 'expire_soon') {
+      return this.endosService.setExpireSoon(endoId);
+    }
+    if (toBeStatus === 'expired') {
+      this.endosService.setExpired(endoId);
+    }
+    // delete when it is already called
+    await this.removeInDbByEndoIdAndStatus({ endoId, toBeStatus });
+    return;
+  }
+
   async addSchedule({
     endoId,
     toBeStatus,
     // seconds,
-    dateTime,
+    jsDate,
     saveToDb,
   }: AddScheduleInput) {
     // console.log('xxxxxxxxx', toBeStatus, seconds);
-    const name = nameSchedule({ endoId, status: toBeStatus, dateTime });
+    const name = nameSchedule({ endoId, status: toBeStatus, jsDate });
     const callback = async () => {
       this.logger.warn(
-        `Timeout ${name} executing at ${dateTime.toISOString()}!`,
+        `Timeout ${name} executing at ${jsDate.toLocaleDateString('th-th')}!`,
       );
 
       console.log('before calling the remove in db ');
 
       if (toBeStatus === 'ready') return this.endosService.setReady(endoId);
       if (toBeStatus === 'expire_soon') {
-        console.log('ทันที');
         return this.endosService.setExpireSoon(endoId);
       }
 
       if (toBeStatus === 'expired') {
-        console.log('ทันที');
         this.endosService.setExpired(endoId);
       }
       // delete when it is already called
@@ -93,8 +124,7 @@ export class EndoCronsService implements OnModuleInit {
     // const establishTimeout = setTimeout(callback, seconds * 1000);
     // this.schedulerRegistry.addTimeout(name, establishTimeout);
 
-    const date = dayjs().add(1, 'day').toDate();
-    const job = new CronJob(date, callback);
+    const job = new CronJob(jsDate, callback);
     this.schedulerRegistry.addCronJob(name, job);
     job.start();
 
@@ -105,7 +135,7 @@ export class EndoCronsService implements OnModuleInit {
     const input = {
       endoId,
       toBeStatus,
-      isoDate: date.toISOString(),
+      isoDate: dayjs(jsDate).format(DAYJS_DATE_TIME_FORMAT),
     };
 
     if (saveToDb) await this.saveInDb(input);
@@ -211,10 +241,18 @@ export class EndoCronsService implements OnModuleInit {
       let next;
       try {
         next = value.nextDates().toJSDate();
+        console.log('xxxxxx');
+        console.log('next', next);
+        console.log('js', value.nextDates().toJSDate());
+        console.log('iso', value.nextDates().toISODate());
+        console.log(
+          'local',
+          value.nextDates().toLocaleString({ timeZone: 'Asia/Bangkok' }),
+        );
       } catch (e) {
         next = 'error: next fire date is in the past!';
       }
-      const message = `job: "${key}" -> ${next}`;
+      const message = `JOB NAME: "${key}". \n EXECUTE AT: ${next}`;
       this.logger.log(message);
       result.push(message);
     });

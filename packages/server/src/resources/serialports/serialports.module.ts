@@ -11,7 +11,6 @@ import { SettingModule } from '../../setting/setting.module';
 import {
   containerTypeOptions,
   CONTAINER_TO_SERIALPORT_PATH_MAPPER,
-  CONTAINER_TYPE_VALUES,
   MySerialPort,
 } from '../../types/CONTAINER_TYPE';
 import { getConnectedArduinos } from '../../utils/getConnectedArduinos';

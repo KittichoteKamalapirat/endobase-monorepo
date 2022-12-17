@@ -4,6 +4,7 @@ query Containers {
     col
     currTemp
     currHum
+    isConnected
     lightsAreOn
   }
 }

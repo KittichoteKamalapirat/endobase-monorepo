@@ -1,5 +1,14 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import BooleanResponse from '../endos/dto/boolean-response.input';
+import { forwardRef, Inject } from '@nestjs/common';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  ResolveField,
+  Resolver,
+  Root,
+} from '@nestjs/graphql';
+import { SerialportsService } from '../serialports/serialports.service';
 import { ContainersService } from './containers.service';
 import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
@@ -7,7 +16,18 @@ import { Container } from './entities/container.entity';
 
 @Resolver(() => Container)
 export class ContainersResolver {
-  constructor(private readonly containersService: ContainersService) {}
+  constructor(
+    private readonly containersService: ContainersService,
+    // private readonly serialportsService: SerialportsService,
+    @Inject(forwardRef(() => SerialportsService))
+    private serialportsService: SerialportsService,
+  ) {}
+
+  @ResolveField(() => Boolean)
+  isConnected(@Root() container: Container): boolean {
+    const col = container.col;
+    return this.serialportsService.containerIsConnected(col);
+  }
 
   @Mutation(() => Container)
   createContainer(

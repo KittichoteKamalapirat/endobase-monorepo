@@ -99,14 +99,11 @@ export class EndoCronsService implements OnModuleInit {
     jsDate,
     saveToDb,
   }: AddScheduleInput) {
-    // console.log('xxxxxxxxx', toBeStatus, seconds);
     const name = nameSchedule({ endoId, status: toBeStatus, jsDate });
     const callback = async () => {
       this.logger.warn(
         `Timeout ${name} executing at ${jsDate.toLocaleDateString('th-th')}!`,
       );
-
-      console.log('before calling the remove in db ');
 
       if (toBeStatus === 'ready') return this.endosService.setReady(endoId);
       if (toBeStatus === 'expire_soon') {
@@ -231,7 +228,7 @@ export class EndoCronsService implements OnModuleInit {
     const jobs = this.schedulerRegistry.getCronJobs();
 
     const result = [];
-    console.log('jobs', jobs);
+
     jobs.forEach((value, key) => {
       // valye => a bunch of stuff
       // key => name
@@ -241,14 +238,6 @@ export class EndoCronsService implements OnModuleInit {
       let next;
       try {
         next = value.nextDates().toJSDate();
-        console.log('xxxxxx');
-        console.log('next', next);
-        console.log('js', value.nextDates().toJSDate());
-        console.log('iso', value.nextDates().toISODate());
-        console.log(
-          'local',
-          value.nextDates().toLocaleString({ timeZone: 'Asia/Bangkok' }),
-        );
       } catch (e) {
         next = 'error: next fire date is in the past!';
       }

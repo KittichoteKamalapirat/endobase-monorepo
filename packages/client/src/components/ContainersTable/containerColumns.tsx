@@ -18,6 +18,22 @@ export const containerColumns = () => {
       accessor: "currHum",
     },
     {
+      Header: "Connection",
+      accessor: "isConnected",
+      Cell: ({ value: isConnected }: { value: boolean }) => (
+        <div>
+          {isConnected ? (
+            <span className="text-green-500 font-bold animate-pulse-fast ">
+              Online
+            </span>
+          ) : (
+            <span className="text-grey-500">Offline</span>
+          )}
+        </div>
+      ),
+    },
+
+    {
       Header: "Action",
       Cell: ({ row }: { row: any }) => <ContainerActionColumn row={row} />,
     },

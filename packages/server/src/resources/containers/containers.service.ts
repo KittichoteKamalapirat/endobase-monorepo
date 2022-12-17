@@ -1,8 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CannotGetEntityManagerNotConnectedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
-import BooleanResponse from '../endos/dto/boolean-response.input';
 import { SerialportsService } from '../serialports/serialports.service';
 import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';

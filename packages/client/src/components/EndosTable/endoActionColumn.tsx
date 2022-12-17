@@ -46,6 +46,10 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const currentStatus = row.original.status;
   const endoId = row.original.id as string;
 
+  const isConnected = row.original.tray.container.isConnected;
+  if (!isConnected)
+    return <div className="text-grey-500">Container is offline</div>;
+
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
     case ENDO_STATUS.READY:

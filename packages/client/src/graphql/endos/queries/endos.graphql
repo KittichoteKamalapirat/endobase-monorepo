@@ -17,6 +17,7 @@ query endos {
       container {
         id
         col
+        isConnected
       }
     }
   }

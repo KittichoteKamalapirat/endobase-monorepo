@@ -46,6 +46,7 @@ type Container {
   snapshots: [Snapshot!]!
   createdAt: DateTime!
   updatedAt: DateTime!
+  isConnected: Boolean!
 }
 
 type Tray {

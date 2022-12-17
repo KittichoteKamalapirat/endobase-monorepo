@@ -42,6 +42,7 @@ export type Container = {
   currHum: Scalars['String'];
   currTemp: Scalars['String'];
   id: Scalars['ID'];
+  isConnected: Scalars['Boolean'];
   lightsAreOn: Scalars['Boolean'];
   snapshots: Array<Snapshot>;
   trays: Array<Tray>;
@@ -628,7 +629,7 @@ export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean }> };
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isConnected: boolean, lightsAreOn: boolean }> };
 
 export type CreateEndoMutationVariables = Exact<{
   input: CreateEndoInput;
@@ -676,7 +677,7 @@ export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id:
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string } } }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isConnected: boolean } } }> };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -1064,6 +1065,7 @@ export const ContainersDocument = gql`
     col
     currTemp
     currHum
+    isConnected
     lightsAreOn
   }
 }
@@ -1356,6 +1358,7 @@ export const EndosDocument = gql`
       container {
         id
         col
+        isConnected
       }
     }
   }

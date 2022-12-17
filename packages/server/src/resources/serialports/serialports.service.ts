@@ -13,6 +13,7 @@ import {
   CONTAINER_TYPE_OBJ,
   CONTAINER_TYPE_VALUES,
   MyParser,
+  MySerialPort,
 } from '../../types/CONTAINER_TYPE';
 import { formatSTS } from '../../utils/formatSTS';
 import { rowNumToLEDPositionTwoCols } from '../../utils/rowNumToLEDPositionTwoCols';
@@ -35,7 +36,7 @@ export class SerialportsService {
   constructor(
     private snapshotsService: SnapshotsService,
     @Inject(SERIALPORTS_PROVIDER)
-    private serialports: { A: SerialPort; B: SerialPort; C: SerialPort },
+    private serialports: MySerialPort,
     private containersService: ContainersService,
     private settingService: SettingService,
   ) {
@@ -199,5 +200,9 @@ export class SerialportsService {
       row: row,
       endoStatus: status,
     });
+  }
+
+  containerIsConnected(col: CONTAINER_TYPE_VALUES) {
+    return !!this.serialports[col];
   }
 }

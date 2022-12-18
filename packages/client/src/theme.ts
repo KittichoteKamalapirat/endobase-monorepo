@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 export const green = "#57B65F";
 export const blue = "#4E97F3";
 export const red = "#D2042D";
@@ -50,6 +52,11 @@ export const space3XL = "4rem";
 
 export const CARD_CLASSNAMES =
   "border-solid rounded-md border-2 border-grey-50 p-6 shadow-md my-4";
+
+export const UNCLICKABLE_CARD_CLASSNAMES = classNames(
+  CARD_CLASSNAMES,
+  "hover:cursor-default"
+);
 
 export const BORDER_CLASSNAMES =
   "border-solid rounded-md border-2 border-grey-50 p-6 shadow-md my-4";

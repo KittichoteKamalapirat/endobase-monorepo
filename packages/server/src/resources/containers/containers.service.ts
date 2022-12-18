@@ -99,6 +99,8 @@ export class ContainersService {
   async turnLightsOn(id: string): Promise<ContainerResponse> {
     const container = await this.findOne(id);
 
+    console.log('containerrrr', container);
+
     if (!container)
       return {
         errors: [
@@ -116,11 +118,13 @@ export class ContainersService {
     );
 
     // turn light off for every tray in that container
+
+    // tray.endo could be undefined when there are empty trays
     container.trays.map((tray) =>
       this.serialportsService.turnLightsOn({
         col: container.col,
         row: tray.row,
-        status: tray.endo.status,
+        status: tray.endo?.status || 'no_endo', // make light black for a tray with no endo
       }),
     );
     return {

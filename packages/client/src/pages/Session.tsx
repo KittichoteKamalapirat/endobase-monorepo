@@ -81,7 +81,7 @@ const Session = () => {
       </div>
 
       <PageHeading heading="Session" />
-      <EndoDetail endo={endoData?.endo as Endo} />
+      <EndoDetail endo={endoData?.endo as Endo} canBeClicked />
 
       {data?.session.endoWasExpired ? (
         <NoPatientForm />

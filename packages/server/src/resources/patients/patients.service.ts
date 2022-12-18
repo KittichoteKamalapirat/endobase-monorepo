@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePatientInput } from './dto/create-patient.input';
-import PatientResponse from './dto/patient-response';
-import { UpdatePatientInput } from './dto/update-patient.input';
 import { Patient } from './entities/patient.entity';
 
 @Injectable()

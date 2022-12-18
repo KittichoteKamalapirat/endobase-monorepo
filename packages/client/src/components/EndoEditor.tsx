@@ -52,7 +52,7 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
     data: emptyTraysData,
     loading: emptyTraysLoading,
     error: emptyTraysError,
-  } = useEmptyTraysQuery();
+  } = useEmptyTraysQuery({ fetchPolicy: "network-only" });
 
   const emptyTraysOptions =
     emptyTraysData?.emptyTrays.map((tray) => ({
@@ -60,10 +60,17 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
       label: tray.position,
     })) || [];
 
+  console.log("emptyTraysData", emptyTraysData);
+  console.log("emptyTraysLoading", emptyTraysLoading);
+  console.log("emptyTraysError", emptyTraysError);
+  console.log("emptyTraysOptions", emptyTraysOptions);
+
   const trayOptions = [
     ...emptyTraysOptions,
-    initialData.tray?.label ? initialData.tray : { value: "", label: "" }, // have to add the current one as well
+    ...(initialData.tray?.label ? [initialData.tray] : []), // have to add the current one as well
   ];
+
+  console.log("trayOptions", trayOptions);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between my-4">
@@ -147,6 +154,7 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
           isClearable={false}
           isLoading={emptyTraysLoading}
           required
+          noOptionsMessage="There are no empty trays. Please delete an endoscope to empty trays"
         />
       </div>
     </form>

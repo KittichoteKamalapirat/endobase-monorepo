@@ -112,7 +112,7 @@ const EndoPage = () => {
           </div>
         </div>
 
-        <EndoDetail endo={data?.endo as Endo} />
+        <EndoDetail endo={data?.endo as Endo} canBeClicked={false} />
       </div>
     </Layout>
   );

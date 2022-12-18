@@ -1,14 +1,13 @@
-import { TbBulbOff, TbBulb } from "react-icons/tb";
+import { TbBulb } from "react-icons/tb";
 import { useDispatch } from "react-redux";
-import { showToast } from "../../redux/slices/toastReducer";
-import Button, { ButtonTypes } from "../Buttons/Button";
-import { fromPromise } from "@apollo/client";
-import { grey300, primaryColor } from "../../theme";
 import { ICON_SIZE } from "../../constants";
 import {
   useTurnLightsOffMutation,
   useTurnLightsOnMutation,
 } from "../../generated/graphql";
+import { showToast } from "../../redux/slices/toastReducer";
+import { grey300, primaryColor } from "../../theme";
+import Button, { ButtonTypes } from "../Buttons/Button";
 
 interface Props {
   row: any;
@@ -29,36 +28,41 @@ const ContainerActionColumn = ({ row }: Props) => {
   };
 
   const handleTurnLightsOn = async () => {
-    if (lightsAreOn) return; // do nothing
-    const result = await turnLightsOn({
-      variables: { id: containerId },
-    });
+    console.log("resultttttttt1");
+    try {
+      if (lightsAreOn) return; // do nothing
+      const result = await turnLightsOn({
+        variables: { id: containerId },
+      });
 
-    console.log("result", result);
-    const resultValue = result.data?.turnLightsOn.container;
+      console.log("resultttt2", result);
+      const resultValue = result.data?.turnLightsOn.container;
 
-    let errorMessage = "";
-    const resultUserErrors = result.data?.turnLightsOn.errors || [];
-    resultUserErrors.map(({ field, message }) => {
-      errorMessage += `${field} ${message}\n`;
-    });
+      let errorMessage = "";
+      const resultUserErrors = result.data?.turnLightsOn.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${field} ${message}\n`;
+      });
 
-    // show success or failure
-    if (resultValue && resultUserErrors.length === 0) {
-      dispatch(
-        showToast({
-          message: "Turned lights on",
-          variant: "success",
-        })
-      );
-      // await refetch(); // update cache after delete
-    } else
-      dispatch(
-        showToast({
-          message: errorMessage,
-          variant: "error",
-        })
-      );
+      // show success or failure
+      if (resultValue && resultUserErrors.length === 0) {
+        dispatch(
+          showToast({
+            message: "Turned lights on",
+            variant: "success",
+          })
+        );
+        // await refetch(); // update cache after delete
+      } else
+        dispatch(
+          showToast({
+            message: errorMessage,
+            variant: "error",
+          })
+        );
+    } catch (error) {
+      console.log("error turn lights on", error);
+    }
   };
 
   const handleTurnLightsOff = async () => {
@@ -92,6 +96,7 @@ const ContainerActionColumn = ({ row }: Props) => {
       );
   };
 
+  const isConnected = row.original.isConnected;
   return (
     <div className="flex gap-2">
       <Button
@@ -104,6 +109,7 @@ const ContainerActionColumn = ({ row }: Props) => {
           />
         }
         type={ButtonTypes.TEXT}
+        disabled={!isConnected}
         extraClass="hover:scale-125"
       />
     </div>

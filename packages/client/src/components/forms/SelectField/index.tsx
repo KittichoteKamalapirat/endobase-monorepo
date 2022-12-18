@@ -48,6 +48,7 @@ interface Props {
   watch?: FieldPathValue<FieldValues, FieldPath<FieldValues>>;
   optionalLabelStyle?: string;
   testId?: string;
+  noOptionsMessage?: string;
 }
 
 const SelectField = ({
@@ -74,6 +75,7 @@ const SelectField = ({
   defaultValue,
   labelFontColour,
   testId = "",
+  noOptionsMessage = "No Options",
 }: Props) => {
   return (
     <div className={className}>
@@ -113,6 +115,7 @@ const SelectField = ({
                   onBlur={onBlur}
                   placeholder={placeholder}
                   isDisabled={isDisabled}
+                  noOptionsMessage={() => <div>{noOptionsMessage}</div>}
                 />
                 {children}
               </div>

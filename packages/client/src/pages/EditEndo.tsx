@@ -1,11 +1,12 @@
 import { useDispatch } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import RowsSkeleton from "../components/skeletons/RowsSkeleton";
 import {
   UpdateEndoInput,
+  useContainersQuery,
   useEndoQuery,
   useUpdateEndoMutation,
 } from "../generated/graphql";
@@ -35,6 +36,9 @@ const EditEndo = () => {
     tray: { value: tray?.id || "", label: tray?.position || "" },
   };
   const [updateEndo] = useUpdateEndoMutation();
+  const navigate = useNavigate();
+
+  const { refetch: refetchEndo } = useEndoQuery({ variables: { id: endoId } });
 
   const onSubmit = async (formInput: EndoFormValues) => {
     const { brand, serialNum, type, model, dryingTime, tray } = formInput;
@@ -48,13 +52,35 @@ const EditEndo = () => {
       dryingTime: Number(dryingTime),
     };
     try {
-      await updateEndo({ variables: { id: endoId, input } });
-      dispatch(
-        showToast({
-          message: "Successfully Updated",
-          variant: "success",
-        })
-      );
+      const result = await updateEndo({
+        variables: { id: endoId, input },
+        // have to explicitly update cache bcause the "position" would not get updated
+        // because the field resovler "position" is calculated based on endo.tray.row and endo.tray.container.col
+        update: () => {
+          refetchEndo();
+        },
+      });
+
+      if (result.data?.updateEndo) {
+        navigate(`/endo/${result.data.updateEndo.id}`, {
+          state: { prev: `endo/edit/${result.data.updateEndo.id}` },
+        });
+
+        console.log("result", result);
+        dispatch(
+          showToast({
+            message: "Successfully Updated",
+            variant: "success",
+          })
+        );
+      } else {
+        dispatch(
+          showToast({
+            message: "An error occured",
+            variant: "error",
+          })
+        );
+      }
     } catch (error) {
       dispatch(
         showToast({
@@ -74,7 +100,7 @@ const EditEndo = () => {
 
   return (
     <Layout>
-      <EndoEditor onSubmit={onSubmit} initialData={initialData} />
+      <EndoEditor onSubmit={onSubmit} initialData={initialData} isEdit />
     </Layout>
   );
 };

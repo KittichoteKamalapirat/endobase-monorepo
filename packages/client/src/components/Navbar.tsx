@@ -8,10 +8,9 @@ import { brandName, ICON_SIZE } from "../constants";
 import { useLogoutMutation } from "../generated/graphql";
 import { client as apolloClient } from "../lib/apollo";
 import { urlResolver } from "../lib/UrlResolver";
-import logo from "../logo.svg";
+
 import { ACTIVE_PAGE_CLASSNAMES, primaryColor } from "../theme";
 import Button, { ButtonTypes } from "./Buttons/Button";
-import { CONTAINER_TAB_OBJ } from "./Tabs/CONTAINER_TAB_TYPE";
 
 enum PATH_ENUM {
   ACTIVITIES = "/activities",
@@ -35,10 +34,14 @@ const Navbar = () => {
   return (
     <nav className="z-100 fixed bg-grey-0 container px-10 py-2 flex flex-wrap justify-between items-center mx-auto top-0">
       <a href={urlResolver.index()} className="flex items-center">
-        <img src={logo} className="mr-3 h-6 sm:h-9" alt={`${brandName} logo`} />
-        <span className="self-center text-xl font-semibold whitespace-nowrap hover:underline">
+        <img
+          src="/logo.svg"
+          className="mr-3 h-6 sm:h-9"
+          alt={`${brandName} logo`}
+        />
+        {/* <span className="self-center text-xl font-semibold whitespace-nowrap hover:underline">
           {brandName}
-        </span>
+        </span> */}
       </a>
 
       <div className="hidden w-full md:block md:w-auto" id="navbar-default">

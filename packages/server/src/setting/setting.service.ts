@@ -51,11 +51,13 @@ export class SettingService {
   }
 
   async updateByName(input: UpdateSettingInput): Promise<Setting | Error> {
-    const setting = await this.findByName(input.name);
+    const setting = await this.settingRepository.findOne({
+      where: { name: input.name },
+    });
 
     if (!setting) return new Error('Cannot find the setting');
 
-    const updatedSettingInput = { ...setting, value: input.value };
+    const updatedSettingInput = { ...setting, value: input.value }; // make sure the is not relation nested in ...setting
     const updatedSetting = await this.settingRepository.save(
       updatedSettingInput,
     );

@@ -24,19 +24,26 @@ export const ENDO_STATUS_OBJ = {
   DISINFECTION_PASSED: 'disinfection_passed',
   DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
+  NO_ENDO: 'no_endo',
 } as const;
 
-export type ENDO_STATUS =
-  | 'ready'
-  | 'expire_soon'
-  | 'being_used'
-  | 'expired'
-  | 'expired_and_out' // session created, out to be wash soon
-  | 'leak_test_failed'
-  | 'leak_test_passed'
-  | 'disinfection_failed'
-  | 'disinfection_passed'
-  | 'drying';
+export type ENDO_STATUS_KEYS = keyof typeof ENDO_STATUS_OBJ;
+export type ENDO_STATUS = typeof ENDO_STATUS_OBJ[ENDO_STATUS_KEYS];
+
+// // export type ENDO_STATUS = keyof typeof ENDO_STATUS_OBJ;
+
+// export type ENDO_STATUS =
+//   | 'ready'
+//   | 'expire_soon'
+//   | 'being_used'
+//   | 'expired'
+//   | 'expired_and_out' // session created, out to be wash soon
+//   | 'leak_test_failed'
+//   | 'leak_test_passed'
+//   | 'disinfection_failed'
+//   | 'disinfection_passed'
+//   | 'drying'
+//   | 'no_endo';
 
 export const statusToColor = {
   [ENDO_STATUS_OBJ.READY]: 'green',
@@ -49,6 +56,8 @@ export const statusToColor = {
   [ENDO_STATUS_OBJ.DISINFECTION_PASSED]: 'black',
   [ENDO_STATUS_OBJ.DISINFECTION_FAILED]: 'black',
   [ENDO_STATUS_OBJ.DRYING]: 'blue',
+
+  [ENDO_STATUS_OBJ.NO_ENDO]: 'black',
 };
 @ObjectType()
 @Entity()

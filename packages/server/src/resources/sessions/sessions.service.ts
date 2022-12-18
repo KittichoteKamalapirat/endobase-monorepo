@@ -97,7 +97,7 @@ export class SessionsService {
         patient = existingPatient;
       }
       const session = await this.sessionsRepository.findOneBy({ id });
-      const newSession = { ...session, patientId: patient.id };
+      const newSession = { ...session, patientId: patient.id }; // MAKE SURE this is no relation nested
       await this.sessionsRepository.save(newSession);
       return newSession;
     } catch (error) {

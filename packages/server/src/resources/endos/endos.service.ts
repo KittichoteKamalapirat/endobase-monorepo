@@ -61,11 +61,13 @@ export class EndosService {
   }
 
   async updateEndo(id: string, input: UpdateEndoInput): Promise<Endo | Error> {
-    const endo = await this.findOne(id);
+    const endo = await this.endosRepository.findOneBy({ id });
     if (!endo) return new Error('Cannot find the endoscope');
 
     const updatedEndo = { ...endo, ...input };
-    return this.endosRepository.save(updatedEndo);
+
+    const result = await this.endosRepository.save(updatedEndo);
+    return result;
   }
 
   async remove(id: string): Promise<BooleanResponse> {

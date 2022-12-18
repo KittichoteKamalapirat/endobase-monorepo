@@ -68,7 +68,7 @@ export const snapshotColumns = () => {
                   return (
                     <div>
                       <div className="flex items-center gap-2">
-                        <div className="font-bold">{key}</div>
+                        <div className="font-bold">{key}:</div>
                         <div>
                           {decodedObj[key as keyof typeof decodedObj]
                             ? "True"

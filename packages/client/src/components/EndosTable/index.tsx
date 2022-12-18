@@ -169,7 +169,7 @@ const EndosTable = () => {
                       cell.column.Header !== "Action"
                         ? () =>
                             navigate(`/endo/${(row.original as Endo).id}`, {
-                              state: { prev: "setting" },
+                              state: { prev: "" },
                             })
                         : undefined
                     }

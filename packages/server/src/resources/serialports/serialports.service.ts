@@ -16,6 +16,8 @@ import {
   MySerialPort,
 } from '../../types/CONTAINER_TYPE';
 import { formatSTS } from '../../utils/formatSTS';
+import { getConnectedArduinos } from '../../utils/getConnectedArduinos';
+import { initSerialports } from '../../utils/initSerialPorts';
 import { rowNumToLEDPositionTwoCols } from '../../utils/rowNumToLEDPositionTwoCols';
 import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
@@ -25,10 +27,6 @@ import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 
-interface ParserAndContainer {
-  col: CONTAINER_TYPE_VALUES;
-  parser: ReadlineParser;
-}
 @Injectable()
 export class SerialportsService {
   private readonly logger = new Logger(AppService.name);
@@ -105,7 +103,7 @@ export class SerialportsService {
   }
   // @Cron(CronExpression.EVERY_10_MINUTES)
   // @Cron(CronExpression.EVERY_HOUR)
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   checkSystemStatus() {
     console.log('-----------check status cron----------');
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
@@ -123,6 +121,12 @@ export class SerialportsService {
     this.logger.log('Read STS every 1 sec');
   }
 
+  @Cron(CronExpression.EVERY_MINUTE)
+  async checkSerialportConnections() {
+    const connectedArduinos = await getConnectedArduinos();
+    // recheck ports
+    initSerialports({ connectedArduinos, serialports: this.serialports });
+  }
   // also could be use when turn lights on
   writeColor({
     col,

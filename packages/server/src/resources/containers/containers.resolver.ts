@@ -37,7 +37,7 @@ export class ContainersResolver {
   }
 
   @Query(() => [Container], { name: 'containers' })
-  findAll() {
+  async findAll() {
     return this.containersService.findAll();
   }
 

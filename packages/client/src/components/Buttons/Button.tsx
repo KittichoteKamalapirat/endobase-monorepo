@@ -61,27 +61,27 @@ const useClassName = ({
   extraClass,
   height,
 }: ClassProps) => {
-  const commonClass = `no-underline px-4 py-2 rounded-md ${fontSize} ${height} ${spacing} ${borderRadius} ${extraClass} ${
+  const commonClass = `no-underline px-4 rounded-md ${fontSize} ${height} ${spacing} ${borderRadius} ${extraClass} ${
     disabled ? "opacity-50 cursor-not-allowed" : ""
   }`;
   const borderClass = `${borderColour} ${borderWidth}`;
 
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `hover:bg-grey-100 ${fontColor} ${borderClass} ${commonClass}`;
+      return `hover:bg-grey-100 py-2 ${fontColor} ${borderClass} ${commonClass}`;
 
     case ButtonTypes.SECONDARY:
-      return `bg-grey-100 hover:bg-grey-200 text-grey-250 text-opacity-70 text-11px font-nunito ${commonClass}`;
+      return `bg-grey-100 hover:bg-grey-200 py-2  text-grey-250 text-opacity-70 text-11px font-nunito ${commonClass}`;
 
     case ButtonTypes.TEXT:
       return `${fontColor} hover:text-primary-hovered text-15px underline px-0 ${commonClass}`;
 
     case ButtonTypes.ACTION:
-      return `bg-action hover:bg-primary-hovered text-white ${commonClass}`;
+      return `bg-action hover:bg-primary-hovered py-2 text-white ${commonClass}`;
 
     case ButtonTypes.PRIMARY:
     default:
-      return `bg-primary-primary hover:bg-primary-hovered text-white ${commonClass}`;
+      return `bg-primary-primary hover:bg-primary-hovered py-2 text-white ${commonClass}`;
   }
 };
 

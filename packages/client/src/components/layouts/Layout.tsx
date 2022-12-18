@@ -28,15 +28,17 @@ const Layout = ({
   extraStyle = "",
 }: Props) => {
   return (
-    <div className="pt-24 bg-grey-0 text-grey-900 h-min-screen ">
+    <div>
       <Navbar />
-      <main
-        className={`flex-1 h-full w-full ${justifyContent} ${alignItems} ${extraStyle} `}
-      >
-        <Container>{children}</Container>
-      </main>
+      <div className="bg-grey-0 text-grey-900 h-min-screen ">
+        <main
+          className={`flex-1 h-full w-full ${justifyContent} ${alignItems} ${extraStyle} `}
+        >
+          <Container>{children}</Container>
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
     </div>
   );
 };

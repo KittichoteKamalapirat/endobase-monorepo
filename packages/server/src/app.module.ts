@@ -21,13 +21,22 @@ import { TraysModule } from './resources/trays/trays.module';
 import { UsersModule } from './resources/users/users.module';
 import { SettingModule } from './setting/setting.module';
 import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
+import { ConfigModule } from '@nestjs/config';
+
+// could be "mac-dev", "win-dev", "wind-prod"
+const ENV = process.env.NODE_ENV;
+console.log('envvvv',ENV)
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath:  !ENV ? '.env.prod' : `.env.${ENV}`,
+      isGlobal: true
+    }),
     // graphql
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: 'http://localhost:3000',
+        origin: ['http://localhost',"http://endosupply","http://192.168.1.187" ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -35,10 +44,11 @@ import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
       installSubscriptionHandlers: true,
       subscriptions: {
         'graphql-ws': true,
-        'subscriptions-transport-ws': true, // without this, it won't work since graphql playground does not support graphql-ws yet, so have to use both
+        'subscriptions-transport-ws': true, // with   out this, it won't work since graphql playground does not support graphql-ws yet, so have to use both
       },
 
       context: ({ req, res }) => {
+    
         // get the cookie from the request
         // verify the cookie
         // attach the user object to the request object
@@ -66,4 +76,7 @@ import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
   controllers: [AppController],
   providers: [AppService],
 })
+
+
+
 export class AppModule {}

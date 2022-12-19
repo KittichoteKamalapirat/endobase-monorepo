@@ -23,9 +23,9 @@ export const CONTAINER_TO_SERIALPORT_PATH_MAPPER: Record<
   CONTAINER_TYPE_VALUES,
   string
 > = {
-  a: '/dev/tty.usbserial-0001',
-  b: '/dev/tty.usbserial-3',
-  c: '/dev/tty.usbserial-5',
+  a: 'COM3',
+  b: 'COM6',
+  c: 'COM7',
   // d: '/dev/tty.usbserial-7',
   // e: '/dev/tty.usbserial-9',
   // f: '/dev/tty.usbserial-11',

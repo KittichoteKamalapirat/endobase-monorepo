@@ -94,6 +94,7 @@ export class SerialportsModule {
       useValue: serialports,
     };
 
+
     return {
       module: SerialportsModule,
       providers: [serialportsProvider],

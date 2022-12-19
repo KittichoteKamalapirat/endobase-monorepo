@@ -1,6 +1,6 @@
-export const serialportPathA = '/dev/tty.usbserial-0001';
-export const serialportPathB = '/dev/tty.usbserial-3';
-export const serialportPathC = '/dev/tty.usbserial-5';
+// export const serialportPathA = '/dev/tty.usbserial-0001';
+// export const serialportPathB = '/dev/tty.usbserial-3';
+// export const serialportPathC = '/dev/tty.usbserial-5';
 
 export const RED_COLOR_COMMAND = '255,000,000'; // expired
 export const GREEN_COLOR_COMMAND = '000,255,000'; // ready
@@ -26,5 +26,6 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 // Serial Ports
 export const SERIALPORTS_PROVIDER = 'allSerialports'; // for provider in serial ports module
 
-export const ARDUINO_VENDOR_ID = '10c4';
-export const ARDUINO_PATH_REGEXP = new RegExp('/dev/tty.usb*');
+// export const ARDUINO_VENDOR_ID = '10C4';
+// export const ARDUINO_PATH_REGEXP = new RegExp('COM');
+

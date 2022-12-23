@@ -1,0 +1,10 @@
+pm2 start yarn --name endo-supply-client -- prod-start
+
+
+yarn --cwd /"Program Files"/endobase-monorepo/packages/client dev
+
+
+pm2 start yarn --name endo-supply-client -- --cwd /"Program Files"/endobase-monorepo/packages/client prod-start
+
+
+serve -l 80 -s build &> client.log &

@@ -6,8 +6,8 @@ import { SerialPort } from 'serialport';
 
 export const CONTAINER_TYPE_OBJ = {
   a: 'A',
-  b: 'B',
-  c: 'C',
+  // b: 'B',
+  // c: 'C',
   // d: 'D',
   // e: 'E',
   // f: 'F',
@@ -24,8 +24,8 @@ export const CONTAINER_TO_SERIALPORT_PATH_MAPPER: Record<
   string
 > = {
   a: 'COM3',
-  b: 'COM6',
-  c: 'COM7',
+  // b: 'COM9',
+  // c: 'COM10',
   // d: '/dev/tty.usbserial-7',
   // e: '/dev/tty.usbserial-9',
   // f: '/dev/tty.usbserial-11',

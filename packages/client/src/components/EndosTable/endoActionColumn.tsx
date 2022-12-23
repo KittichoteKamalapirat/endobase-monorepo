@@ -87,7 +87,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.DISINFECTION_PASSED:
       return (
         <LinkButton
-          label="Dry"
+          label="Store"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
         />

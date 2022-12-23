@@ -6,12 +6,12 @@ export default class CreateContainers implements Seeder {
     await factory(Container)().create({
       col: 'a',
     });
-    await factory(Container)().create({
-      col: 'b',
-    });
-    await factory(Container)().create({
-      col: 'c',
-    });
+    // await factory(Container)().create({
+    //   col: 'b',
+    // });
+    // await factory(Container)().create({
+    //   col: 'c',
+    // });
     // await factory(Container)().create({
     //   col: 'd',
     // });

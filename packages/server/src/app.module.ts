@@ -36,7 +36,7 @@ console.log('envvvv',ENV)
     // graphql
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: ['http://localhost',"http://endosupply","http://192.168.1.187" ], // in url bar: "endosupply/", "localhost"
+        origin: ['http://localhost',"http://endosupply","http://172.23.240.1" ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

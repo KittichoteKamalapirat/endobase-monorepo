@@ -212,6 +212,7 @@ type Mutation {
   updateEndo(id: String!, input: UpdateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
+  washWithoutStoring(id: String!): Session!
   createAction(input: CreateActionInput!): Action!
   removeAction(id: Int!): Action!
   createSession(input: CreateSessionInput!): Session!

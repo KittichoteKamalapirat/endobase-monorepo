@@ -1,0 +1,5 @@
+mutation WashWithoutStoring($id: String!) {
+  washWithoutStoring(id: $id) {
+    id
+  }
+}

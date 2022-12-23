@@ -75,7 +75,7 @@ const Session = () => {
       <div className="flex justify-start my-4">
         <LinkButton
           label="Back"
-          href={prev ? `/${prev}` : "/"}
+          href={prev ? `${prev}` : "/"}
           type={ButtonTypes.OUTLINED}
         />
       </div>

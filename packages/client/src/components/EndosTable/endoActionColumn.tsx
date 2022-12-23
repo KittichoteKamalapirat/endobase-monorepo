@@ -1,14 +1,17 @@
-import "react-tooltip/dist/react-tooltip.css";
-import { Tooltip } from "react-tooltip";
+import { BsInboxesFill } from "react-icons/bs";
 import { FaFan } from "react-icons/fa";
+import { GiWaterRecycling } from "react-icons/gi";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "react-tooltip/dist/react-tooltip.css";
+import { ICON_SIZE } from "../../constants";
+import { useWashWithoutStoringMutation } from "../../generated/graphql";
 import { showToast } from "../../redux/slices/toastReducer";
+import { primaryColor } from "../../theme";
 import { ENDO_STATUS } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
-import { GiWaterRecycling } from "react-icons/gi";
-import { ICON_SIZE } from "../../constants";
-import { primaryColor } from "../../theme";
+
 
 interface Props {
   pickEndo: any;
@@ -17,6 +20,9 @@ interface Props {
 }
 const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const [washWithoutStoring] = useWashWithoutStoringMutation()
 
   const handleUseEndo = async (id: string) => {
     try {
@@ -38,6 +44,31 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     }
   };
 
+
+  const handleRewash = async(id: string) => {
+    try {  
+      const result = await washWithoutStoring({variables: {id}})
+
+      const sessionId = result.data?.washWithoutStoring.id
+      await refetchEndos()
+      navigate(`/session/${sessionId}`, {
+      state: { prev: "/" },
+    });
+      
+    } catch (error) {
+      dispatch(
+        showToast({
+          message: "An error occured!",
+          variant: "error",
+        })
+      );
+      
+    }
+  
+
+    
+
+  }
   // 'ready', => use
   // 'expire_soon', => use
   //  'being_used', => wash
@@ -57,10 +88,10 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
     case ENDO_STATUS.READY:
-      return <Button label="Use" onClick={() => handleUseEndo(endoId)} />;
+      return <Button label="Pick" onClick={() => handleUseEndo(endoId)} />;
 
     case ENDO_STATUS.EXPIRED:
-      return <Button label="Take out" onClick={() => handleUseEndo(endoId)} />;
+      return <Button label="Take out and wash" onClick={() => handleUseEndo(endoId)} />;
 
     case ENDO_STATUS.BEING_USED:
     case ENDO_STATUS.EXPIRED_AND_OUT:
@@ -86,11 +117,22 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
     case ENDO_STATUS.DISINFECTION_PASSED:
       return (
-        <LinkButton
+       <div className="flex flex-col gap-2">
+         <LinkButton
           label="Store"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
+          leftIcon={<BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />}
         />
+        {/* Combine Use and wash */}
+         <Button
+          label="Rewash"
+          onClick={() => handleRewash(endoId)}
+          type={ButtonTypes.SECONDARY}
+          startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          
+        />
+       </div>
       );
     case ENDO_STATUS.DRYING:
       return (

@@ -84,7 +84,7 @@ const EndosSettingTable = () => {
           label="Add"
           onClick={() => {
             navigate("/endo/new", {
-              state: { prev: `setting` },
+              state: { prev: `/setting` },
             });
           }}
           type={ButtonTypes.PRIMARY}
@@ -136,7 +136,7 @@ const EndosSettingTable = () => {
                 key={index}
                 onClick={() =>
                   navigate(`/endo/${(row.original as Endo).id}`, {
-                    state: { prev: "setting" },
+                    state: { prev: "/setting" },
                   })
                 }
                 className="border-b-2 border-solid border-grey-50 hover:bg-primary-50 hover:cursor-pointer"

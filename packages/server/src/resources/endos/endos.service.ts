@@ -152,8 +152,8 @@ export class EndosService {
     const endo = await this.endosRepository.findOneBy({ id });
 
     if (!endo) return new Error('No endoscope found');
-    if (toBeStatus === 'ready' && endo.status !== 'drying')
-      return new Error('The endoscope is not drying');
+    // if ( !["ready","drying", "disinfection_passed"].includes(toBeStatus)  )
+    //   return new Error('The endoscope is not drying');
 
     const updatedEndo = { ...endo, status: toBeStatus };
 
@@ -266,5 +266,19 @@ export class EndosService {
     // what if there are many
 
     return this.sessionsService.findCurrentSessionByEndoId(endoId);
+  }
+
+
+  async washWithoutStoring(id: string){
+    // do 3 things
+    // end session
+    // update endo status from disinfection_passed to leaktest_passed
+    // create a new session
+  
+    await this.sessionsService.endSessionByEndoId(id)
+    await this.updateStatus(id, "being_used")
+    const newSession = await this.sessionsService.create({endoId: id, endoWasExpired: false})
+
+    return newSession
   }
 }

@@ -35,7 +35,7 @@ const CreateEndo = () => {
       const result = await createEndo({ variables: { input } });
       if (result.data?.createEndo) {
         navigate(`/endo/${result.data.createEndo.id}`, {
-          state: { prev: "endo/new" },
+          state: { prev: "/endo/new" },
         });
 
         dispatch(

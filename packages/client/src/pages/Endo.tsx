@@ -65,7 +65,7 @@ const EndoPage = () => {
         })
       );
       await refetch(); // update cache after delete
-      navigate(prev ? `/${prev}` : "/");
+      navigate(prev ? `${prev}` : "/");
     } else
       dispatch(
         showToast({
@@ -87,7 +87,7 @@ const EndoPage = () => {
         <div className="flex  justify-start my-4">
           <LinkButton
             label="Back"
-            href={prev ? `/${prev}` : "/"}
+            href={prev ? `${prev}` : "/"}
             type={ButtonTypes.OUTLINED}
           />
         </div>
@@ -99,7 +99,7 @@ const EndoPage = () => {
               label="Edit"
               onClick={() => {
                 navigate(`/endo/edit/${id}`, {
-                  state: { prev: `endo/${id}` },
+                  state: { prev: `/endo/${id}` },
                 });
               }}
               type={ButtonTypes.OUTLINED}

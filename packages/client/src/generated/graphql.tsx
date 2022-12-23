@@ -197,6 +197,7 @@ export type Mutation = {
   updateSetting: Setting;
   updateTray: Tray;
   updateUser: User;
+  washWithoutStoring: Session;
 };
 
 
@@ -348,6 +349,11 @@ export type MutationUpdateTrayArgs = {
 
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
+};
+
+
+export type MutationWashWithoutStoringArgs = {
+  id: Scalars['String'];
 };
 
 export type Officer = {
@@ -666,6 +672,13 @@ export type UpdateEndoMutationVariables = Exact<{
 
 
 export type UpdateEndoMutation = { __typename?: 'Mutation', updateEndo: { __typename?: 'Endo', id: string, trayId: string, serialNum: string, dryingTime: number, brand: string, type: string, model: string } };
+
+export type WashWithoutStoringMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type WashWithoutStoringMutation = { __typename?: 'Mutation', washWithoutStoring: { __typename?: 'Session', id: string } };
 
 export type EndoQueryVariables = Exact<{
   id: Scalars['String'];
@@ -1285,6 +1298,39 @@ export function useUpdateEndoMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateEndoMutationHookResult = ReturnType<typeof useUpdateEndoMutation>;
 export type UpdateEndoMutationResult = Apollo.MutationResult<UpdateEndoMutation>;
 export type UpdateEndoMutationOptions = Apollo.BaseMutationOptions<UpdateEndoMutation, UpdateEndoMutationVariables>;
+export const WashWithoutStoringDocument = gql`
+    mutation WashWithoutStoring($id: String!) {
+  washWithoutStoring(id: $id) {
+    id
+  }
+}
+    `;
+export type WashWithoutStoringMutationFn = Apollo.MutationFunction<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>;
+
+/**
+ * __useWashWithoutStoringMutation__
+ *
+ * To run a mutation, you first call `useWashWithoutStoringMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWashWithoutStoringMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [washWithoutStoringMutation, { data, loading, error }] = useWashWithoutStoringMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWashWithoutStoringMutation(baseOptions?: Apollo.MutationHookOptions<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>(WashWithoutStoringDocument, options);
+      }
+export type WashWithoutStoringMutationHookResult = ReturnType<typeof useWashWithoutStoringMutation>;
+export type WashWithoutStoringMutationResult = Apollo.MutationResult<WashWithoutStoringMutation>;
+export type WashWithoutStoringMutationOptions = Apollo.BaseMutationOptions<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>;
 export const EndoDocument = gql`
     query Endo($id: String!) {
   endo(id: $id) {

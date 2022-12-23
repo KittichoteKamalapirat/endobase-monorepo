@@ -9,6 +9,7 @@ import {
 } from "react-table";
 import {
   Endo,
+  useEndoQuery,
   useEndosQuery,
   usePickEndoMutation,
 } from "../../generated/graphql";
@@ -43,6 +44,7 @@ const EndosTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
+  
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
@@ -97,7 +99,7 @@ const EndosTable = () => {
           label="Add"
           onClick={() => {
             navigate("/endo/new", {
-              state: { prev: `setting` },
+              state: { prev: `/setting` },
             });
           }}
           type={ButtonTypes.PRIMARY}
@@ -169,7 +171,7 @@ const EndosTable = () => {
                       cell.column.Header !== "Action"
                         ? () =>
                             navigate(`/endo/${(row.original as Endo).id}`, {
-                              state: { prev: "" },
+                              state: { prev: "/" },
                             })
                         : undefined
                     }

@@ -166,7 +166,7 @@ const ActionsTable = () => {
                 key={index}
                 onClick={() =>
                   navigate(`/session/${(row.original as Action).sessionId}`, {
-                    state: { prev: "activities" },
+                    state: { prev: "/activities" },
                   })
                 }
                 className={classNames(

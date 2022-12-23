@@ -63,7 +63,7 @@ const EditEndo = () => {
 
       if (result.data?.updateEndo) {
         navigate(`/endo/${result.data.updateEndo.id}`, {
-          state: { prev: `endo/edit/${result.data.updateEndo.id}` },
+          state: { prev: `/endo/edit/${result.data.updateEndo.id}` },
         });
 
         console.log("result", result);

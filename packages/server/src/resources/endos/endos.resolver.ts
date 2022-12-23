@@ -13,6 +13,8 @@ import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { UpdateEndoInput } from './dto/update-endo.input';
 import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
+import { Session } from '../sessions/entities/session.entity';
+
 
 @Resolver(() => Endo)
 export class EndosResolver {
@@ -90,6 +92,13 @@ export class EndosResolver {
     @Args({ name: 'id', type: () => String }) id: string,
   ): Promise<Endo | Error> {
     return this.endosService.pickEndo(id);
+  }
+
+  @Mutation(() => Session)
+  async washWithoutStoring(
+    @Args({ name: 'id', type: () => String }) id: string,
+  ): Promise<Session | Error> {
+    return this.endosService.washWithoutStoring(id);
   }
 
   //   @ResolveField()

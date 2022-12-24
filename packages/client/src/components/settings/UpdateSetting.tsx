@@ -8,7 +8,7 @@ import Button, { HTMLButtonType } from "../Buttons/Button";
 import TextField, { TextFieldTypes } from "../forms/TextField";
 import HDivider from "../layouts/HDivider";
 import { WiHumidity } from "react-icons/wi";
-import { TbTemperature } from "react-icons/tb";
+import { TbBulb, TbTemperature } from "react-icons/tb";
 import { showToast } from "../../redux/slices/toastReducer";
 import { useDispatch } from "react-redux";
 
@@ -67,12 +67,16 @@ const UpdateSetting = ({ setting }: Props) => {
 
   const icon = (() => {
     switch (setting.name) {
-      case "containerSnapshotIntervalMins":
+      case "containerSnapshotIntervalMin":
         return <BiTimeFive size={ICON_SIZE + 10} />;
       case "humidityThreshold":
         return <WiHumidity size={ICON_SIZE + 10} />;
       case "temperatureThreshold":
         return <TbTemperature size={ICON_SIZE + 10} />;
+      case "trayLocationBlinkingSec":
+        return <TbBulb
+          size={ICON_SIZE + 10}
+        />
       default:
         return null;
     }

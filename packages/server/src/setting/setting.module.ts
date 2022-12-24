@@ -9,4 +9,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [SettingResolver, SettingService],
   exports: [SettingService],
 })
-export class SettingModule {}
+export class SettingModule { }

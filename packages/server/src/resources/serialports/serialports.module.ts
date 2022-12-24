@@ -3,15 +3,12 @@ import {
   forwardRef,
   Injectable,
   Module,
-  Provider,
+  Provider
 } from '@nestjs/common';
-import { SerialPort } from 'serialport';
 import { SERIALPORTS_PROVIDER } from '../../constants';
 import { SettingModule } from '../../setting/setting.module';
 import {
-  containerTypeOptions,
-  CONTAINER_TO_SERIALPORT_PATH_MAPPER,
-  MySerialPort,
+  MySerialPort
 } from '../../types/CONTAINER_TYPE';
 import { getConnectedArduinos } from '../../utils/getConnectedArduinos';
 import { initSerialports } from '../../utils/initSerialPorts';

@@ -9,9 +9,10 @@ import {
 
 // setting
 export type SETTING_NAMES =
-  | 'containerSnapshotIntervalMins'
+  | 'containerSnapshotIntervalMin'
   | 'humidityThreshold'
-  | 'temperatureThreshold';
+  | 'temperatureThreshold'
+  | 'trayLocationBlinkingSec';
 
 @ObjectType()
 @Entity()

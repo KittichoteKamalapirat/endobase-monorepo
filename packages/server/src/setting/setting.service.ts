@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AppService } from '../app.service';
@@ -11,10 +11,24 @@ import { Setting, SETTING_NAMES } from './entities/setting.entity';
 export class SettingService {
   private readonly logger = new Logger(AppService.name);
   private SNAPSHOT_INTERVAL_MINS = DEFAULT_SNAPSHOT_INTERVAL_MINS;
+  // public configSetting: { [key: string]: string } = {}
+
   constructor(
     @InjectRepository(Setting)
     private settingRepository: Repository<Setting>, // use database, make sure forFeature is in module
-  ) {}
+
+  ) { }
+
+
+  // async onModuleInit() {
+  //   const settings = await this.findAll()
+  //   settings.forEach(setting => {
+  //     const key = setting.name
+  //     const value = setting.value
+  //     this.configSetting[key] = value
+  //   })
+  // }
+
 
   // for serialports to use
   getSnapshotInterval() {
@@ -38,7 +52,7 @@ export class SettingService {
 
   async findSnapshotIntervalMins() {
     return this.settingRepository.findOne({
-      where: { name: 'containerSnapshotIntervalMins' },
+      where: { name: 'containerSnapshotIntervalMin' },
     });
   }
 
@@ -63,7 +77,7 @@ export class SettingService {
     );
 
     // update for serialports
-    if (setting.name === 'containerSnapshotIntervalMins')
+    if (setting.name === 'containerSnapshotIntervalMin')
       this.setSnapshotInterval(parseInt(updatedSetting.value));
 
     return updatedSetting;

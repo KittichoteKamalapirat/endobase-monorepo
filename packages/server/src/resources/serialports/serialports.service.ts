@@ -211,12 +211,13 @@ export class SerialportsService {
     col,
     row
   }: RowAndColInput) {
-    console.log('inside blinking function')
-    const seconds = 10
-    const milliInterval = 1000
-    let toBlinkCounter = seconds / (milliInterval / 1000)
+
+    const blinkSetting = (await this.settingService.findByName("trayLocationBlinkingSec"))
+    const secStr = blinkSetting.value
+
+    const frequencyInterval = 1000
+    let toBlinkCounter = Number(secStr) / (frequencyInterval / 1000)
     const blinkingInterval = setInterval(() => {
-      console.log('inside setinterval')
       if (toBlinkCounter <= 0) {
         clearInterval(blinkingInterval)
         return // so it does not move to the next line
@@ -228,7 +229,7 @@ export class SerialportsService {
       });
 
       toBlinkCounter--
-    }, milliInterval);
+    }, frequencyInterval);
 
     return true
   }

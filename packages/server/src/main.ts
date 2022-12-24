@@ -1,13 +1,24 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
 import Redis from 'ioredis';
 import { AppModule } from './app.module';
 import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
+import fs from "fs"
+import path from 'path'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  const certPath = path.resolve(__dirname, '../.cert/endosupply+4.pem')
+  const keyPath = path.resolve(__dirname, '../.cert/endosupply+4-key.pem')
+  const httpsOptions = {
+    cert: fs.readFileSync(certPath),
+    key: fs.readFileSync(keyPath),
+  };
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { httpsOptions });
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -15,6 +26,7 @@ async function bootstrap() {
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
+  // app.set('trust proxy', 1);
 
   app.use(
     session({
@@ -26,15 +38,18 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true, // so that Javascript's front end can't access cookie
-        sameSite: 'lax', // csrf
-        secure: IS_PROD, // cookie only works in https
-        domain: IS_PROD ? '.cookknow.com' : undefined, // no need if in development
+        sameSite: 'lax', // csrf // browser, has nothing to do with server?
+        // secure: IS_PROD, // cookie only works in https
+        secure: true, // cookie only works in https
+        // domain: IS_PROD ? '.cookknow.com' : undefined, // no need if in development
       },
       saveUninitialized: false,
       secret: SESSION_SECRET,
       resave: false,
     }),
   );
+
+
 
   await app.listen(4001);
 }

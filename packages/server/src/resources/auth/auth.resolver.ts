@@ -11,7 +11,7 @@ export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   //   @UseGuards(LocalAuthGuard)
   //   @UseGuards(GqlAuthGuard)
@@ -26,6 +26,7 @@ export class AuthResolver {
   @Query(() => User, { nullable: true })
   me(@Context() { req }: MyContext): Promise<User | null> {
     // Destructure the parameter array to req
+    console.log('my session', req.session)
 
     if (!req.session.userId) {
       return null;

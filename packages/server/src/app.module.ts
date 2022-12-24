@@ -25,19 +25,27 @@ import { ConfigModule } from '@nestjs/config';
 
 // could be "mac-dev", "win-dev", "wind-prod"
 const ENV = process.env.NODE_ENV;
-console.log('envvvv',ENV)
-console.log('hi')
+console
 
 @Module({
-imports: [
+  imports: [
     ConfigModule.forRoot({
-      envFilePath:  !ENV ? '.env.prod' : `.env.${ENV}`,
+      envFilePath: !ENV ? '.env.prod' : `.env.${ENV}`,
       isGlobal: true
     }),
     // graphql
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
-        origin: ['http://localhost',"http://endosupply","http://192.168.1.187" ], // in url bar: "endosupply/", "localhost"
+        origin: [
+          'http://localhost',
+          "http://endosupply",
+
+          'https://localhost',
+          'https://localhost/',
+          "https://endosupply",
+          "https://endosupply.com",
+
+          "http://172.21.32.1"], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -49,8 +57,9 @@ imports: [
       },
 
       context: ({ req, res }) => {
-        
-    
+        console.log('req.session', req.session)
+
+
         // get the cookie from the request
         // verify the cookie
         // attach the user object to the request object
@@ -81,4 +90,4 @@ imports: [
 
 
 
-export class AppModule {}
+export class AppModule { }

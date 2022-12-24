@@ -33,7 +33,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "set PORT=80 && react-scripts start",
+    "dev": "react-scripts start",
     "prod-start": "set PORT=80 && react-scripts start",
     "build": "react-scripts build",
     "prod-static": "serve -l 80 -s build",

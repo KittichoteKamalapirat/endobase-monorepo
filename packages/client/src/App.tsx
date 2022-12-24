@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
+import { config } from "./constants";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
 
 import Actions from "./pages/Actions";
@@ -25,6 +26,12 @@ function App() {
   const { data: confirmData, isOpen: confirmIsOpen } = useSelector(
     (state: RootState) => state.confirmModal
   );
+
+  console.log('configgg', config)
+
+  console.log('envvvv', process.env.SSL_CRT_FILE)
+  console.log('envvvv', process.env.SSL_KEY_FILE)
+
 
   const dispatch = useDispatch();
 

@@ -31,7 +31,7 @@ export class ActionsService {
     private serialportsService: SerialportsService,
     private endosService: EndosService,
     private endoCronsService: EndoCronsService,
-  ) {}
+  ) { }
 
   // if therre is existing officer (with the officerNum), use it
   // otherwise, create one!
@@ -117,11 +117,10 @@ export class ActionsService {
         });
 
         // TODO fix this // this was called right away
-        // // 2. create a schedule to expire_soon in 29 days
+        // // 2. create a schedule to expire_soon in 30 days
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expire_soon',
-          // seconds: dayToSec(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS),
           jsDate: dayjs()
             .add(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS, 'day')
             .toDate(),
@@ -132,7 +131,6 @@ export class ActionsService {
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expired',
-          // seconds: dayToSec(MAX_STORAGE_DAYS),
           jsDate: dayjs().add(MAX_STORAGE_DAYS, 'day').toDate(),
           saveToDb: true,
         });

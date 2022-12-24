@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
+import { SimpleConsoleLogger } from 'typeorm';
 import { AppService } from '../../app.service';
 import {
   BLACK_COLOR_COMMAND,
@@ -26,6 +27,7 @@ import { ENDO_STATUS } from '../endos/entities/endo.entity';
 import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
+import { RowAndColInput } from './dto/row-and-col.input';
 
 @Injectable()
 export class SerialportsService {
@@ -108,8 +110,7 @@ export class SerialportsService {
     console.log('-----------check status cron----------');
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
       console.log(
-        `serialport ${key} is ${
-          this.serialports[key]?.isOpen ? 'open' : 'close'
+        `serialport ${key} is ${this.serialports[key]?.isOpen ? 'open' : 'close'
         }`,
       );
     });
@@ -206,6 +207,31 @@ export class SerialportsService {
     });
   }
 
+  async blinkLocation({
+    col,
+    row
+  }: RowAndColInput) {
+    console.log('inside blinking function')
+    const seconds = 10
+    const milliInterval = 1000
+    let toBlinkCounter = seconds / (milliInterval / 1000)
+    const blinkingInterval = setInterval(() => {
+      console.log('inside setinterval')
+      if (toBlinkCounter <= 0) {
+        clearInterval(blinkingInterval)
+        return // so it does not move to the next line
+      }
+      this.writeColor({
+        col: col,
+        row: row,
+        endoStatus: toBlinkCounter % 2 === 0 ? "ready" : "being_used",
+      });
+
+      toBlinkCounter--
+    }, milliInterval);
+
+    return true
+  }
   containerIsConnected(col: CONTAINER_TYPE_VALUES) {
     return !!this.serialports[col];
   }

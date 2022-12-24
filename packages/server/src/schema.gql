@@ -168,6 +168,7 @@ type PaginatedSnapshotOutput {
 }
 
 type Query {
+  testPort: Boolean!
   snapshots: [Snapshot!]!
   paginatedSnapshots(input: PaginatedInput!): PaginatedSnapshotOutput!
   containers: [Container!]!
@@ -200,6 +201,7 @@ input PaginatedInput {
 }
 
 type Mutation {
+  blinkLocation(input: RowAndColInput!): Boolean!
   createSnapshot(input: CreateSnapshotInput!): Snapshot!
   createContainer(createContainerInput: CreateContainerInput!): Container!
   removeContainer(id: Int!): Container!
@@ -232,6 +234,11 @@ type Mutation {
   removeUser(id: Int!): User!
   login(input: LoginInput!): UserResponse!
   logout: Boolean!
+}
+
+input RowAndColInput {
+  col: String!
+  row: Int!
 }
 
 input CreateSnapshotInput {

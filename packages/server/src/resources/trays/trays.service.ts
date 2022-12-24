@@ -44,6 +44,7 @@ export class TraysService {
     return `This action updates a #${id} tray`;
   }
 
+
   remove(id: number) {
     return `This action removes a #${id} tray`;
   }

@@ -3,26 +3,30 @@ import { Control, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  Endo,
   EndoQuery,
   Exact,
+  useBlinkLocationMutation,
   useCreateActionMutation,
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
+import { endoColumns } from "./EndosTable/endoColumns";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
+  endo: Endo
   refetchEndo: (
     variables?:
       | Partial<
-          Exact<{
-            id: string;
-          }>
-        >
+        Exact<{
+          id: string;
+        }>
+      >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -41,14 +45,23 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const CompleteSessionForm = ({ refetchEndo, containerClass }: Props) => {
+const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
+  const [blinkLocation] = useBlinkLocationMutation()
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
   }); // to update cache
 
   const dispatch = useDispatch();
+
+  const handleBlinkLocation = () => {
+    blinkLocation({
+      variables: {
+        input: { col: endo.tray.container.col, row: endo.tray.row }
+      }
+    })
+  }
 
   const {
     control,
@@ -112,12 +125,21 @@ const CompleteSessionForm = ({ refetchEndo, containerClass }: Props) => {
           />
         </div>
 
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="ml-2.5 w-24"
-          disabled={!testPassed}
-        />
+        <div className="flex gap-2">
+          <Button
+            label="Blink location"
+            buttonType={HTMLButtonType.BUTTON}
+            onClick={handleBlinkLocation}
+          />
+
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            disabled={!testPassed}
+          />
+
+        </div>
+
       </div>
     </form>
   );

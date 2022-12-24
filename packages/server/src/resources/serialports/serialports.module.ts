@@ -18,16 +18,17 @@ import { initSerialports } from '../../utils/initSerialPorts';
 import { ContainersModule } from '../containers/containers.module';
 import { SnapshotsModule } from '../snapshots/snapshots.module';
 import { SnapshotsService } from '../snapshots/snapshots.service';
+import { SerialportsResolver } from './serialports.resolver';
 import { SerialportsService } from './serialports.service';
 
 @Module({
   imports: [SnapshotsModule, forwardRef(() => ContainersModule), SettingModule],
-  providers: [SerialportsService],
+  providers: [SerialportsResolver, SerialportsService],
   exports: [SerialportsService],
 })
 @Injectable()
 export class SerialportsModule {
-  constructor(private snapshotsService: SnapshotsService) {}
+  constructor(private snapshotsService: SnapshotsService) { }
 
   // forRoot is just a convention, can be any name
 

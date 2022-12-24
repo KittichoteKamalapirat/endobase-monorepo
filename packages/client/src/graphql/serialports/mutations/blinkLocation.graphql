@@ -1,0 +1,3 @@
+mutation BlinkLocation($input: RowAndColInput!){
+  blinkLocation(input: $input)
+}

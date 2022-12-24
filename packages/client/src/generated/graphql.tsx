@@ -166,6 +166,7 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  blinkLocation: Scalars['Boolean'];
   createAction: Action;
   createContainer: Container;
   createEndo: Endo;
@@ -198,6 +199,11 @@ export type Mutation = {
   updateTray: Tray;
   updateUser: User;
   washWithoutStoring: Session;
+};
+
+
+export type MutationBlinkLocationArgs = {
+  input: RowAndColInput;
 };
 
 
@@ -413,6 +419,7 @@ export type Query = {
   settings: Array<Setting>;
   snapshotIntervalMins: Setting;
   snapshots: Array<Snapshot>;
+  testPort: Scalars['Boolean'];
   tray: Tray;
   trays: Array<Tray>;
   user: User;
@@ -462,6 +469,11 @@ export type QueryTrayArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['String'];
+};
+
+export type RowAndColInput = {
+  col: Scalars['String'];
+  row: Scalars['Int'];
 };
 
 export type Session = {
@@ -691,6 +703,13 @@ export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isConnected: boolean } } }> };
+
+export type BlinkLocationMutationVariables = Exact<{
+  input: RowAndColInput;
+}>;
+
+
+export type BlinkLocationMutation = { __typename?: 'Mutation', blinkLocation: boolean };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -1437,6 +1456,37 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
+export const BlinkLocationDocument = gql`
+    mutation BlinkLocation($input: RowAndColInput!) {
+  blinkLocation(input: $input)
+}
+    `;
+export type BlinkLocationMutationFn = Apollo.MutationFunction<BlinkLocationMutation, BlinkLocationMutationVariables>;
+
+/**
+ * __useBlinkLocationMutation__
+ *
+ * To run a mutation, you first call `useBlinkLocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBlinkLocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [blinkLocationMutation, { data, loading, error }] = useBlinkLocationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useBlinkLocationMutation(baseOptions?: Apollo.MutationHookOptions<BlinkLocationMutation, BlinkLocationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BlinkLocationMutation, BlinkLocationMutationVariables>(BlinkLocationDocument, options);
+      }
+export type BlinkLocationMutationHookResult = ReturnType<typeof useBlinkLocationMutation>;
+export type BlinkLocationMutationResult = Apollo.MutationResult<BlinkLocationMutation>;
+export type BlinkLocationMutationOptions = Apollo.BaseMutationOptions<BlinkLocationMutation, BlinkLocationMutationVariables>;
 export const CreateActionDocument = gql`
     mutation createAction($input: CreateActionInput!) {
   createAction(input: $input) {

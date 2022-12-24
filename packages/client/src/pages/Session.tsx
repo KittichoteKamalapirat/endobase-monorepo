@@ -114,6 +114,7 @@ const Session = () => {
           <CompleteSessionForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
+            endo={endoData?.endo as Endo}
           />
         )}
       </div>

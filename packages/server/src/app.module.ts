@@ -26,9 +26,10 @@ import { ConfigModule } from '@nestjs/config';
 // could be "mac-dev", "win-dev", "wind-prod"
 const ENV = process.env.NODE_ENV;
 console.log('envvvv',ENV)
+console.log('hi')
 
 @Module({
-  imports: [
+imports: [
     ConfigModule.forRoot({
       envFilePath:  !ENV ? '.env.prod' : `.env.${ENV}`,
       isGlobal: true
@@ -48,6 +49,7 @@ console.log('envvvv',ENV)
       },
 
       context: ({ req, res }) => {
+        
     
         // get the cookie from the request
         // verify the cookie

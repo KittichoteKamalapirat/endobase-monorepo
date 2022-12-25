@@ -44,8 +44,12 @@ console
           'https://localhost/',
           "https://endosupply",
           "https://endosupply.com",
+          "https://192.168.1.200",
 
-          "http://172.21.32.1"], // in url bar: "endosupply/", "localhost"
+          "http://172.21.32.1"
+
+
+        ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

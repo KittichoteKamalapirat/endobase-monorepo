@@ -12,8 +12,8 @@ const prod = {
 }
 
 const dev = {
-    graphqlHttpEndpoint: "https://endosupply:4001/graphql",
-    graphqlSocketEndpoint: "wss://localhost:4001/graphql"
+    graphqlHttpEndpoint: "https://192.168.1.200:4001/graphql",
+    graphqlSocketEndpoint: "wss://192.168.1.200:4001/graphql"
 }
 
 

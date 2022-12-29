@@ -18,7 +18,7 @@ import { Session } from '../sessions/entities/session.entity';
 
 @Resolver(() => Endo)
 export class EndosResolver {
-  constructor(private endosService: EndosService) {}
+  constructor(private endosService: EndosService) { }
 
   @ResolveField(() => String)
   position(@Root() endo: Endo): string {

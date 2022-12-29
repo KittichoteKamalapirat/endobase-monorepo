@@ -77,6 +77,7 @@ const Session = () => {
           label="Back"
           href={prev ? `${prev}` : "/"}
           type={ButtonTypes.OUTLINED}
+          extraClass="min-w-24"
         />
       </div>
 
@@ -118,6 +119,16 @@ const Session = () => {
           />
         )}
       </div>
+
+      <div className="flex justify-center my-4">
+        <LinkButton
+          label="Back"
+          href={prev ? `${prev}` : "/"}
+          type={ButtonTypes.OUTLINED}
+          extraClass="min-w-24"
+        />
+      </div>
+
     </Layout>
   );
 };

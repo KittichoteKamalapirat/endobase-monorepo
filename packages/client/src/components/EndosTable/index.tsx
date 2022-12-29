@@ -5,16 +5,16 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable,
+  useTable
 } from "react-table";
 import {
-  Endo,
-  useEndoQuery,
-  useEndosQuery,
-  usePickEndoMutation,
+  Endo, useEndosQuery,
+  usePickEndoMutation
 } from "../../generated/graphql";
 
 import { useNavigate } from "react-router-dom";
+import { useScreenIsLargerThan } from "../../hooks/useScreenIsLargerThan";
+import { sortEndosByPosition } from "../../utils/sortEndosByPosition";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
@@ -42,18 +42,25 @@ import { GlobalFilter } from "./GlobalFilter";
 const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
+
+  const isLargerThanBreakpoint = useScreenIsLargerThan("md")
+
+
+  const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[])
+
+  console.log('sortedEndos', sortedEndos)
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
-  
+
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
-    return endoColumns({ pickEndo, refetchEndos: refetch });
-  }, [pickEndo, refetch]);
+    return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
+  }, [pickEndo, refetch, isLargerThanBreakpoint]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
-    return endosData?.endos || [];
+    return sortedEndos || [];
   }, [loading, endosData, error]);
 
   const {
@@ -158,7 +165,7 @@ const EndosTable = () => {
                 key={index}
                 className={classNames(
                   rowColor,
-                  "border-b-2 border-solid border-grey-50 hover:bg-primary-50 hover:cursor-pointer"
+                  "border-b-2 border-solid border-grey-50 hover:font-bold hover:cursor-pointer"
                 )}
               >
                 {row.cells.map((cell: any, index) => (
@@ -170,9 +177,9 @@ const EndosTable = () => {
                       // if col is action => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action"
                         ? () =>
-                            navigate(`/endo/${(row.original as Endo).id}`, {
-                              state: { prev: "/" },
-                            })
+                          navigate(`/endo/${(row.original as Endo).id}`, {
+                            state: { prev: "/" },
+                          })
                         : undefined
                     }
                   >

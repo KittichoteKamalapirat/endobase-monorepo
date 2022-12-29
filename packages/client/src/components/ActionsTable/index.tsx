@@ -49,6 +49,7 @@ const ActionsTable = () => {
       return [];
 
     const actions = [...(pagActionsData?.paginatedActions.items || [])]; // TODO make this less confusing
+
     return (
       actions.sort((prev, curr) => {
         const dateSort: number =
@@ -56,7 +57,10 @@ const ActionsTable = () => {
         return dateSort || 0;
       }) || []
     );
+
   }, [loading, pagActionsData, error]);
+
+
 
   const nextPage = () => {
     const toFetchIndex = currPage + 1;
@@ -171,7 +175,7 @@ const ActionsTable = () => {
                 }
                 className={classNames(
                   index % 2 !== 0 ? "bg-grey-50" : "",
-                  "hover:bg-primary-50 hover:cursor-pointer"
+                  "hover:font-bold hover:cursor-pointer"
                 )}
               >
                 {/* <a href={`/session/${(row.original as Action).sessionId}`}> */}

@@ -32,7 +32,7 @@ export class EndosService {
     private actionsService: ActionsService,
     @Inject(forwardRef(() => EndoCronsService))
     private endoCronsService: EndoCronsService,
-  ) {}
+  ) { }
 
   async findAll(): Promise<Endo[]> {
     const endos = await this.endosRepository.find({
@@ -269,15 +269,15 @@ export class EndosService {
   }
 
 
-  async washWithoutStoring(id: string){
-    // do 3 things
+  async washWithoutStoring(id: string) {
+    // do 4 things
     // end session
     // update endo status from disinfection_passed to leaktest_passed
     // create a new session
-  
+
     await this.sessionsService.endSessionByEndoId(id)
     await this.updateStatus(id, "being_used")
-    const newSession = await this.sessionsService.create({endoId: id, endoWasExpired: false})
+    const newSession = await this.sessionsService.create({ endoId: id, endoWasExpired: false })
 
     return newSession
   }

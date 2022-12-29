@@ -8,6 +8,7 @@ const red = "#D2042D";
 const orange = "#FFA500";
 const black = "#000000";
 
+
 // white grey and black
 const grey0 = "#FFFFFF";
 const grey50 = "#F5F0F0";
@@ -46,6 +47,15 @@ const sansFamily = ["Arial", "sans-serif"];
 const serifFamily = ["Arial", "sans-serif"];
 const monoFamily = ["Montserrat", "Arial", "sans-serif"];
 
+const screens = {
+  'xs': '475px',
+  'sm': '640px',
+  'md': '768px',
+  'lg': '1024px',
+  'xl': '1280px',
+  '2xl': '1536px',
+}
+
 // font size
 
 const fontSizeXS = "12px";
@@ -60,6 +70,7 @@ const fontSize3XL = "30px";
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    screens,
     extend: {
       fontFamily: {
         sans: sansFamily,
@@ -74,6 +85,12 @@ module.exports = {
         xl: fontSizeXL,
         "2xl": fontSize2XL,
         "3xl": fontSize3XL,
+      },
+      minWidth: {
+        '12': '48px',
+        '16': '64px',
+        '20': '80px',
+        '24': '96px',
       },
       colors: {
         grey: {

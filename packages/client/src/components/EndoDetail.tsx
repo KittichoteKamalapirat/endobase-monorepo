@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import { Endo } from "../generated/graphql";
 import { ACTION_CARD_CLASSNAMES, UNCLICKABLE_CARD_CLASSNAMES } from "../theme";
+import Badge from "./Badge";
 import SubHeading from "./typography/SubHeading";
 
 interface Props {
@@ -30,8 +31,9 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
             <div>Brand</div>
             <div>Model</div>
             <div>Type</div>
-            <div>Status</div>
             <div>Drying Time</div>
+            <div>Status</div>
+
           </div>
 
           <div id="right">
@@ -40,8 +42,9 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
             <div>{brand}</div>
             <div>{model}</div>
             <div>{type}</div>
-            <div>{status}</div>
             <div>{dryingTime} minutes</div>
+            <div > <Badge content={status} /> </div>
+
           </div>
         </div>
       </div>

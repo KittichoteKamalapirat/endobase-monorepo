@@ -26,6 +26,7 @@ query PaginatedActions($input: PaginatedInput!) {
           type
           model
           position
+          serialNum
         }
         patientId
         patient {

@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { Tooltip } from "react-tooltip";
-import { json } from "stream/consumers";
 import { HUMIDITY_THRESHOLD, ICON_SIZE } from "../../constants";
 import { primaryColor } from "../../theme";
 import { decodeSts } from "../../utils/decodeSts";
@@ -13,6 +12,9 @@ export const snapshotColumns = () => {
     {
       Header: "Container",
       accessor: "container.col",
+      Cell: ({ value: col }: { value: string }) => (
+        <div>{col.toUpperCase()}</div>
+      ),
     },
     {
       Header: "Temperature",

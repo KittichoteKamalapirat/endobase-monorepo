@@ -1,7 +1,9 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { Control, useForm } from "react-hook-form";
+import { TbBulb } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { ICON_SIZE } from "../constants";
 import {
   Endo,
   EndoQuery,
@@ -11,7 +13,8 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import Button, { HTMLButtonType } from "./Buttons/Button";
+import { primaryColor } from "../theme";
+import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import { endoColumns } from "./EndosTable/endoColumns";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
@@ -129,7 +132,12 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
           <Button
             label="Blink location"
             buttonType={HTMLButtonType.BUTTON}
+            type={ButtonTypes.OUTLINED}
             onClick={handleBlinkLocation}
+            startIcon={<TbBulb
+              color={primaryColor}
+              size={ICON_SIZE + 10}
+            />}
           />
 
           <Button

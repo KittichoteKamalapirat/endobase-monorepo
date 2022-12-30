@@ -8,6 +8,7 @@ import { AppModule } from './app.module';
 import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
 import fs from "fs"
 import path from 'path'
+import { SettingService } from './setting/setting.service';
 
 async function bootstrap() {
 
@@ -52,5 +53,11 @@ async function bootstrap() {
 
 
   await app.listen(4001);
+
+  // // init setting so snapshot cron can use it
+  // const settingService = app.get(SettingService);
+  // await settingService.initSetting()
+  // console.log('111111')
+
 }
 bootstrap();

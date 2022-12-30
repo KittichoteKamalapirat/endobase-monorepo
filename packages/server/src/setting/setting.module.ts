@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { SettingService } from './setting.service';
-import { SettingResolver } from './setting.resolver';
-import { Setting } from './entities/setting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Setting } from './entities/setting.entity';
+import { SettingResolver } from './setting.resolver';
+import { SettingService } from './setting.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Setting])],

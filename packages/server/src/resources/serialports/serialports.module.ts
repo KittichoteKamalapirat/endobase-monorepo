@@ -18,7 +18,7 @@ import { SerialportsResolver } from './serialports.resolver';
 import { SerialportsService } from './serialports.service';
 
 @Module({
-  imports: [SnapshotsModule, forwardRef(() => ContainersModule), SettingModule],
+  imports: [SnapshotsModule, forwardRef(() => ContainersModule), forwardRef(() => SettingModule)],
   providers: [SerialportsResolver, SerialportsService],
   exports: [SerialportsService],
 })

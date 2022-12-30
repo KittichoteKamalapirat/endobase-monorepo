@@ -2,7 +2,6 @@ import { getBreakpointValue } from "../../hooks/useScreenIsLargerThan";
 
 
 
-
 describe("getBreakpointValue", () => {
   const input1 = "sm"
   const input2 = "md"

@@ -72,6 +72,7 @@ console
     ScheduleModule.forRoot(),
     SerialportsModule.forRoot(), // can add dynamic data
     // resoureces
+    SettingModule,
     EndosModule,
     ContainersModule,
     TraysModule,
@@ -82,7 +83,6 @@ console
     SnapshotsModule,
     UsersModule,
     AuthModule,
-    SettingModule,
     EndoCronsModule,
   ],
   controllers: [AppController],

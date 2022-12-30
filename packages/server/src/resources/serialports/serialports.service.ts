@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReadlineParser, SerialPort } from 'serialport';
 import { SimpleConsoleLogger } from 'typeorm';
@@ -30,8 +30,10 @@ import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
 
 @Injectable()
-export class SerialportsService {
+export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
+
+  private activeSerialportNum = this.getActiveSerialportNum()
 
   constructor(
     private snapshotsService: SnapshotsService,
@@ -40,9 +42,16 @@ export class SerialportsService {
     private containersService: ContainersService,
     private settingService: SettingService,
   ) {
+
+  }
+
+  async onModuleInit() {
+    await this.settingService.initSetting()
+
+    // console.log('resultttt', result)
     const parsers = {} as MyParser;
 
-    Object.keys(this.serialports).forEach((key: CONTAINER_TYPE_VALUES) => {
+    Object.keys(this.serialports).forEach(async (key: CONTAINER_TYPE_VALUES) => {
       if (!this.serialports[key]) return;
       const parser = this.serialports[key].pipe(
         new ReadlineParser({ delimiter: '\r\n' }),
@@ -51,40 +60,32 @@ export class SerialportsService {
     });
 
     let counter = 0;
-    let COUNTER_CEIL = this.settingService.getSnapshotInterval(); // get the default value
 
-    // update counterCeil for the first time
-    (async () => {
-      const minsString = (await this.settingService.findSnapshotIntervalMins())
-        .value;
-      const minsNum = parseInt(minsString);
 
-      this.settingService.setSnapshotInterval(minsNum); // update the global variable too
-      COUNTER_CEIL = CONTAINER_NUM * minsNum;
-      return minsNum;
-    })();
+    const snapshotSettingMin = parseFloat(this.settingService.getSetting().containerSnapshotIntervalMin.value); // get the default value
+    // ex. 60 mins * 8 active serialports
+    this.settingService.counterCeil = snapshotSettingMin * this.activeSerialportNum;
+
 
     // event listener on controller return
     containerTypeOptions.forEach((option) => {
       const col = option.value;
       parsers[col]?.on('data', async (data: string) => {
         console.log('got response from container ', col);
-        console.log('COUNTER_CEIL', COUNTER_CEIL);
+        console.log('COUNTER_CEIL', this.settingService.counterCeil);
         console.log('counter', counter);
         const { systemStatus, temp, hum } = formatSTS(data) || {};
 
-        COUNTER_CEIL =
-          CONTAINER_NUM * this.settingService.getSnapshotInterval(); // if the interval value changes => recalculate
-
-        // update container stats
+        // update container stats every minute
         // cron job defined in snapshots service
-        containersService.updateStats({
+        this.containersService.updateStats({
           col,
           currTemp: temp,
           currHum: hum,
         });
 
-        if (data.includes('sts') && counter >= COUNTER_CEIL) {
+        // add a new snapshot
+        if (data.includes('sts') && counter >= this.settingService.counterCeil) {
           // only save snapshot if it is reading system status
 
           const container = await this.containersService.findOneByContainerChar(
@@ -98,14 +99,33 @@ export class SerialportsService {
             containerId: container.id,
           };
           this.snapshotsService.create(input);
+
+          // reset counter back to 0
+          counter = 0
+        } else {
+          counter += 1;
         }
-        counter += 1;
+
       });
     });
   }
+  getActiveSerialportNum() {
+    // there could be 4 containers
+    // but if only 2 is connected
+    // active should be 2
+
+    let counter = 0
+    Object.keys(CONTAINER_TYPE_OBJ).forEach(key => {
+      // if null then don't count, if sp then count
+      if (CONTAINER_TYPE_OBJ[key]) counter++
+    })
+    return counter
+  }
+
   // @Cron(CronExpression.EVERY_10_MINUTES)
   // @Cron(CronExpression.EVERY_HOUR)
-  @Cron(CronExpression.EVERY_MINUTE)
+  // @Cron(CronExpression.EVERY_MINUTE)
+  @Cron(CronExpression.EVERY_SECOND)
   checkSystemStatus() {
     console.log('-----------check status cron----------');
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {

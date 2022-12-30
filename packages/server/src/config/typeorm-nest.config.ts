@@ -31,5 +31,5 @@ export const typeormConfigNest = {
     EndoCron,
   ],
   synchronize: true,
-  logging: true,
+  logging: false,
 };

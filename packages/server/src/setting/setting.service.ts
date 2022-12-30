@@ -1,44 +1,55 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+
 import { InjectRepository } from '@nestjs/typeorm';
+import { SerialportsService } from 'src/resources/serialports/serialports.service';
 import { Repository } from 'typeorm';
 import { AppService } from '../app.service';
-import { DEFAULT_SNAPSHOT_INTERVAL_MINS } from '../constants';
 import { CreateSettingInput } from './dto/create-setting.input';
 import { UpdateSettingInput } from './dto/update-setting.input';
-import { Setting, SETTING_NAMES } from './entities/setting.entity';
+import { Setting } from './entities/setting.entity';
+import { SETTING_TYPE_VALUES } from './entities/SETTING_TYPE_OBJ';
 
 @Injectable()
 export class SettingService {
   private readonly logger = new Logger(AppService.name);
-  private SNAPSHOT_INTERVAL_MINS = DEFAULT_SNAPSHOT_INTERVAL_MINS;
+  public counterCeil = 0
+  private allSettings = {} as { [key in SETTING_TYPE_VALUES]: Setting }
+
   // public configSetting: { [key: string]: string } = {}
 
   constructor(
     @InjectRepository(Setting)
     private settingRepository: Repository<Setting>, // use database, make sure forFeature is in module
+    @Inject(forwardRef(() => SerialportsService))
+    private serialportsService: SerialportsService
 
   ) { }
 
 
-  // async onModuleInit() {
-  //   const settings = await this.findAll()
-  //   settings.forEach(setting => {
-  //     const key = setting.name
-  //     const value = setting.value
-  //     this.configSetting[key] = value
-  //   })
+  async initSetting() {
+    console.log('inittttttt')
+    const settings = await this.findAll()
+    settings.forEach(setting => {
+      const key = setting.name
+      this.allSettings[key] = setting
+    })
+
+    return true
+  }
+
+  getSetting() {
+    return this.allSettings
+  }
+
+  // // for serialports to use
+  // getSnapshotInterval() {
+  //   return this.SNAPSHOT_INTERVAL_MINS;
   // }
 
-
-  // for serialports to use
-  getSnapshotInterval() {
-    return this.SNAPSHOT_INTERVAL_MINS;
-  }
-
-  setSnapshotInterval(mins: number) {
-    this.SNAPSHOT_INTERVAL_MINS = mins;
-    return this.SNAPSHOT_INTERVAL_MINS;
-  }
+  // setSnapshotInterval(mins: number) {
+  //   this.SNAPSHOT_INTERVAL_MINS = mins;
+  //   return this.SNAPSHOT_INTERVAL_MINS;
+  // }
 
   create(input: CreateSettingInput) {
     const newSetting = this.settingRepository.create(input);
@@ -60,7 +71,7 @@ export class SettingService {
     return `This action returns a #${id} setting`;
   }
 
-  findByName(name: SETTING_NAMES) {
+  findByName(name: SETTING_TYPE_VALUES) {
     return this.settingRepository.findOne({ where: { name } });
   }
 
@@ -76,9 +87,16 @@ export class SettingService {
       updatedSettingInput,
     );
 
-    // update for serialports
-    if (setting.name === 'containerSnapshotIntervalMin')
-      this.setSnapshotInterval(parseInt(updatedSetting.value));
+    // update counter ceiling for for serialports to create snapshot
+    if (setting.name === 'containerSnapshotIntervalMin') {
+      console.log('aaaaaa', this.serialportsService)
+
+
+      const activeSp = this.serialportsService.getActiveSerialportNum()
+      console.log('activeSp', activeSp)
+      this.counterCeil = Number(input.value) * activeSp
+
+    }
 
     return updatedSetting;
   }

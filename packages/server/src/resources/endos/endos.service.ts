@@ -4,11 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { Endo, ENDO_STATUS, ENDO_STATUS_OBJ } from './entities/endo.entity';
 
-import { SchedulerRegistry } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
-import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from '../../constants';
-import { dayToSec } from '../../utils/dayToSec';
-import { ActionsService } from '../actions/actions.service';
 import { EndoCronsService } from '../endo-crons/endo-crons.service';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
@@ -20,16 +16,13 @@ import { UpdateEndoInput } from './dto/update-endo.input';
 @Injectable()
 export class EndosService {
   private readonly logger = new Logger(AppService.name);
-  private x = 10;
+
   constructor(
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
     // private actionsService: ActionsService,
     private serialportsService: SerialportsService,
-    private schedulerRegistry: SchedulerRegistry,
-    @Inject(forwardRef(() => ActionsService))
-    private actionsService: ActionsService,
     @Inject(forwardRef(() => EndoCronsService))
     private endoCronsService: EndoCronsService,
   ) { }

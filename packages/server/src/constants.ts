@@ -15,7 +15,6 @@ export const MAX_STORAGE_DAYS = 31;
 export const EXPIRE_SOON_DAYS = 1;
 
 export const CONTAINER_NUM = 3;
-export const DEFAULT_SNAPSHOT_INTERVAL_MINS = 60;
 
 // config
 export const IS_PROD = process.env.NODE_ENV === 'production';
@@ -26,6 +25,7 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 
 // Serial Ports
 export const SERIALPORTS_PROVIDER = 'allSerialports'; // for provider in serial ports module
+export const SETTINGS_PROVIDER = 'allSettings';
 
 // export const ARDUINO_VENDOR_ID = '10C4';
 // export const ARDUINO_PATH_REGEXP = new RegExp('COM');

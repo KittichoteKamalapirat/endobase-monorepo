@@ -6,13 +6,10 @@ import {
   Entity,
   Column,
 } from 'typeorm';
+import { SETTING_TYPE_VALUES } from './SETTING_TYPE_OBJ';
 
 // setting
-export type SETTING_NAMES =
-  | 'containerSnapshotIntervalMin'
-  | 'humidityThreshold'
-  | 'temperatureThreshold'
-  | 'trayLocationBlinkingSec';
+
 
 @ObjectType()
 @Entity()
@@ -23,7 +20,7 @@ export class Setting {
 
   @Column({ unique: true })
   @Field(() => String)
-  name: SETTING_NAMES;
+  name: SETTING_TYPE_VALUES;
 
   @Column({ unique: true })
   @Field(() => String)

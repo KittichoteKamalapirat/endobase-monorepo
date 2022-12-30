@@ -14,7 +14,6 @@ export const ORANGE_COLOR_COMMAND = '255,165,000';
 export const MAX_STORAGE_DAYS = 31;
 export const EXPIRE_SOON_DAYS = 1;
 
-export const CONTAINER_NUM = 3;
 
 // config
 export const IS_PROD = process.env.NODE_ENV === 'production';

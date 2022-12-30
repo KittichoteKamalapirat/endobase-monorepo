@@ -1,12 +1,9 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ReadlineParser, SerialPort } from 'serialport';
-import { SimpleConsoleLogger } from 'typeorm';
+import { ReadlineParser } from 'serialport';
 import { AppService } from '../../app.service';
 import {
-  BLACK_COLOR_COMMAND,
-  CONTAINER_NUM,
-  SERIALPORTS_PROVIDER,
+  BLACK_COLOR_COMMAND, SERIALPORTS_PROVIDER
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
@@ -14,7 +11,7 @@ import {
   CONTAINER_TYPE_OBJ,
   CONTAINER_TYPE_VALUES,
   MyParser,
-  MySerialPort,
+  MySerialPort
 } from '../../types/CONTAINER_TYPE';
 import { formatSTS } from '../../utils/formatSTS';
 import { getConnectedArduinos } from '../../utils/getConnectedArduinos';

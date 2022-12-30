@@ -29,20 +29,16 @@ export class SnapshotsService {
   }
 
   async create(input: CreateSnapshotInput) {
-    console.log('creating snapshot')
     const newSnapshotInput = this.snapshotsRepository.create(input);
 
-
     const newSnapshot = await this.snapshotsRepository.save(newSnapshotInput);
-
-
-
 
     const withContainer = await this.snapshotsRepository.findOne({
       where: { id: newSnapshot.id },
       relations: ['container'],
     });
 
+    // emit so the subscribe listener got triggered
     this.pubSub.publish(snapshotTriggertName, {
       subscribeToOverHumOrTemp: withContainer, // key has to be subscription name
     });

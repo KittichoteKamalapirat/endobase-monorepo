@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { Pagination } from 'nestjs-typeorm-paginate';
+import { snapshotTriggertName } from 'src/constants';
 import { PaginatedInput } from "../common/dto/import { InputType, Int, Field } from '@nestjs/PaginatedInput";
 import { CreateSnapshotInput } from './dto/create-snapshot.input';
 import { PaginatedSnapshotOutput } from './dto/paginated-snapshot.output';
 import { Snapshot } from './entities/snapshot.entity';
 import { SnapshotsService } from './snapshots.service';
-import { PubSub } from 'graphql-subscriptions';
-import { snapshotTriggertName } from 'src/constants';
 
 @Resolver(() => Snapshot)
 export class SnapshotsResolver {
@@ -19,18 +18,11 @@ export class SnapshotsResolver {
   @Mutation(() => Snapshot)
   async createSnapshot(@Args('input') input: CreateSnapshotInput) {
     const newSnapshot = await this.snapshotsService.create(input);
-
-    console.log('create snapshottttttt')
-
-    // this.pubSub.publish(snapshotTriggertName, {
-    //   subscribeToOverHumOrTemp: newSnapshot, // key has to be subscription name
-    // });
     return newSnapshot;
   }
 
   @Subscription(() => Snapshot, {
     filter: (payload, variables) => {
-      console.log('--------filterrrrr--------')
       const humExceeds =
         parseFloat((payload.subscribeToOverHumOrTemp as Snapshot).hum) >
         parseFloat(variables.humThreshold);

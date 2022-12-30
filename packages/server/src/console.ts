@@ -8,6 +8,7 @@ async function bootstrap() {
     );
 
     const command = process.argv[2];
+    console.log('command', command)
 
     switch (command) {
         case 'blink-serialport':
@@ -18,13 +19,16 @@ async function bootstrap() {
                 col: "a",
             }))
             break;
+        case "test":
+            console.log('test')
+            break
         default:
             console.log('Command not found');
             process.exit(1);
     }
 
-    // await application.close();
-    // process.exit(0);
+    await application.close();
+    process.exit(0);
 }
 
 bootstrap();

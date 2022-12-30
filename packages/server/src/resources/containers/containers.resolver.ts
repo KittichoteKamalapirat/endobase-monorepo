@@ -21,12 +21,18 @@ export class ContainersResolver {
     // private readonly serialportsService: SerialportsService,
     @Inject(forwardRef(() => SerialportsService))
     private serialportsService: SerialportsService,
-  ) {}
+  ) { }
 
   @ResolveField(() => Boolean)
   isConnected(@Root() container: Container): boolean {
     const col = container.col;
     return this.serialportsService.containerIsConnected(col);
+  }
+
+  @ResolveField(() => Boolean)
+  isResponding(@Root() container: Container): boolean {
+    const col = container.col;
+    return this.serialportsService.containerIsResponding(col);
   }
 
   @Mutation(() => Container)

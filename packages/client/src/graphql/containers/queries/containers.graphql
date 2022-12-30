@@ -5,6 +5,7 @@ query Containers {
     currTemp
     currHum
     isConnected
+    isResponding
     lightsAreOn
   }
 }

@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
+import { isCompositeType } from 'graphql/type';
 import { SerialportsService } from 'src/resources/serialports/serialports.service';
 import { Repository } from 'typeorm';
 import { AppService } from '../app.service';
@@ -12,7 +13,7 @@ import { SETTING_TYPE_VALUES } from './entities/SETTING_TYPE_OBJ';
 @Injectable()
 export class SettingService {
   private readonly logger = new Logger(AppService.name);
-  public counterCeil = 0
+  public counterCeil = Infinity
   private allSettings = {} as { [key in SETTING_TYPE_VALUES]: Setting }
 
   // public configSetting: { [key: string]: string } = {}
@@ -27,7 +28,6 @@ export class SettingService {
 
 
   async initSetting() {
-    console.log('inittttttt')
     const settings = await this.findAll()
     settings.forEach(setting => {
       const key = setting.name
@@ -89,15 +89,15 @@ export class SettingService {
 
     // update counter ceiling for for serialports to create snapshot
     if (setting.name === 'containerSnapshotIntervalMin') {
-      console.log('aaaaaa', this.serialportsService)
-
-
-      const activeSp = this.serialportsService.getActiveSerialportNum()
-      console.log('activeSp', activeSp)
-      this.counterCeil = Number(input.value) * activeSp
+      const activeSpNum = this.serialportsService.getActiveSerialportNum()
+      this.counterCeil = Number(input.value) * activeSpNum
+      console.log('updated counter ceil', this.counterCeil)
 
     }
-
+    // re init setting
+    await this.initSetting()
     return updatedSetting;
   }
+
+
 }

@@ -41,7 +41,7 @@ export const snapshotColumns = () => {
             // );
           }
         }, [numVal, dispatch]);
-        return <div>{pgDateToReadable(value)}</div>;
+        return <div>{value}</div>;
       },
     },
     {

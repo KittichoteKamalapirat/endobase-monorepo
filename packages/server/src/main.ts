@@ -3,12 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
+import fs from "fs";
 import Redis from 'ioredis';
+import path from 'path';
 import { AppModule } from './app.module';
-import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
-import fs from "fs"
-import path from 'path'
-import { SettingService } from './setting/setting.service';
+import { COOKIE_NAME, SESSION_SECRET } from './constants';
 
 async function bootstrap() {
 

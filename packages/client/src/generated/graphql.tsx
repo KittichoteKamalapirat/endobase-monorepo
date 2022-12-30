@@ -43,6 +43,7 @@ export type Container = {
   currTemp: Scalars['String'];
   id: Scalars['ID'];
   isConnected: Scalars['Boolean'];
+  isResponding: Scalars['Boolean'];
   lightsAreOn: Scalars['Boolean'];
   snapshots: Array<Snapshot>;
   trays: Array<Tray>;
@@ -647,7 +648,7 @@ export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isConnected: boolean, lightsAreOn: boolean }> };
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isConnected: boolean, isResponding: boolean, lightsAreOn: boolean }> };
 
 export type CreateEndoMutationVariables = Exact<{
   input: CreateEndoInput;
@@ -1099,6 +1100,7 @@ export const ContainersDocument = gql`
     currTemp
     currHum
     isConnected
+    isResponding
     lightsAreOn
   }
 }

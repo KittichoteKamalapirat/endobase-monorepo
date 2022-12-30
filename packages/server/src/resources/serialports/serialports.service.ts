@@ -33,7 +33,7 @@ import { RowAndColInput } from './dto/row-and-col.input';
 export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
 
-  private activeSerialportNum = this.getActiveSerialportNum()
+  private activeSerialportObj = {} as { [key in CONTAINER_TYPE_VALUES]: boolean }
 
   constructor(
     private snapshotsService: SnapshotsService,
@@ -59,21 +59,25 @@ export class SerialportsService implements OnModuleInit {
       parsers[key] = parser;
     });
 
-    let counter = 0;
+
 
 
     const snapshotSettingMin = parseFloat(this.settingService.getSetting().containerSnapshotIntervalMin.value); // get the default value
     // ex. 60 mins * 8 active serialports
-    this.settingService.counterCeil = snapshotSettingMin * this.activeSerialportNum;
+    this.settingService.counterCeil = snapshotSettingMin * this.getActiveSerialportNum() || Infinity;
 
+    let counter = 0;
 
     // event listener on controller return
     containerTypeOptions.forEach((option) => {
       const col = option.value;
+
       parsers[col]?.on('data', async (data: string) => {
+        this.setActiveSerialport(col)
         console.log('got response from container ', col);
         console.log('COUNTER_CEIL', this.settingService.counterCeil);
         console.log('counter', counter);
+        console.log('active', this.getActiveSerialports())
         const { systemStatus, temp, hum } = formatSTS(data) || {};
 
         // update container stats every minute
@@ -108,16 +112,34 @@ export class SerialportsService implements OnModuleInit {
 
       });
     });
+
+    // init activeSerialportObj
+    Object.keys(CONTAINER_TYPE_OBJ).forEach(key => {
+      this.activeSerialportObj[key] = false
+    })
   }
+
+  getActiveSerialports() {
+    return this.activeSerialportObj
+  }
+
+  setActiveSerialport(container: CONTAINER_TYPE_VALUES) {
+    this.activeSerialportObj[container] = true
+
+    // update counterCeil
+    const snapshotSettingMin = parseFloat(this.settingService.getSetting().containerSnapshotIntervalMin.value);
+    this.settingService.counterCeil = this.getActiveSerialportNum() * snapshotSettingMin
+  }
+
   getActiveSerialportNum() {
     // there could be 4 containers
     // but if only 2 is connected
     // active should be 2
 
     let counter = 0
-    Object.keys(CONTAINER_TYPE_OBJ).forEach(key => {
+    Object.keys(this.activeSerialportObj).forEach(key => {
       // if null then don't count, if sp then count
-      if (CONTAINER_TYPE_OBJ[key]) counter++
+      if (this.activeSerialportObj[key]) counter++
     })
     return counter
   }
@@ -255,5 +277,9 @@ export class SerialportsService implements OnModuleInit {
   }
   containerIsConnected(col: CONTAINER_TYPE_VALUES) {
     return !!this.serialports[col];
+  }
+
+  containerIsResponding(col: CONTAINER_TYPE_VALUES) {
+    return this.activeSerialportObj[col];
   }
 }

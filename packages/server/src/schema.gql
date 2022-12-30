@@ -47,6 +47,7 @@ type Container {
   createdAt: DateTime!
   updatedAt: DateTime!
   isConnected: Boolean!
+  isResponding: Boolean!
 }
 
 type Tray {

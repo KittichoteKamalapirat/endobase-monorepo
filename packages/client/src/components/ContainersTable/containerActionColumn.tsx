@@ -96,7 +96,7 @@ const ContainerActionColumn = ({ row }: Props) => {
       );
   };
 
-  const isConnected = row.original.isConnected;
+  const isActive = row.original.isResponding;
   return (
     <div className="flex gap-2">
       <Button
@@ -109,7 +109,7 @@ const ContainerActionColumn = ({ row }: Props) => {
           />
         }
         type={ButtonTypes.TEXT}
-        disabled={!isConnected}
+        disabled={!isActive}
         extraClass="hover:scale-125"
       />
     </div>

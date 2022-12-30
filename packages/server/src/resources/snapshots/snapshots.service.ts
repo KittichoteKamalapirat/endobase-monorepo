@@ -10,23 +10,43 @@ import {
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
 import { ContainersService } from '../containers/containers.service';
+import { PubSub } from 'graphql-subscriptions';
+import { snapshotTriggertName } from 'src/constants';
 
 @Injectable()
 export class SnapshotsService {
+  //subscription
+
+  public pubSub: PubSub;
   private readonly logger = new Logger(AppService.name);
   constructor(
     @InjectRepository(Snapshot)
     private snapshotsRepository: Repository<Snapshot>,
     private containersService: ContainersService,
-  ) {}
+
+  ) {
+    this.pubSub = new PubSub();
+  }
 
   async create(input: CreateSnapshotInput) {
-    const newSnapshot = this.snapshotsRepository.create(input);
-    await this.snapshotsRepository.save(newSnapshot);
-    const withContainer = this.snapshotsRepository.findOne({
+    console.log('creating snapshot')
+    const newSnapshotInput = this.snapshotsRepository.create(input);
+
+
+    const newSnapshot = await this.snapshotsRepository.save(newSnapshotInput);
+
+
+
+
+    const withContainer = await this.snapshotsRepository.findOne({
       where: { id: newSnapshot.id },
       relations: ['container'],
     });
+
+    this.pubSub.publish(snapshotTriggertName, {
+      subscribeToOverHumOrTemp: withContainer, // key has to be subscription name
+    });
+
     return withContainer;
   }
 

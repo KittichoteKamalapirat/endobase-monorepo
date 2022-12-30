@@ -1,4 +1,4 @@
-import { CONTAINER_TYPE_OBJ, CONTAINER_TYPE_VALUES } from 'src/types/CONTAINER_TYPE';
+import { CONTAINER_TYPE_OBJ, CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { Factory, Seeder } from 'typeorm-seeding';
 import { Container } from '../../resources/containers/entities/container.entity';
 

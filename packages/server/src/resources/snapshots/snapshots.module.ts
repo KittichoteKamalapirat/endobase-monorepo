@@ -13,4 +13,4 @@ import { SnapshotsService } from './snapshots.service';
   providers: [SnapshotsResolver, SnapshotsService],
   exports: [SnapshotsService],
 })
-export class SnapshotsModule {}
+export class SnapshotsModule { }

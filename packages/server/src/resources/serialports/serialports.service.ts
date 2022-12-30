@@ -102,7 +102,8 @@ export class SerialportsService implements OnModuleInit {
             hum,
             containerId: container.id,
           };
-          this.snapshotsService.create(input);
+          const newSnapshot = await this.snapshotsService.create(input);
+          console.log('newsnapshot', newSnapshot)
 
           // reset counter back to 0
           counter = 0
@@ -149,7 +150,7 @@ export class SerialportsService implements OnModuleInit {
   // @Cron(CronExpression.EVERY_MINUTE)
   @Cron(CronExpression.EVERY_SECOND)
   checkSystemStatus() {
-    console.log('-----------check status cron----------');
+    // console.log('-----------check status cron----------');
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
       console.log(
         `serialport ${key} is ${this.serialports[key]?.isOpen ? 'open' : 'close'

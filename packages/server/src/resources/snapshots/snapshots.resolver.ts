@@ -7,27 +7,30 @@ import { PaginatedSnapshotOutput } from './dto/paginated-snapshot.output';
 import { Snapshot } from './entities/snapshot.entity';
 import { SnapshotsService } from './snapshots.service';
 import { PubSub } from 'graphql-subscriptions';
+import { snapshotTriggertName } from 'src/constants';
 
-const snapshotTriggertName = 'snapshotAdded';
 @Resolver(() => Snapshot)
 export class SnapshotsResolver {
-  private pubSub: PubSub;
+  // pubSub: PubSub;
   constructor(private readonly snapshotsService: SnapshotsService) {
-    this.pubSub = new PubSub();
+    // this.pubSub = new PubSub();
   }
 
   @Mutation(() => Snapshot)
   async createSnapshot(@Args('input') input: CreateSnapshotInput) {
     const newSnapshot = await this.snapshotsService.create(input);
 
-    this.pubSub.publish(snapshotTriggertName, {
-      subscribeToOverHumOrTemp: newSnapshot, // key has to be subscription name
-    });
+    console.log('create snapshottttttt')
+
+    // this.pubSub.publish(snapshotTriggertName, {
+    //   subscribeToOverHumOrTemp: newSnapshot, // key has to be subscription name
+    // });
     return newSnapshot;
   }
 
   @Subscription(() => Snapshot, {
     filter: (payload, variables) => {
+      console.log('--------filterrrrr--------')
       const humExceeds =
         parseFloat((payload.subscribeToOverHumOrTemp as Snapshot).hum) >
         parseFloat(variables.humThreshold);
@@ -41,7 +44,7 @@ export class SnapshotsResolver {
     @Args('humThreshold', { type: () => String }) humThreshold: string, // use above
     @Args('tempThreshold', { type: () => String }) tempThreshold: string,
   ) {
-    return this.pubSub.asyncIterator(snapshotTriggertName);
+    return this.snapshotsService.pubSub.asyncIterator(snapshotTriggertName);
   }
 
   @Query(() => [Snapshot], { name: 'snapshots' })

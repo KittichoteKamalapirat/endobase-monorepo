@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { useDispatch } from "react-redux";
 import { Tooltip } from "react-tooltip";
-import { HUMIDITY_THRESHOLD, ICON_SIZE } from "../../constants";
+import { ICON_SIZE } from "../../constants";
 import { primaryColor } from "../../theme";
 import { decodeSts } from "../../utils/decodeSts";
 import { pgDateToReadable } from "../../utils/pgDateToReadable";
@@ -23,26 +21,7 @@ export const snapshotColumns = () => {
     {
       Header: "Humidity",
       accessor: "hum",
-      Cell: ({ value }: { value: string }) => {
-        const dispatch = useDispatch();
-        const numVal = parseInt(value);
 
-        useEffect(() => {
-          if (numVal > HUMIDITY_THRESHOLD) {
-            // dispatch(
-            //   openAlertModal({
-            //     heading: "Humidity exceeds!",
-            //     content:
-            //       "Humidity is detected to be over the expected value of " +
-            //       HUMIDITY_THRESHOLD,
-            //     type: "danger",
-            //     ariaLabel: "",
-            //   })
-            // );
-          }
-        }, [numVal, dispatch]);
-        return <div>{value}</div>;
-      },
     },
     {
       Header: "system status",

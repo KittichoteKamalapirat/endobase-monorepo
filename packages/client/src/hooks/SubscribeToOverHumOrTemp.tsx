@@ -7,6 +7,7 @@ import {
 import { openAlertModal } from "../redux/slices/alertModalReducer";
 
 const SubscribeToOverHumOrTemp = () => {
+
   const {
     data: settingsData,
     loading: settingsLoading,
@@ -45,18 +46,22 @@ const SubscribeToOverHumOrTemp = () => {
       const anonymous = () => {
         const currHumNum = parseFloat(hum);
         const currTempNum = parseFloat(temp);
+
         const humThresNum = parseFloat(humThreshold);
         const tempThresNum = parseFloat(tempThreshold);
+
+        const col = container.col.toUpperCase()
+
         if (currHumNum > humThresNum && currTempNum > tempThresNum) {
-          heading = `Humidity and Temperature exceed at container ${container.col}!`;
+          heading = `Humidity and Temperature exceed at container ${col}!`;
 
           content = `The humidity is over ${humThresNum} and the temperature is over ${tempThresNum}.`;
         } else if (currHumNum > humThresNum) {
-          heading = `Humidity exceeds at container ${container.col}!`;
+          heading = `Humidity exceeds at container ${col}!`;
 
           content = `The humidity is detected to be over the expected value of ${humThresNum}.`;
         } else if (currTempNum > tempThresNum) {
-          heading = `Temperature exceeds at container ${container.col}!`;
+          heading = `Temperature exceeds at container ${col}!`;
 
           content = `The temperature is detected to be over the expected value of ${tempThresNum}.`;
         }

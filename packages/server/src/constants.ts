@@ -27,6 +27,10 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 export const SERIALPORTS_PROVIDER = 'allSerialports'; // for provider in serial ports module
 export const SETTINGS_PROVIDER = 'allSettings';
 
+// pubsub
+
+export const snapshotTriggertName = 'snapshotAdded';
+
 // export const ARDUINO_VENDOR_ID = '10C4';
 // export const ARDUINO_PATH_REGEXP = new RegExp('COM');
 

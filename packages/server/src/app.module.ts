@@ -61,9 +61,6 @@ console
       },
 
       context: ({ req, res }) => {
-        console.log('req.session', req.session)
-
-
         // get the cookie from the request
         // verify the cookie
         // attach the user object to the request object

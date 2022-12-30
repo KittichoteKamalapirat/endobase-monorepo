@@ -14,7 +14,6 @@ import { getConnectedArduinos } from '../../utils/getConnectedArduinos';
 import { initSerialports } from '../../utils/initSerialPorts';
 import { ContainersModule } from '../containers/containers.module';
 import { SnapshotsModule } from '../snapshots/snapshots.module';
-import { SnapshotsService } from '../snapshots/snapshots.service';
 import { SerialportsResolver } from './serialports.resolver';
 import { SerialportsService } from './serialports.service';
 
@@ -25,73 +24,24 @@ import { SerialportsService } from './serialports.service';
 })
 @Injectable()
 export class SerialportsModule {
-  constructor(private snapshotsService: SnapshotsService) { }
+  constructor() { }
 
   // forRoot is just a convention, can be any name
-
   static async forRoot(): Promise<DynamicModule> {
     const connectedArduinos = await getConnectedArduinos();
-
     const serialports = {} as MySerialPort;
 
     // init every row that is connected
     // result will be
     //   A: SerialPort,
-    // B: null,
+    //   B: null,
     //   C: SerialPort,
-
-    // containerTypeOptions.forEach((option) => {
-    //   const col = option.value;
-    //   const toConnectPath = CONTAINER_TO_SERIALPORT_PATH_MAPPER[col];
-    //   const isConnected = !!connectedArduinos.find(
-    //     (portInfo) => portInfo.path === toConnectPath,
-    //   );
-
-    //   console.log('toConnectPath', toConnectPath);
-    //   console.log('isConnected', isConnected);
-
-    //   if (!isConnected) {
-    //     serialports[col] = null;
-    //     return;
-    //   }
-
-    //   const sp = new SerialPort({
-    //     path: toConnectPath,
-    //     baudRate: 9600,
-    //     autoOpen: true,
-    //   });
-    //   serialports[col] = sp;
-    // });
-
     initSerialports({ connectedArduinos, serialports });
-    // const spForContainerA = new SerialPort({
-    //   path: serialportPathA,
-    //   baudRate: 9600,
-    //   autoOpen: true,
-    // });
-    // const spForContainerB = new SerialPort({
-    //   path: serialportPathB,
-    //   baudRate: 9600,
-    //   autoOpen: true,
-    // });
-    // const spForContainerC = new SerialPort({
-    //   path: serialportPathC,
-    //   baudRate: 9600,
-    //   autoOpen: true,
-    // });
-
-    // make this match with container
-    // const serialports = {
-    //   A: spForContainerA,
-    //   // B: spForContainerB,
-    //   C: spForContainerC,
-    // };
 
     const serialportsProvider: Provider = {
       provide: SERIALPORTS_PROVIDER,
       useValue: serialports,
     };
-
 
     return {
       module: SerialportsModule,

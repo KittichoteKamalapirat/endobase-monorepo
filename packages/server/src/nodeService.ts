@@ -2,7 +2,7 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name:'endo_supply_server_2',
+  name: 'endo_supply_server_3',
   description: 'An endoscope data management system iOT',
   script: 'C:\\Program Files\\endobase-monorepo\\packages\\server\\dist\\main.js',
   nodeOptions: [
@@ -15,7 +15,7 @@ var svc = new Service({
 
 // Listen for the "install" event, which indicates the
 // process is available as a service.
-svc.on('install',function(){
+svc.on('install', function () {
   svc.start();
 });
 

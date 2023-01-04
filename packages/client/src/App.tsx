@@ -26,10 +26,6 @@ function App() {
     (state: RootState) => state.confirmModal
   );
 
-  console.log('configgg', config)
-
-  console.log('envvvv', process.env.SSL_CRT_FILE)
-  console.log('envvvv', process.env.SSL_KEY_FILE)
 
 
   const dispatch = useDispatch();

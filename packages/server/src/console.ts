@@ -8,19 +8,15 @@ async function bootstrap() {
     );
 
     const command = process.argv[2];
-    console.log('command', command)
 
     switch (command) {
         case 'blink-serialport':
-            console.log('custom command run')
             const serialportsService = application.get(SerialportsService);
             await serialportsService.blinkLocation(({
                 row: 1,
                 col: "a",
             }))
             break;
-        case "test":
-            console.log('test')
             break
         default:
             console.log('Command not found');

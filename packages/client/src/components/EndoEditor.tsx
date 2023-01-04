@@ -60,17 +60,11 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
       label: tray.position,
     })) || [];
 
-  console.log("emptyTraysData", emptyTraysData);
-  console.log("emptyTraysLoading", emptyTraysLoading);
-  console.log("emptyTraysError", emptyTraysError);
-  console.log("emptyTraysOptions", emptyTraysOptions);
-
   const trayOptions = [
     ...emptyTraysOptions,
     ...(initialData.tray?.label ? [initialData.tray] : []), // have to add the current one as well
   ];
 
-  console.log("trayOptions", trayOptions);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex items-center justify-between my-4">

@@ -8,7 +8,7 @@ import { LoginInput } from './dto/login.input';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
 
   async login(data: LoginInput, req: RequestWithSession) {
     const response = await this.validateUser(data.username, data.password);
@@ -27,7 +27,6 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
-      console.log('Cannot find a user');
       return {
         errors: [
           {

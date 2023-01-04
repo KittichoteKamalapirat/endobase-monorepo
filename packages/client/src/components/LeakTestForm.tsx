@@ -18,10 +18,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-          Exact<{
-            id: string;
-          }>
-        >
+        Exact<{
+          id: string;
+        }>
+      >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -70,7 +70,7 @@ const LeakTestForm = ({ refetchEndo, containerClass }: Props) => {
         passed: true,
       };
 
-      const result = await createAction({
+      await createAction({
         variables: {
           input,
         },
@@ -78,7 +78,7 @@ const LeakTestForm = ({ refetchEndo, containerClass }: Props) => {
 
       refetch();
       refetchEndo();
-      console.log("result", result);
+
     } catch (error) {
       console.log("error", error);
     }

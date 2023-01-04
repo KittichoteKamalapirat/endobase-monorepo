@@ -65,8 +65,6 @@ const EditEndo = () => {
         navigate(`/endo/${result.data.updateEndo.id}`, {
           state: { prev: `/endo/edit/${result.data.updateEndo.id}` },
         });
-
-        console.log("result", result);
         dispatch(
           showToast({
             message: "Successfully Updated",

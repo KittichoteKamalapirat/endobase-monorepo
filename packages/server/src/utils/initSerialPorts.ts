@@ -21,9 +21,6 @@ export const initSerialports = ({ connectedArduinos, serialports }: Args) => {
       (portInfo) => portInfo.path === toConnectPath,
     );
 
-    console.log('toConnectPath', toConnectPath);
-    console.log('isConnected', isConnected);
-
     // if not connected
     // make it null (even if it was connected previously)
     // update every 1 min from the frontend's refetch

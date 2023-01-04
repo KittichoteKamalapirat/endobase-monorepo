@@ -48,7 +48,6 @@ const EndosTable = () => {
 
   const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[])
 
-  console.log('sortedEndos', sortedEndos)
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
 

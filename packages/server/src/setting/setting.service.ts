@@ -91,7 +91,6 @@ export class SettingService {
     if (setting.name === 'containerSnapshotIntervalMin') {
       const activeSpNum = this.serialportsService.getActiveSerialportNum()
       this.counterCeil = Number(input.value) * activeSpNum
-      console.log('updated counter ceil', this.counterCeil)
 
     }
     // re init setting

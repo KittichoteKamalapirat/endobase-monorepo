@@ -56,7 +56,6 @@ async function bootstrap() {
   // // init setting so snapshot cron can use it
   // const settingService = app.get(SettingService);
   // await settingService.initSetting()
-  // console.log('111111')
 
 }
 bootstrap();

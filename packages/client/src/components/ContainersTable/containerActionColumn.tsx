@@ -28,14 +28,12 @@ const ContainerActionColumn = ({ row }: Props) => {
   };
 
   const handleTurnLightsOn = async () => {
-    console.log("resultttttttt1");
     try {
       if (lightsAreOn) return; // do nothing
       const result = await turnLightsOn({
         variables: { id: containerId },
       });
 
-      console.log("resultttt2", result);
       const resultValue = result.data?.turnLightsOn.container;
 
       let errorMessage = "";

@@ -45,7 +45,6 @@ export class SerialportsService implements OnModuleInit {
   async onModuleInit() {
     await this.settingService.initSetting()
 
-    // console.log('resultttt', result)
     const parsers = {} as MyParser;
 
     Object.keys(this.serialports).forEach(async (key: CONTAINER_TYPE_VALUES) => {
@@ -71,10 +70,7 @@ export class SerialportsService implements OnModuleInit {
 
       parsers[col]?.on('data', async (data: string) => {
         this.setActiveSerialport(col)
-        console.log('got response from container ', col);
-        console.log('COUNTER_CEIL', this.settingService.counterCeil);
-        console.log('counter', counter);
-        console.log('active', this.getActiveSerialports())
+
         const { systemStatus, temp, hum } = formatSTS(data) || {};
 
         // update container stats every minute
@@ -100,7 +96,6 @@ export class SerialportsService implements OnModuleInit {
             containerId: container.id,
           };
           const newSnapshot = await this.snapshotsService.create(input);
-          console.log('newsnapshot', newSnapshot)
 
           // reset counter back to 0
           counter = 0
@@ -147,7 +142,6 @@ export class SerialportsService implements OnModuleInit {
   // @Cron(CronExpression.EVERY_MINUTE)
   @Cron(CronExpression.EVERY_SECOND)
   checkSystemStatus() {
-    // console.log('-----------check status cron----------');
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
       console.log(
         `serialport ${key} is ${this.serialports[key]?.isOpen ? 'open' : 'close'
@@ -184,11 +178,9 @@ export class SerialportsService implements OnModuleInit {
     });
 
     this.serialports[col]?.write(command, (err) => {
-      // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);
       }
-      console.log('wrote');
     });
   }
 
@@ -207,11 +199,9 @@ export class SerialportsService implements OnModuleInit {
     });
 
     this.serialports[col]?.write(command, (err) => {
-      // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);
       }
-      console.log('wrote ', command);
     });
   }
 
@@ -223,7 +213,6 @@ export class SerialportsService implements OnModuleInit {
     const command = `:L${ledPosition}(${colorCommand})\r\n)`;
 
     this.serialports[col]?.write(command, (err) => {
-      // if (error) console.log(error?.message);
       if (err) {
         return console.log('Error on write: ', err.message);
       }

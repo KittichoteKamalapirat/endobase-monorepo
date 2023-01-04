@@ -8,10 +8,6 @@ export const useIsAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log('me data', data?.me?.username)
-  console.log('loading', loading)
-  console.log('errpr', error)
-
   useEffect(() => {
     // if login nothing happen
 

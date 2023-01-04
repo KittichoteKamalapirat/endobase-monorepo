@@ -17,7 +17,7 @@ export class ContainersService {
     // private serialportsService: SerialportsService,
     @Inject(forwardRef(() => SerialportsService))
     private serialportsService: SerialportsService,
-  ) {}
+  ) { }
 
   create(createContainerInput: CreateContainerInput) {
     return 'This action adds a new container';
@@ -98,8 +98,6 @@ export class ContainersService {
 
   async turnLightsOn(id: string): Promise<ContainerResponse> {
     const container = await this.findOne(id);
-
-    console.log('containerrrr', container);
 
     if (!container)
       return {

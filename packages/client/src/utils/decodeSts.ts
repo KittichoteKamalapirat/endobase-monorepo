@@ -15,8 +15,7 @@ export interface StsInfo {
 export const decodeSts = (input: number): StsInfo => {
   const binary = dec2bin(input);
   const binaryStr = binary.toString();
-  console.log("binary", binary);
-  console.log("binaryStr", binaryStr);
+
   const result = {
     doorIsClosed: binaryStr[7] === "1", // bit 0
     // door2IsClosed: binaryStr[6] === "1", // bit 1
@@ -28,6 +27,5 @@ export const decodeSts = (input: number): StsInfo => {
     airValveIsOn: binaryStr[0] === "1", // bit 7
   };
 
-  console.log("result", result);
   return result;
 };

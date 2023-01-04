@@ -7,13 +7,13 @@ export const ICON_SIZE = 15;
 export const HUMIDITY_THRESHOLD = 35;
 
 const prod = {
-    graphqlHttpEndpoint: "https://192.168.1.200:4001/graphql",
-    graphqlSocketEndpoint: "wss://192.168.1.200:4001/graphql"
+    graphqlHttpEndpoint: "https://192.168.1.187:4001/graphql",
+    graphqlSocketEndpoint: "wss://192.168.1.187:4001/graphql"
 }
 
 const dev = {
-    graphqlHttpEndpoint: "https://192.168.1.200:4001/graphql",
-    graphqlSocketEndpoint: "wss://192.168.1.200:4001/graphql"
+    graphqlHttpEndpoint: "https://192.168.1.187:4001/graphql",
+    graphqlSocketEndpoint: "wss://192.168.1.187:4001/graphql"
 }
 
 

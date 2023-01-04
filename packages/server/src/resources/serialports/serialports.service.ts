@@ -238,7 +238,8 @@ export class SerialportsService implements OnModuleInit {
 
   async blinkLocation({
     col,
-    row
+    row,
+    status
   }: RowAndColInput) {
 
     const blinkSetting = (await this.settingService.findByName("trayLocationBlinkingSec"))
@@ -249,12 +250,17 @@ export class SerialportsService implements OnModuleInit {
     const blinkingInterval = setInterval(() => {
       if (toBlinkCounter <= 0) {
         clearInterval(blinkingInterval)
+        this.writeColor({ // write the last time so it's not dark
+          col: col,
+          row: row,
+          endoStatus: status,
+        });
         return // so it does not move to the next line
       }
       this.writeColor({
         col: col,
         row: row,
-        endoStatus: toBlinkCounter % 2 === 0 ? "ready" : "being_used",
+        endoStatus: toBlinkCounter % 2 === 0 ? status : "being_used",
       });
 
       toBlinkCounter--

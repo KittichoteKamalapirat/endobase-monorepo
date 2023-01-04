@@ -14,6 +14,7 @@ import {
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
+import { ENDO_STATUS_Keys, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import { endoColumns } from "./EndosTable/endoColumns";
 import CheckboxField from "./forms/CheckboxField";
@@ -58,10 +59,10 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
 
   const dispatch = useDispatch();
 
-  const handleBlinkLocation = () => {
+  const handleBlinkLocation = (status: ENDO_STATUS_VALUES) => {
     blinkLocation({
       variables: {
-        input: { col: endo.tray.container.col, row: endo.tray.row }
+        input: { col: endo.tray.container.col, row: endo.tray.row, status }
       }
     })
   }
@@ -102,6 +103,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
           variant: "success",
         })
       );
+      handleBlinkLocation("drying")
     } catch (error) {
       console.log("error", error);
     }
@@ -133,7 +135,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
             label="Blink location"
             buttonType={HTMLButtonType.BUTTON}
             type={ButtonTypes.OUTLINED}
-            onClick={handleBlinkLocation}
+            onClick={() => handleBlinkLocation("ready")}
             startIcon={<TbBulb
               color={primaryColor}
               size={ICON_SIZE + 10}

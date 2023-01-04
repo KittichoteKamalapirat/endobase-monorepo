@@ -168,3 +168,17 @@ when server comes back =>
    c: Parser,
 }```
 ````
+
+When deploy server
+1. yarn build
+2. yarn prod (node-service)
+
+When deploy react
+1. build docker image
+2. remove running container (same name)
+3. run docker container (change image)
+
+
+When installa at a hospital
+1. fix the port
+2. change the ip address in both server and clientdocker

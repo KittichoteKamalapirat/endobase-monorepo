@@ -240,6 +240,7 @@ type Mutation {
 input RowAndColInput {
   col: String!
   row: Int!
+  status: String!
 }
 
 input CreateSnapshotInput {

@@ -15,6 +15,7 @@ async function bootstrap() {
             await serialportsService.blinkLocation(({
                 row: 1,
                 col: "a",
+                status: "ready"
             }))
             break;
             break

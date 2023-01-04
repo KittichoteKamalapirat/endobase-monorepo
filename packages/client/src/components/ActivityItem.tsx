@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ActivityItem = ({ action }: Props) => {
-  const { officer, type, passed, createdAt } = action;
+  const { officer, passed, createdAt } = action;
 
   return (
     <div>

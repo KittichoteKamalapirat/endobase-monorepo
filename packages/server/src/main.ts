@@ -18,7 +18,7 @@ async function bootstrap() {
     key: fs.readFileSync(keyPath),
   };
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { httpsOptions });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule,);
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -32,7 +32,7 @@ async function bootstrap() {
     session({
       name: COOKIE_NAME, // TODO add dot env
       store: new RedisStore({
-        client: redis,
+        client: redis as any,
         disableTouch: true,
       }),
       cookie: {

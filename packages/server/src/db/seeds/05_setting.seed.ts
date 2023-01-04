@@ -5,14 +5,14 @@ export default class CreateSettings implements Seeder {
   public async run(factory: Factory): Promise<any> {
     await factory(Setting)().create({
       name: 'humidityThreshold',
-      value: '20',
+      value: '30',
       label: 'Humidity Threshold Alert',
       description:
         'เปิดการแจ้งเตือนหากความชื้นในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',
     });
     await factory(Setting)().create({
       name: 'temperatureThreshold',
-      value: '35',
+      value: '30',
       label: 'Temperature Threshold Alert',
       description:
         'เปิดการแจ้งเตือนหากอุณหภูมิในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',

@@ -475,6 +475,7 @@ export type QueryUserArgs = {
 export type RowAndColInput = {
   col: Scalars['String'];
   row: Scalars['Int'];
+  status: Scalars['String'];
 };
 
 export type Session = {

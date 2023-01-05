@@ -16,7 +16,7 @@ export const typeormConfigNest = {
   port: 5432,
   username: 'postgres',
   password: '02321',
-  database: 'endosupply',
+  database: process.env.NODE_ENV === "production" ? 'endosupply_prod' : "endosupply",
   entities: [
     Endo,
     Container,

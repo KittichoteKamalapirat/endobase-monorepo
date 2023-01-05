@@ -137,14 +137,12 @@ export class SerialportsService implements OnModuleInit {
     return counter
   }
 
-  // @Cron(CronExpression.EVERY_10_MINUTES)
-  // @Cron(CronExpression.EVERY_HOUR)
-  // @Cron(CronExpression.EVERY_MINUTE)
-  @Cron(CronExpression.EVERY_SECOND)
+  //check every minute => createsnapshot every hour
+  @Cron(CronExpression.EVERY_MINUTE)
   checkSystemStatus() {
     Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
       console.log(
-        `serialport ${key} is ${this.serialports[key]?.isOpen ? 'open' : 'close'
+        `serialport ${key} is ${this.serialports[key]?.isOpen ? 'plugged' : 'unplugged'
         }`,
       );
     });

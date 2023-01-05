@@ -228,30 +228,7 @@ export class EndosService {
     });
   }
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
-  // addTestSchedule() {
-  //   const name = String(Math.random() * 100);
-  //   const callback = () => {
-  //     this.logger.warn(`Timeout ${name} executing after 1 sec!`);
-  //   };
 
-  //   const establishTimeout = setTimeout(callback, 1000);
-  //   this.schedulerRegistry.addTimeout(`Name: ${name}`, establishTimeout);
-  // }
-
-  // addSchedule(endoId: string, toBeStatus: ENDO_STATUS, milliseconds: number) {
-  //   const name = `Endo: ${endoId} is to be ${toBeStatus}`;
-  //   const callback = () => {
-  //     this.logger.warn(`Timeout ${name} executing after (${milliseconds})!`);
-  //     if (toBeStatus === 'ready') return this.setReady(endoId);
-  //     if (toBeStatus === 'expire_soon') return this.setExpireSoon(endoId);
-  //     if (toBeStatus === 'expired') return this.setExpired(endoId);
-  //     return;
-  //   };
-
-  //   const establishTimeout = setTimeout(callback, milliseconds);
-  //   this.schedulerRegistry.addTimeout(name, establishTimeout);
-  // }
 
   findCurrentSessionByEndoId(endoId: string) {
     // current session = status = ongoing

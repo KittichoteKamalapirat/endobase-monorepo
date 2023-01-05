@@ -182,3 +182,9 @@ When deploy react
 When installa at a hospital
 1. fix the port
 2. change the ip address in both server and clientdocker
+3. change chrome default page and new tab page to match ip address
+
+
+when run yarn gen
+1. server => yarn dev (will listen to http localhost 4001)
+2. client => 

@@ -4,9 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
-import { config } from "./constants";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
-
 import Actions from "./pages/Actions";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";

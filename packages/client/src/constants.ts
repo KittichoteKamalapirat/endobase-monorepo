@@ -12,10 +12,10 @@ const prod = {
 }
 
 const dev = {
-    // graphqlHttpEndpoint: "https://192.168.1.187:4001/graphql",
-    // graphqlSocketEndpoint: "wss://192.168.1.187:4001/graphql"
-    graphqlHttpEndpoint: "http://localhost:4001/graphql",
-    graphqlSocketEndpoint: "ws://localhost:4001/graphql"
+    graphqlHttpEndpoint: "https://192.168.1.187:4001/graphql",
+    graphqlSocketEndpoint: "wss://192.168.1.187:4001/graphql"
+    // graphqlHttpEndpoint: "http://localhost:4001/graphql",
+    // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
 
 
 

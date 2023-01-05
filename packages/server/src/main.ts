@@ -18,7 +18,7 @@ async function bootstrap() {
     key: fs.readFileSync(keyPath),
   };
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule,);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { httpsOptions });
 
   app.useGlobalPipes(new ValidationPipe());
 

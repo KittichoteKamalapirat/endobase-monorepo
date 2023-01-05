@@ -19,7 +19,7 @@ export default class CreateSettings implements Seeder {
     });
     await factory(Setting)().create({
       name: 'containerSnapshotIntervalMin',
-      value: '20',
+      value: '60',
       label: 'Container Snapshot Interval',
       description:
         'ช่วงระยะเวลาในการบันทึกข้อมูล หน่วยเป็นนาที (เช่น ทุกๆ 10 นาที)',

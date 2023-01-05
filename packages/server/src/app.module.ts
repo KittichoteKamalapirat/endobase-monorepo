@@ -25,12 +25,17 @@ import { ConfigModule } from '@nestjs/config';
 
 // could be "mac-dev", "win-dev", "wind-prod"
 const ENV = process.env.NODE_ENV;
-console
+
+const envPath = (() => {
+  if (ENV === "production") return '.env.production'
+  return '.env.development' // no env or env===prod
+})()
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: !ENV ? '.env.prod' : `.env.${ENV}`,
+      envFilePath: envPath,
       isGlobal: true
     }),
     // graphql

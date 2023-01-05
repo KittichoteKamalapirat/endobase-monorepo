@@ -11,8 +11,8 @@ import { COOKIE_NAME, SESSION_SECRET } from './constants';
 
 async function bootstrap() {
 
-  const certPath = path.resolve(__dirname, '../.cert/endosupply+4.pem')
-  const keyPath = path.resolve(__dirname, '../.cert/endosupply+4-key.pem')
+  const certPath = path.resolve(__dirname, '../.cert/cert.pem')
+  const keyPath = path.resolve(__dirname, '../.cert/key.pem')
   const httpsOptions = {
     cert: fs.readFileSync(certPath),
     key: fs.readFileSync(keyPath),

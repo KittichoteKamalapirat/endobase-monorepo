@@ -40,6 +40,7 @@ const ActivityItem = ({ action }: Props) => {
           </div>
         </div>
       </div>
+
       <HDivider extraClass="my-4" />
     </div>
   );

@@ -23,9 +23,6 @@ const SubscribeToOverHumOrTemp = () => {
       (setting) => setting.name === "temperatureThreshold"
     )?.value || "";
 
-  console.log('humThreshold', humThreshold)
-  console.log('tempThreshold', tempThreshold)
-
   const {
     data: snapshotData,
     loading: snapshotLoading,

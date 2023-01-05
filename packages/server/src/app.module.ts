@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
 import { ScheduleModule } from '@nestjs/schedule';
 import { typeormConfigNest } from './config/typeorm-nest.config';
 import { ActionsModule } from './resources/actions/actions.module';

@@ -30,6 +30,7 @@ import { RowAndColInput } from './dto/row-and-col.input';
 export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
 
+  // active serialport means those that are responding
   private activeSerialportObj = {} as { [key in CONTAINER_TYPE_VALUES]: boolean }
 
   constructor(

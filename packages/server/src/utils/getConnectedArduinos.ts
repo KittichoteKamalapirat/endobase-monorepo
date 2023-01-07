@@ -2,6 +2,7 @@ import { SerialPort } from 'serialport';
 
 export const getConnectedArduinos = async () => {
   const allPorts = await SerialPort.list();
+  console.log('allports', allPorts)
   const connectedArduinos = allPorts.filter((port) => {
     const vendorIdIsMatched = port.vendorId === process.env.ARDUINO_VENDOR_ID;
 

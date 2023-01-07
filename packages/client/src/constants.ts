@@ -16,9 +16,6 @@ const dev = {
     graphqlSocketEndpoint: "ws://192.168.1.187:4001/graphql"
     // graphqlHttpEndpoint: "http://localhost:4001/graphql",
     // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
-
-
-
 }
 
 

@@ -105,9 +105,9 @@ const UpdateSetting = ({ setting }: Props) => {
                 name={FormNames.TIME}
                 control={control as unknown as Control}
                 containerClass="w-full sm:w-80"
-                placeholder="Drying Time"
+                placeholder={setting.label}
                 type={TextFieldTypes.OUTLINED}
-                inputType={InputType.Text}
+                inputType={InputType.Number}
                 extraClass="w-full"
                 labelClass="mt-4.5 mb-2"
                 error={errors[FormNames.TIME]}

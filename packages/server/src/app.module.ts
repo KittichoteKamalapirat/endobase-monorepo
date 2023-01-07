@@ -41,17 +41,8 @@ const envPath = (() => {
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
         origin: [
-          'http://localhost',
           'http://localhost:3000',
-          // "http://endosupply",
-
-          // 'https://localhost',
-          // 'https://localhost/',
-          // "https://endosupply",
-          // "https://endosupply.com",
           "http://192.168.1.187",
-          "http://172.30.176.1",
-          // "http://172.21.32.1"
         ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },

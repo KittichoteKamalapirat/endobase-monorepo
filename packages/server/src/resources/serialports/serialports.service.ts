@@ -68,8 +68,11 @@ export class SerialportsService implements OnModuleInit {
     // event listener on controller return
     containerTypeOptions.forEach((option) => {
       const col = option.value;
+      console.log('col', col)
+      console.log('parsers', parsers)
 
       parsers[col]?.on('data', async (data: string) => {
+        console.log('received from', col, data.toString())
         this.setActiveSerialport(col)
 
         const { systemStatus, temp, hum } = formatSTS(data) || {};

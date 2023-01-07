@@ -32,7 +32,7 @@ export class ContainersResolver {
   @ResolveField(() => Boolean)
   isResponding(@Root() container: Container): boolean {
     const col = container.col;
-    return this.serialportsService.containerIsResponding(col);
+    return this.serialportsService.containerIsResponding(col) || false;
   }
 
   @Mutation(() => Container)

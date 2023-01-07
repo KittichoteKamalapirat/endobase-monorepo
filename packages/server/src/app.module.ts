@@ -42,17 +42,14 @@ const envPath = (() => {
       cors: {
         origin: [
           'http://localhost',
-          "http://endosupply",
+          // "http://endosupply",
 
-          'https://localhost',
-          'https://localhost/',
-          "https://endosupply",
-          "https://endosupply.com",
-          "https://192.168.1.187",
-
-          "http://172.21.32.1"
-
-
+          // 'https://localhost',
+          // 'https://localhost/',
+          // "https://endosupply",
+          // "https://endosupply.com",
+          "http://192.168.1.187",
+          // "http://172.21.32.1"
         ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },

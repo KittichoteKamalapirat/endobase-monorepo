@@ -169,7 +169,6 @@ type PaginatedSnapshotOutput {
 }
 
 type Query {
-  testPort: Boolean!
   snapshots: [Snapshot!]!
   paginatedSnapshots(input: PaginatedInput!): PaginatedSnapshotOutput!
   containers: [Container!]!

@@ -42,6 +42,7 @@ export class SerialportsModule {
       provide: SERIALPORTS_PROVIDER,
       useValue: serialports,
     };
+    console.log('serialportsProvider', serialportsProvider)
 
     return {
       module: SerialportsModule,

@@ -6,14 +6,6 @@ import { SerialportsService } from './serialports.service';
 @Resolver()
 export class SerialportsResolver {
   constructor(private serialportsService: SerialportsService) { }
-  @Query(() => Boolean)
-  testPort() {
-    // this.serialportsService.writeRandomColor();
-
-    // getSystemStatus(allPorts[0]);
-
-    return true;
-  }
 
   @Mutation(() => Boolean)
   blinkLocation(

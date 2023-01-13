@@ -11,7 +11,7 @@ COPY . .
 
 ENV NODE_ENV production
 
-EXPOSE 443
+EXPOSE 80
 # required for docker desktop port mapping
 
 CMD ["yarn", "prod-start"]

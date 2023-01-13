@@ -3,7 +3,7 @@ const typeormConfigMigrations = {
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: '02321',
+  password: '4755',
   database: 'endosupply_prod',
   autoLoadEntities: true,
 

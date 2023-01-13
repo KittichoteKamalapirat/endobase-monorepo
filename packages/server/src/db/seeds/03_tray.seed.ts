@@ -11,10 +11,10 @@ export default class CreateTrays implements Seeder {
       .from(Container, 'container')
       .getMany();
 
-    // create 16 trays (1-16) for each container
+    // create 16 trays (1-8) for each container
     await Promise.all(
       containers.map(async (container) => {
-        const rows = Array.from({ length: 16 }, (_, i) => i + 1) as RowType[];
+        const rows = Array.from({ length: 8 }, (_, i) => i + 1) as RowType[];
         await Promise.all(
           rows.map(async (row) => {
             await factory(Tray)().create({

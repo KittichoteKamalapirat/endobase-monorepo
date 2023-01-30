@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { columnToArduinoIdMapper } from 'src/constants';
 import { Repository } from 'typeorm';
@@ -82,41 +82,24 @@ export class ContainersService {
       updatedInput,
     );
 
-    console.log(1);
-
-    // // turn light off for every tray in that container
-    // container.trays.map((tray) => {
-    //   // because of forward ref?
-    //   this.serialportsService.turnLightsOff({
-    //     col: container.col,
-    //     row: tray.row,
-    //     // endoStatus: 'ready',
-    //   });
-    // });
-
-    console.log(2);
+    console.log('trays num', container.trays.length);
 
     const syncTurnlightsOff = async () => {
       for (let tray of container.trays) {
-        console.log(111);
+        console.log('tray', tray);
 
-        const result = await this.serialportsService.turnLightsOff({
+        await this.serialportsService.turnLightsOff({
           col: container.col,
           row: tray.row,
-          // endoStatus: 'ready',
         });
-        console.log('-------------------------------------');
 
-        return result
-
+        // DON"T RETURN inside the loop => immediately get out of the loop
       }
     }
     try {
-      console.log(3);
       const result = await syncTurnlightsOff()
-      console.log('resulttt', result);
+      console.log('result', result);
 
-      console.log(4);
     } catch (error) {
       console.log(error);
     }
@@ -146,16 +129,6 @@ export class ContainersService {
 
     // turn light off for every tray in that container
 
-    // tray.endo could be undefined when there are empty trays
-    container.trays.map((tray) =>
-      this.serialportsService.turnLightsOn({
-        col: container.col,
-        row: tray.row,
-        status: tray.endo?.status || 'no_endo', // make light black for a tray with no endo
-      }),
-    );
-
-
 
     const syncTurnlightsOn = async () => {
       for (let tray of container.trays) {
@@ -164,7 +137,6 @@ export class ContainersService {
           row: tray.row,
           status: tray.endo?.status || 'no_endo',
         });
-
       }
     }
     try {

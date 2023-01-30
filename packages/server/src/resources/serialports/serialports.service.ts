@@ -159,23 +159,17 @@ export class SerialportsService implements OnModuleInit {
 
   async turnLightsOff({ col, row }: { col: CONTAINER_TYPE_VALUES; row: RowType }) {
     try {
-      console.log(111111);
 
       // col
       const arduinoId = columnToArduinoIdMapper[col]
-      console.log(222222);
       await this.modbus.setID(arduinoId)
-
-      console.log(333333);
 
       // row
       const position = 99 + row // 100 => row 1, 115 => row 16
-      console.log(444444);
 
       // color
       const color = colorToNumber.off
       await this.modbus.writeRegister(position, color) // 0 = off
-      console.log(555555);
 
       return true
     } catch (error) {
@@ -183,7 +177,7 @@ export class SerialportsService implements OnModuleInit {
     }
   }
 
-  turnLightsOn({
+  async turnLightsOn({
     col,
     row,
     status,
@@ -192,7 +186,7 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
     status: ENDO_STATUS;
   }) {
-    this.writeColor({
+    await this.writeColor({
       col: col,
       row: row,
       endoStatus: status,

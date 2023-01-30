@@ -2,12 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SerialportsService } from './resources/serialports/serialports.service';
 
+
 async function bootstrap() {
     const application = await NestFactory.createApplicationContext(
         AppModule,
     );
 
     const command = process.argv[2];
+
 
     switch (command) {
         case 'blink-serialport':
@@ -18,7 +20,16 @@ async function bootstrap() {
                 status: "ready"
             }))
             break;
-            break
+        case 'write-color':
+            console.log(11111);
+
+            const serialportsService1 = application.get(SerialportsService);
+            await serialportsService1.writeColor(({
+                row: 1,
+                col: "a",
+                endoStatus: "ready"
+            }))
+            break;
         default:
             console.log('Command not found');
             process.exit(1);

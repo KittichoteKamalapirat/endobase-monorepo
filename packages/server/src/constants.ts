@@ -33,3 +33,21 @@ export const snapshotTriggertName = 'snapshotAdded';
 // export const ARDUINO_VENDOR_ID = '10C4';
 // export const ARDUINO_PATH_REGEXP = new RegExp('COM');
 
+
+export const columnToArduinoIdMapper = {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: 4,
+    e: 5,
+    f: 6,
+    g: 7,
+}
+
+export const colorToNumber = {
+    "off": 0,
+    "red": 0,
+    "green": 0,
+    "blue": 0,
+    "white": 0,
+}

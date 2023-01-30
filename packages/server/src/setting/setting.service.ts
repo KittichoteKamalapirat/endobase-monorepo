@@ -1,7 +1,6 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { isCompositeType } from 'graphql/type';
 import { SerialportsService } from 'src/resources/serialports/serialports.service';
 import { Repository } from 'typeorm';
 import { AppService } from '../app.service';
@@ -21,8 +20,6 @@ export class SettingService {
   constructor(
     @InjectRepository(Setting)
     private settingRepository: Repository<Setting>, // use database, make sure forFeature is in module
-    @Inject(forwardRef(() => SerialportsService))
-    private serialportsService: SerialportsService
 
   ) { }
 
@@ -40,16 +37,6 @@ export class SettingService {
   getSetting() {
     return this.allSettings
   }
-
-  // // for serialports to use
-  // getSnapshotInterval() {
-  //   return this.SNAPSHOT_INTERVAL_MINS;
-  // }
-
-  // setSnapshotInterval(mins: number) {
-  //   this.SNAPSHOT_INTERVAL_MINS = mins;
-  //   return this.SNAPSHOT_INTERVAL_MINS;
-  // }
 
   create(input: CreateSettingInput) {
     const newSetting = this.settingRepository.create(input);
@@ -87,12 +74,7 @@ export class SettingService {
       updatedSettingInput,
     );
 
-    // update counter ceiling for for serialports to create snapshot
-    if (setting.name === 'containerSnapshotIntervalMin') {
-      const activeSpNum = this.serialportsService.getActiveSerialportNum()
-      this.counterCeil = Number(input.value) * activeSpNum
 
-    }
     // re init setting
     await this.initSetting()
     return updatedSetting;

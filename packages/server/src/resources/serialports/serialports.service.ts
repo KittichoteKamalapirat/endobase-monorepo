@@ -1,42 +1,34 @@
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ReadlineParser } from 'serialport';
 import { AppService } from '../../app.service';
-import {
-  BLACK_COLOR_COMMAND, SERIALPORTS_PROVIDER
-} from '../../constants';
+import { colorToNumber, columnToArduinoIdMapper } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
   containerTypeOptions,
   CONTAINER_TYPE_OBJ,
-  CONTAINER_TYPE_VALUES,
-  MyParser,
-  MySerialPort
+  CONTAINER_TYPE_VALUES
 } from '../../types/CONTAINER_TYPE';
-import { formatSTS } from '../../utils/formatSTS';
-import { getConnectedArduinos } from '../../utils/getConnectedArduinos';
-import { initSerialports } from '../../utils/initSerialPorts';
-import { rowNumToLEDPositionTwoCols } from '../../utils/rowNumToLEDPositionTwoCols';
-import { writeColorCommand } from '../../utils/writeColorCommand';
 import { ContainersService } from '../containers/containers.service';
 
-import { ENDO_STATUS } from '../endos/entities/endo.entity';
+import ModbusRTU from "modbus-serial";
+import { ENDO_STATUS, statusToColor } from '../endos/entities/endo.entity';
 import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
+import { forwardRef, Inject } from '@nestjs/common';
 
 @Injectable()
 export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
+  private modbus = new ModbusRTU();
 
   // active serialport means those that are responding
   private activeSerialportObj = {} as { [key in CONTAINER_TYPE_VALUES]: boolean }
 
   constructor(
     private snapshotsService: SnapshotsService,
-    @Inject(SERIALPORTS_PROVIDER)
-    private serialports: MySerialPort,
+    @Inject(forwardRef(() => ContainersService))
     private containersService: ContainersService,
     private settingService: SettingService,
   ) {
@@ -44,128 +36,72 @@ export class SerialportsService implements OnModuleInit {
   }
 
   async onModuleInit() {
+    await this.modbus.connectRTUBuffered("COM5", { baudRate: 9600 });
+
     await this.settingService.initSetting()
 
-    const parsers = {} as MyParser;
-
-    Object.keys(this.serialports).forEach(async (key: CONTAINER_TYPE_VALUES) => {
-      if (!this.serialports[key]) return;
-      const parser = this.serialports[key].pipe(
-        new ReadlineParser({ delimiter: '\r\n' }),
-      );
-      parsers[key] = parser;
-    });
-
-
-
-
-    const snapshotSettingMin = parseFloat(this.settingService.getSetting().containerSnapshotIntervalMin.value); // get the default value
-    // ex. 60 mins * 8 active serialports
-    this.settingService.counterCeil = snapshotSettingMin * this.getActiveSerialportNum() || Infinity;
-
-    let counter = 0;
 
     // event listener on controller return
     containerTypeOptions.forEach((option) => {
       const col = option.value;
-      console.log('col', col)
-      console.log('parsers', parsers)
 
-      parsers[col]?.on('data', async (data: string) => {
-        console.log('received from', col, data.toString())
-        this.setActiveSerialport(col)
 
-        const { systemStatus, temp, hum } = formatSTS(data) || {};
-
-        // update container stats every minute
-        // cron job defined in snapshots service
-        this.containersService.updateStats({
-          col,
-          currTemp: temp,
-          currHum: hum,
-        });
-
-        // add a new snapshot
-        if (data.includes('sts') && counter >= this.settingService.counterCeil) {
-          // only save snapshot if it is reading system status
-
-          const container = await this.containersService.findOneByContainerChar(
-            col,
-          );
-
-          const input: CreateSnapshotInput = {
-            systemStatus,
-            temp,
-            hum,
-            containerId: container.id,
-          };
-          const newSnapshot = await this.snapshotsService.create(input);
-
-          // reset counter back to 0
-          counter = 0
-        } else {
-          counter += 1;
-        }
-
-      });
     });
 
-    // init activeSerialportObj
-    Object.keys(CONTAINER_TYPE_OBJ).forEach(key => {
-      this.activeSerialportObj[key] = false
-    })
   }
 
   getActiveSerialports() {
     return this.activeSerialportObj
   }
 
-  setActiveSerialport(container: CONTAINER_TYPE_VALUES) {
-    this.activeSerialportObj[container] = true
+  async setActiveSerialport() {
+    await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
+      const arduinoId = columnToArduinoIdMapper[key]
+      await this.modbus.setID(arduinoId);
+      const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+      if (val) {
+        this.activeSerialportObj[key] = true
+      } else {
+        this.activeSerialportObj[key] = false
+      }
 
-    // update counterCeil
-    const snapshotSettingMin = parseFloat(this.settingService.getSetting().containerSnapshotIntervalMin.value);
-    this.settingService.counterCeil = this.getActiveSerialportNum() * snapshotSettingMin
+    }));
   }
 
-  getActiveSerialportNum() {
-    // there could be 4 containers
-    // but if only 2 is connected
-    // active should be 2
 
-    let counter = 0
-    Object.keys(this.activeSerialportObj).forEach(key => {
-      // if null then don't count, if sp then count
-      if (this.activeSerialportObj[key]) counter++
-    })
-    return counter
-  }
+  @Cron(CronExpression.EVERY_HOUR)
+  async createSnapshotCron() {
+    const newSnapshots = await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
+      const arduinoId = columnToArduinoIdMapper[key]
 
-  //check every minute => createsnapshot every hour
-  @Cron(CronExpression.EVERY_MINUTE)
-  checkSystemStatus() {
-    Object.keys(CONTAINER_TYPE_OBJ).forEach((key) => {
-      console.log(
-        `serialport ${key} is ${this.serialports[key]?.isOpen ? 'plugged' : 'unplugged'
-        }`,
+      await this.modbus.setID(arduinoId);
+
+      const container = await this.containersService.findOneByContainerChar(
+        key as CONTAINER_TYPE_VALUES,
       );
-    });
 
-    Object.keys(this.serialports).forEach((key) => {
-      this.serialports[key]?.write(':STS\r\n');
-    });
+      const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+      const systemStatus = String(val.data[0]);
+      const temp = String(val.data[1] / 10)
+      const hum = String(val.data[2] / 10);
 
-    this.logger.log('Read STS every 1 sec');
+
+
+      const input: CreateSnapshotInput = {
+        systemStatus,
+        temp,
+        hum,
+        containerId: container.id,
+      };
+      const newSnapshot = await this.snapshotsService.create(input);
+      return newSnapshot
+
+
+    }));
+    return newSnapshots
   }
 
-  @Cron(CronExpression.EVERY_MINUTE)
-  async checkSerialportConnections() {
-    const connectedArduinos = await getConnectedArduinos();
-    // recheck ports
-    initSerialports({ connectedArduinos, serialports: this.serialports });
-  }
-  // also could be use when turn lights on
-  writeColor({
+  async writeColor({
     col,
     row,
     endoStatus,
@@ -174,52 +110,43 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
     endoStatus: ENDO_STATUS;
   }) {
-    const command = writeColorCommand({
-      endoStatus,
-      row,
-    });
+    try {
+      // col
+      const arduinoId = columnToArduinoIdMapper[col]
+      await this.modbus.setID(arduinoId)
 
-    this.serialports[col]?.write(command, (err) => {
-      if (err) {
-        return console.log('Error on write: ', err.message);
-      }
-    });
+      // row
+      const position = 99 + row // 100 => row 1, 115 => row 16
+
+      // color
+      const color = statusToColor[endoStatus]
+
+      await this.modbus.writeRegister(position, color) // 0 = off
+      return true
+    } catch (error) {
+      return false
+    }
   }
 
-  setDryingTime({
-    col,
-    row,
-    endoStatus,
-  }: {
-    col: CONTAINER_TYPE_VALUES;
-    row: RowType;
-    endoStatus: ENDO_STATUS;
-  }) {
-    const command = writeColorCommand({
-      endoStatus,
-      row,
-    });
 
-    this.serialports[col]?.write(command, (err) => {
-      if (err) {
-        return console.log('Error on write: ', err.message);
-      }
-    });
-  }
+  async turnLightsOff({ col, row }: { col: CONTAINER_TYPE_VALUES; row: RowType }) {
+    try {
+      // col
+      const arduinoId = columnToArduinoIdMapper[col]
+      await this.modbus.setID(arduinoId)
 
-  turnLightsOff({ col, row }: { col: CONTAINER_TYPE_VALUES; row: RowType }) {
-    const colorCommand = BLACK_COLOR_COMMAND;
+      // row
+      const position = 99 + row // 100 => row 1, 115 => row 16
 
-    const ledPosition = rowNumToLEDPositionTwoCols(row);
+      // color
+      const color = colorToNumber.off
 
-    const command = `:L${ledPosition}(${colorCommand})\r\n)`;
+      await this.modbus.writeRegister(position, color) // 0 = off
+      return true
+    } catch (error) {
+      return false
+    }
 
-    this.serialports[col]?.write(command, (err) => {
-      if (err) {
-        return console.log('Error on write: ', err.message);
-      }
-      console.log('turned lights off');
-    });
   }
 
   turnLightsOn({
@@ -270,9 +197,7 @@ export class SerialportsService implements OnModuleInit {
 
     return true
   }
-  containerIsConnected(col: CONTAINER_TYPE_VALUES) {
-    return !!this.serialports[col];
-  }
+
 
   containerIsResponding(col: CONTAINER_TYPE_VALUES) {
     return this.activeSerialportObj[col];

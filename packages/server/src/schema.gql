@@ -46,7 +46,6 @@ type Container {
   snapshots: [Snapshot!]!
   createdAt: DateTime!
   updatedAt: DateTime!
-  isConnected: Boolean!
   isResponding: Boolean!
 }
 
@@ -148,16 +147,6 @@ type FieldError {
   message: String!
 }
 
-type BooleanResponse {
-  errors: [FieldError!]
-  value: Boolean
-}
-
-type UserResponse {
-  errors: [FieldError!]
-  user: User
-}
-
 type ContainerResponse {
   errors: [FieldError!]
   container: Container
@@ -166,6 +155,16 @@ type ContainerResponse {
 type PaginatedSnapshotOutput {
   items: [Snapshot!]!
   meta: IPaginationMetaClass!
+}
+
+type BooleanResponse {
+  errors: [FieldError!]
+  value: Boolean
+}
+
+type UserResponse {
+  errors: [FieldError!]
+  user: User
 }
 
 type Query {

@@ -2,6 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActionsModule } from '../actions/actions.module';
 import { EndoCronsModule } from '../endo-crons/endo-crons.module';
+import { SerialportsModule } from '../serialports/serialports.module';
 import { SessionsModule } from '../sessions/sessions.module';
 import { EndosResolver } from './endos.resolver';
 import { EndosService } from './endos.service';
@@ -13,8 +14,9 @@ import { Endo } from './entities/endo.entity';
     forwardRef(() => ActionsModule),
     forwardRef(() => EndoCronsModule),
     SessionsModule,
+    SerialportsModule
   ],
   providers: [EndosResolver, EndosService],
   exports: [EndosService],
 })
-export class EndosModule {}
+export class EndosModule { }

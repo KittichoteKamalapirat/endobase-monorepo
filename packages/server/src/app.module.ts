@@ -64,7 +64,7 @@ const envPath = (() => {
     // typeorm
     TypeOrmModule.forRoot(typeormConfigNest),
     ScheduleModule.forRoot(),
-    SerialportsModule.forRoot(), // can add dynamic data
+    SerialportsModule, // can add dynamic data
     // resoureces
     SettingModule,
     EndosModule,

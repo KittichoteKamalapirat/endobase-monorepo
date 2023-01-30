@@ -45,16 +45,16 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   };
 
 
-  const handleRewash = async(id: string) => {
-    try {  
-      const result = await washWithoutStoring({variables: {id}})
+  const handleRewash = async (id: string) => {
+    try {
+      const result = await washWithoutStoring({ variables: { id } })
 
       const sessionId = result.data?.washWithoutStoring.id
       await refetchEndos()
       navigate(`/session/${sessionId}`, {
-      state: { prev: "/" },
-    });
-      
+        state: { prev: "/" },
+      });
+
     } catch (error) {
       dispatch(
         showToast({
@@ -62,11 +62,11 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           variant: "error",
         })
       );
-      
-    }
-  
 
-    
+    }
+
+
+
 
   }
   // 'ready', => use
@@ -82,8 +82,8 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const currentStatus = row.original.status;
   const endoId = row.original.id as string;
 
-  const isConnected = row.original.tray.container.isConnected;
-  if (!isConnected) return <div className="text-grey-500">Offline</div>;
+  const isResponding = row.original.tray.container.isResponding;
+  if (!isResponding) return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
@@ -117,22 +117,22 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
     case ENDO_STATUS.DISINFECTION_PASSED:
       return (
-       <div className="flex flex-col gap-2">
-         <LinkButton
-          label="Store"
-          href={`/session/${row.original.currentSessionId}`}
-          type={ButtonTypes.SECONDARY}
-          leftIcon={<BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />}
-        />
-        {/* Combine Use and wash */}
-         <Button
-          label="Rewash"
-          onClick={() => handleRewash(endoId)}
-          type={ButtonTypes.SECONDARY}
-          startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
-          
-        />
-       </div>
+        <div className="flex flex-col gap-2">
+          <LinkButton
+            label="Store"
+            href={`/session/${row.original.currentSessionId}`}
+            type={ButtonTypes.SECONDARY}
+            leftIcon={<BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />}
+          />
+          {/* Combine Use and wash */}
+          <Button
+            label="Rewash"
+            onClick={() => handleRewash(endoId)}
+            type={ButtonTypes.SECONDARY}
+            startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+
+          />
+        </div>
       );
     case ENDO_STATUS.DRYING:
       return (

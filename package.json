@@ -9,6 +9,8 @@
       "**/typeorm",
       "**/@nestjs",
       "**/@nestjs/**",
+      "**/modbus-serial",
+      "**/modbus-serial/**",
       "**/typeorm-seeding/**",
       "**/typeorm-seeding"
     ]

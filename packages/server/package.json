@@ -46,6 +46,7 @@
     "graphql": "^16.6.0",
     "graphql-subscriptions": "^2.0.0",
     "ioredis": "^5.2.4",
+    "modbus-serial": "^8.0.9",
     "nestjs-typeorm-paginate": "^4.0.2",
     "node-windows": "^1.0.0-beta.8",
     "pg": "^8.8.0",

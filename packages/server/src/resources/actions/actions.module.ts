@@ -7,6 +7,7 @@ import { SessionsModule } from '../sessions/sessions.module';
 import { OfficersModule } from '../officers/officers.module';
 import { EndosModule } from '../endos/endo.module';
 import { EndoCronsModule } from '../endo-crons/endo-crons.module';
+import { SerialportsModule } from '../serialports/serialports.module';
 
 @Module({
   imports: [
@@ -14,9 +15,10 @@ import { EndoCronsModule } from '../endo-crons/endo-crons.module';
     SessionsModule,
     OfficersModule,
     EndoCronsModule,
+    SerialportsModule,
     forwardRef(() => EndosModule),
   ],
   providers: [ActionsResolver, ActionsService],
   exports: [ActionsService],
 })
-export class ActionsModule {}
+export class ActionsModule { }

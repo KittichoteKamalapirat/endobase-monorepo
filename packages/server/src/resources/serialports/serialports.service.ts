@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
-import { colorToNumber, columnToArduinoIdMapper } from '../../constants';
+import { colorToNumber, columnToArduinoIdMapper, COM_PORT } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
   containerTypeOptions,
@@ -36,7 +36,7 @@ export class SerialportsService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await this.modbus.connectRTUBuffered("COM5", { baudRate: 9600 });
+    await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
 
     await this.settingService.initSetting()
 
@@ -54,19 +54,37 @@ export class SerialportsService implements OnModuleInit {
     return this.activeSerialportObj
   }
 
-  async setActiveSerialport() {
-    await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
-      const arduinoId = columnToArduinoIdMapper[key]
-      await this.modbus.setID(arduinoId);
-      const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
-      if (val) {
-        this.activeSerialportObj[key] = true
-      } else {
-        this.activeSerialportObj[key] = false
-      }
 
-    }));
+
+
+  @Timeout(1000)
+  // @Cron(CronExpression.EVERY_SECOND)
+  async setActiveSerialport() {
+    const syncSetActiveSerialport = async () => {
+      const activeSerialportObj = {};
+      for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
+        const arduinoId = columnToArduinoIdMapper[key]
+        await this.modbus.setID(arduinoId);
+        await this.modbus.writeRegister(100, 3)
+        const val = await this.modbus.readInputRegisters(0, 3);
+        if (val) activeSerialportObj[key] = true
+        else activeSerialportObj[key] = false
+      }
+      return activeSerialportObj;
+    }
+    try {
+      const activeSerialportObj = await syncSetActiveSerialport() as Record<CONTAINER_TYPE_VALUES, boolean>
+      this.activeSerialportObj = activeSerialportObj
+      console.log(this.activeSerialportObj);
+    } catch (error) {
+      console.log(error);
+    }
+
+
   }
+
+
+
 
 
   @Cron(CronExpression.EVERY_HOUR)

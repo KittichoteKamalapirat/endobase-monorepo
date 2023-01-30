@@ -17,13 +17,13 @@ export default class CreateSettings implements Seeder {
       description:
         'เปิดการแจ้งเตือนหากอุณหภูมิในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',
     });
-    await factory(Setting)().create({
-      name: 'containerSnapshotIntervalMin',
-      value: '60',
-      label: 'Container Snapshot Interval',
-      description:
-        'ช่วงระยะเวลาในการบันทึกข้อมูล หน่วยเป็นนาที (เช่น ทุกๆ 10 นาที)',
-    });
+    // await factory(Setting)().create({
+    //   name: 'containerSnapshotIntervalMin',
+    //   value: '60',
+    //   label: 'Container Snapshot Interval',
+    //   description:
+    //     'ช่วงระยะเวลาในการบันทึกข้อมูล หน่วยเป็นนาที (เช่น ทุกๆ 10 นาที)',
+    // });
     await factory(Setting)().create({
       name: 'trayLocationBlinkingSec',
       value: '10',

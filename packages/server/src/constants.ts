@@ -33,6 +33,7 @@ export const snapshotTriggertName = 'snapshotAdded';
 // export const ARDUINO_VENDOR_ID = '10C4';
 // export const ARDUINO_PATH_REGEXP = new RegExp('COM');
 
+export const COM_PORT = "COM5"
 
 export const columnToArduinoIdMapper = {
     a: 1,
@@ -51,3 +52,5 @@ export const colorToNumber = {
     "blue": 0,
     "white": 0,
 }
+
+export const setDryingTimePosition = 12

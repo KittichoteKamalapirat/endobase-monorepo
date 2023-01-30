@@ -42,7 +42,6 @@ export type Container = {
   currHum: Scalars['String'];
   currTemp: Scalars['String'];
   id: Scalars['ID'];
-  isConnected: Scalars['Boolean'];
   isResponding: Scalars['Boolean'];
   lightsAreOn: Scalars['Boolean'];
   snapshots: Array<Snapshot>;
@@ -420,7 +419,6 @@ export type Query = {
   settings: Array<Setting>;
   snapshotIntervalMins: Setting;
   snapshots: Array<Snapshot>;
-  testPort: Scalars['Boolean'];
   tray: Tray;
   trays: Array<Tray>;
   user: User;
@@ -649,7 +647,7 @@ export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isConnected: boolean, isResponding: boolean, lightsAreOn: boolean }> };
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isResponding: boolean, lightsAreOn: boolean }> };
 
 export type CreateEndoMutationVariables = Exact<{
   input: CreateEndoInput;
@@ -704,7 +702,7 @@ export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id:
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isConnected: boolean } } }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
 
 export type BlinkLocationMutationVariables = Exact<{
   input: RowAndColInput;
@@ -1100,7 +1098,6 @@ export const ContainersDocument = gql`
     col
     currTemp
     currHum
-    isConnected
     isResponding
     lightsAreOn
   }
@@ -1427,7 +1424,7 @@ export const EndosDocument = gql`
       container {
         id
         col
-        isConnected
+        isResponding
       }
     }
   }

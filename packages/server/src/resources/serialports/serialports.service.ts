@@ -158,6 +158,11 @@ export class SerialportsService implements OnModuleInit {
 
       // color
       const color = colorToNumber.off
+      console.log('id', arduinoId);
+      console.log('position', position)
+      console.log('color', color)
+
+
 
       await this.modbus.writeRegister(position, color) // 0 = off
       return true

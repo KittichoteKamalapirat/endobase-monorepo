@@ -1,5 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { columnToArduinoIdMapper } from 'src/constants';
 import { Repository } from 'typeorm';
 import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { SerialportsService } from '../serialports/serialports.service';
@@ -90,6 +91,28 @@ export class ContainersService {
         // endoStatus: 'ready',
       });
     });
+
+
+
+    const syncTurnlightsOff = async () => {
+      for (let tray of container.trays) {
+        await this.serialportsService.turnLightsOff({
+          col: container.col,
+          row: tray.row,
+          // endoStatus: 'ready',
+        });
+
+      }
+    }
+    try {
+      await syncTurnlightsOff()
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
 
     return {
       container: updatedContainer,

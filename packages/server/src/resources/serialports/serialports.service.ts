@@ -63,10 +63,20 @@ export class SerialportsService implements OnModuleInit {
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
+        console.log(1);
+
         const arduinoId = columnToArduinoIdMapper[key]
+        console.log(2);
+
         await this.modbus.setID(arduinoId);
+        console.log(3);
+
         await this.modbus.writeRegister(100, 3)
+        console.log(4);
+
         const val = await this.modbus.readInputRegisters(0, 3);
+        console.log(5);
+
         if (val) activeSerialportObj[key] = true
         else activeSerialportObj[key] = false
       }
@@ -149,27 +159,28 @@ export class SerialportsService implements OnModuleInit {
 
   async turnLightsOff({ col, row }: { col: CONTAINER_TYPE_VALUES; row: RowType }) {
     try {
+      console.log(111111);
+
       // col
       const arduinoId = columnToArduinoIdMapper[col]
+      console.log(222222);
       await this.modbus.setID(arduinoId)
+
+      console.log(333333);
 
       // row
       const position = 99 + row // 100 => row 1, 115 => row 16
+      console.log(444444);
 
       // color
       const color = colorToNumber.off
-      console.log('id', arduinoId);
-      console.log('position', position)
-      console.log('color', color)
-
-
-
       await this.modbus.writeRegister(position, color) // 0 = off
+      console.log(555555);
+
       return true
     } catch (error) {
       return false
     }
-
   }
 
   turnLightsOn({

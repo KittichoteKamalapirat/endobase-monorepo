@@ -82,38 +82,44 @@ export class ContainersService {
       updatedInput,
     );
 
-    // turn light off for every tray in that container
-    container.trays.map((tray) => {
-      // because of forward ref?
-      this.serialportsService.turnLightsOff({
-        col: container.col,
-        row: tray.row,
-        // endoStatus: 'ready',
-      });
-    });
+    console.log(1);
 
+    // // turn light off for every tray in that container
+    // container.trays.map((tray) => {
+    //   // because of forward ref?
+    //   this.serialportsService.turnLightsOff({
+    //     col: container.col,
+    //     row: tray.row,
+    //     // endoStatus: 'ready',
+    //   });
+    // });
 
+    console.log(2);
 
     const syncTurnlightsOff = async () => {
       for (let tray of container.trays) {
-        await this.serialportsService.turnLightsOff({
+        console.log(111);
+
+        const result = await this.serialportsService.turnLightsOff({
           col: container.col,
           row: tray.row,
           // endoStatus: 'ready',
         });
+        console.log('-------------------------------------');
+
+        return result
 
       }
     }
     try {
-      await syncTurnlightsOff()
+      console.log(3);
+      const result = await syncTurnlightsOff()
+      console.log('resulttt', result);
 
+      console.log(4);
     } catch (error) {
       console.log(error);
     }
-
-
-
-
     return {
       container: updatedContainer,
     };
@@ -148,6 +154,27 @@ export class ContainersService {
         status: tray.endo?.status || 'no_endo', // make light black for a tray with no endo
       }),
     );
+
+
+
+    const syncTurnlightsOn = async () => {
+      for (let tray of container.trays) {
+        await this.serialportsService.turnLightsOn({
+          col: container.col,
+          row: tray.row,
+          status: tray.endo?.status || 'no_endo',
+        });
+
+      }
+    }
+    try {
+      await syncTurnlightsOn()
+    } catch (error) {
+      console.log(error);
+    }
+
+
+
     return {
       container: updatedContainer,
     };

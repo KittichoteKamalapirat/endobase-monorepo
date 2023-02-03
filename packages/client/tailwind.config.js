@@ -11,7 +11,7 @@ const black = "#000000";
 
 // white grey and black
 const grey0 = "#FFFFFF";
-const grey50 = "#F5F0F0";
+const grey50 = "#F5F5F5";
 const grey100 = "#E0E0E0";
 const grey200 = "#C2C2C2";
 const grey300 = "#8F8F8F";
@@ -25,7 +25,7 @@ const grey900 = "#121212";
 
 const primaryColor = "#0018A8";
 // main
-const primaryColor50 = "#EBEEFF";
+const primaryColor50 = "#F6FDFF";
 const primaryColor100 = "#C2CBFF";
 const primaryColor200 = "#99A8FF";
 const primaryColor300 = "#8597FF";

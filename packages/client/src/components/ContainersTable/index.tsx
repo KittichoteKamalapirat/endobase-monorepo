@@ -73,7 +73,7 @@ const ContainersTable = () => {
               <TR
                 {...row.getRowProps()}
                 key={index}
-                className={classNames(index % 2 !== 0 ? "bg-grey-50" : "")}
+                className={classNames(index % 2 !== 0 ? "bg-primary-50" : "")}
               >
                 {row.cells.map((cell: any, index) => (
                   <TD

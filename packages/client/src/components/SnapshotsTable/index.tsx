@@ -174,7 +174,7 @@ const SnapshotsTable = () => {
               <TR
                 {...row.getRowProps()}
                 key={`body-${index}`}
-                className={classNames(index % 2 !== 0 ? "bg-grey-50" : "")}
+                className={classNames(index % 2 !== 0 ? "bg-primary-50" : "")}
               >
                 {row.cells.map((cell: any, subIndex) => (
                   <TD

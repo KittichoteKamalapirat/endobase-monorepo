@@ -174,7 +174,7 @@ const ActionsTable = () => {
                   })
                 }
                 className={classNames(
-                  index % 2 !== 0 ? "bg-grey-50" : "",
+                  index % 2 !== 0 ? "bg-primary-50" : "",
                   "hover:font-bold hover:cursor-pointer"
                 )}
               >

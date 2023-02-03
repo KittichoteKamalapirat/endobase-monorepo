@@ -31,6 +31,7 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
+import { HOSPITAL_NAME } from "../../constants";
 
 // 1. get the data
 // 2. define the columns
@@ -100,7 +101,7 @@ const EndosTable = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <PageHeading heading="Endoscopes" />
+        <PageHeading heading={HOSPITAL_NAME} />
         <Button
           label="Add"
           onClick={() => {

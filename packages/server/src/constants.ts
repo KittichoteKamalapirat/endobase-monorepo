@@ -33,10 +33,10 @@ export const snapshotTriggertName = 'snapshotAdded';
 // export const ARDUINO_VENDOR_ID = '10C4';
 // export const ARDUINO_PATH_REGEXP = new RegExp('COM');
 
-export const COM_PORT = "COM5"
+export const COM_PORT = "COM6"
 
 export const columnToArduinoIdMapper = {
-    a: 1,
+    a: 1, // start from arduino 1
     b: 2,
     c: 3,
     d: 4,

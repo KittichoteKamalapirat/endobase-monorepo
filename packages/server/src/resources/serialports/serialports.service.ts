@@ -96,37 +96,99 @@ export class SerialportsService implements OnModuleInit {
 
 
 
-
+  @Timeout(5000) // wait a bit for modbus to connect
   @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
-    const newSnapshots = await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
-      const arduinoId = columnToArduinoIdMapper[key]
+    console.log(111111111);
 
-      await this.modbus.setID(arduinoId);
+    const syncCreateSnapshots = async () => {
+      // do not return anything inside a loop => exit immediately
+      // If I need any data => create empty array and push or reassign
+      for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
+        const arduinoId = columnToArduinoIdMapper[key]
 
-      const container = await this.containersService.findOneByContainerChar(
-        key as CONTAINER_TYPE_VALUES,
-      );
-
-      const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
-      const systemStatus = String(val.data[0]);
-      const temp = String(val.data[1] / 10)
-      const hum = String(val.data[2] / 10);
+        console.log('id', arduinoId);
 
 
+        this.modbus.setID(arduinoId);
 
-      const input: CreateSnapshotInput = {
-        systemStatus,
-        temp,
-        hum,
-        containerId: container.id,
-      };
-      const newSnapshot = await this.snapshotsService.create(input);
-      return newSnapshot
+        const container = await this.containersService.findOneByContainerChar(
+          key as CONTAINER_TYPE_VALUES,
+        );
+        console.log('container', container);
 
 
-    }));
-    return newSnapshots
+        const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+        console.log('value', val);
+
+        const systemStatus = String(val.data[0]);
+        const temp = String(val.data[1] / 10)
+        const hum = String(val.data[2] / 10);
+
+
+        console.log('status', systemStatus);
+
+        const input: CreateSnapshotInput = {
+          systemStatus,
+          temp,
+          hum,
+          containerId: container.id,
+        };
+        const newSnapshot = await this.snapshotsService.create(input);
+        console.log('new snapshot', newSnapshot);
+
+
+      }
+    }
+    try {
+      console.log('start');
+
+      await syncCreateSnapshots()
+
+      console.log('end');
+
+      // const newSnapshots = await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
+      //   const arduinoId = columnToArduinoIdMapper[key]
+
+      //   await this.modbus.setID(arduinoId);
+
+      //   const container = await this.containersService.findOneByContainerChar(
+      //     key as CONTAINER_TYPE_VALUES,
+      //   );
+      //   console.log('container', container);
+
+
+      //   const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+      //   console.log('value', val);
+
+      //   const systemStatus = String(val.data[0]);
+      //   const temp = String(val.data[1] / 10)
+      //   const hum = String(val.data[2] / 10);
+
+
+      //   console.log('status', systemStatus);
+
+
+      //   const input: CreateSnapshotInput = {
+      //     systemStatus,
+      //     temp,
+      //     hum,
+      //     containerId: container.id,
+      //   };
+      //   const newSnapshot = await this.snapshotsService.create(input);
+      //   return newSnapshot
+
+
+      // }));
+      // console.log(newSnapshots);
+
+      // return newSnapshots
+    } catch (error) {
+      console.log(error);
+
+    }
+
+
   }
 
   async writeColor({
@@ -159,7 +221,6 @@ export class SerialportsService implements OnModuleInit {
 
   async turnLightsOff({ col, row }: { col: CONTAINER_TYPE_VALUES; row: RowType }) {
     try {
-
       // col
       const arduinoId = columnToArduinoIdMapper[col]
       await this.modbus.setID(arduinoId)
@@ -217,7 +278,7 @@ export class SerialportsService implements OnModuleInit {
       this.writeColor({
         col: col,
         row: row,
-        endoStatus: toBlinkCounter % 2 === 0 ? status : "being_used",
+        endoStatus: toBlinkCounter % 2 === 0 ? status : "being_used", // ดำสลับกับสี
       });
 
       toBlinkCounter--

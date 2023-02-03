@@ -142,13 +142,14 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
           label="Tray"
           labelClass="mt-4.5 mb-2"
           selectClass="w-full"
+          className="py-4"
           control={control as unknown as Control}
           options={trayOptions}
           isSearchable
           isClearable={false}
           isLoading={emptyTraysLoading}
           required
-          noOptionsMessage="There are no empty trays. Please delete an endoscope to empty trays"
+          noOptionsMessage="There are no empty trays. Please delete other endoscopes to empty trays"
         />
       </div>
     </form>

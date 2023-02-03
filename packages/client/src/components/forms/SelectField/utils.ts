@@ -19,8 +19,10 @@ export const getStyles = (
       cursor: "pointer",
       appearance: "none",
       boxShadow: "none",
-      borderRadius: "0.25rem",
+      padding: "6px 6px 12px 0",
+      borderRadius: 10,
       fontSize: fontSizeMD,
+      background: "#F8FBFC",
       "&:focus": {
         outline: "none",
         borderColor: currentColour,
@@ -29,8 +31,7 @@ export const getStyles = (
         outline: "none",
         borderColor: currentColour,
       },
-      minHeight: "2rem",
-      height: "2rem",
+      minHeight: "2rem"
     }),
     menu: (provided) => ({
       ...provided,
@@ -57,7 +58,6 @@ export const getStyles = (
     placeholder: (provided) => ({
       ...provided,
       color: "#8b8b8b",
-      fontSize: "10px",
       fontWeight: "300",
     }),
     input: (provided) => ({

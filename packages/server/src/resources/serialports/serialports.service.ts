@@ -38,22 +38,11 @@ export class SerialportsService implements OnModuleInit {
 
   async onModuleInit() {
     await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
-
     await this.settingService.initSetting()
-
-
-    // event listener on controller return
-    containerTypeOptions.forEach((option) => {
-      const col = option.value;
-
-
-    });
-
   }
 
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
-  // @Cron(CronExpression.EVERY_SECOND)
   async setActiveSerialport() {
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
@@ -82,7 +71,7 @@ export class SerialportsService implements OnModuleInit {
     await this.createSnapshot()
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  // @Cron(CronExpression.EVERY_HOUR) // TODO add back
   async createSnapshotCron() {
     console.log('create snapshot cron');
     await this.createSnapshot()
@@ -131,9 +120,9 @@ export class SerialportsService implements OnModuleInit {
     await this.updateContainerStatus()
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  // @Cron("*/15 * * * * *") todo add back
   async updateContainerStatusCron() {
-    console.log('update container stats every 10 sec');
+    console.log('update container stats every 15 sec');
     await this.updateContainerStatus()
   }
   async updateContainerStatus() {

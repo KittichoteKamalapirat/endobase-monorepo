@@ -127,7 +127,7 @@ export class ActionsService {
           saveToDb: true,
         });
 
-        // 3. create a schedule to expired in 1 day
+        // 3. create a schedule to expired in 1 day after
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expired',

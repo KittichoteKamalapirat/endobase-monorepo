@@ -30,7 +30,7 @@ export class EndoCronsService implements OnModuleInit {
     private endoCronsRepository: Repository<EndoCron>,
     @Inject(forwardRef(() => EndosService))
     private endosService: EndosService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     // init all the jobs in db
@@ -136,6 +136,9 @@ export class EndoCronsService implements OnModuleInit {
     };
 
     if (saveToDb) await this.saveInDb(input);
+
+    console.log('schedule created');
+
 
     return;
   }

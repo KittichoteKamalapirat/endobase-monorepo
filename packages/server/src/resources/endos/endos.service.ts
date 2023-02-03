@@ -11,6 +11,8 @@ import { SessionsService } from '../sessions/sessions.service';
 import BooleanResponse from './dto/boolean-response.input';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { UpdateEndoInput } from './dto/update-endo.input';
+import dayjs from 'dayjs';
+import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from 'src/constants';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -50,7 +52,28 @@ export class EndosService {
 
   async createEndo(input: CreateEndoInput): Promise<Endo> {
     const newEndo = this.endosRepository.create(input);
-    return this.endosRepository.save(newEndo);
+    const savedEndo = await this.endosRepository.save(newEndo);
+    const endoId = savedEndo.id
+
+    // 1. create a schedule to expire_soon in 30 days
+    await this.endoCronsService.addSchedule({
+      endoId,
+      toBeStatus: 'expire_soon',
+      jsDate: dayjs()
+        .add(MAX_STORAGE_DAYS - EXPIRE_SOON_DAYS, 'day')
+        .toDate(),
+      saveToDb: true,
+    });
+
+    // 2. create a schedule to expired in 1 day after
+    await this.endoCronsService.addSchedule({
+      endoId,
+      toBeStatus: 'expired',
+      jsDate: dayjs().add(MAX_STORAGE_DAYS, 'day').toDate(),
+      saveToDb: true,
+    });
+
+    return savedEndo
   }
 
   async updateEndo(id: string, input: UpdateEndoInput): Promise<Endo | Error> {

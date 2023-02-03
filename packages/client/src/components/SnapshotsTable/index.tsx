@@ -142,11 +142,11 @@ const SnapshotsTable = () => {
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
-            <TR {...group.getHeaderGroupProps} key={index}>
-              {group.headers.map((col, index) => (
+            <TR {...group.getHeaderGroupProps} key={`header-${index}`}>
+              {group.headers.map((col, subIndex) => (
                 <TH
                   {...col.getHeaderProps(col.getSortByToggleProps())}
-                  key={index}
+                  key={`header--${index}-${subIndex}`}
                 >
                   <div className="flex gap-2 items-center">
                     {col.render("Header")}
@@ -166,14 +166,14 @@ const SnapshotsTable = () => {
             return (
               <TR
                 {...row.getRowProps()}
-                key={index}
+                key={`body-${index}`}
                 className={classNames(index % 2 !== 0 ? "bg-grey-50" : "")}
               >
-                {row.cells.map((cell: any, index) => (
+                {row.cells.map((cell: any, subIndex) => (
                   <TD
                     {...cell.getCellProps()}
                     isnumeric={cell.column.isNumeric}
-                    key={index}
+                    key={`body-${index}-${subIndex}`}
                   >
                     {cell.render("Cell")}
                   </TD>

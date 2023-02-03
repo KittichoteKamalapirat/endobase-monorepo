@@ -47,7 +47,7 @@ export const snapshotColumns = () => {
               <div>
                 {Object.keys(decodedObj).map((key) => {
                   return (
-                    <div>
+                    <div key={key}>
                       <div className="flex items-center gap-2">
                         <div className="font-bold">{key}:</div>
                         <div>

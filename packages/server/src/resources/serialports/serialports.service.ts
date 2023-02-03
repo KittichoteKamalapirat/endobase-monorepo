@@ -4,20 +4,19 @@ import { AppService } from '../../app.service';
 import { colorToNumber, columnToArduinoIdMapper, COM_PORT, CREATE_SNAPSHOT_TIMEOUT, SET_ACTIVE_MODBUS_TIMEOUT, UPDATE_CONTAINER_STATS_TIMEOUT } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
-  containerTypeOptions,
   CONTAINER_TYPE_OBJ,
   CONTAINER_TYPE_VALUES
 } from '../../types/CONTAINER_TYPE';
 import { ContainersService } from '../containers/containers.service';
 
+import { forwardRef, Inject } from '@nestjs/common';
 import ModbusRTU from "modbus-serial";
+import { UpdateContainerStatsInput } from '../containers/dto/update-container-stats.input';
 import { ENDO_STATUS, statusToColor } from '../endos/entities/endo.entity';
 import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
-import { forwardRef, Inject } from '@nestjs/common';
-import { UpdateContainerStatsInput } from '../containers/dto/update-container-stats.input';
 
 @Injectable()
 export class SerialportsService implements OnModuleInit {
@@ -37,6 +36,8 @@ export class SerialportsService implements OnModuleInit {
   }
 
   async onModuleInit() {
+    Object.keys(CONTAINER_TYPE_OBJ).forEach(key => this.activeSerialportObj[key] = false); // make all fale by default
+
     await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
     await this.settingService.initSetting()
   }
@@ -45,14 +46,16 @@ export class SerialportsService implements OnModuleInit {
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
   async setActiveSerialport() {
     const syncSetActiveSerialport = async () => {
-      const activeSerialportObj = {};
+      const activeSerialportObj = {}
+
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key]
-        await this.modbus.setID(arduinoId);
+        this.modbus.setID(arduinoId);
         const val = await this.modbus.readInputRegisters(0, 3);
         if (val) activeSerialportObj[key] = true
         else activeSerialportObj[key] = false
       }
+
       return activeSerialportObj;
     }
     try {
@@ -100,12 +103,12 @@ export class SerialportsService implements OnModuleInit {
           hum,
           containerId: container.id,
         };
+        console.log('snapshots be created');
         await this.snapshotsService.create(input);
       }
     }
     try {
       await syncCreateSnapshots()
-      console.log('snapshots created');
 
     } catch (error) {
       console.log(error);
@@ -122,8 +125,10 @@ export class SerialportsService implements OnModuleInit {
   @Cron("*/15 * * * * *")
   async updateContainerStatusCron() {
     console.log('update container stats every 15 sec');
+    console.log('modbus status', this.activeSerialportObj);
     await this.updateContainerStatus()
   }
+
   async updateContainerStatus() {
     const syncUpdateContainers = async () => {
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {

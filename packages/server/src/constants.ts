@@ -1,7 +1,7 @@
 // timeouts
 export const SET_ACTIVE_MODBUS_TIMEOUT = 2000
-export const UPDATE_CONTAINER_STATS_TIMEOUT = 3000
-export const CREATE_SNAPSHOT_TIMEOUT = 4000
+export const UPDATE_CONTAINER_STATS_TIMEOUT = 4000
+export const CREATE_SNAPSHOT_TIMEOUT = 6000
 
 // crons
 // - storage days

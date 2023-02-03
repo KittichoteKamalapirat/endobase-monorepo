@@ -74,16 +74,21 @@ export class SerialportsService implements OnModuleInit {
     } catch (error) {
       console.log(error);
     }
-
-
   }
 
+  @Timeout(CREATE_SNAPSHOT_TIMEOUT)
+  async createSnapshotTimeout() { // wait a bit for modbus to connect
+    console.log('create snapshot timeout');
+    await this.createSnapshot()
+  }
 
-
-
-  @Timeout(CREATE_SNAPSHOT_TIMEOUT) // wait a bit for modbus to connect
   @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
+    console.log('create snapshot cron');
+    await this.createSnapshot()
+  }
+
+  async createSnapshot() {
     const syncCreateSnapshots = async () => {
       // do not return anything inside a loop => exit immediately
       // If I need any data => create empty array and push or reassign
@@ -119,11 +124,19 @@ export class SerialportsService implements OnModuleInit {
     }
   }
 
+  // wait a bit for modbus to connect
+  @Timeout(UPDATE_CONTAINER_STATS_TIMEOUT)
+  async updateContainerStatusCronTimeout() {
+    console.log('update container stats timeout');
+    await this.updateContainerStatus()
+  }
 
-  @Timeout(UPDATE_CONTAINER_STATS_TIMEOUT) // wait a bit for modbus to connect
   @Cron(CronExpression.EVERY_10_SECONDS)
+  async updateContainerStatusCron() {
+    console.log('update container stats every 10 sec');
+    await this.updateContainerStatus()
+  }
   async updateContainerStatus() {
-
     const syncUpdateContainers = async () => {
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key]
@@ -135,11 +148,8 @@ export class SerialportsService implements OnModuleInit {
         if (typeof val.data[1] === "number") { // got value back
           this.activeSerialportObj[key] = true
         }
-
         const temp = String(val.data[1] / 10)
         const hum = String(val.data[2] / 10);
-
-
 
         const input: UpdateContainerStatsInput = {
           col: key as CONTAINER_TYPE_VALUES,
@@ -149,17 +159,12 @@ export class SerialportsService implements OnModuleInit {
         await this.containersService.updateStats(input);
       }
     }
-
     try {
-      console.log('update container stats every 10 secs');
-
+      console.log('update container stats');
       await syncUpdateContainers()
     } catch (error) {
       console.log('error update container status', error.message);
-
     }
-
-
   }
 
   async writeColor({

@@ -136,6 +136,7 @@ module.exports = {
           700: "#F03E3F",
           800: "#E03130",
           900: "#C92B2B",
+          DEFAULT: "#FF6B6B"
         },
         green: {
           50: "#f0fdf4",

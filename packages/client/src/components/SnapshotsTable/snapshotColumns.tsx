@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Tooltip } from "react-tooltip";
 import { ICON_SIZE } from "../../constants";
@@ -5,7 +6,11 @@ import { primaryColor } from "../../theme";
 import { decodeSts } from "../../utils/decodeSts";
 import { pgDateToReadable } from "../../utils/pgDateToReadable";
 
-export const snapshotColumns = () => {
+interface Props {
+  humThreshold: number
+  tempThreshold: number
+}
+export const snapshotColumns = ({ humThreshold, tempThreshold }: Props) => {
   return [
     {
       Header: "Container",
@@ -17,10 +22,16 @@ export const snapshotColumns = () => {
     {
       Header: "Temperature",
       accessor: "temp",
+      Cell: ({ value: temp }: { value: number }) => {
+        return <div className={classNames(temp > tempThreshold && "text-red")}>{temp}</div>
+      }
     },
     {
       Header: "Humidity",
       accessor: "hum",
+      Cell: ({ value: hum }: { value: number }) => {
+        return <div className={classNames(hum > humThreshold && "text-red")}>{hum}</div>
+      }
 
     },
     {

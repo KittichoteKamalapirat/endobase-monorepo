@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ContainersTable from "../components/ContainersTable";
 import Layout from "../components/layouts/Layout";
 import SnapshotsTable from "../components/SnapshotsTable";
@@ -15,9 +15,7 @@ import { useIsAuth } from "../hooks/useIsAuth";
 const Containers = () => {
   useIsAuth();
   const { state } = useLocation();
-
   const { tab } = state || {};
-
   const [selectTab, setSelectedTab] = useState<CONTAINER_TAB_VALUES>(
     tab || "current"
   );

@@ -8,7 +8,7 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { usePaginatedSnapshotsQuery } from "../../generated/graphql";
+import { usePaginatedSnapshotsQuery, useSettingsQuery } from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
 import { GlobalFilter } from "../EndosTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
@@ -28,6 +28,13 @@ const SnapshotsTable = () => {
   const [currPage, setCurrPage] = useState(1);
   const [localPageSize, setLocalPageSize] = useState(10);
 
+
+  const { data: settingsData, loading: settingsLoading, error: settingsError } = useSettingsQuery();
+
+
+  const tempThresholdStr = settingsData?.settings.find(setting => setting.name === "temperatureThreshold")?.value || '100' // make high so it's dark
+  const humThresholdStr = settingsData?.settings.find(setting => setting.name === "humidityThreshold")?.value || '100'
+
   const {
     data: pagSnapshotsData,
     loading,
@@ -39,7 +46,7 @@ const SnapshotsTable = () => {
   });
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(() => snapshotColumns(), []);
+  const columns = useMemo<Column[]>(() => snapshotColumns({ humThreshold: parseFloat(humThresholdStr), tempThreshold: parseFloat(tempThresholdStr) }), []);
 
   const data = useMemo(() => {
     if (
@@ -110,11 +117,11 @@ const SnapshotsTable = () => {
   useEffect(() => {
     setPageSize(localPageSize); // without this, it only shows 10 by default (react-table)
   }, [setPageSize, localPageSize]);
-  if (loading) {
+  if (loading || settingsLoading) {
     return <RowsSkeleton />;
   }
-  if (error) {
-    return <Error text={error?.message} />;
+  if (error || settingsError) {
+    return <Error text={error?.message || settingsError?.message || ""} />;
   }
 
   return (

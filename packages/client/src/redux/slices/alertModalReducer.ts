@@ -32,7 +32,7 @@ export const alertModalSlice = createSlice({
     },
     openAlertModal: (state, action: PayloadAction<AlertModalType>) => {
       state.data = action.payload;
-      state.isOpen = !state.isOpen;
+      state.isOpen = true
     },
   },
 });

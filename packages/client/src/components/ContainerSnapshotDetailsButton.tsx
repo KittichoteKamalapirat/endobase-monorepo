@@ -10,10 +10,10 @@ const ContainerSnapshotDetailsButton = () => {
     <Button
       label="See more details"
       onClick={() => {
+        dispatch(closeAlertModal());
         navigate(`/containers`, {
           state: { tab: "snapshots" },
         });
-        dispatch(closeAlertModal());
       }}
       extraClass="mt-4"
     />

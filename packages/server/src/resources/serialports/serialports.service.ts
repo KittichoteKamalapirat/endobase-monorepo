@@ -117,6 +117,8 @@ export class SerialportsService implements OnModuleInit {
     }
     try {
       await syncCreateSnapshots()
+      console.log('snapshots created');
+
     } catch (error) {
       console.log(error);
     }

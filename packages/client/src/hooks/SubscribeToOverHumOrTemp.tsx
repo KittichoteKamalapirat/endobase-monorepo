@@ -34,6 +34,7 @@ const SubscribeToOverHumOrTemp = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     if (settingsLoading || snapshotLoading) return;
 
     if (settingsError || snapshotError) return;

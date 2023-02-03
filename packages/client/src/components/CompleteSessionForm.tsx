@@ -10,13 +10,12 @@ import {
   Exact,
   useBlinkLocationMutation,
   useCreateActionMutation,
-  useSessionQuery,
+  useSessionQuery
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
-import { ENDO_STATUS_Keys, ENDO_STATUS_VALUES } from "../utils/statusToColor";
+import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
-import { endoColumns } from "./EndosTable/endoColumns";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -53,6 +52,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
   const [blinkLocation] = useBlinkLocationMutation()
+
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
   }); // to update cache

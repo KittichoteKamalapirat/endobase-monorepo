@@ -10,6 +10,11 @@ export const BLACK_COLOR_COMMAND = '000,000,000'; // endo not here: being_used, 
 export const YELLOW_COLOR_COMMAND = '120,120,000'; // expired_soon
 export const ORANGE_COLOR_COMMAND = '255,165,000';
 
+
+// cron
+export const SET_ACTIVE_MODBUS_TIMEOUT = 2000
+export const UPDATE_CONTAINER_STATS_TIMEOUT = 3000
+export const CREATE_SNAPSHOT_TIMEOUT = 4000
 // 0.0001
 export const MAX_STORAGE_DAYS = 31;
 export const EXPIRE_SOON_DAYS = 1;

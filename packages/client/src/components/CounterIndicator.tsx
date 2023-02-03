@@ -15,10 +15,10 @@ interface Props {
   refetch: (
     variables?:
       | Partial<
-          Exact<{
-            [key: string]: never;
-          }>
-        >
+        Exact<{
+          [key: string]: never;
+        }>
+      >
       | undefined
   ) => Promise<
     ApolloQueryResult<
@@ -40,8 +40,8 @@ const CounterIndicator = ({ refetch }: Props) => {
       <span
         className={classNames(
           "font-bold",
-          refetchCounter < 3 ? "animate-pulse-0.5 text-red-700" : "",
-          refetchCounter > 58 ? "animate-pulse-0.5 text-green-700" : ""
+          refetchCounter < 2 ? "animate-pulse-0.5 text-red-700" : "",
+          refetchCounter > 13 ? "animate-pulse-0.5 text-green-700" : ""
         )}
       >
         {refetchCounter}

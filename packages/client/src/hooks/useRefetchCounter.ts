@@ -20,10 +20,10 @@ export const useRefetchCounter = (
   refetch: (
     variables?:
       | Partial<
-          Exact<{
-            [key: string]: never;
-          }>
-        >
+        Exact<{
+          [key: string]: never;
+        }>
+      >
       | undefined
   ) => Promise<
     ApolloQueryResult<
@@ -50,7 +50,7 @@ export const useRefetchCounter = (
       } else {
         setRefetchCounter(refetchCounter - 1);
       }
-    }, UPDATE_CONTAINER_STATS_TIME_INTERVAL * 1000);
+    }, 1000);
 
     return () => {
       dispatch(updateSaveCount(refetchCounter)); // save the current count in global state

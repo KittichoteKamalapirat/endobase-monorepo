@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
-import { colorToNumber, columnToArduinoIdMapper, COM_PORT } from '../../constants';
+import { colorToNumber, columnToArduinoIdMapper, COM_PORT, CREATE_SNAPSHOT_TIMEOUT, SET_ACTIVE_MODBUS_TIMEOUT, UPDATE_CONTAINER_STATS_TIMEOUT } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
   containerTypeOptions,
@@ -17,6 +17,7 @@ import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
 import { forwardRef, Inject } from '@nestjs/common';
+import { UpdateContainerStatsInput } from '../containers/dto/update-container-stats.input';
 
 @Injectable()
 export class SerialportsService implements OnModuleInit {
@@ -50,14 +51,8 @@ export class SerialportsService implements OnModuleInit {
 
   }
 
-  getActiveSerialports() {
-    return this.activeSerialportObj
-  }
 
-
-
-
-  @Timeout(1000)
+  @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
   // @Cron(CronExpression.EVERY_SECOND)
   async setActiveSerialport() {
     const syncSetActiveSerialport = async () => {
@@ -86,7 +81,7 @@ export class SerialportsService implements OnModuleInit {
 
 
 
-  @Timeout(5000) // wait a bit for modbus to connect
+  @Timeout(CREATE_SNAPSHOT_TIMEOUT) // wait a bit for modbus to connect
   @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
     const syncCreateSnapshots = async () => {
@@ -122,6 +117,49 @@ export class SerialportsService implements OnModuleInit {
     } catch (error) {
       console.log(error);
     }
+  }
+
+
+  @Timeout(UPDATE_CONTAINER_STATS_TIMEOUT) // wait a bit for modbus to connect
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async updateContainerStatus() {
+
+    const syncUpdateContainers = async () => {
+      for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
+        const arduinoId = columnToArduinoIdMapper[key]
+        this.modbus.setID(arduinoId);
+
+        const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+
+        // update just in case the sp did not init correctly when server starts
+        if (typeof val.data[1] === "number") { // got value back
+          this.activeSerialportObj[key] = true
+        }
+
+        const temp = String(val.data[1] / 10)
+        const hum = String(val.data[2] / 10);
+
+
+
+        const input: UpdateContainerStatsInput = {
+          col: key as CONTAINER_TYPE_VALUES,
+          currTemp: temp,
+          currHum: hum,
+        };
+        await this.containersService.updateStats(input);
+      }
+    }
+
+    try {
+      console.log('update container stats every 10 secs');
+
+      await syncUpdateContainers()
+    } catch (error) {
+      console.log('error update container status', error.message);
+
+    }
+
+
   }
 
   async writeColor({

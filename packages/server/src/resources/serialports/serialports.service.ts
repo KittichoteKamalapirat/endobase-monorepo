@@ -63,20 +63,10 @@ export class SerialportsService implements OnModuleInit {
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
-        console.log(1);
-
         const arduinoId = columnToArduinoIdMapper[key]
-        console.log(2);
-
         await this.modbus.setID(arduinoId);
-        console.log(3);
-
         await this.modbus.writeRegister(100, 3)
-        console.log(4);
-
         const val = await this.modbus.readInputRegisters(0, 3);
-        console.log(5);
-
         if (val) activeSerialportObj[key] = true
         else activeSerialportObj[key] = false
       }
@@ -85,7 +75,7 @@ export class SerialportsService implements OnModuleInit {
     try {
       const activeSerialportObj = await syncSetActiveSerialport() as Record<CONTAINER_TYPE_VALUES, boolean>
       this.activeSerialportObj = activeSerialportObj
-      console.log(this.activeSerialportObj);
+      console.log('active ports', this.activeSerialportObj);
     } catch (error) {
       console.log(error);
     }
@@ -99,34 +89,22 @@ export class SerialportsService implements OnModuleInit {
   @Timeout(5000) // wait a bit for modbus to connect
   @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
-    console.log(111111111);
-
     const syncCreateSnapshots = async () => {
       // do not return anything inside a loop => exit immediately
       // If I need any data => create empty array and push or reassign
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key]
-
-        console.log('id', arduinoId);
-
-
         this.modbus.setID(arduinoId);
 
         const container = await this.containersService.findOneByContainerChar(
           key as CONTAINER_TYPE_VALUES,
         );
-        console.log('container', container);
-
 
         const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
-        console.log('value', val);
 
         const systemStatus = String(val.data[0]);
         const temp = String(val.data[1] / 10)
         const hum = String(val.data[2] / 10);
-
-
-        console.log('status', systemStatus);
 
         const input: CreateSnapshotInput = {
           systemStatus,
@@ -134,61 +112,14 @@ export class SerialportsService implements OnModuleInit {
           hum,
           containerId: container.id,
         };
-        const newSnapshot = await this.snapshotsService.create(input);
-        console.log('new snapshot', newSnapshot);
-
-
+        await this.snapshotsService.create(input);
       }
     }
     try {
-      console.log('start');
-
       await syncCreateSnapshots()
-
-      console.log('end');
-
-      // const newSnapshots = await Promise.all(Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
-      //   const arduinoId = columnToArduinoIdMapper[key]
-
-      //   await this.modbus.setID(arduinoId);
-
-      //   const container = await this.containersService.findOneByContainerChar(
-      //     key as CONTAINER_TYPE_VALUES,
-      //   );
-      //   console.log('container', container);
-
-
-      //   const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
-      //   console.log('value', val);
-
-      //   const systemStatus = String(val.data[0]);
-      //   const temp = String(val.data[1] / 10)
-      //   const hum = String(val.data[2] / 10);
-
-
-      //   console.log('status', systemStatus);
-
-
-      //   const input: CreateSnapshotInput = {
-      //     systemStatus,
-      //     temp,
-      //     hum,
-      //     containerId: container.id,
-      //   };
-      //   const newSnapshot = await this.snapshotsService.create(input);
-      //   return newSnapshot
-
-
-      // }));
-      // console.log(newSnapshots);
-
-      // return newSnapshots
     } catch (error) {
       console.log(error);
-
     }
-
-
   }
 
   async writeColor({

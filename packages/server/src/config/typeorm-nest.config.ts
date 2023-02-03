@@ -16,7 +16,8 @@ export const typeormConfigNest = {
   port: 5432,
   username: 'postgres',
   password: '02321',
-  database: process.env.NODE_ENV === "production" ? 'endosupply_prod' : "endosupply",
+  // database: process.env.NODE_ENV === "production" ? 'endosupply_prod' : "endosupply",
+  database: "endosupply_prod",
   entities: [
     Endo,
     Container,
@@ -31,5 +32,5 @@ export const typeormConfigNest = {
     EndoCron,
   ],
   synchronize: true,
-  logging: true,
+  logging: false,
 };

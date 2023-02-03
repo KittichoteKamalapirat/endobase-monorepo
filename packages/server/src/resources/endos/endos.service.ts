@@ -198,22 +198,6 @@ export class EndosService {
     return this.endosRepository.save(updatedEndo);
   }
 
-  //   // update db
-  // // change lightbox
-  // async updateStatusAndLightBox(endoId: string, status: ENDO_STATUS) {
-  //   const endo = await this.findOne(endoId); // find the endo for col and row
-
-  //   // update db
-  //   this.updateStatus(endoId, status);
-
-  //   // change lightbox
-  //   this.serialportsService.writeColor({
-  //     col: endo.tray.container.col,
-  //     row: endo.tray.row,
-  //     endoStatus: status,
-  //   });
-  // }
-
   async setReady(endoId: string) {
     // update endo status to ready
     this.updateStatus(endoId, ENDO_STATUS_OBJ.READY);

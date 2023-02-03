@@ -49,7 +49,6 @@ export class SerialportsService implements OnModuleInit {
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key]
         await this.modbus.setID(arduinoId);
-        await this.modbus.writeRegister(100, 3)
         const val = await this.modbus.readInputRegisters(0, 3);
         if (val) activeSerialportObj[key] = true
         else activeSerialportObj[key] = false
@@ -71,7 +70,7 @@ export class SerialportsService implements OnModuleInit {
     await this.createSnapshot()
   }
 
-  // @Cron(CronExpression.EVERY_HOUR) // TODO add back
+  @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
     console.log('create snapshot cron');
     await this.createSnapshot()
@@ -120,7 +119,7 @@ export class SerialportsService implements OnModuleInit {
     await this.updateContainerStatus()
   }
 
-  // @Cron("*/15 * * * * *") todo add back
+  @Cron("*/15 * * * * *")
   async updateContainerStatusCron() {
     console.log('update container stats every 15 sec');
     await this.updateContainerStatus()

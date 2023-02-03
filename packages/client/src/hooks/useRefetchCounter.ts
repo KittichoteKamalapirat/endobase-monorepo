@@ -1,7 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { UPDATE_CONTAINER_STATS_TIME_INTERVAL } from "../constants";
+import { UPDATE_CLIENT_DATA_MINUTE_INTERVAL } from "../constants";
 import {
   ActionsQuery,
   ContainersQuery,
@@ -14,7 +14,7 @@ import {
 import { updateSaveCount } from "../redux/slices/saveCountReducer";
 import { RootState } from "../redux/store";
 
-const defaultSecs = UPDATE_CONTAINER_STATS_TIME_INTERVAL * 60;
+const defaultSecs = UPDATE_CLIENT_DATA_MINUTE_INTERVAL * 60;
 
 export const useRefetchCounter = (
   refetch: (

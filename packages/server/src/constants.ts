@@ -1,21 +1,10 @@
-// export const serialportPathA = '/dev/tty.usbserial-0001';
-// export const serialportPathB = '/dev/tty.usbserial-3';
-// export const serialportPathC = '/dev/tty.usbserial-5';
-
-export const RED_COLOR_COMMAND = '255,000,000'; // expired
-export const GREEN_COLOR_COMMAND = '000,255,000'; // ready
-export const BLUE_COLOR_COMMAND = '000,000,255'; // drying
-export const WHITE_COLOR_COMMAND = '255,255,255';
-export const BLACK_COLOR_COMMAND = '000,000,000'; // endo not here: being_used,  disinfection_passed, disinfection_failed,leak_test_failed, leak_test_passed
-export const YELLOW_COLOR_COMMAND = '120,120,000'; // expired_soon
-export const ORANGE_COLOR_COMMAND = '255,165,000';
-
-
-// cron
+// timeouts
 export const SET_ACTIVE_MODBUS_TIMEOUT = 2000
 export const UPDATE_CONTAINER_STATS_TIMEOUT = 3000
 export const CREATE_SNAPSHOT_TIMEOUT = 4000
-// 0.0001
+
+// crons
+// - storage days
 export const MAX_STORAGE_DAYS = 31;
 export const EXPIRE_SOON_DAYS = 1;
 
@@ -27,19 +16,11 @@ export const SESSION_SECRET = 'secretkpodfqpemvqemfvef';
 
 export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db for schedule table
 
-// Serial Ports
-export const SERIALPORTS_PROVIDER = 'allSerialports'; // for provider in serial ports module
-export const SETTINGS_PROVIDER = 'allSettings';
-
 // pubsub
-
 export const snapshotTriggertName = 'snapshotAdded';
 
-// export const ARDUINO_VENDOR_ID = '10C4';
-// export const ARDUINO_PATH_REGEXP = new RegExp('COM');
-
+// new serialport: modbus
 export const COM_PORT = "COM6"
-
 export const columnToArduinoIdMapper = {
     a: 1, // start from arduino 1
     b: 2,
@@ -49,7 +30,6 @@ export const columnToArduinoIdMapper = {
     f: 6,
     g: 7,
 }
-
 export const colorToNumber = {
     "off": 0,
     "red": 0,
@@ -57,5 +37,3 @@ export const colorToNumber = {
     "blue": 0,
     "white": 0,
 }
-
-export const setDryingTimePosition = 12

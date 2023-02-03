@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UPDATE_CONTAINER_STATS_TIME_INTERVAL } from "../../constants";
+import { UPDATE_CLIENT_DATA_MINUTE_INTERVAL } from "../../constants";
 
-const initialState = UPDATE_CONTAINER_STATS_TIME_INTERVAL * 60; // can also be the  UPDATE_STORAGE_TIME_INTERVAL
-
+const initialState = UPDATE_CLIENT_DATA_MINUTE_INTERVAL * 60;
 export const saveCountSlice = createSlice({
   name: "saveCount",
   initialState,

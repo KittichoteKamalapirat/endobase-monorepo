@@ -14,8 +14,6 @@ export class ContainersService {
   constructor(
     @InjectRepository(Container)
     private containersRepository: Repository<Container>,
-    // @Inject(SERIALPORTS_PROVIDER) // TODO what is this => remove this line fix
-    // private serialportsService: SerialportsService,
     @Inject(forwardRef(() => SerialportsService))
     private serialportsService: SerialportsService,
   ) { }

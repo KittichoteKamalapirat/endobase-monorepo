@@ -10,15 +10,15 @@ export const HOSPITAL_NAME = "Songkhla Hospital"
 export const brandName = "Endo Supply";
 
 
-// 192.168.1.200
+// localhost
 const prod = {
-    graphqlHttpEndpoint: "http://192.168.1.200:4001/graphql",
-    graphqlSocketEndpoint: "ws://192.168.1.200:4001/graphql"
+    graphqlHttpEndpoint: "http://localhost:4001/graphql",
+    graphqlSocketEndpoint: "ws://localhost:4001/graphql"
 }
 
 const dev = {
-    graphqlHttpEndpoint: "http://192.168.1.200:4001/graphql",
-    graphqlSocketEndpoint: "ws://192.168.1.200:4001/graphql"
+    graphqlHttpEndpoint: "http://localhost:4001/graphql",
+    graphqlSocketEndpoint: "ws://localhost:4001/graphql"
     // graphqlHttpEndpoint: "http://localhost:4001/graphql",
     // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
 }

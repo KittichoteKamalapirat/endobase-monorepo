@@ -20,7 +20,7 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 export const snapshotTriggertName = 'snapshotAdded';
 
 // new serialport: modbus
-export const COM_PORT = "COM6"
+export const COM_PORT = "COM7"
 export const columnToArduinoIdMapper = {
     a: 1, // start from arduino 1
     b: 2,

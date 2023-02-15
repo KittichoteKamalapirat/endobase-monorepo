@@ -26,9 +26,9 @@ export const columnToArduinoIdMapper = {
     b: 2,
     c: 3,
     d: 4,
-    e: 5,
-    f: 6,
-    g: 7,
+    e: 7,
+    f: 5,
+    g: 6,
 }
 export const colorToNumber = {
     "off": 0,

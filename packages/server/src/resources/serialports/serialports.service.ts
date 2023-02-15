@@ -91,11 +91,11 @@ export class SerialportsService implements OnModuleInit {
           key as CONTAINER_TYPE_VALUES,
         );
 
-        const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+        const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
 
-        const systemStatus = String(val.data[0]);
-        const temp = String(val.data[1] / 10)
-        const hum = String(val.data[2] / 10);
+        const systemStatus = String(val.data[1]);
+        const temp = String(val.data[2] / 10)
+        const hum = String(val.data[3] / 10);
 
         const input: CreateSnapshotInput = {
           systemStatus,
@@ -129,20 +129,23 @@ export class SerialportsService implements OnModuleInit {
     await this.updateContainerStatus()
   }
 
+
   async updateContainerStatus() {
     const syncUpdateContainers = async () => {
       for (let key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key]
         this.modbus.setID(arduinoId);
 
-        const val = await this.modbus.readInputRegisters(0, 3); // read 3 registers starting from  at address 0 (first register)
+        const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
 
         // update just in case the sp did not init correctly when server starts
         if (typeof val.data[1] === "number") { // got value back
           this.activeSerialportObj[key] = true
         }
-        const temp = String(val.data[1] / 10)
-        const hum = String(val.data[2] / 10);
+
+
+        const temp = String(val.data[2] / 10)
+        const hum = String(val.data[3] / 10);
 
         const input: UpdateContainerStatsInput = {
           col: key as CONTAINER_TYPE_VALUES,
@@ -160,6 +163,15 @@ export class SerialportsService implements OnModuleInit {
     }
   }
 
+
+  getReversePosition(row: RowType) {
+    const reverseRow = 25 - row // 9 => 16, 16 => 9
+    const calculatedRowNum = row <= 8 ? row : reverseRow
+    // row
+    return 99 + calculatedRowNum // 100 => row 1, 115 => row 16
+
+  }
+
   async writeColor({
     col,
     row,
@@ -174,8 +186,7 @@ export class SerialportsService implements OnModuleInit {
       const arduinoId = columnToArduinoIdMapper[col]
       await this.modbus.setID(arduinoId)
 
-      // row
-      const position = 99 + row // 100 => row 1, 115 => row 16
+      const position = this.getReversePosition(row)
 
       // color
       const color = statusToColor[endoStatus]
@@ -195,7 +206,7 @@ export class SerialportsService implements OnModuleInit {
       await this.modbus.setID(arduinoId)
 
       // row
-      const position = 99 + row // 100 => row 1, 115 => row 16
+      const position = this.getReversePosition(row)
 
       // color
       const color = colorToNumber.off

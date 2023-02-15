@@ -41,7 +41,7 @@
     "eject": "react-scripts eject",
     "gen": "graphql-codegen --config codegen.ts",
     "build-image": "docker build . -t endobase",
-    "deploy-container": "docker container run -d -p 80:80 --name endobase_react 1908fa216037"
+    "deploy-container": "docker container run -d -p 80:80 --name endobase_react b515f2e919e8"
   },
   "eslintConfig": {
     "extends": [

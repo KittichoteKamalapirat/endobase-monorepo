@@ -175,7 +175,7 @@ const ActionsTable = () => {
                 }
                 className={classNames(
                   index % 2 !== 0 ? "bg-primary-50" : "",
-                  "hover:font-bold hover:cursor-pointer"
+                  "hover:cursor-pointer"
                 )}
               >
                 {/* <a href={`/session/${(row.original as Action).sessionId}`}> */}

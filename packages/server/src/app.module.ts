@@ -42,6 +42,7 @@ const envPath = (() => {
       cors: {
         origin: [
           'http://localhost:3000',
+          'http://localhost',
           "http://192.168.1.200",
         ], // in url bar: "endosupply/", "localhost"
         credentials: true,

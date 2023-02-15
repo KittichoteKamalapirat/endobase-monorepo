@@ -165,7 +165,7 @@ const EndosTable = () => {
                 key={index}
                 className={classNames(
                   rowColor,
-                  "border-b-2 border-solid border-grey-50 hover:font-bold hover:cursor-pointer"
+                  "border-b-2 border-solid border-grey-50 hover:cursor-pointer"
                 )}
               >
                 {row.cells.map((cell: any, index) => (

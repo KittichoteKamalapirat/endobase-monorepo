@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Column,
   useGlobalFilter,
@@ -45,7 +45,7 @@ const EndosTable = () => {
   const { data: endosData, loading, error, refetch } = useEndosQuery();
 
   const isLargerThanBreakpoint = useScreenIsLargerThan("md")
-
+  const [currentPageIndex, setCurrentPageIndex] = useState(0)
 
   const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[])
 
@@ -55,6 +55,7 @@ const EndosTable = () => {
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
+
     if (refetchCounter === 0) {
       return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
 
@@ -81,7 +82,7 @@ const EndosTable = () => {
     pageOptions, // for getting all pages num
     setPageSize, // for customize pageSize
     // pagination ends
-
+    gotoPage,
     prepareRow,
     state: { pageIndex, globalFilter, pageSize }, // table state
     setGlobalFilter, // for setting global filter text value
@@ -96,6 +97,11 @@ const EndosTable = () => {
     usePagination
   );
 
+  useEffect(() => {
+    if (currentPageIndex !== 0) gotoPage(currentPageIndex)
+  }, [refetch, columns, pageIndex])
+
+
   if (loading) {
     return <RowsSkeleton />;
   }
@@ -106,6 +112,7 @@ const EndosTable = () => {
   return (
     <div>
       <div className="flex justify-between">
+
         <PageHeading heading={HOSPITAL_NAME} />
         <Button
           label="Add"
@@ -122,8 +129,14 @@ const EndosTable = () => {
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} data={data} />
       </div>
       <PaginationControl
-        nextPage={nextPage}
-        previousPage={previousPage}
+        nextPage={() => {
+          nextPage()
+          setCurrentPageIndex(pageIndex + 1)
+        }}
+        previousPage={() => {
+          previousPage()
+          setCurrentPageIndex(pageIndex - 1)
+        }}
         canNextPage={canNextPage}
         canPreviousPage={canPreviousPage}
         pageNum={pageOptions.length}

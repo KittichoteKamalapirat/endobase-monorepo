@@ -119,7 +119,7 @@ const EndosTable = () => {
       </div>
 
       <div className="my-4">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} data={data} />
       </div>
       <PaginationControl
         nextPage={nextPage}

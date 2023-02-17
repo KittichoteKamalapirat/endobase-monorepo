@@ -22,13 +22,21 @@ export const snapshotTriggertName = 'snapshotAdded';
 // new serialport: modbus
 export const COM_PORT = "COM7"
 export const columnToArduinoIdMapper = {
-    a: 1, // start from arduino 1
-    b: 2,
-    c: 3,
+    // a: 1, // start from arduino 1
+    // b: 2,
+    // c: 3,
+    // d: 4,
+    // e: 7,
+    // f: 5,
+    // g: 6,
+
+    a: 6, // start from arduino 1
+    b: 5,
+    c: 7,
     d: 4,
-    e: 7,
-    f: 5,
-    g: 6,
+    e: 3,
+    f: 1,
+    g: 2,
 }
 export const colorToNumber = {
     "off": 0,

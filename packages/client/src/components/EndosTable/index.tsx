@@ -32,7 +32,7 @@ import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
 import { HOSPITAL_NAME } from "../../constants";
-
+import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -51,10 +51,15 @@ const EndosTable = () => {
 
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
-
+  const refetchCounter = useRefetchCounter(refetch)
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
+    if (refetchCounter === 0) {
+      return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
+
+    }
+
     return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
   }, [pickEndo, refetch, isLargerThanBreakpoint]);
 

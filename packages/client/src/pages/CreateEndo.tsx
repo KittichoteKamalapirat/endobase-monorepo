@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
-import { CreateEndoInput, useCreateEndoMutation } from "../generated/graphql";
+import { CreateEndoInput, useCreateEndoMutation, useEndosQuery } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 
@@ -18,6 +18,7 @@ const initialData: EndoFormValues = {
 const CreateEndo = () => {
   useIsAuth();
   const [createEndo] = useCreateEndoMutation();
+  const { refetch } = useEndosQuery()
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onSubmit = async (formInput: EndoFormValues) => {
@@ -34,6 +35,7 @@ const CreateEndo = () => {
     try {
       const result = await createEndo({ variables: { input } });
       if (result.data?.createEndo) {
+        await refetch()
         navigate(`/endo/${result.data.createEndo.id}`, {
           state: { prev: "/endo/new" },
         });

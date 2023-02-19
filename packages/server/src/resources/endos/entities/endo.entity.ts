@@ -7,7 +7,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { EndoCron } from '../../endo-crons/entities/endo-cron.entity';
 import { Session } from '../../sessions/entities/session.entity';
@@ -116,7 +116,7 @@ export class Endo {
   @Field()
   createdAt: Date;
 
-  @Column({ default: new Date().toISOString() })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   @Field()
   lastPutBackISO: string;
 
@@ -124,3 +124,5 @@ export class Endo {
   @Field()
   updatedAt: Date;
 }
+
+

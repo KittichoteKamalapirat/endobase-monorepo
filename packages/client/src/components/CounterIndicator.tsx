@@ -11,6 +11,8 @@ import {
 } from "../generated/graphql";
 import { useRefetchCounter } from "../hooks/useRefetchCounter";
 
+import { UPDATE_CLIENT_DATA_MINUTE_INTERVAL } from "../constants";
+
 interface Props {
   refetch: (
     variables?:
@@ -32,6 +34,11 @@ interface Props {
   >;
 }
 
+
+
+const defaultSecs = UPDATE_CLIENT_DATA_MINUTE_INTERVAL * 60;
+
+
 const CounterIndicator = ({ refetch }: Props) => {
   const refetchCounter = useRefetchCounter(refetch);
   return (
@@ -41,7 +48,7 @@ const CounterIndicator = ({ refetch }: Props) => {
         className={classNames(
           "font-bold",
           refetchCounter < 2 ? "animate-pulse-0.5 text-red-700" : "",
-          refetchCounter > 13 ? "animate-pulse-0.5 text-green-700" : ""
+          refetchCounter > defaultSecs - 2 ? "animate-pulse-0.5 text-green-700" : ""
         )}
       >
         {refetchCounter}

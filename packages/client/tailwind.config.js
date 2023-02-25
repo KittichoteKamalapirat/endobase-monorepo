@@ -8,7 +8,6 @@ const red = "#D2042D";
 const orange = "#FFA500";
 const black = "#000000";
 
-
 // white grey and black
 const grey0 = "#FFFFFF";
 const grey50 = "#F5F5F5";
@@ -48,13 +47,13 @@ const serifFamily = ["Arial", "sans-serif"];
 const monoFamily = ["Montserrat", "Arial", "sans-serif"];
 
 const screens = {
-  'xs': '475px',
-  'sm': '640px',
-  'md': '768px',
-  'lg': '1024px',
-  'xl': '1280px',
-  '2xl': '1536px',
-}
+  xs: "475px",
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px",
+  "2xl": "1536px",
+};
 
 // font size
 
@@ -87,10 +86,10 @@ module.exports = {
         "3xl": fontSize3XL,
       },
       minWidth: {
-        '12': '48px',
-        '16': '64px',
-        '20': '80px',
-        '24': '96px',
+        12: "48px",
+        16: "64px",
+        20: "80px",
+        24: "96px",
       },
       colors: {
         grey: {
@@ -122,6 +121,7 @@ module.exports = {
           800: primaryColor800,
           850: primaryColor850,
           900: primaryColor900,
+          DEFAULT: primaryColor,
           primary: primaryColor,
           hovered: primaryHoveredColor,
         },
@@ -136,7 +136,7 @@ module.exports = {
           700: "#F03E3F",
           800: "#E03130",
           900: "#C92B2B",
-          DEFAULT: "#FF6B6B"
+          DEFAULT: "#FF6B6B",
         },
         green: {
           50: "#f0fdf4",
@@ -159,7 +159,7 @@ module.exports = {
         "blue-bg": "#E0F2FE", // for endo table status
         orange: orange,
         black: black,
-        ice: "#F8FBFC"
+        ice: "#F8FBFC",
       },
       animation: {
         "spin-slow": "spin 12s linear infinite",

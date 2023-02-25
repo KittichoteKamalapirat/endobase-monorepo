@@ -65,20 +65,14 @@ const Session = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("use effect 1");
-    console.log("loading", loading);
-    console.log("error", error);
-    console.log("leakTestAction", leakTestAction);
-    console.log("disinfectAction", disinfectAction);
-    console.log("storeAction", storeAction);
     if (
       !loading &&
       !error &&
+      !takeOutAction &&
       !leakTestAction &&
       !disinfectAction &&
       !storeAction
     ) {
-      console.log("use effect 2");
       dispatch(
         showToast({
           message: "Please fill in your Officer Number",
@@ -86,7 +80,15 @@ const Session = () => {
         })
       );
     }
-  }, [disinfectAction, dispatch, error, leakTestAction, loading, storeAction]);
+  }, [
+    disinfectAction,
+    dispatch,
+    error,
+    takeOutAction,
+    leakTestAction,
+    loading,
+    storeAction,
+  ]);
 
   if (loading || endoLoading)
     return (

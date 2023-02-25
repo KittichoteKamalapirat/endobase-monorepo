@@ -3,13 +3,24 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
+// import fs from 'fs';
 import Redis from 'ioredis';
+// import path from 'path';
 import { AppModule } from './app.module';
 import { COOKIE_NAME, SESSION_SECRET } from './constants';
 
 async function bootstrap() {
+  // const certPath = path.resolve(__dirname, '../.cert/endosupply+4.pem');
+  // const keyPath = path.resolve(__dirname, '../.cert/endosupply+4-key.pem');
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // const httpsOptions = {
+  //   cert: fs.readFileSync(certPath),
+  //   key: fs.readFileSync(keyPath),
+  // };
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    // httpsOptions,
+  });
 
   app.useGlobalPipes(new ValidationPipe());
 
@@ -23,17 +34,15 @@ async function bootstrap() {
     session({
       name: COOKIE_NAME, // TODO add dot env
       store: new RedisStore({
-        client: redis as any,
+        client: redis as any, // TODO
         disableTouch: true,
       }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true, // so that Javascript's front end can't access cookie
-        sameSite: "lax", // csrf // browser, has nothing to do with server?
+        sameSite: 'none', // csrf // browser, has nothing to do with server?
         // secure: IS_PROD, // cookie only works in https
-        secure: false,
-
-        // secure: false, // cookie only works in https
+        secure: true, // cookie only works in https
         // domain: IS_PROD ? '.cookknow.com' : undefined, // no need if in development
       },
       saveUninitialized: false,
@@ -42,13 +51,6 @@ async function bootstrap() {
     }),
   );
 
-
-
   await app.listen(4001);
-
-  // // init setting so snapshot cron can use it
-  // const settingService = app.get(SettingService);
-  // await settingService.initSetting()
-
 }
 bootstrap();

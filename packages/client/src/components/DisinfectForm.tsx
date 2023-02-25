@@ -1,5 +1,4 @@
 import { ApolloQueryResult } from "@apollo/client";
-import React from "react";
 import { Control, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import {
@@ -15,6 +14,7 @@ import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
+  disabled: boolean; // if Leak Test and Prewash are not filled in
   refetchEndo: (
     variables?:
       | Partial<
@@ -40,7 +40,7 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
+const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -53,6 +53,7 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
     formState: { errors },
     handleSubmit,
     watch,
+    setError,
     register,
   } = useForm<FormValues>({
     defaultValues: initialData,
@@ -61,6 +62,12 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
   const testPassed = !!watch(FormNames.PASSED_TEST);
 
   const onSubmit = async (data: FormValues) => {
+    if (disabled)
+      return setError("officerNum", {
+        type: "custom",
+        message: "Please fill in the Leak Test Form first",
+      });
+
     try {
       if (!sessionId) return;
       const input = {
@@ -70,7 +77,7 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
         passed: true,
       };
 
-      const result = await createAction({
+      await createAction({
         variables: {
           input,
         },
@@ -85,7 +92,7 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
       <SmallHeading heading="Disinfection" />
-      <div>
+      <div className="flex items-end">
         <TextField
           required
           name={FormNames.OFFICER_NUM}
@@ -96,19 +103,18 @@ const DisinfectForm = ({ refetchEndo, containerClass }: Props) => {
           error={errors[FormNames.OFFICER_NUM]}
         />
 
-        <div className="my-2">
-          <CheckboxField
-            {...register(FormNames.PASSED_TEST, { required: true })}
-            option={{ value: "no need this", label: "Passed" }}
-            isChecked={testPassed}
-          />
-        </div>
-
         <Button
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="ml-2.5 w-24"
           disabled={!testPassed}
+        />
+      </div>
+      <div className="my-2">
+        <CheckboxField
+          {...register(FormNames.PASSED_TEST, { required: true })}
+          option={{ value: "no need this", label: "Passed" }}
+          isChecked={testPassed}
         />
       </div>
     </form>

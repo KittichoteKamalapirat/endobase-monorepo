@@ -15,10 +15,9 @@ import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
 import { Session } from '../sessions/entities/session.entity';
 
-
 @Resolver(() => Endo)
 export class EndosResolver {
-  constructor(private endosService: EndosService) { }
+  constructor(private endosService: EndosService) {}
 
   @ResolveField(() => String)
   position(@Root() endo: Endo): string {
@@ -88,9 +87,7 @@ export class EndosResolver {
   }
 
   @Mutation(() => Endo)
-  async pickEndo(
-    @Args({ name: 'id', type: () => String }) id: string,
-  ): Promise<Endo | Error> {
+  async pickEndo(@Args({ name: 'id' }) id: string): Promise<Endo | Error> {
     return this.endosService.pickEndo(id);
   }
 

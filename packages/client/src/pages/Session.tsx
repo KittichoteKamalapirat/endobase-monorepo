@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
 import { ButtonTypes } from "../components/Buttons/Button";
@@ -12,6 +14,7 @@ import PatientDetail from "../components/PatientDetail";
 import PatientForm from "../components/PatientForm";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
+import TakeOutForm from "../components/TakeOutForm";
 import PageHeading from "../components/typography/PageHeading";
 import SubHeading from "../components/typography/SubHeading";
 import {
@@ -22,6 +25,7 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
+import { showToast } from "../redux/slices/toastReducer";
 import { CARD_CLASSNAMES } from "../theme";
 
 const Session = () => {
@@ -46,6 +50,10 @@ const Session = () => {
 
   const { patientId, actions, patient } = data?.session || {};
 
+  const takeOutAction = actions?.find(
+    (action) => action.type === "take_out" && action.passed
+  );
+
   const leakTestAction = actions?.find(
     (action) => action.type === "leak_test_and_prewash" && action.passed
   );
@@ -53,6 +61,32 @@ const Session = () => {
     (action) => action.type === "disinfect" && action.passed
   );
   const storeAction = actions?.find((action) => action.type === "store");
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("use effect 1");
+    console.log("loading", loading);
+    console.log("error", error);
+    console.log("leakTestAction", leakTestAction);
+    console.log("disinfectAction", disinfectAction);
+    console.log("storeAction", storeAction);
+    if (
+      !loading &&
+      !error &&
+      !leakTestAction &&
+      !disinfectAction &&
+      !storeAction
+    ) {
+      console.log("use effect 2");
+      dispatch(
+        showToast({
+          message: "Please fill in your Officer Number",
+          variant: "success",
+        })
+      );
+    }
+  }, [disinfectAction, dispatch, error, leakTestAction, loading, storeAction]);
 
   if (loading || endoLoading)
     return (
@@ -99,15 +133,29 @@ const Session = () => {
       <div id="activities-detail" className={CARD_CLASSNAMES}>
         <SubHeading heading="Activities" extraClass="mt-4" />
 
+        {takeOutAction ? (
+          <ActivityItem action={takeOutAction as Partial<Action>} />
+        ) : (
+          <TakeOutForm containerClass="my-4" refetchEndo={refetchEndo} />
+        )}
+
         {leakTestAction ? (
           <ActivityItem action={leakTestAction as Partial<Action>} />
         ) : (
-          <LeakTestForm containerClass="my-4" refetchEndo={refetchEndo} />
+          <LeakTestForm
+            containerClass="my-4"
+            refetchEndo={refetchEndo}
+            disabled={!takeOutAction}
+          />
         )}
         {disinfectAction ? (
           <ActivityItem action={disinfectAction as Partial<Action>} />
         ) : (
-          <DisinfectForm containerClass="my-4" refetchEndo={refetchEndo} />
+          <DisinfectForm
+            containerClass="my-4"
+            refetchEndo={refetchEndo}
+            disabled={!(takeOutAction && leakTestAction)}
+          />
         )}
         {storeAction ? (
           <ActivityItem action={storeAction as Partial<Action>} />
@@ -116,6 +164,7 @@ const Session = () => {
             containerClass="my-4"
             refetchEndo={refetchEndo}
             endo={endoData?.endo as Endo}
+            disabled={!(takeOutAction && leakTestAction && disinfectAction)}
           />
         )}
       </div>
@@ -128,7 +177,6 @@ const Session = () => {
           extraClass="min-w-24"
         />
       </div>
-
     </Layout>
   );
 };

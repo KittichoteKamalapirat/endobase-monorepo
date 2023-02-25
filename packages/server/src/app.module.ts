@@ -26,29 +26,30 @@ import { ConfigModule } from '@nestjs/config';
 const ENV = process.env.NODE_ENV;
 
 const envPath = (() => {
-  if (ENV === "production") return '.env.production'
-  return '.env.development' // no env or env===prod
-})()
-
+  if (ENV === 'production') return '.env.production';
+  return '.env.development'; // no env or env===prod
+})();
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: envPath,
-      isGlobal: true
+      isGlobal: true,
     }),
     // graphql
     GraphQLModule.forRoot<ApolloDriverConfig>({
       cors: {
         origin: [
           'http://localhost:3000',
+          'http://localhost:3001',
+          'http://localhost:51108',
           'http://localhost',
-          "http://192.168.1.200",
-          "http://192.168.0.100",
-          "http://192.168.0.100:3000",
-          "http://172.31.64.1",
-          "http://172.31.64.1:3000",
-          "http://192.168.1.100"
+          'http://192.168.1.200',
+          'http://192.168.0.100',
+          'http://192.168.0.100:3000',
+          'http://172.31.64.1',
+          'http://172.31.64.1:3000',
+          'http://192.168.1.100',
         ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },
@@ -88,7 +89,4 @@ const envPath = (() => {
   controllers: [AppController],
   providers: [AppService],
 })
-
-
-
-export class AppModule { }
+export class AppModule {}

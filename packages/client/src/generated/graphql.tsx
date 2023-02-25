@@ -378,8 +378,8 @@ export type PaginatedActionOutput = {
 };
 
 export type PaginatedInput = {
-  limit?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
+  limit?: Scalars['Int'];
+  page?: Scalars['Int'];
 };
 
 export type PaginatedSnapshotOutput = {
@@ -668,7 +668,7 @@ export type PickEndoMutationVariables = Exact<{
 }>;
 
 
-export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string } };
+export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null } };
 
 export type UpdateDryingTimeMutationVariables = Exact<{
   input: UpdateDryingTimeInput;
@@ -1215,6 +1215,7 @@ export const PickEndoDocument = gql`
     type
     model
     status
+    currentSessionId
   }
 }
     `;

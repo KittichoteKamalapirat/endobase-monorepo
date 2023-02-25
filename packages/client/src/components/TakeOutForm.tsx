@@ -1,5 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
+import { useEffect } from "react";
 import { Control, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   EndoQuery,
@@ -7,14 +9,13 @@ import {
   useCreateActionMutation,
   useSessionQuery,
 } from "../generated/graphql";
+import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
-import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
-  disabled: boolean; // if Take Out Form is not completed yet
   refetchEndo: (
     variables?:
       | Partial<
@@ -28,19 +29,16 @@ interface Props {
 
 enum FormNames {
   OFFICER_NUM = "officerNum",
-  PASSED_TEST = "passedTest",
 }
 
 interface FormValues {
   [FormNames.OFFICER_NUM]: string;
-  [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
 }
 
 const initialData = {
   officerNum: "",
-  passedTest: false,
 };
-const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
+const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -51,28 +49,18 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
   const {
     control,
     handleSubmit,
-    register,
-    watch,
-    setError,
     formState: { errors },
+    setFocus,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
 
-  const testPassed = !!watch(FormNames.PASSED_TEST);
-
   const onSubmit = async (data: FormValues) => {
-    if (disabled)
-      return setError("officerNum", {
-        type: "custom",
-        message: "Please fill in the Take Out Form first",
-      });
-
     try {
       if (!sessionId) return;
       const input = {
         sessionId,
-        type: "leak_test_and_prewash",
+        type: "take_out",
         officerNum: data.officerNum,
         passed: true,
       };
@@ -90,9 +78,17 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
     }
   };
 
+  // This form only shows when it's empty
+  // If it's empty => mean that it's redirected from "Pick" button
+  useEffect(() => {
+    setFocus("officerNum");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Leak Test" />
+      <SmallHeading heading="Take Out" />
       <div className="flex items-end">
         <TextField
           required
@@ -108,17 +104,9 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="ml-2.5 w-24"
-          disabled={!testPassed}
-        />
-      </div>
-      <div className="my-2">
-        <CheckboxField
-          {...register(FormNames.PASSED_TEST, { required: true })}
-          option={{ value: "true", label: "Passed" }}
-          isChecked={testPassed}
         />
       </div>
     </form>
   );
 };
-export default LeakTestForm;
+export default TakeOutForm;

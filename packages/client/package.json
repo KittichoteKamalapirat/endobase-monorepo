@@ -19,7 +19,7 @@
     "graphql": "^16.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.39.1",
+    "react-hook-form": "^7.43.2",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.6.0",
     "react-modal": "^3.16.1",
@@ -33,14 +33,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "set PORT=3000 && react-scripts start",
+    "dev": "set PORT=3001 && react-scripts start",
     "prod-start": "react-scripts start",
     "build": "react-scripts build",
     "prod-static": "serve -l 80 -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "gen": "graphql-codegen --config codegen.ts",
-    "build-image": "docker build . -t endobase",
+    "build-image": "`docker build . -t endobase`",
     "deploy-container": "docker container run -d -p 80:80 --name endobase_react 742857e09e2a"
   },
   "eslintConfig": {

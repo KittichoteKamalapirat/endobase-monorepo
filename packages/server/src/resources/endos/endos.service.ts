@@ -13,6 +13,7 @@ import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { UpdateEndoInput } from './dto/update-endo.input';
 import dayjs from 'dayjs';
 import { EXPIRE_SOON_DAYS, MAX_STORAGE_DAYS } from 'src/constants';
+import { ActionsService } from '../actions/actions.service';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -23,11 +24,12 @@ export class EndosService {
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
-    // private actionsService: ActionsService,
+
     private serialportsService: SerialportsService,
     @Inject(forwardRef(() => EndoCronsService))
+    @Inject(forwardRef(() => EndoCronsService))
     private endoCronsService: EndoCronsService,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Endo[]> {
     const endos = await this.endosRepository.find({
@@ -53,7 +55,7 @@ export class EndosService {
   async createEndo(input: CreateEndoInput): Promise<Endo> {
     const newEndo = this.endosRepository.create(input);
     const savedEndo = await this.endosRepository.save(newEndo);
-    const endoId = savedEndo.id
+    const endoId = savedEndo.id;
 
     // 1. create a schedule to expire_soon in 30 days
     await this.endoCronsService.addSchedule({
@@ -73,7 +75,7 @@ export class EndosService {
       saveToDb: true,
     });
 
-    return savedEndo
+    return savedEndo;
   }
 
   async updateEndo(id: string, input: UpdateEndoInput): Promise<Endo | Error> {
@@ -158,7 +160,7 @@ export class EndosService {
     // remove all the crons in db and memory
     this.endoCronsService.deleteEveryScheduleByEndoId({ endoId: endo.id });
 
-    return pickedEndo;
+    return pickedEndo as Endo;
   }
 
   async updateStatus(
@@ -235,8 +237,6 @@ export class EndosService {
     });
   }
 
-
-
   findCurrentSessionByEndoId(endoId: string) {
     // current session = status = ongoing
     // supposed to be only one
@@ -245,17 +245,19 @@ export class EndosService {
     return this.sessionsService.findCurrentSessionByEndoId(endoId);
   }
 
-
   async washWithoutStoring(id: string) {
     // do 4 things
     // end session
     // update endo status from disinfection_passed to leaktest_passed
     // create a new session
 
-    await this.sessionsService.endSessionByEndoId(id)
-    await this.updateStatus(id, "being_used")
-    const newSession = await this.sessionsService.create({ endoId: id, endoWasExpired: false })
+    await this.sessionsService.endSessionByEndoId(id);
+    await this.updateStatus(id, 'being_used');
+    const newSession = await this.sessionsService.create({
+      endoId: id,
+      endoWasExpired: false,
+    });
 
-    return newSession
+    return newSession;
   }
 }

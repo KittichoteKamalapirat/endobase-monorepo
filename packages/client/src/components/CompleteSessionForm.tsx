@@ -10,7 +10,7 @@ import {
   Exact,
   useBlinkLocationMutation,
   useCreateActionMutation,
-  useSessionQuery
+  useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
@@ -22,14 +22,15 @@ import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
-  endo: Endo
+  endo: Endo;
+  disabled: boolean; // if Leak Test and Prewash and Disinfect form are not filled in
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -48,10 +49,15 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
+const CompleteSessionForm = ({
+  endo,
+  refetchEndo,
+  containerClass,
+  disabled,
+}: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
-  const [blinkLocation] = useBlinkLocationMutation()
+  const [blinkLocation] = useBlinkLocationMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -62,10 +68,10 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
   const handleBlinkLocation = (status: ENDO_STATUS_VALUES) => {
     blinkLocation({
       variables: {
-        input: { col: endo.tray.container.col, row: endo.tray.row, status }
-      }
-    })
-  }
+        input: { col: endo.tray.container.col, row: endo.tray.row, status },
+      },
+    });
+  };
 
   const {
     control,
@@ -73,6 +79,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
     handleSubmit,
     register,
     watch,
+    setError,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
@@ -80,6 +87,11 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
   const testPassed = !!watch(FormNames.PASSED_TEST);
 
   const onSubmit = async (data: FormValues) => {
+    if (disabled)
+      return setError("officerNum", {
+        type: "custom",
+        message: "Please fill in the Disinfection form first",
+      });
     try {
       if (!sessionId) return;
       const input = {
@@ -103,7 +115,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
           variant: "success",
         })
       );
-      handleBlinkLocation("drying")
+      handleBlinkLocation("drying");
     } catch (error) {
       console.log("error", error);
     }
@@ -136,10 +148,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
             buttonType={HTMLButtonType.BUTTON}
             type={ButtonTypes.OUTLINED}
             onClick={() => handleBlinkLocation("ready")}
-            startIcon={<TbBulb
-              color={primaryColor}
-              size={ICON_SIZE + 10}
-            />}
+            startIcon={<TbBulb color={primaryColor} size={ICON_SIZE + 10} />}
           />
 
           <Button
@@ -147,9 +156,7 @@ const CompleteSessionForm = ({ endo, refetchEndo, containerClass }: Props) => {
             buttonType={HTMLButtonType.SUBMIT}
             disabled={!testPassed}
           />
-
         </div>
-
       </div>
     </form>
   );

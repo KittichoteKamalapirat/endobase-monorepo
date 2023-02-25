@@ -6,5 +6,6 @@ mutation pickEndo($id: String!) {
     type
     model
     status
+    currentSessionId
   }
 }

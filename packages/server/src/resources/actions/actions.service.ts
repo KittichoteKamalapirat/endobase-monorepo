@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import {
@@ -29,9 +29,12 @@ export class ActionsService {
     private officersService: OfficersService,
     private sessionsService: SessionsService,
     private serialportsService: SerialportsService,
-    private endosService: EndosService,
+
     private endoCronsService: EndoCronsService,
-  ) { }
+
+    @Inject(forwardRef(() => EndosService))
+    private endosService: EndosService,
+  ) {}
 
   // if therre is existing officer (with the officerNum), use it
   // otherwise, create one!
@@ -207,8 +210,6 @@ export class ActionsService {
         return item;
       }),
     );
-
-
 
     return paginatedResults;
   }

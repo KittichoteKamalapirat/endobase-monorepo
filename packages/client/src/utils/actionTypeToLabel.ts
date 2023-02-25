@@ -1,5 +1,6 @@
 export const ACTION_TYPE_OBJ = {
   leak_test_and_prewash: "Leak Test and Prewash",
+  take_out: "Take Out",
   disinfect: "Disinfect",
   store: "Put back to storage",
 } as const;

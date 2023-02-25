@@ -5,6 +5,7 @@ import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetail
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
+
 import Actions from "./pages/Actions";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
@@ -23,8 +24,6 @@ function App() {
   const { data: confirmData, isOpen: confirmIsOpen } = useSelector(
     (state: RootState) => state.confirmModal
   );
-
-
 
   const dispatch = useDispatch();
 

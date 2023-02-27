@@ -1,7 +1,6 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { SerialportsService } from 'src/resources/serialports/serialports.service';
 import { Repository } from 'typeorm';
 import { AppService } from '../app.service';
 import { CreateSettingInput } from './dto/create-setting.input';
@@ -12,30 +11,28 @@ import { SETTING_TYPE_VALUES } from './entities/SETTING_TYPE_OBJ';
 @Injectable()
 export class SettingService {
   private readonly logger = new Logger(AppService.name);
-  public counterCeil = Infinity
-  private allSettings = {} as { [key in SETTING_TYPE_VALUES]: Setting }
+  public counterCeil = Infinity;
+  private allSettings = {} as { [key in SETTING_TYPE_VALUES]: Setting };
 
   // public configSetting: { [key: string]: string } = {}
 
   constructor(
     @InjectRepository(Setting)
     private settingRepository: Repository<Setting>, // use database, make sure forFeature is in module
-
-  ) { }
-
+  ) {}
 
   async initSetting() {
-    const settings = await this.findAll()
-    settings.forEach(setting => {
-      const key = setting.name
-      this.allSettings[key] = setting
-    })
+    const settings = await this.findAll();
+    settings.forEach((setting) => {
+      const key = setting.name;
+      this.allSettings[key] = setting;
+    });
 
-    return true
+    return true;
   }
 
   getSetting() {
-    return this.allSettings
+    return this.allSettings;
   }
 
   create(input: CreateSettingInput) {
@@ -74,11 +71,8 @@ export class SettingService {
       updatedSettingInput,
     );
 
-
     // re init setting
-    await this.initSetting()
+    await this.initSetting();
     return updatedSetting;
   }
-
-
 }

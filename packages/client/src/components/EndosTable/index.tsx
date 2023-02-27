@@ -34,6 +34,8 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
+import { ICON_SIZE } from "../../constants";
+import { FaRegHospital } from "react-icons/fa";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -131,7 +133,11 @@ const EndosTable = () => {
   return (
     <div>
       <div className="flex justify-between items-center">
-        <PageHeading heading={hospitalName} />
+        <div className="flex items-center gap-4">
+          <FaRegHospital size={ICON_SIZE + 10} />
+          <PageHeading heading={hospitalName} />
+        </div>
+
         <Button
           label="Add"
           onClick={() => {

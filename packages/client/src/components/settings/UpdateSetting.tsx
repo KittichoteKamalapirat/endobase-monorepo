@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 import { Control, useForm } from "react-hook-form";
 import { BiTimeFive } from "react-icons/bi";
+import { TbBulb, TbTemperature } from "react-icons/tb";
+import { WiHumidity } from "react-icons/wi";
+import { useDispatch } from "react-redux";
 import { ICON_SIZE } from "../../constants";
 import { InputType } from "../../constants/inputType";
 import { Setting, useUpdateSettingMutation } from "../../generated/graphql";
+import { showToast } from "../../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "../Buttons/Button";
 import TextField, { TextFieldTypes } from "../forms/TextField";
 import HDivider from "../layouts/HDivider";
-import { WiHumidity } from "react-icons/wi";
-import { TbBulb, TbTemperature } from "react-icons/tb";
-import { showToast } from "../../redux/slices/toastReducer";
-import { useDispatch } from "react-redux";
 
-import { RiHospitalLine } from "react-icons/ri";
+import { FaRegHospital } from "react-icons/fa";
 interface Props {
   setting: Setting;
   defaultValues: FormValues;
@@ -75,7 +75,7 @@ const UpdateSetting = ({ setting, defaultValues }: Props) => {
       case "temperatureThreshold":
         return <TbTemperature size={ICON_SIZE + 10} />;
       case "hospitalName":
-        return <RiHospitalLine size={ICON_SIZE + 4} />;
+        return <FaRegHospital size={ICON_SIZE + 4} />;
       case "trayLocationBlinkingSec":
         return <TbBulb size={ICON_SIZE + 10} />;
       default:

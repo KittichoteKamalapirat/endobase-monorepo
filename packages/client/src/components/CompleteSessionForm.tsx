@@ -14,7 +14,7 @@ import {
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
-import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
+import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
@@ -115,7 +115,7 @@ const CompleteSessionForm = ({
           variant: "success",
         })
       );
-      handleBlinkLocation("drying");
+      handleBlinkLocation(ENDO_STATUS.READY);
     } catch (error) {
       console.log("error", error);
     }

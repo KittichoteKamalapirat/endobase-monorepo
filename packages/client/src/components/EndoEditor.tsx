@@ -1,6 +1,5 @@
 import { Control, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import { InputType } from "../constants/inputType";
 import { useEmptyTraysQuery } from "../generated/graphql";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import LinkButton from "./Buttons/LinkButton";
@@ -20,7 +19,6 @@ enum FormNames {
   BRAND = "brand",
   TYPE = "type",
   MODEL = "model",
-  DRYING_TIME = "dryingTime",
   TRAY = "tray",
 }
 
@@ -29,7 +27,6 @@ export interface EndoFormValues {
   [FormNames.BRAND]: string;
   [FormNames.TYPE]: string;
   [FormNames.MODEL]: string;
-  [FormNames.DRYING_TIME]: string;
   [FormNames.TRAY]: SelectOption | null;
 }
 
@@ -40,7 +37,7 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
 
   const {
     control,
-    formState: { errors, isSubmitting, isSubmitSuccessful, isDirty },
+    formState: { errors, isSubmitting, isDirty },
     handleSubmit,
     register,
     watch,
@@ -123,18 +120,6 @@ const EndoEditor = ({ onSubmit, initialData, isEdit = false }: Props) => {
           placeholder="ModelX, V1, etc"
           type={TextFieldTypes.OUTLINED}
           error={errors[FormNames.MODEL]}
-        />
-
-        <TextField
-          required
-          name={FormNames.DRYING_TIME}
-          control={control as unknown as Control}
-          label="Drying Time (minutes)"
-          placeholder="30"
-          type={TextFieldTypes.OUTLINED}
-          inputType={InputType.Number}
-          error={errors[FormNames.DRYING_TIME]}
-          showNumberArrows={false}
         />
 
         <SelectField

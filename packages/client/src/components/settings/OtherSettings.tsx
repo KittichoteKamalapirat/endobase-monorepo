@@ -10,7 +10,6 @@ const OtherSettings = () => {
   if (error) return <Error text="Error retrieving setting" />;
   return (
     <>
-      {/* <SubHeading heading="Other settings" /> */}
       {data?.settings
         .slice()
         .sort((a, b) => (a.id < b.id ? -1 : -1))

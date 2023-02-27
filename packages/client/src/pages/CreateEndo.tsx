@@ -2,7 +2,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
-import { CreateEndoInput, useCreateEndoMutation, useEndosQuery } from "../generated/graphql";
+import {
+  CreateEndoInput,
+  useCreateEndoMutation,
+  useEndosQuery,
+} from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 
@@ -11,31 +15,30 @@ const initialData: EndoFormValues = {
   brand: "",
   type: "",
   model: "",
-  dryingTime: "",
   tray: null,
 };
 
 const CreateEndo = () => {
   useIsAuth();
   const [createEndo] = useCreateEndoMutation();
-  const { refetch } = useEndosQuery()
+  const { refetch } = useEndosQuery();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onSubmit = async (formInput: EndoFormValues) => {
-    const { brand, serialNum, type, model, dryingTime, tray } = formInput;
+    const { brand, serialNum, type, model, tray } = formInput;
     const input: CreateEndoInput = {
       trayId: tray?.value as string,
       brand,
       serialNum,
       type,
       model,
-      dryingTime: Number(dryingTime),
+      dryingTime: 30, // Not used but just keep it here
     };
 
     try {
       const result = await createEndo({ variables: { input } });
       if (result.data?.createEndo) {
-        await refetch()
+        await refetch();
         navigate(`/endo/${result.data.createEndo.id}`, {
           state: { prev: "/endo/new" },
         });

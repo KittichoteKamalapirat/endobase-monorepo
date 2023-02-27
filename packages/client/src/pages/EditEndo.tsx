@@ -6,7 +6,6 @@ import { Error } from "../components/skeletons/Error";
 import RowsSkeleton from "../components/skeletons/RowsSkeleton";
 import {
   UpdateEndoInput,
-  useContainersQuery,
   useEndoQuery,
   useUpdateEndoMutation,
 } from "../generated/graphql";
@@ -25,14 +24,13 @@ const EditEndo = () => {
   const endoId = id || "";
   const { data, loading, error } = useEndoQuery({ variables: { id: endoId } });
 
-  const { serialNum, brand, type, dryingTime, model, tray } = data?.endo || {};
+  const { serialNum, brand, type, model, tray } = data?.endo || {};
 
   const initialData: EndoFormValues = {
     serialNum: serialNum || "",
     brand: brand || "",
     type: type || "",
     model: model || "",
-    dryingTime: String(dryingTime) || "30",
     tray: { value: tray?.id || "", label: tray?.position || "" },
   };
   const [updateEndo] = useUpdateEndoMutation();
@@ -41,7 +39,7 @@ const EditEndo = () => {
   const { refetch: refetchEndo } = useEndoQuery({ variables: { id: endoId } });
 
   const onSubmit = async (formInput: EndoFormValues) => {
-    const { brand, serialNum, type, model, dryingTime, tray } = formInput;
+    const { brand, serialNum, type, model, tray } = formInput;
 
     const input: UpdateEndoInput = {
       trayId: tray?.value as string,
@@ -49,7 +47,7 @@ const EditEndo = () => {
       serialNum,
       type,
       model,
-      dryingTime: Number(dryingTime),
+      dryingTime: 30,
     };
     try {
       const result = await updateEndo({

@@ -100,7 +100,7 @@ export class ActionsService {
       case ACTION_TYPE_OBJ.STORE:
         await this.endosService.updateStatus(
           session.endoId,
-          ENDO_STATUS_OBJ.DRYING,
+          ENDO_STATUS_OBJ.READY, // Used to be drying
         );
         // update session
         await this.sessionsService.endSession(input.sessionId);
@@ -111,15 +111,15 @@ export class ActionsService {
         // Add 3 schedules
         const endoId = session.endoId;
         // 1. create schedule to ready in 30 mins
-        await this.endoCronsService.addSchedule({
-          endoId,
-          toBeStatus: 'ready',
-          // seconds: minToSec(session.endo.dryingTime),
-          jsDate: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
-          saveToDb: true,
-        });
+        // No need this anymore
+        // await this.endoCronsService.addSchedule({
+        //   endoId,
+        //   toBeStatus: 'ready',
+        //   // seconds: minToSec(session.endo.dryingTime),
+        //   jsDate: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
+        //   saveToDb: true,
+        // });
 
-        // TODO fix this // this was called right away
         // // 2. create a schedule to expire_soon in 30 days
         await this.endoCronsService.addSchedule({
           endoId,

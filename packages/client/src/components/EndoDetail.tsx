@@ -11,8 +11,7 @@ interface Props {
 }
 
 const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
-  const { serialNum, dryingTime, status, brand, type, model, position } =
-    endo || {};
+  const { serialNum, status, brand, type, model, position } = endo || {};
 
   if (!endo) return null;
 
@@ -31,9 +30,8 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
             <div>Brand</div>
             <div>Model</div>
             <div>Type</div>
-            <div>Drying Time</div>
+            {/* <div>Drying Time</div> */}
             <div>Status</div>
-
           </div>
 
           <div id="right">
@@ -42,9 +40,11 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
             <div>{brand}</div>
             <div>{model}</div>
             <div>{type}</div>
-            <div>{dryingTime} minutes</div>
-            <div > <Badge content={status} /> </div>
-
+            {/* <div>{dryingTime} minutes</div> */}
+            <div>
+              {" "}
+              <Badge content={status} />{" "}
+            </div>
           </div>
         </div>
       </div>

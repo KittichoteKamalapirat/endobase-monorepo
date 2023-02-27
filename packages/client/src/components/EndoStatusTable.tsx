@@ -41,7 +41,11 @@ const EndoStatusTable = ({ endos, setFilter }: Props) => {
   ).length;
 
   const handleFilter = (status: ENDO_STATUS_VALUES) => {
-    if (activeFilter === status) return setActiveFilter("");
+    if (activeFilter === status) {
+      setActiveFilter("");
+      setFilter("");
+      return;
+    }
     setFilter(status);
     setActiveFilter(status);
   };

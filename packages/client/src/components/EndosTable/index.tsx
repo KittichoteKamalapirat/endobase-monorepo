@@ -37,6 +37,7 @@ import { GlobalFilter } from "./GlobalFilter";
 import { ICON_SIZE } from "../../constants";
 import { FaRegHospital } from "react-icons/fa";
 import EndoStatusTable from "../EndoStatusTable";
+import EndoStatusTable2 from "../EndoStatusTable2";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -157,41 +158,41 @@ const EndosTable = () => {
           />
         </div>
 
-        <div className="grid grid-cols-12 gap-4">
-          <div id="left" className="col-span-12 md:col-span-9">
-            <div className="my-4">
-              <GlobalFilter
-                filter={globalFilter}
-                setFilter={setGlobalFilter}
-                data={data}
-              />
-            </div>
-            <PaginationControl
-              nextPage={() => {
-                nextPage();
-                setCurrentPageIndex(pageIndex + 1);
-              }}
-              previousPage={() => {
-                previousPage();
-                setCurrentPageIndex(pageIndex - 1);
-              }}
-              canNextPage={canNextPage}
-              canPreviousPage={canPreviousPage}
-              pageNum={pageOptions.length}
-              setPageSize={setPageSize}
-              currPage={pageIndex + 1}
-              pageSize={pageSize}
-              totalItemsCount={endosData?.endos.length}
+        <div>
+          <div className="my-4">
+            <GlobalFilter
+              filter={globalFilter}
+              setFilter={setGlobalFilter}
+              data={data}
             />
           </div>
-          <div id="right" className="col-span-12 md:col-span-3">
+
+          <div>
             {endosData?.endos && endosData?.endos.length > 0 && (
-              <EndoStatusTable
+              <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
                 setFilter={setGlobalFilter}
               />
             )}
           </div>
+
+          <PaginationControl
+            nextPage={() => {
+              nextPage();
+              setCurrentPageIndex(pageIndex + 1);
+            }}
+            previousPage={() => {
+              previousPage();
+              setCurrentPageIndex(pageIndex - 1);
+            }}
+            canNextPage={canNextPage}
+            canPreviousPage={canPreviousPage}
+            pageNum={pageOptions.length}
+            setPageSize={setPageSize}
+            currPage={pageIndex + 1}
+            pageSize={pageSize}
+            totalItemsCount={endosData?.endos.length}
+          />
         </div>
       </div>
 

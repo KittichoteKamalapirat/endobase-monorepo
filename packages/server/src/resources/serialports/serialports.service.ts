@@ -47,7 +47,7 @@ export class SerialportsService implements OnModuleInit {
       (key) => (this.activeSerialportObj[key] = false),
     ); // make all fale by default
 
-    // await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO add this back
+    await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
     await this.settingService.initSetting();
   }
 

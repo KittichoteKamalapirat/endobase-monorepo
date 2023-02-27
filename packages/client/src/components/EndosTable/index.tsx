@@ -36,6 +36,7 @@ import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
 import { ICON_SIZE } from "../../constants";
 import { FaRegHospital } from "react-icons/fa";
+import EndoStatusTable from "../EndoStatusTable";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -132,47 +133,67 @@ const EndosTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <FaRegHospital size={ICON_SIZE + 10} />
-          <PageHeading heading={hospitalName} />
+      <div id="header">
+        <div
+          data-note="hospital-name-and-add-button"
+          className="flex justify-between items-center mb-4"
+        >
+          <div className="flex items-center gap-4">
+            <FaRegHospital size={ICON_SIZE + 10} />
+            <PageHeading
+              heading={hospitalName}
+              fontSize="text-md md:text-2xl"
+            />
+          </div>
+
+          <Button
+            label="Add"
+            onClick={() => {
+              navigate("/endo/new", {
+                state: { prev: `/setting` },
+              });
+            }}
+            type={ButtonTypes.PRIMARY}
+          />
         </div>
 
-        <Button
-          label="Add"
-          onClick={() => {
-            navigate("/endo/new", {
-              state: { prev: `/setting` },
-            });
-          }}
-          type={ButtonTypes.PRIMARY}
-        />
+        <div className="grid grid-cols-12 gap-4">
+          <div id="left" className="col-span-12 md:col-span-9">
+            <div className="my-4">
+              <GlobalFilter
+                filter={globalFilter}
+                setFilter={setGlobalFilter}
+                data={data}
+              />
+            </div>
+            <PaginationControl
+              nextPage={() => {
+                nextPage();
+                setCurrentPageIndex(pageIndex + 1);
+              }}
+              previousPage={() => {
+                previousPage();
+                setCurrentPageIndex(pageIndex - 1);
+              }}
+              canNextPage={canNextPage}
+              canPreviousPage={canPreviousPage}
+              pageNum={pageOptions.length}
+              setPageSize={setPageSize}
+              currPage={pageIndex + 1}
+              pageSize={pageSize}
+              totalItemsCount={endosData?.endos.length}
+            />
+          </div>
+          <div id="right" className="col-span-12 md:col-span-3">
+            {endosData?.endos && endosData?.endos.length > 0 && (
+              <EndoStatusTable
+                endos={endosData?.endos as Endo[]}
+                setFilter={setGlobalFilter}
+              />
+            )}
+          </div>
+        </div>
       </div>
-
-      <div className="my-4">
-        <GlobalFilter
-          filter={globalFilter}
-          setFilter={setGlobalFilter}
-          data={data}
-        />
-      </div>
-      <PaginationControl
-        nextPage={() => {
-          nextPage();
-          setCurrentPageIndex(pageIndex + 1);
-        }}
-        previousPage={() => {
-          previousPage();
-          setCurrentPageIndex(pageIndex - 1);
-        }}
-        canNextPage={canNextPage}
-        canPreviousPage={canPreviousPage}
-        pageNum={pageOptions.length}
-        setPageSize={setPageSize}
-        currPage={pageIndex + 1}
-        pageSize={pageSize}
-        totalItemsCount={endosData?.endos.length}
-      />
 
       {/* only this component will get updated every seconds */}
       <CounterIndicator refetch={refetch} />

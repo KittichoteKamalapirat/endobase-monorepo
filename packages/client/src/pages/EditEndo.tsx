@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
@@ -15,10 +15,6 @@ import { showToast } from "../redux/slices/toastReducer";
 const EditEndo = () => {
   useIsAuth();
   const { id } = useParams();
-
-  // for back button
-  const { state } = useLocation();
-  const { prev } = state || {};
 
   const dispatch = useDispatch();
   const endoId = id || "";

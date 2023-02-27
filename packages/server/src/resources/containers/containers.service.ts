@@ -1,6 +1,5 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { columnToArduinoIdMapper } from 'src/constants';
 import { Repository } from 'typeorm';
 import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { SerialportsService } from '../serialports/serialports.service';
@@ -16,7 +15,7 @@ export class ContainersService {
     private containersRepository: Repository<Container>,
     @Inject(forwardRef(() => SerialportsService))
     private serialportsService: SerialportsService,
-  ) { }
+  ) {}
 
   create(createContainerInput: CreateContainerInput) {
     return 'This action adds a new container';
@@ -83,7 +82,7 @@ export class ContainersService {
     console.log('trays num', container.trays.length);
 
     const syncTurnlightsOff = async () => {
-      for (let tray of container.trays) {
+      for (const tray of container.trays) {
         console.log('tray', tray);
 
         await this.serialportsService.turnLightsOff({
@@ -93,11 +92,10 @@ export class ContainersService {
 
         // DON"T RETURN inside the loop => immediately get out of the loop
       }
-    }
+    };
     try {
-      const result = await syncTurnlightsOff()
+      const result = await syncTurnlightsOff();
       console.log('result', result);
-
     } catch (error) {
       console.log(error);
     }
@@ -127,23 +125,20 @@ export class ContainersService {
 
     // turn light off for every tray in that container
 
-
     const syncTurnlightsOn = async () => {
-      for (let tray of container.trays) {
+      for (const tray of container.trays) {
         await this.serialportsService.turnLightsOn({
           col: container.col,
           row: tray.row,
           status: tray.endo?.status || 'no_endo',
         });
       }
-    }
+    };
     try {
-      await syncTurnlightsOn()
+      await syncTurnlightsOn();
     } catch (error) {
       console.log(error);
     }
-
-
 
     return {
       container: updatedContainer,

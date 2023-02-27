@@ -7,7 +7,7 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from 'typeorm';
 import { EndoCron } from '../../endo-crons/entities/endo-cron.entity';
 import { Session } from '../../sessions/entities/session.entity';
@@ -18,17 +18,17 @@ export const ENDO_STATUS_OBJ = {
   EXPIRE_SOON: 'expire_soon',
   BEING_USED: 'being_used',
   EXPIRED: 'expired',
-  EXPIRED_AND_OUT: 'expired_and_out',
+  EXPIRED_AND_OUT: 'expired_and_out', // just for the frontend to know to display wash
   LEAK_TEST_FAILED: 'leak_test_failed',
   LEAK_TEST_PASSED: 'leak_test_passed',
   DISINFECTION_PASSED: 'disinfection_passed',
   DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
-  NO_ENDO: 'no_endo',
+  NO_ENDO: 'no_endo', // No endo in a tray (for writing color)
 } as const;
 
 export type ENDO_STATUS_KEYS = keyof typeof ENDO_STATUS_OBJ;
-export type ENDO_STATUS = typeof ENDO_STATUS_OBJ[ENDO_STATUS_KEYS];
+export type ENDO_STATUS = (typeof ENDO_STATUS_OBJ)[ENDO_STATUS_KEYS];
 
 // // export type ENDO_STATUS = keyof typeof ENDO_STATUS_OBJ;
 
@@ -124,5 +124,3 @@ export class Endo {
   @Field()
   updatedAt: Date;
 }
-
-

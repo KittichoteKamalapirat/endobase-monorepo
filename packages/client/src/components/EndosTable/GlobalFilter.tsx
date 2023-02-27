@@ -6,7 +6,7 @@ import Searchbar from "../Searchbar";
 interface Props {
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  data?: any
+  data?: any;
 }
 export const GlobalFilter = ({ filter, setFilter, data }: Props) => {
   const [value, setValue] = useState(filter);
@@ -15,10 +15,10 @@ export const GlobalFilter = ({ filter, setFilter, data }: Props) => {
   }, SEARCH_DEBOUNCE);
 
   useEffect(() => {
-    console.log('set filter')
-    if (data) setFilter(value)
-    else setFilter(value)
-  }, [value, setFilter, data])
+    console.log("set filter");
+    if (data) setFilter(value);
+    else setFilter(value);
+  }, [value, setFilter, data]);
   return (
     <span>
       <Searchbar

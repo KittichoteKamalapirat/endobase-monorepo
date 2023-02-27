@@ -62,11 +62,11 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
           content={`Ready: ${readyNum}`}
           color={
             activeFilter === ENDO_STATUS.READY
-              ? "text-grey-0 border-primary-primary"
-              : "text-primary-primary border-primary-primary"
+              ? "text-grey-0 border-green"
+              : "text-green border-green"
           }
           isActive={activeFilter === ENDO_STATUS.READY}
-          activeColor="bg-primary-primary"
+          activeColor="bg-green"
         />
       </div>
 
@@ -170,11 +170,11 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
           content={`Total: ${endos.length}`}
           color={
             activeFilter === ""
-              ? "text-grey-0 border-grey-900"
-              : "text-grey-900 border-grey-900"
+              ? "text-grey-0 border-primary"
+              : "text-primary border-primary"
           }
           isActive={activeFilter === ""}
-          activeColor="bg-grey-900"
+          activeColor="bg-primary"
         />
       </div>
     </div>

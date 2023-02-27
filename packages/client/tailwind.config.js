@@ -149,6 +149,7 @@ module.exports = {
           700: "#15803d",
           800: "#166534",
           900: "#14532d",
+          DEFAULT: "#16a34a",
         },
         yellow: yellow,
         "yellow-bg": "#FEF9C3", // for endo table status

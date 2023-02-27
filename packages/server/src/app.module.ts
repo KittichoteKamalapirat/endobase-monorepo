@@ -42,7 +42,7 @@ const envPath = (() => {
         origin: [
           'http://localhost:3000',
           'http://localhost:3001',
-          'http://localhost:51108',
+          'http://localhost:53545',
           'http://localhost',
           'http://192.168.1.200',
           'http://192.168.0.100',

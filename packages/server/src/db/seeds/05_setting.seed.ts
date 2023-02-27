@@ -17,6 +17,13 @@ export default class CreateSettings implements Seeder {
       description:
         'เปิดการแจ้งเตือนหากอุณหภูมิในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',
     });
+
+    await factory(Setting)().create({
+      name: 'hospitalName',
+      value: 'NKC Institute of Gastroenterology and Hepatology',
+      label: 'Institution Name',
+      description: 'ชื่อสำหรับแสดงที่หน้าโฮม',
+    });
     // await factory(Setting)().create({
     //   name: 'containerSnapshotIntervalMin',
     //   value: '60',

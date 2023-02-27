@@ -1,12 +1,8 @@
 import { getManager } from 'typeorm';
 import { Seeder } from 'typeorm-seeding';
 
-
-
-
 export default class DropDatabase implements Seeder {
   public async run(): Promise<any> {
-
     // // independent
     // await getManager().query('DROP TABLE setting');
     // // depend on others

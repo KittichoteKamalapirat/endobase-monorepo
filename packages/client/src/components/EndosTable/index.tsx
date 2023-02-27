@@ -1,18 +1,21 @@
 import classNames from "classnames";
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Column,
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from "react-table";
 import {
-  Endo, useEndosQuery,
-  usePickEndoMutation
+  Endo,
+  useEndosQuery,
+  usePickEndoMutation,
+  useSettingsQuery,
 } from "../../generated/graphql";
 
 import { useNavigate } from "react-router-dom";
+import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 import { useScreenIsLargerThan } from "../../hooks/useScreenIsLargerThan";
 import { sortEndosByPosition } from "../../utils/sortEndosByPosition";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
@@ -31,8 +34,6 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
-import { HOSPITAL_NAME } from "../../constants";
-import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -44,24 +45,43 @@ const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
 
-  const isLargerThanBreakpoint = useScreenIsLargerThan("md")
-  const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const {
+    data: settingsData,
+    loading: settingsLoading,
+    error: settingsError,
+  } = useSettingsQuery();
 
-  const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[])
+  const hospitalName = useMemo(
+    () =>
+      settingsData?.settings.find((setting) => setting.name === "hospitalName")
+        ?.value,
+    [settingsData]
+  );
+
+  const isLargerThanBreakpoint = useScreenIsLargerThan("md");
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
+  const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[]);
 
   // const refetchCounter = useRefetchCounter(refetch);
   const [pickEndo] = usePickEndoMutation();
-  const refetchCounter = useRefetchCounter(refetch)
+  const refetchCounter = useRefetchCounter(refetch);
 
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
-
     if (refetchCounter === 0) {
-      return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
-
+      return endoColumns({
+        pickEndo,
+        refetchEndos: refetch,
+        isLargerThanBreakpoint,
+      });
     }
 
-    return endoColumns({ pickEndo, refetchEndos: refetch, isLargerThanBreakpoint });
+    return endoColumns({
+      pickEndo,
+      refetchEndos: refetch,
+      isLargerThanBreakpoint,
+    });
   }, [pickEndo, refetch, isLargerThanBreakpoint]);
 
   const data = useMemo(() => {
@@ -98,22 +118,20 @@ const EndosTable = () => {
   );
 
   useEffect(() => {
-    if (currentPageIndex !== 0) gotoPage(currentPageIndex)
-  }, [refetch, columns, pageIndex])
+    if (currentPageIndex !== 0) gotoPage(currentPageIndex);
+  }, [refetch, columns, pageIndex]);
 
-
-  if (loading) {
+  if (loading || settingsLoading) {
     return <RowsSkeleton />;
   }
-  if (error) {
-    return <Error text={error?.message} />;
+  if (error || settingsError) {
+    return <Error text={error?.message || settingsError?.message || ""} />;
   }
 
   return (
     <div>
-      <div className="flex justify-between">
-
-        <PageHeading heading={HOSPITAL_NAME} />
+      <div className="flex justify-between items-center">
+        <PageHeading heading={hospitalName} />
         <Button
           label="Add"
           onClick={() => {
@@ -126,16 +144,20 @@ const EndosTable = () => {
       </div>
 
       <div className="my-4">
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} data={data} />
+        <GlobalFilter
+          filter={globalFilter}
+          setFilter={setGlobalFilter}
+          data={data}
+        />
       </div>
       <PaginationControl
         nextPage={() => {
-          nextPage()
-          setCurrentPageIndex(pageIndex + 1)
+          nextPage();
+          setCurrentPageIndex(pageIndex + 1);
         }}
         previousPage={() => {
-          previousPage()
-          setCurrentPageIndex(pageIndex - 1)
+          previousPage();
+          setCurrentPageIndex(pageIndex - 1);
         }}
         canNextPage={canNextPage}
         canPreviousPage={canPreviousPage}
@@ -195,9 +217,9 @@ const EndosTable = () => {
                       // if col is action => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action"
                         ? () =>
-                          navigate(`/endo/${(row.original as Endo).id}`, {
-                            state: { prev: "/" },
-                          })
+                            navigate(`/endo/${(row.original as Endo).id}`, {
+                              state: { prev: "/" },
+                            })
                         : undefined
                     }
                   >

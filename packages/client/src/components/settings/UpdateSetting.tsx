@@ -12,21 +12,21 @@ import { TbBulb, TbTemperature } from "react-icons/tb";
 import { showToast } from "../../redux/slices/toastReducer";
 import { useDispatch } from "react-redux";
 
+import { RiHospitalLine } from "react-icons/ri";
 interface Props {
   setting: Setting;
+  defaultValues: FormValues;
 }
 
 enum FormNames {
-  TIME = "time",
+  VALUE = "value",
 }
 
 interface FormValues {
-  [FormNames.TIME]: string;
+  [FormNames.VALUE]: string;
 }
 
-const initialData = { time: "0" };
-
-const UpdateSetting = ({ setting }: Props) => {
+const UpdateSetting = ({ setting, defaultValues }: Props) => {
   // graphql
   const [updateSetting, { loading: updateLoading }] =
     useUpdateSettingMutation();
@@ -43,15 +43,16 @@ const UpdateSetting = ({ setting }: Props) => {
     setValue,
     formState: { errors, isDirty },
   } = useForm<FormValues>({
-    defaultValues: initialData,
+    defaultValues,
   });
 
+  console.log("isDirty", isDirty);
   const onSubmit = async (data: FormValues) => {
     if (!name) return;
     try {
       await updateSetting({
         variables: {
-          input: { name, value: data[FormNames.TIME] },
+          input: { name, value: data[FormNames.VALUE] },
         },
       });
       dispatch(
@@ -73,17 +74,19 @@ const UpdateSetting = ({ setting }: Props) => {
         return <WiHumidity size={ICON_SIZE + 10} />;
       case "temperatureThreshold":
         return <TbTemperature size={ICON_SIZE + 10} />;
+      case "hospitalName":
+        return <RiHospitalLine size={ICON_SIZE + 4} />;
       case "trayLocationBlinkingSec":
-        return <TbBulb
-          size={ICON_SIZE + 10}
-        />
+        return <TbBulb size={ICON_SIZE + 10} />;
       default:
         return null;
     }
   })();
 
+  const inputType = name === "hospitalName" ? InputType.Text : InputType.Number;
+
   useEffect(() => {
-    if (value) setValue(FormNames.TIME, value); // sometimes, initialValue is set before the value is loaded
+    if (value) setValue(FormNames.VALUE, value); // sometimes, initialValue is set before the value is loaded
   }, [value, setValue]);
 
   return (
@@ -102,15 +105,15 @@ const UpdateSetting = ({ setting }: Props) => {
             <div className="flex gap-2">
               <TextField
                 required
-                name={FormNames.TIME}
+                name={FormNames.VALUE}
                 control={control as unknown as Control}
                 containerClass="w-full sm:w-80"
                 placeholder={setting.label}
                 type={TextFieldTypes.OUTLINED}
-                inputType={InputType.Number}
+                inputType={inputType}
                 extraClass="w-full"
                 labelClass="mt-4.5 mb-2"
-                error={errors[FormNames.TIME]}
+                error={errors[FormNames.VALUE]}
               />
               <Button
                 label="Update"

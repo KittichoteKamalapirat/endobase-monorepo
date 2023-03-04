@@ -4,6 +4,7 @@ import { ActionsModule } from '../actions/actions.module';
 import { EndoCronsModule } from '../endo-crons/endo-crons.module';
 import { SerialportsModule } from '../serialports/serialports.module';
 import { SessionsModule } from '../sessions/sessions.module';
+import { TraysModule } from '../trays/trays.module';
 import { EndosResolver } from './endos.resolver';
 import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
@@ -14,9 +15,10 @@ import { Endo } from './entities/endo.entity';
     forwardRef(() => ActionsModule),
     forwardRef(() => EndoCronsModule),
     SessionsModule,
-    SerialportsModule
+    SerialportsModule,
+    TraysModule,
   ],
   providers: [EndosResolver, EndosService],
   exports: [EndosService],
 })
-export class EndosModule { }
+export class EndosModule {}

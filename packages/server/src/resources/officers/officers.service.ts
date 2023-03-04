@@ -16,7 +16,7 @@ export class OfficersService {
   }
 
   findAll() {
-    return `This action returns all officers`;
+    return this.officersRepository.find();
   }
 
   findOneById(id: string) {
@@ -33,5 +33,20 @@ export class OfficersService {
 
   remove(id: number) {
     return `This action removes a #${id} officer`;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const officers = await this.findAll();
+
+      await Promise.all(
+        officers.map((officer) =>
+          this.officersRepository.delete({ id: officer.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove officers', error);
+    }
   }
 }

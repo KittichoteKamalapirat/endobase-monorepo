@@ -1,8 +1,8 @@
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
+import { v4 as uuidv4 } from 'uuid';
 import { Endo } from '../../resources/endos/entities/endo.entity';
 import { Tray } from '../../resources/trays/entities/tray.entity';
-import { v4 as uuidv4 } from 'uuid';
 
 export default class CreateTrays implements Seeder {
   public async run(factory: Factory, connection: Connection): Promise<any> {

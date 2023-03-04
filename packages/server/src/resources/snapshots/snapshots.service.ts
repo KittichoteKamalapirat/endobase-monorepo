@@ -23,7 +23,6 @@ export class SnapshotsService {
     @InjectRepository(Snapshot)
     private snapshotsRepository: Repository<Snapshot>,
     private containersService: ContainersService,
-
   ) {
     this.pubSub = new PubSub();
   }
@@ -69,5 +68,20 @@ export class SnapshotsService {
       relations: ['container'],
     });
     return snapshots;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const snapshots = await this.findAll();
+
+      await Promise.all(
+        snapshots.map((snapshot) =>
+          this.snapshotsRepository.delete({ id: snapshot.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove snapshots', error);
+    }
   }
 }

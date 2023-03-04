@@ -30,7 +30,7 @@ export class EndoCronsService implements OnModuleInit {
     private endoCronsRepository: Repository<EndoCron>,
     @Inject(forwardRef(() => EndosService))
     private endosService: EndosService,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     // init all the jobs in db
@@ -138,7 +138,6 @@ export class EndoCronsService implements OnModuleInit {
     if (saveToDb) await this.saveInDb(input);
 
     console.log('schedule created');
-
 
     return;
   }
@@ -249,5 +248,24 @@ export class EndoCronsService implements OnModuleInit {
       result.push(message);
     });
     return result;
+  }
+
+  findAll() {
+    return this.endoCronsRepository.find();
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const endoCrons = await this.findAll();
+
+      await Promise.all(
+        endoCrons.map((endoCron) =>
+          this.endoCronsRepository.delete({ id: endoCron.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove endoCrons', error);
+    }
   }
 }

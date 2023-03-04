@@ -176,10 +176,12 @@ export type Mutation = {
   createSetting: Setting;
   createSnapshot: Snapshot;
   createTray: Tray;
+  deleteAllData: BooleanResponse;
   deleteEndo: BooleanResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   pickEndo: Endo;
+  populateAllData: BooleanResponse;
   register: UserResponse;
   removeAction: Action;
   removeContainer: Container;
@@ -613,6 +615,16 @@ export type PaginatedActionsQueryVariables = Exact<{
 
 export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
 
+export type DeleteAllDataMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteAllDataMutation = { __typename?: 'Mutation', deleteAllData: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type PopulateAllDataMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PopulateAllDataMutation = { __typename?: 'Mutation', populateAllData: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -900,6 +912,78 @@ export function usePaginatedActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type PaginatedActionsQueryHookResult = ReturnType<typeof usePaginatedActionsQuery>;
 export type PaginatedActionsLazyQueryHookResult = ReturnType<typeof usePaginatedActionsLazyQuery>;
 export type PaginatedActionsQueryResult = Apollo.QueryResult<PaginatedActionsQuery, PaginatedActionsQueryVariables>;
+export const DeleteAllDataDocument = gql`
+    mutation DeleteAllData {
+  deleteAllData {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type DeleteAllDataMutationFn = Apollo.MutationFunction<DeleteAllDataMutation, DeleteAllDataMutationVariables>;
+
+/**
+ * __useDeleteAllDataMutation__
+ *
+ * To run a mutation, you first call `useDeleteAllDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAllDataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAllDataMutation, { data, loading, error }] = useDeleteAllDataMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDeleteAllDataMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAllDataMutation, DeleteAllDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAllDataMutation, DeleteAllDataMutationVariables>(DeleteAllDataDocument, options);
+      }
+export type DeleteAllDataMutationHookResult = ReturnType<typeof useDeleteAllDataMutation>;
+export type DeleteAllDataMutationResult = Apollo.MutationResult<DeleteAllDataMutation>;
+export type DeleteAllDataMutationOptions = Apollo.BaseMutationOptions<DeleteAllDataMutation, DeleteAllDataMutationVariables>;
+export const PopulateAllDataDocument = gql`
+    mutation PopulateAllData {
+  populateAllData {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type PopulateAllDataMutationFn = Apollo.MutationFunction<PopulateAllDataMutation, PopulateAllDataMutationVariables>;
+
+/**
+ * __usePopulateAllDataMutation__
+ *
+ * To run a mutation, you first call `usePopulateAllDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePopulateAllDataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [populateAllDataMutation, { data, loading, error }] = usePopulateAllDataMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePopulateAllDataMutation(baseOptions?: Apollo.MutationHookOptions<PopulateAllDataMutation, PopulateAllDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PopulateAllDataMutation, PopulateAllDataMutationVariables>(PopulateAllDataDocument, options);
+      }
+export type PopulateAllDataMutationHookResult = ReturnType<typeof usePopulateAllDataMutation>;
+export type PopulateAllDataMutationResult = Apollo.MutationResult<PopulateAllDataMutation>;
+export type PopulateAllDataMutationOptions = Apollo.BaseMutationOptions<PopulateAllDataMutation, PopulateAllDataMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

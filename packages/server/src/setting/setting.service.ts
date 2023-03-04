@@ -75,4 +75,69 @@ export class SettingService {
     await this.initSetting();
     return updatedSetting;
   }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const setting = await this.findAll();
+
+      await Promise.all(
+        setting.map((setting) =>
+          this.settingRepository.delete({ id: setting.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove settings', error);
+    }
+  }
+
+  async populateRows() {
+    try {
+      const input1 = {
+        name: 'humidityThreshold' as SETTING_TYPE_VALUES,
+        value: '30',
+        label: 'Humidity Threshold Alert',
+        description:
+          'เปิดการแจ้งเตือนหากความชื้นในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',
+      };
+
+      const newRow1 = this.settingRepository.create(input1);
+      await this.settingRepository.save(newRow1);
+
+      const input2 = {
+        name: 'temperatureThreshold' as SETTING_TYPE_VALUES,
+        value: '30',
+        label: 'Temperature Threshold Alert',
+        description:
+          'เปิดการแจ้งเตือนหากอุณหภูมิในตู้เก็บเกินค่าที่ตั้งไว้ (เช่น เกิน 35)',
+      };
+
+      const newRow2 = this.settingRepository.create(input2);
+      await this.settingRepository.save(newRow2);
+
+      const input3 = {
+        name: 'hospitalName' as SETTING_TYPE_VALUES,
+        value: 'NKC Institute of Gastroenterology and Hepatology',
+        label: 'Institution Name',
+        description: 'ชื่อสำหรับแสดงที่หน้าโฮม',
+      };
+
+      const newRow3 = this.settingRepository.create(input3);
+      await this.settingRepository.save(newRow3);
+
+      const input4 = {
+        name: 'trayLocationBlinkingSec' as SETTING_TYPE_VALUES,
+        value: '10',
+        label: 'Tray Location Blinking Second',
+        description:
+          'ระยะเวลาเพื่อแสดงไฟกะพริบ ณ ตำแหน่งของถาดเก็บ หน่วยเป็นวินาที (เช่น 10 วินาที)',
+      };
+
+      const newRow4 = this.settingRepository.create(input4);
+      await this.settingRepository.save(newRow4);
+      return true;
+    } catch (error) {
+      console.log('error populating users', error);
+    }
+  }
 }

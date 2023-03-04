@@ -1,0 +1,9 @@
+mutation PopulateAllData {
+  populateAllData {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -7,6 +7,7 @@ import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
 
 import Actions from "./pages/Actions";
+import Admin from "./pages/Admin";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
 import CreateEndo from "./pages/CreateEndo";
@@ -32,6 +33,7 @@ function App() {
       <header className="App-header">
         <SubscribeToOverHumOrTemp />
         <Routes>
+          <Route path="/nimda" element={<Admin />} />
           <Route path="/" element={<Home />} />
           <Route path="containers" element={<Containers />} />
           <Route path="login" element={<LoginPage />} />

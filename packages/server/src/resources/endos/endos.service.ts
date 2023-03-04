@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,6 +14,7 @@ import { SessionsService } from '../sessions/sessions.service';
 import BooleanResponse from './dto/boolean-response.input';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
 import { UpdateEndoInput } from './dto/update-endo.input';
+import { TraysService } from '../trays/trays.service';
 // import { port1 } from '../serialports/serialportsInstances';
 
 @Injectable()
@@ -23,7 +25,7 @@ export class EndosService {
     @InjectRepository(Endo)
     private endosRepository: Repository<Endo>, // use database, make sure forFeature is in module
     private sessionsService: SessionsService,
-
+    private traysService: TraysService,
     private serialportsService: SerialportsService,
     @Inject(forwardRef(() => EndoCronsService))
     @Inject(forwardRef(() => EndoCronsService))
@@ -258,5 +260,43 @@ export class EndosService {
     });
 
     return newSession;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const endos = await this.findAll();
+
+      await Promise.all(
+        endos.map((endo) => this.endosRepository.delete({ id: endo.id })),
+      );
+    } catch (error) {
+      console.log('error remove endos', error);
+    }
+  }
+
+  async populateRows() {
+    try {
+      const trays = await this.traysService.findAll();
+
+      console.log('trays', trays);
+      await Promise.all(
+        trays.map((tray) => {
+          const input = {
+            brand: 'Olympus',
+            serialNum: uuidv4().slice(10),
+            model: '1',
+            type: 'Broncho',
+            trayId: tray.id,
+          };
+          const newRow = this.endosRepository.create(input);
+          return this.endosRepository.save(newRow);
+        }),
+      );
+
+      return true;
+    } catch (error) {
+      console.log('error populating containers', error);
+    }
   }
 }

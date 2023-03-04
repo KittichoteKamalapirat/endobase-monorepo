@@ -233,6 +233,8 @@ type Mutation {
   removeUser(id: Int!): User!
   login(input: LoginInput!): UserResponse!
   logout: Boolean!
+  deleteAllData: BooleanResponse!
+  populateAllData: BooleanResponse!
 }
 
 input RowAndColInput {

@@ -1,7 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
+import {
+  CONTAINER_TYPE_OBJ,
+  CONTAINER_TYPE_VALUES,
+} from '../../types/CONTAINER_TYPE';
 import { SerialportsService } from '../serialports/serialports.service';
 import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
@@ -143,5 +146,38 @@ export class ContainersService {
     return {
       container: updatedContainer,
     };
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const containers = await this.findAll();
+
+      await Promise.all(
+        containers.map((container) =>
+          this.containersRepository.delete({ id: container.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove containers', error);
+    }
+  }
+
+  async populateRows() {
+    try {
+      await Promise.all(
+        Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
+          const input = {
+            col: key as CONTAINER_TYPE_VALUES,
+          };
+
+          const newRow = this.containersRepository.create(input);
+          return await this.containersRepository.save(newRow);
+        }),
+      );
+      return true;
+    } catch (error) {
+      console.log('error populating containers', error);
+    }
   }
 }

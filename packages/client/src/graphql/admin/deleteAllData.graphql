@@ -1,0 +1,9 @@
+mutation DeleteAllData {
+  deleteAllData {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}

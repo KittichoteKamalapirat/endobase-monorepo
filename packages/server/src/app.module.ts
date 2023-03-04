@@ -21,6 +21,7 @@ import { UsersModule } from './resources/users/users.module';
 import { SettingModule } from './setting/setting.module';
 import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
 import { ConfigModule } from '@nestjs/config';
+import { AdminModule } from './resources/admin/admin.module';
 
 // could be "mac-dev", "win-dev", "wind-prod"
 const ENV = process.env.NODE_ENV;
@@ -41,6 +42,7 @@ const envPath = (() => {
       cors: {
         origin: [
           'http://localhost:3000',
+          'http://localhost:3001',
           'http://localhost',
           'http://192.168.1.200',
         ], // in url bar: "endosupply/", "localhost"
@@ -78,6 +80,7 @@ const envPath = (() => {
     UsersModule,
     AuthModule,
     EndoCronsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

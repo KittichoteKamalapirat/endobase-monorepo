@@ -217,4 +217,19 @@ export class ActionsService {
   remove(id: number) {
     return `This action removes a #${id} action`;
   }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const actions = await this.findAll();
+
+      await Promise.all(
+        actions.map((action) =>
+          this.actionsRepository.delete({ id: action.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove actions', error);
+    }
+  }
 }

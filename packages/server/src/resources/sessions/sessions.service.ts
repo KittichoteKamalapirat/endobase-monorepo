@@ -68,7 +68,9 @@ export class SessionsService {
 
   async endSession(id: string) {
     try {
-      const session = await this.sessionsRepository.findOne({ where: {id, status: "ongoing"}  });
+      const session = await this.sessionsRepository.findOne({
+        where: { id, status: 'ongoing' },
+      });
       if (!session) return new Error('cannot fidn a session');
       const updatedSession: Session = {
         ...session,
@@ -82,11 +84,12 @@ export class SessionsService {
     }
   }
 
-
   async endSessionByEndoId(endoId: string) {
     try {
       // find the current session
-      const session = await this.sessionsRepository.findOne({ where: {endoId, status: "ongoing"}  });
+      const session = await this.sessionsRepository.findOne({
+        where: { endoId, status: 'ongoing' },
+      });
       if (!session) return new Error('cannot find a session');
       const updatedSession: Session = {
         ...session,
@@ -99,7 +102,6 @@ export class SessionsService {
       return new Error(error);
     }
   }
-
 
   async updatePatient(id: string, patientHN: string) {
     // use patientId if this hosNum is already in the db
@@ -131,5 +133,20 @@ export class SessionsService {
 
   remove(id: string) {
     return `This action removes a #${id} session`;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const sessions = await this.findAll();
+
+      await Promise.all(
+        sessions.map((session) =>
+          this.sessionsRepository.delete({ id: session.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove sessions', error);
+    }
   }
 }

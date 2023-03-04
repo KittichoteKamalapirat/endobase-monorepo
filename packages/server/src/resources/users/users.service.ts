@@ -110,7 +110,7 @@ export class UsersService {
   };
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   findOne(id: string) {
@@ -127,5 +127,34 @@ export class UsersService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const users = await this.findAll();
+
+      await Promise.all(
+        users.map((user) => this.usersRepository.delete({ id: user.id })),
+      );
+    } catch (error) {
+      console.log('error remove users', error);
+    }
+  }
+
+  async populateRows() {
+    try {
+      const input = {
+        username: '02321',
+        password:
+          '$2b$10$sLE1vuo0vs6xy2oqxV/jNOjSyF83/S.PaG9dGgX5Q3lyus2/VXzqe',
+      };
+
+      const newRow = this.usersRepository.create(input);
+      await this.usersRepository.save(newRow);
+      return true;
+    } catch (error) {
+      console.log('error populating users', error);
+    }
   }
 }

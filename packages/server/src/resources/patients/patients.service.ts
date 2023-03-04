@@ -15,7 +15,7 @@ export class PatientsService {
   }
 
   findAll() {
-    return `This action returns all patients`;
+    return this.patientsRepository.find();
   }
 
   async findOneById(id: string): Promise<Patient> {
@@ -44,5 +44,20 @@ export class PatientsService {
 
   remove(id: number) {
     return `This action removes a #${id} patient`;
+  }
+
+  // for admin
+  async removeAllRows() {
+    try {
+      const patients = await this.findAll();
+
+      await Promise.all(
+        patients.map((patient) =>
+          this.patientsRepository.delete({ id: patient.id }),
+        ),
+      );
+    } catch (error) {
+      console.log('error remove patients', error);
+    }
   }
 }

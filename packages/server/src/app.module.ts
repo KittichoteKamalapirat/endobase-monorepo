@@ -45,6 +45,7 @@ const envPath = (() => {
           'http://localhost:3001',
           'http://localhost',
           'http://192.168.1.200',
+          'http://192.168.0.100', // just in case
         ], // in url bar: "endosupply/", "localhost"
         credentials: true,
       },

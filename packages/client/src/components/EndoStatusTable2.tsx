@@ -77,7 +77,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
         {/* <div className="col-span-1">Being Used</div> */}
         <Badge
           size="md"
-          content={`Being: Used ${beingUsedNum}`}
+          content={`Being Used: ${beingUsedNum}`}
           color={
             activeFilter === ENDO_STATUS.BEING_USED
               ? "text-grey-0 border-grey-400"
@@ -95,7 +95,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
         {/* <div className="col-span-1">Being Washed</div> */}
         <Badge
           size="md"
-          content={`Leak: Tested ${leakTestPassedNum}`}
+          content={`Leak Tested: ${leakTestPassedNum}`}
           color={
             activeFilter === ENDO_STATUS.LEAK_TEST_PASSED
               ? "text-grey-0 border-grey-400"
@@ -131,7 +131,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
         {/* <div className="col-span-1">Expire Soon</div> */}
         <Badge
           size="md"
-          content={`Expire: Soon ${expireSoonNum}`}
+          content={`Expire Soon: ${expireSoonNum}`}
           color={
             activeFilter === ENDO_STATUS.EXPIRE_SOON
               ? "text-grey-900 border-yellow"

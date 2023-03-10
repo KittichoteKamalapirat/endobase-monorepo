@@ -51,9 +51,9 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap">
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.READY)}
       >
         {/* <div className="col-span-1">Ready</div> */}
@@ -71,7 +71,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.BEING_USED)}
       >
         {/* <div className="col-span-1">Being Used</div> */}
@@ -89,7 +89,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.LEAK_TEST_PASSED)}
       >
         {/* <div className="col-span-1">Being Washed</div> */}
@@ -107,7 +107,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.DISINFECTION_PASSED)}
       >
         {/* <div className="col-span-1">Being Washed</div> */}
@@ -125,7 +125,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.EXPIRE_SOON)}
       >
         {/* <div className="col-span-1">Expire Soon</div> */}
@@ -143,7 +143,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.EXPIRED)}
       >
         {/* <div className="col-span-1">Expired</div> */}
@@ -161,7 +161,7 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
       </div>
 
       <div
-        className="flex justify-between my-1 gap-2 hover:cursor-pointer"
+        className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => setFilter("")}
       >
         {/* <div className="col-span-1">Total</div> */}

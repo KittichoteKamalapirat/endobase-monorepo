@@ -11,17 +11,17 @@ export const brandName = "Endo Supply";
 
 // localhost
 const prod = {
-    // graphqlHttpEndpoint: "http://localhost:4001/graphql",
-    // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
-    graphqlHttpEndpoint: "http://192.168.0.100:4001/graphql",
-    graphqlSocketEndpoint: "ws://192.168.0.100:4001/graphql",
+  graphqlHttpEndpoint: "http://localhost:4001/graphql",
+  graphqlSocketEndpoint: "ws://localhost:4001/graphql",
+  // graphqlHttpEndpoint: "http://192.168.0.100:4001/graphql",
+  // graphqlSocketEndpoint: "ws://192.168.0.100:4001/graphql",
 };
 
 const dev = {
-    graphqlHttpEndpoint: "http://192.168.0.100:4001/graphql",
-    graphqlSocketEndpoint: "ws://192.168.0.100:4001/graphql",
-    // graphqlHttpEndpoint: "http://localhost:4001/graphql",
-    // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
+  // graphqlHttpEndpoint: "http://192.168.0.100:4001/graphql",
+  // graphqlSocketEndpoint: "ws://192.168.0.100:4001/graphql",
+  graphqlHttpEndpoint: "http://localhost:4001/graphql",
+  graphqlSocketEndpoint: "ws://localhost:4001/graphql",
 };
 
 export const config = process.env.NODE_ENV === "development" ? dev : prod;

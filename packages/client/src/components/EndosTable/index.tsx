@@ -14,13 +14,16 @@ import {
   useSettingsQuery,
 } from "../../generated/graphql";
 
+import { FaRegHospital } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { ICON_SIZE } from "../../constants";
 import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 import { useScreenIsLargerThan } from "../../hooks/useScreenIsLargerThan";
 import { sortEndosByPosition } from "../../utils/sortEndosByPosition";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
+import EndoStatusTable2 from "../EndoStatusTable2";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PaginationControl from "../Table/PaginationControl";
@@ -34,10 +37,6 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { GlobalFilter } from "./GlobalFilter";
-import { ICON_SIZE } from "../../constants";
-import { FaRegHospital } from "react-icons/fa";
-import EndoStatusTable from "../EndoStatusTable";
-import EndoStatusTable2 from "../EndoStatusTable2";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -167,7 +166,7 @@ const EndosTable = () => {
             />
           </div>
 
-          <div>
+          <div className="mb-2">
             {endosData?.endos && endosData?.endos.length > 0 && (
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}

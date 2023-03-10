@@ -81,7 +81,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const endoId = row.original.id as string;
 
   const isResponding = row.original.tray.container.isResponding;
-  if (!isResponding) return <div className="text-grey-500">Offline</div>;
+  // if (!isResponding) return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:

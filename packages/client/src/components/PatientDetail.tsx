@@ -1,7 +1,6 @@
-import classNames from "classnames";
 import { Patient } from "../generated/graphql";
-import { CARD_CLASSNAMES } from "../theme";
-import SubHeading from "./typography/SubHeading";
+import HDivider from "./layouts/HDivider";
+import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   patient: Patient;
@@ -13,8 +12,11 @@ const PatientDetail = ({ patient }: Props) => {
   if (!patient) return null;
 
   return (
-    <div className={classNames(CARD_CLASSNAMES)}>
-      <SubHeading heading="Patient Detail" />
+    <div>
+      <SmallHeading
+        heading="Who used this endoscope?"
+        extraClass="text-grey-500"
+      />
       <div className="flex gap-10 mt-4">
         <div id="left" className="font-bold">
           <div>Hospital Number &#40;HN&#41;</div>
@@ -24,6 +26,8 @@ const PatientDetail = ({ patient }: Props) => {
           <div>{hosNum}</div>
         </div>
       </div>
+
+      <HDivider extraClass="my-4" />
     </div>
   );
 };

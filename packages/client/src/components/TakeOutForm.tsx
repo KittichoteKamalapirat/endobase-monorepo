@@ -86,7 +86,7 @@ const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Take Out" />
+      <SmallHeading heading="1. Take Out" />
       <div className="flex items-end">
         <TextField
           required

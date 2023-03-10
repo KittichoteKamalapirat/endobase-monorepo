@@ -4,13 +4,13 @@ import {
   useSessionQuery,
   useUpdateSessionPatientMutation,
 } from "../generated/graphql";
-import { CARD_CLASSNAMES } from "../theme";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
+  disabled: boolean; // if Take Out Form is not completed yet
 }
 
 enum FormNames {
@@ -24,7 +24,7 @@ interface FormValues {
 const initialData = {
   patientHnNum: "",
 };
-const PatientForm = ({ containerClass }: Props) => {
+const PatientForm = ({ containerClass, disabled }: Props) => {
   const { id: sessionId } = useParams();
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -35,6 +35,7 @@ const PatientForm = ({ containerClass }: Props) => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
@@ -42,6 +43,13 @@ const PatientForm = ({ containerClass }: Props) => {
   const onSubmit = async (data: FormValues) => {
     try {
       if (!sessionId) return;
+
+      if (disabled)
+        return setError("patientHnNum", {
+          type: "custom",
+          message: "Please fill in the Take Out Form first",
+        });
+
       await updatePatientInSession({
         variables: {
           input: {
@@ -57,29 +65,27 @@ const PatientForm = ({ containerClass }: Props) => {
     }
   };
   return (
-    <div className={CARD_CLASSNAMES}>
-      <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-        <SmallHeading heading="Who used this endoscope?" />
+    <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
+      <SmallHeading heading="2. Who used this endoscope?" />
 
-        <div className="flex items-end">
-          <TextField
-            required
-            name={FormNames.PATIENT_HN_NUM}
-            control={control as unknown as Control}
-            label="Patient Hospital Number (HN)"
-            placeholder="Please insert patient ID"
-            type={TextFieldTypes.OUTLINED}
-            extraClass="w-full"
-            error={errors[FormNames.PATIENT_HN_NUM]}
-          />
-          <Button
-            label="Save"
-            buttonType={HTMLButtonType.SUBMIT}
-            extraClass="ml-2.5 w-24"
-          />
-        </div>
-      </form>
-    </div>
+      <div className="flex items-end">
+        <TextField
+          required
+          name={FormNames.PATIENT_HN_NUM}
+          control={control as unknown as Control}
+          label="Patient Hospital Number (HN)"
+          placeholder="Please insert patient ID"
+          type={TextFieldTypes.OUTLINED}
+          extraClass="w-full"
+          error={errors[FormNames.PATIENT_HN_NUM]}
+        />
+        <Button
+          label="Save"
+          buttonType={HTMLButtonType.SUBMIT}
+          extraClass="ml-2.5 w-24"
+        />
+      </div>
+    </form>
   );
 };
 export default PatientForm;

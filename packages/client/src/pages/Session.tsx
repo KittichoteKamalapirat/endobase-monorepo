@@ -16,7 +16,6 @@ import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import TakeOutForm from "../components/TakeOutForm";
 import PageHeading from "../components/typography/PageHeading";
-import SubHeading from "../components/typography/SubHeading";
 import {
   Action,
   Endo,
@@ -120,45 +119,48 @@ const Session = () => {
       <PageHeading heading="Session" />
       <EndoDetail endo={endoData?.endo as Endo} canBeClicked />
 
-      {data?.session.endoWasExpired ? (
-        <NoPatientForm />
-      ) : (
-        <div id="patient-details">
-          {patientId ? (
-            <PatientDetail patient={patient as Patient} />
-          ) : (
-            <PatientForm containerClass="my-4" />
-          )}
-        </div>
-      )}
-
-      <div id="activities-detail" className={CARD_CLASSNAMES}>
-        <SubHeading heading="Activities" extraClass="mt-4" />
-
+      <div className={CARD_CLASSNAMES}>
+        {/* 1 */}
         {takeOutAction ? (
           <ActivityItem action={takeOutAction as Partial<Action>} />
         ) : (
           <TakeOutForm containerClass="my-4" refetchEndo={refetchEndo} />
         )}
+        {/* 2 */}
 
+        {data?.session.endoWasExpired ? (
+          <NoPatientForm />
+        ) : (
+          <div id="patient-details">
+            {patientId ? (
+              <PatientDetail patient={patient as Patient} />
+            ) : (
+              <PatientForm containerClass="my-4" disabled={!takeOutAction} />
+            )}
+          </div>
+        )}
+
+        {/* 3 */}
         {leakTestAction ? (
           <ActivityItem action={leakTestAction as Partial<Action>} />
         ) : (
           <LeakTestForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
-            disabled={!takeOutAction}
+            disabled={!(takeOutAction && patient)}
           />
         )}
+        {/* 4 */}
         {disinfectAction ? (
           <ActivityItem action={disinfectAction as Partial<Action>} />
         ) : (
           <DisinfectForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
-            disabled={!(takeOutAction && leakTestAction)}
+            disabled={!(patient && takeOutAction && leakTestAction)}
           />
         )}
+        {/* 5 */}
         {storeAction ? (
           <ActivityItem action={storeAction as Partial<Action>} />
         ) : (

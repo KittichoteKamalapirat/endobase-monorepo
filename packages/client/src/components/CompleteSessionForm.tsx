@@ -122,7 +122,7 @@ const CompleteSessionForm = ({
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Put back to storage and dry" />
+      <SmallHeading heading="5. Put back to storage and dry" />
       <div>
         <TextField
           required

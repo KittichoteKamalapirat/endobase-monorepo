@@ -91,7 +91,7 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Disinfection" />
+      <SmallHeading heading="4. Disinfection" />
       <div className="flex items-end">
         <TextField
           required

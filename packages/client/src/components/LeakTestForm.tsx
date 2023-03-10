@@ -65,7 +65,7 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
     if (disabled)
       return setError("officerNum", {
         type: "custom",
-        message: "Please fill in the Take Out Form first",
+        message: "Please fill in the Patient Form first",
       });
 
     try {
@@ -92,7 +92,7 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="Leak Test" />
+      <SmallHeading heading="3. Leak Test" />
       <div className="flex items-end">
         <TextField
           required

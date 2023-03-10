@@ -1,10 +1,14 @@
 import { FieldError } from "react-hook-form";
 
-const getErrorMessage = (name: string, error: FieldError | undefined) => {
+const getErrorMessage = (
+  name: string,
+  error: FieldError | undefined,
+  includedfieldName?: boolean
+) => {
   const message = error?.message || "";
   if (message.length > 0) {
-    // return `${name} ${message}`;
-    return `${message}`;
+    if (includedfieldName) return `${name} ${message}`;
+    else return `${message}`;
   }
 
   return null;

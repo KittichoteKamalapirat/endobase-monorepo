@@ -5,7 +5,6 @@ import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetail
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
-
 import Actions from "./pages/Actions";
 import Admin from "./pages/Admin";
 import ConfigSetting from "./pages/ConfigSetting";

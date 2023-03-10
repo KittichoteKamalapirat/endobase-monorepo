@@ -1,6 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { useEffect } from "react";
 import { Control, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   EndoQuery,
@@ -8,6 +9,7 @@ import {
   useCreateActionMutation,
   useSessionQuery,
 } from "../generated/graphql";
+import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -53,6 +55,7 @@ const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
     defaultValues: initialData,
   });
 
+  const dispatch = useDispatch();
   const onSubmit = async (data: FormValues) => {
     try {
       if (!sessionId) return;
@@ -63,14 +66,37 @@ const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
         passed: true,
       };
 
-      await createAction({
+      const result = await createAction({
         variables: {
           input,
         },
       });
 
-      refetch();
-      refetchEndo();
+      const resultValue = result.data?.createAction.action;
+
+      let errorMessage = "";
+      const resultUserErrors = result.data?.createAction.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${message}\n`;
+      });
+
+      if (resultValue && resultUserErrors.length === 0) {
+        dispatch(
+          showToast({
+            message: "Successfully created an action",
+            variant: "success",
+          })
+        );
+        refetch();
+        refetchEndo();
+      } else {
+        dispatch(
+          showToast({
+            message: errorMessage,
+            variant: "error",
+          })
+        );
+      }
     } catch (error) {
       console.log("error", error);
     }

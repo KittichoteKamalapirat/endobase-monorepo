@@ -1,82 +1,24 @@
-import { useDispatch } from "react-redux";
-import Button, { ButtonTypes } from "../components/Buttons/Button";
-import {
-  useDeleteAllDataMutation,
-  usePopulateAllDataMutation,
-} from "../generated/graphql";
-import { showToast } from "../redux/slices/toastReducer";
+import CreateOfficer from "../components/CreateOfficer";
+import Layout from "../components/layouts/Layout";
+import Migration from "../components/Migration";
+import OfficersList from "../components/OfficersList";
+import SubHeading from "../components/typography/SubHeading";
+import { CARD_CLASSNAMES } from "../theme";
 
 const Admin = () => {
-  const dispatch = useDispatch();
-  const [deleteAllData] = useDeleteAllDataMutation();
-  const [populateAllData] = usePopulateAllDataMutation();
-  const handleDeleteAllData = async () => {
-    try {
-      const result = await deleteAllData();
-      if (result.data?.deleteAllData) {
-        dispatch(
-          showToast({
-            message: "Successfully Deleted",
-            variant: "success",
-          })
-        );
-      } else {
-        dispatch(
-          showToast({
-            message: "An error occured",
-            variant: "error",
-          })
-        );
-      }
-    } catch (error) {
-      dispatch(
-        showToast({
-          message: "An error occured",
-          variant: "error",
-        })
-      );
-    }
-  };
-
-  const handlePopulateData = async () => {
-    try {
-      const result = await populateAllData();
-      if (result.data?.populateAllData) {
-        dispatch(
-          showToast({
-            message: "Successfully Created",
-            variant: "success",
-          })
-        );
-      } else {
-        dispatch(
-          showToast({
-            message: "An error occured",
-            variant: "error",
-          })
-        );
-      }
-    } catch (error) {
-      dispatch(
-        showToast({
-          message: "An error occured",
-          variant: "error",
-        })
-      );
-    }
-  };
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex items-center justify-center gap-2 flex-col">
-        <Button
-          label="Delete all data"
-          type={ButtonTypes.SECONDARY}
-          onClick={handleDeleteAllData}
-        />
-        <Button label="Populate data" onClick={handlePopulateData} />
+    <Layout>
+      <div className={CARD_CLASSNAMES}>
+        <CreateOfficer />
       </div>
-    </div>
+
+      <OfficersList />
+
+      <div className="mt-10">
+        <SubHeading heading="Dangerous Zone" fontColor="text-red" />
+        <Migration />
+      </div>
+    </Layout>
   );
 };
-
 export default Admin;

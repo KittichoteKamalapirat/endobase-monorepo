@@ -168,6 +168,9 @@ module.exports = {
         "pulse-1": "pulse 1s cubic-bezier(0.6, 0, 0.8, 1) infinite",
         "pulse-2": "pulse 2s cubic-bezier(0.6, 0, 0.8, 1) infinite",
       },
+      gridTemplateColumns: {
+        13: "repeat(13, minmax(0, 1fr))",
+      },
     },
   },
   plugins: [],

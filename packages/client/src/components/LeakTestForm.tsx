@@ -1,5 +1,6 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { Control, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   EndoQuery,
@@ -7,6 +8,7 @@ import {
   useCreateActionMutation,
   useSessionQuery,
 } from "../generated/graphql";
+import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
@@ -59,6 +61,8 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
     defaultValues: initialData,
   });
 
+  const dispatch = useDispatch();
+
   const testPassed = !!watch(FormNames.PASSED_TEST);
 
   const onSubmit = async (data: FormValues) => {
@@ -77,14 +81,37 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
         passed: true,
       };
 
-      await createAction({
+      const result = await createAction({
         variables: {
           input,
         },
       });
 
-      refetch();
-      refetchEndo();
+      const resultValue = result.data?.createAction.action;
+
+      let errorMessage = "";
+      const resultUserErrors = result.data?.createAction.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${message}\n`;
+      });
+
+      if (resultValue && resultUserErrors.length === 0) {
+        dispatch(
+          showToast({
+            message: "Successfully created an action",
+            variant: "success",
+          })
+        );
+        refetch();
+        refetchEndo();
+      } else {
+        dispatch(
+          showToast({
+            message: errorMessage,
+            variant: "error",
+          })
+        );
+      }
     } catch (error) {
       console.log("error", error);
     }

@@ -29,6 +29,12 @@ export type Action = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ActionResponse = {
+  __typename?: 'ActionResponse';
+  action?: Maybe<Action>;
+  errors?: Maybe<Array<FieldError>>;
+};
+
 export type BooleanResponse = {
   __typename?: 'BooleanResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -77,6 +83,8 @@ export type CreateEndoInput = {
 };
 
 export type CreateOfficerInput = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
   officerNum: Scalars['String'];
 };
 
@@ -167,10 +175,10 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   blinkLocation: Scalars['Boolean'];
-  createAction: Action;
+  createAction: ActionResponse;
   createContainer: Container;
   createEndo: Endo;
-  createOfficer: Officer;
+  createOfficer: OfficerResponse;
   createPatient: Patient;
   createSession: Session;
   createSetting: Setting;
@@ -225,7 +233,7 @@ export type MutationCreateEndoArgs = {
 
 
 export type MutationCreateOfficerArgs = {
-  createOfficerInput: CreateOfficerInput;
+  input: CreateOfficerInput;
 };
 
 
@@ -368,9 +376,17 @@ export type Officer = {
   __typename?: 'Officer';
   actions: Array<Action>;
   createdAt: Scalars['DateTime'];
+  firstName: Scalars['String'];
   id: Scalars['ID'];
+  lastName: Scalars['String'];
   officerNum: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type OfficerResponse = {
+  __typename?: 'OfficerResponse';
+  errors?: Maybe<Array<FieldError>>;
+  officer?: Maybe<Officer>;
 };
 
 export type PaginatedActionOutput = {
@@ -554,7 +570,9 @@ export type UpdateEndoInput = {
 };
 
 export type UpdateOfficerInput = {
+  firstName?: InputMaybe<Scalars['String']>;
   id: Scalars['Int'];
+  lastName?: InputMaybe<Scalars['String']>;
   officerNum?: InputMaybe<Scalars['String']>;
 };
 
@@ -716,6 +734,18 @@ export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
 
+export type CreateOfficerMutationVariables = Exact<{
+  input: CreateOfficerInput;
+}>;
+
+
+export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type OfficersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OfficersQuery = { __typename?: 'Query', officers: Array<{ __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }> };
+
 export type BlinkLocationMutationVariables = Exact<{
   input: RowAndColInput;
 }>;
@@ -728,7 +758,7 @@ export type CreateActionMutationVariables = Exact<{
 }>;
 
 
-export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } };
+export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateSessionPatientMutationVariables = Exact<{
   input: UpdateSessionPatientInput;
@@ -1542,6 +1572,84 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
+export const CreateOfficerDocument = gql`
+    mutation CreateOfficer($input: CreateOfficerInput!) {
+  createOfficer(input: $input) {
+    officer {
+      officerNum
+      firstName
+      lastName
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CreateOfficerMutationFn = Apollo.MutationFunction<CreateOfficerMutation, CreateOfficerMutationVariables>;
+
+/**
+ * __useCreateOfficerMutation__
+ *
+ * To run a mutation, you first call `useCreateOfficerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOfficerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOfficerMutation, { data, loading, error }] = useCreateOfficerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOfficerMutation(baseOptions?: Apollo.MutationHookOptions<CreateOfficerMutation, CreateOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOfficerMutation, CreateOfficerMutationVariables>(CreateOfficerDocument, options);
+      }
+export type CreateOfficerMutationHookResult = ReturnType<typeof useCreateOfficerMutation>;
+export type CreateOfficerMutationResult = Apollo.MutationResult<CreateOfficerMutation>;
+export type CreateOfficerMutationOptions = Apollo.BaseMutationOptions<CreateOfficerMutation, CreateOfficerMutationVariables>;
+export const OfficersDocument = gql`
+    query Officers {
+  officers {
+    id
+    officerNum
+    firstName
+    lastName
+  }
+}
+    `;
+
+/**
+ * __useOfficersQuery__
+ *
+ * To run a query within a React component, call `useOfficersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOfficersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOfficersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOfficersQuery(baseOptions?: Apollo.QueryHookOptions<OfficersQuery, OfficersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OfficersQuery, OfficersQueryVariables>(OfficersDocument, options);
+      }
+export function useOfficersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OfficersQuery, OfficersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OfficersQuery, OfficersQueryVariables>(OfficersDocument, options);
+        }
+export type OfficersQueryHookResult = ReturnType<typeof useOfficersQuery>;
+export type OfficersLazyQueryHookResult = ReturnType<typeof useOfficersLazyQuery>;
+export type OfficersQueryResult = Apollo.QueryResult<OfficersQuery, OfficersQueryVariables>;
 export const BlinkLocationDocument = gql`
     mutation BlinkLocation($input: RowAndColInput!) {
   blinkLocation(input: $input)
@@ -1576,10 +1684,16 @@ export type BlinkLocationMutationOptions = Apollo.BaseMutationOptions<BlinkLocat
 export const CreateActionDocument = gql`
     mutation createAction($input: CreateActionInput!) {
   createAction(input: $input) {
-    id
-    type
-    passed
-    sessionId
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
+    }
   }
 }
     `;

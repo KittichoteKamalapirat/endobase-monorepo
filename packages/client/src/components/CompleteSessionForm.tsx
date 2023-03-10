@@ -101,14 +101,38 @@ const CompleteSessionForm = ({
         passed: true,
       };
 
-      await createAction({
+      const result = await createAction({
         variables: {
           input,
         },
       });
 
-      refetch();
-      refetchEndo();
+      const resultValue = result.data?.createAction.action;
+
+      let errorMessage = "";
+      const resultUserErrors = result.data?.createAction.errors || [];
+      resultUserErrors.map(({ field, message }) => {
+        errorMessage += `${message}\n`;
+      });
+
+      if (resultValue && resultUserErrors.length === 0) {
+        dispatch(
+          showToast({
+            message: "Successfully created an action",
+            variant: "success",
+          })
+        );
+        refetch();
+        refetchEndo();
+      } else {
+        dispatch(
+          showToast({
+            message: errorMessage,
+            variant: "error",
+          })
+        );
+      }
+
       dispatch(
         showToast({
           message: "Session completed",

@@ -1,0 +1,14 @@
+mutation CreateOfficer($input: CreateOfficerInput!) {
+  createOfficer(input: $input) {
+    officer {
+      officerNum
+      firstName
+      lastName
+    }
+
+    errors {
+      field
+      message
+    }
+  }
+}

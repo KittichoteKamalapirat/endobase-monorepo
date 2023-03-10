@@ -1,8 +1,14 @@
 mutation createAction($input: CreateActionInput!) {
   createAction(input: $input) {
-    id
-    type
-    passed
-    sessionId
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
+    }
   }
 }

@@ -5,6 +5,8 @@
 type Officer {
   id: ID!
   officerNum: String!
+  firstName: String!
+  lastName: String!
   actions: [Action!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -147,6 +149,16 @@ type FieldError {
   message: String!
 }
 
+type ActionResponse {
+  errors: [FieldError!]
+  action: Action
+}
+
+type OfficerResponse {
+  errors: [FieldError!]
+  officer: Officer
+}
+
 type ContainerResponse {
   errors: [FieldError!]
   container: Container
@@ -214,7 +226,7 @@ type Mutation {
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
   pickEndo(id: String!): Endo!
   washWithoutStoring(id: String!): Session!
-  createAction(input: CreateActionInput!): Action!
+  createAction(input: CreateActionInput!): ActionResponse!
   removeAction(id: Int!): Action!
   createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
@@ -222,7 +234,7 @@ type Mutation {
   removeSession(id: String!): Session!
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   removePatient(id: Int!): Patient!
-  createOfficer(createOfficerInput: CreateOfficerInput!): Officer!
+  createOfficer(input: CreateOfficerInput!): OfficerResponse!
   updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
   removeOfficer(id: Int!): Officer!
   createTray(input: CreateTrayInput!): Tray!
@@ -321,10 +333,14 @@ input CreatePatientInput {
 
 input CreateOfficerInput {
   officerNum: String!
+  firstName: String!
+  lastName: String!
 }
 
 input UpdateOfficerInput {
   officerNum: String
+  firstName: String
+  lastName: String
   id: Int!
 }
 

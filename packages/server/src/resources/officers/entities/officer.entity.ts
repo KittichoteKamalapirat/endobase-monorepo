@@ -24,6 +24,14 @@ export class Officer {
   @Field()
   officerNum: string;
 
+  @Column()
+  @Field()
+  firstName: string;
+
+  @Column()
+  @Field()
+  lastName: string;
+
   // actions
   @OneToMany(() => Action, (action) => action.officer, { cascade: true })
   @Field(() => [Action])

@@ -17,6 +17,7 @@ import { Officer } from '../officers/entities/officer.entity';
 import { OfficersService } from '../officers/officers.service';
 import { SerialportsService } from '../serialports/serialports.service';
 import { SessionsService } from '../sessions/sessions.service';
+import ActionResponse from './dto/action-response';
 import { CreateActionInput } from './dto/create-action.input';
 import { Action, ACTION_TYPE_OBJ } from './entities/action.entity';
 
@@ -41,7 +42,7 @@ export class ActionsService {
 
   // if type = leak test or disinfect, have to update endo status
   // if type = store, have to update endo status, end session, and change light color
-  async create(input: CreateActionInput) {
+  async create(input: CreateActionInput): Promise<ActionResponse> {
     // make sure, an action is not already created
     const action = await this.actionsRepository.findOneBy({
       sessionId: input.sessionId,
@@ -52,7 +53,14 @@ export class ActionsService {
     // can only pass 1 time
     // but can fail many times
     if (action && input.passed)
-      return new Error(`${input.type} has already been completed`);
+      return {
+        errors: [
+          {
+            message: `${input.type} has already been completed`,
+            field: 'action',
+          },
+        ],
+      };
 
     const existingOfficer = await this.officersService.findOneByofficerNum(
       input.officerNum,
@@ -60,9 +68,14 @@ export class ActionsService {
 
     let officer: Officer | null = null;
     if (!existingOfficer) {
-      officer = await this.officersService.create({
-        officerNum: input.officerNum,
-      });
+      return {
+        errors: [
+          {
+            message: `This officer number does not exist`,
+            field: 'officerNum',
+          },
+        ],
+      };
     } else {
       officer = existingOfficer;
     }
@@ -77,7 +90,16 @@ export class ActionsService {
     // find session to get the endoId
 
     const session = await this.sessionsService.findOne(input.sessionId);
-    if (!session) return new Error('Cannot find a session');
+    if (!session)
+      return {
+        errors: [
+          {
+            message: 'Cannot find a session',
+            field: 'session',
+          },
+        ],
+      };
+
     // update endo status
     switch (input.type) {
       case ACTION_TYPE_OBJ.LEAK_TEST_AND_PREWASH:
@@ -151,7 +173,8 @@ export class ActionsService {
     }
 
     const newAction = this.actionsRepository.create(actionInput);
-    return this.actionsRepository.save(newAction);
+    const savedAction = await this.actionsRepository.save(newAction);
+    return { action: savedAction };
   }
 
   // @Timeout(1000)

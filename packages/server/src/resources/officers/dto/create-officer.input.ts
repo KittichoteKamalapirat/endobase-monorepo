@@ -4,4 +4,10 @@ import { Field, InputType } from '@nestjs/graphql';
 export class CreateOfficerInput {
   @Field(() => String)
   officerNum: string;
+
+  @Field(() => String)
+  firstName: string;
+
+  @Field(() => String)
+  lastName: string;
 }

@@ -7,7 +7,7 @@ import session from 'express-session';
 import Redis from 'ioredis';
 // import path from 'path';
 import { AppModule } from './app.module';
-import { COOKIE_NAME, SESSION_SECRET } from './constants';
+import { COOKIE_NAME, IS_PROD, SESSION_SECRET } from './constants';
 
 async function bootstrap() {
   // const certPath = path.resolve(__dirname, '../.cert/endosupply+4.pem');
@@ -40,9 +40,9 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true, // so that Javascript's front end can't access cookie
-        sameSite: 'none', // csrf // browser, has nothing to do with server?
+        sameSite: 'lax', // csrf // browser, has nothing to do with server?
         // secure: IS_PROD, // cookie only works in https
-        secure: true, // cookie only works in https
+        secure: IS_PROD, // cookie only works in https
         // domain: IS_PROD ? '.cookknow.com' : undefined, // no need if in development
       },
       saveUninitialized: false,

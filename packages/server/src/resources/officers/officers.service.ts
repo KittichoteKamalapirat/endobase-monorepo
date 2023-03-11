@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOfficerInput } from './dto/create-officer.input';
+import OfficerResponse from './dto/officer-response';
 import { UpdateOfficerInput } from './dto/update-officer.input';
 import { Officer } from './entities/officer.entity';
 
@@ -10,9 +11,21 @@ export class OfficersService {
   @InjectRepository(Officer)
   private officersRepository: Repository<Officer>; // use database, make sure forFeature is in module
 
-  create(input: CreateOfficerInput) {
+  async create(input: CreateOfficerInput): Promise<OfficerResponse> {
     const newOfficer = this.officersRepository.create(input);
-    return this.officersRepository.save(newOfficer);
+    try {
+      const savedOfficer = await this.officersRepository.save(newOfficer);
+      return { officer: savedOfficer };
+    } catch (error) {
+      return {
+        errors: [
+          {
+            message: `An error occured`,
+            field: 'officerNum',
+          },
+        ],
+      };
+    }
   }
 
   findAll() {

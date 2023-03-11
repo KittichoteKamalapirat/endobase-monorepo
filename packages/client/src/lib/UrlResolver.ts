@@ -20,6 +20,10 @@ class UrlResolver {
     return "/nimda";
   }
 
+  setting() {
+    return "/setting";
+  }
+
   createOfficer() {
     return "/nimda/officer/new";
   }

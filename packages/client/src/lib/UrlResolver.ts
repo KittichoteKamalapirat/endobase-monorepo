@@ -20,6 +20,10 @@ class UrlResolver {
     return "/nimda";
   }
 
+  adminDb() {
+    return "/nimda/database";
+  }
+
   setting() {
     return "/setting";
   }

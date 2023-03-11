@@ -8,6 +8,7 @@ import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
 import { urlResolver } from "./lib/UrlResolver";
 import Actions from "./pages/Actions";
 import Admin from "./pages/Admin";
+import AdminDbPage from "./pages/AdminDb.page";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
 import CreateEndo from "./pages/CreateEndo";
@@ -37,6 +38,7 @@ function App() {
         <Routes>
           {/* admin routes */}
           <Route path="/nimda" element={<Admin />} />
+          <Route path={urlResolver.adminDb()} element={<AdminDbPage />} />
           <Route
             path={urlResolver.createOfficer()}
             element={<CreateOfficerPage />}

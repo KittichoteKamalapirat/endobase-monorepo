@@ -186,6 +186,7 @@ export type Mutation = {
   createTray: Tray;
   deleteAllData: BooleanResponse;
   deleteEndo: BooleanResponse;
+  deleteOfficer: BooleanResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   pickEndo: Endo;
@@ -193,7 +194,6 @@ export type Mutation = {
   register: UserResponse;
   removeAction: Action;
   removeContainer: Container;
-  removeOfficer: Officer;
   removePatient: Patient;
   removeSession: Session;
   removeTray: Tray;
@@ -202,7 +202,7 @@ export type Mutation = {
   turnLightsOn: ContainerResponse;
   updateDryingTime: Endo;
   updateEndo: Endo;
-  updateOfficer: Officer;
+  updateOfficer: OfficerResponse;
   updateSession: Session;
   updateSessionPatient: Session;
   updateSetting: Setting;
@@ -267,6 +267,11 @@ export type MutationDeleteEndoArgs = {
 };
 
 
+export type MutationDeleteOfficerArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationLoginArgs = {
   input: LoginInput;
 };
@@ -288,11 +293,6 @@ export type MutationRemoveActionArgs = {
 
 
 export type MutationRemoveContainerArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationRemoveOfficerArgs = {
   id: Scalars['Int'];
 };
 
@@ -339,7 +339,7 @@ export type MutationUpdateEndoArgs = {
 
 
 export type MutationUpdateOfficerArgs = {
-  updateOfficerInput: UpdateOfficerInput;
+  input: UpdateOfficerInput;
 };
 
 
@@ -426,6 +426,7 @@ export type Query = {
   endoCronsInMemory: Array<Scalars['String']>;
   endos: Array<Endo>;
   me?: Maybe<User>;
+  officer: Officer;
   officers: Array<Officer>;
   paginatedActions: PaginatedActionOutput;
   paginatedSnapshots: PaginatedSnapshotOutput;
@@ -450,6 +451,11 @@ export type QueryContainerArgs = {
 
 
 export type QueryEndoArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryOfficerArgs = {
   id: Scalars['String'];
 };
 
@@ -571,7 +577,7 @@ export type UpdateEndoInput = {
 
 export type UpdateOfficerInput = {
   firstName?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
+  id: Scalars['String'];
   lastName?: InputMaybe<Scalars['String']>;
   officerNum?: InputMaybe<Scalars['String']>;
 };
@@ -739,7 +745,28 @@ export type CreateOfficerMutationVariables = Exact<{
 }>;
 
 
-export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type DeleteOfficerMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeleteOfficerMutation = { __typename?: 'Mutation', deleteOfficer: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type UpdateOfficerMutationVariables = Exact<{
+  input: UpdateOfficerInput;
+}>;
+
+
+export type UpdateOfficerMutation = { __typename?: 'Mutation', updateOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type OfficerQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type OfficerQuery = { __typename?: 'Query', officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } };
 
 export type OfficersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1576,6 +1603,7 @@ export const CreateOfficerDocument = gql`
     mutation CreateOfficer($input: CreateOfficerInput!) {
   createOfficer(input: $input) {
     officer {
+      id
       officerNum
       firstName
       lastName
@@ -1613,6 +1641,123 @@ export function useCreateOfficerMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateOfficerMutationHookResult = ReturnType<typeof useCreateOfficerMutation>;
 export type CreateOfficerMutationResult = Apollo.MutationResult<CreateOfficerMutation>;
 export type CreateOfficerMutationOptions = Apollo.BaseMutationOptions<CreateOfficerMutation, CreateOfficerMutationVariables>;
+export const DeleteOfficerDocument = gql`
+    mutation DeleteOfficer($id: String!) {
+  deleteOfficer(id: $id) {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type DeleteOfficerMutationFn = Apollo.MutationFunction<DeleteOfficerMutation, DeleteOfficerMutationVariables>;
+
+/**
+ * __useDeleteOfficerMutation__
+ *
+ * To run a mutation, you first call `useDeleteOfficerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOfficerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOfficerMutation, { data, loading, error }] = useDeleteOfficerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteOfficerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOfficerMutation, DeleteOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOfficerMutation, DeleteOfficerMutationVariables>(DeleteOfficerDocument, options);
+      }
+export type DeleteOfficerMutationHookResult = ReturnType<typeof useDeleteOfficerMutation>;
+export type DeleteOfficerMutationResult = Apollo.MutationResult<DeleteOfficerMutation>;
+export type DeleteOfficerMutationOptions = Apollo.BaseMutationOptions<DeleteOfficerMutation, DeleteOfficerMutationVariables>;
+export const UpdateOfficerDocument = gql`
+    mutation UpdateOfficer($input: UpdateOfficerInput!) {
+  updateOfficer(input: $input) {
+    officer {
+      id
+      officerNum
+      firstName
+      lastName
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type UpdateOfficerMutationFn = Apollo.MutationFunction<UpdateOfficerMutation, UpdateOfficerMutationVariables>;
+
+/**
+ * __useUpdateOfficerMutation__
+ *
+ * To run a mutation, you first call `useUpdateOfficerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOfficerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOfficerMutation, { data, loading, error }] = useUpdateOfficerMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOfficerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOfficerMutation, UpdateOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOfficerMutation, UpdateOfficerMutationVariables>(UpdateOfficerDocument, options);
+      }
+export type UpdateOfficerMutationHookResult = ReturnType<typeof useUpdateOfficerMutation>;
+export type UpdateOfficerMutationResult = Apollo.MutationResult<UpdateOfficerMutation>;
+export type UpdateOfficerMutationOptions = Apollo.BaseMutationOptions<UpdateOfficerMutation, UpdateOfficerMutationVariables>;
+export const OfficerDocument = gql`
+    query Officer($id: String!) {
+  officer(id: $id) {
+    id
+    officerNum
+    firstName
+    lastName
+  }
+}
+    `;
+
+/**
+ * __useOfficerQuery__
+ *
+ * To run a query within a React component, call `useOfficerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOfficerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOfficerQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOfficerQuery(baseOptions: Apollo.QueryHookOptions<OfficerQuery, OfficerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OfficerQuery, OfficerQueryVariables>(OfficerDocument, options);
+      }
+export function useOfficerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OfficerQuery, OfficerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OfficerQuery, OfficerQueryVariables>(OfficerDocument, options);
+        }
+export type OfficerQueryHookResult = ReturnType<typeof useOfficerQuery>;
+export type OfficerLazyQueryHookResult = ReturnType<typeof useOfficerLazyQuery>;
+export type OfficerQueryResult = Apollo.QueryResult<OfficerQuery, OfficerQueryVariables>;
 export const OfficersDocument = gql`
     query Officers {
   officers {

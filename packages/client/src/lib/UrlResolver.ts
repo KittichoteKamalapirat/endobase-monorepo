@@ -15,6 +15,18 @@ class UrlResolver {
     // return `http://localhost:4000/graphql`;
     return config.graphqlSocketEndpoint;
   }
+
+  admin() {
+    return "/nimda";
+  }
+
+  createOfficer() {
+    return "/nimda/officer/new";
+  }
+
+  editOfficer(id: string) {
+    return `/nimda/officer/${id}/edit`;
+  }
 }
 
 export const urlResolver = new UrlResolver();

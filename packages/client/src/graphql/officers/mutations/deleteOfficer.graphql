@@ -1,0 +1,9 @@
+mutation DeleteOfficer($id: String!) {
+  deleteOfficer(id: $id) {
+    value
+    errors {
+      field
+      message
+    }
+  }
+}

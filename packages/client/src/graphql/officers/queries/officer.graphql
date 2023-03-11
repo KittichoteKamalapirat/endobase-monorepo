@@ -1,0 +1,8 @@
+query Officer($id: String!) {
+  officer(id: $id) {
+    id
+    officerNum
+    firstName
+    lastName
+  }
+}

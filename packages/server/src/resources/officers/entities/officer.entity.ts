@@ -20,7 +20,7 @@ export class Officer {
   @Field(() => ID)
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field()
   officerNum: string;
 

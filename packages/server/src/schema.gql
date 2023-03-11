@@ -159,6 +159,11 @@ type OfficerResponse {
   officer: Officer
 }
 
+type BooleanResponse {
+  errors: [FieldError!]
+  value: Boolean
+}
+
 type ContainerResponse {
   errors: [FieldError!]
   container: Container
@@ -167,11 +172,6 @@ type ContainerResponse {
 type PaginatedSnapshotOutput {
   items: [Snapshot!]!
   meta: IPaginationMetaClass!
-}
-
-type BooleanResponse {
-  errors: [FieldError!]
-  value: Boolean
 }
 
 type UserResponse {
@@ -196,6 +196,7 @@ type Query {
   patients: [Patient!]!
   patient(id: String!): Patient!
   officers: [Officer!]!
+  officer(id: String!): Officer!
   endoCronsInDb: [EndoCron!]!
   endoCronsInMemory: [String!]!
   trays: [Tray!]!
@@ -235,8 +236,8 @@ type Mutation {
   createPatient(createPatientInput: CreatePatientInput!): Patient!
   removePatient(id: Int!): Patient!
   createOfficer(input: CreateOfficerInput!): OfficerResponse!
-  updateOfficer(updateOfficerInput: UpdateOfficerInput!): Officer!
-  removeOfficer(id: Int!): Officer!
+  updateOfficer(input: UpdateOfficerInput!): OfficerResponse!
+  deleteOfficer(id: String!): BooleanResponse!
   createTray(input: CreateTrayInput!): Tray!
   updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
@@ -341,7 +342,7 @@ input UpdateOfficerInput {
   officerNum: String
   firstName: String
   lastName: String
-  id: Int!
+  id: String!
 }
 
 input CreateTrayInput {

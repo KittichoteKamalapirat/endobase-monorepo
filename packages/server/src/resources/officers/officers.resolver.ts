@@ -1,9 +1,11 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { OfficersService } from './officers.service';
 import { Officer } from './entities/officer.entity';
 import { CreateOfficerInput } from './dto/create-officer.input';
 import { UpdateOfficerInput } from './dto/update-officer.input';
 import OfficerResponse from './dto/officer-response';
+import BooleanResponse from '../endos/dto/boolean-response.input';
+import { MyContext } from '../../types/context.type';
 
 @Resolver(() => Officer)
 export class OfficersResolver {
@@ -19,18 +21,22 @@ export class OfficersResolver {
     return this.officersService.findAll();
   }
 
-  @Mutation(() => Officer)
-  updateOfficer(
-    @Args('updateOfficerInput') updateOfficerInput: UpdateOfficerInput,
-  ) {
-    return this.officersService.update(
-      updateOfficerInput.id,
-      updateOfficerInput,
-    );
+  @Query(() => Officer)
+  officer(@Args('id') id: string) {
+    return this.officersService.findOne(id);
   }
 
-  @Mutation(() => Officer)
-  removeOfficer(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(() => OfficerResponse)
+  updateOfficer(
+    @Args('input')
+    input: UpdateOfficerInput,
+    // @Context() { req }: MyContext
+  ) {
+    return this.officersService.update(input.id, input);
+  }
+
+  @Mutation(() => BooleanResponse)
+  deleteOfficer(@Args('id') id: string) {
     return this.officersService.remove(id);
   }
 }

@@ -1,5 +1,5 @@
-mutation CreateOfficer($input: CreateOfficerInput!) {
-  createOfficer(input: $input) {
+mutation UpdateOfficer($input: UpdateOfficerInput!) {
+  updateOfficer(input: $input) {
     officer {
       id
       officerNum

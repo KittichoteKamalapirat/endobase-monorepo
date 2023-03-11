@@ -5,12 +5,15 @@ import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetail
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
+import { urlResolver } from "./lib/UrlResolver";
 import Actions from "./pages/Actions";
 import Admin from "./pages/Admin";
 import ConfigSetting from "./pages/ConfigSetting";
 import Containers from "./pages/Containers";
 import CreateEndo from "./pages/CreateEndo";
+import CreateOfficerPage from "./pages/CreateOfficer.page";
 import EditEndo from "./pages/EditEndo";
+import EditOfficerPage from "./pages/EditOfficer.page";
 import EndoPage from "./pages/Endo";
 import Home from "./pages/Home";
 import LoginPage from "./pages/Login";
@@ -32,7 +35,15 @@ function App() {
       <header className="App-header">
         <SubscribeToOverHumOrTemp />
         <Routes>
+          {/* admin routes */}
           <Route path="/nimda" element={<Admin />} />
+          <Route
+            path={urlResolver.createOfficer()}
+            element={<CreateOfficerPage />}
+          />
+
+          <Route path="/nimda/officer/:id/edit" element={<EditOfficerPage />} />
+
           <Route path="/" element={<Home />} />
           <Route path="containers" element={<Containers />} />
           <Route path="login" element={<LoginPage />} />

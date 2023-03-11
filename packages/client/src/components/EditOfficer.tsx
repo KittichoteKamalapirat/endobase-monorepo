@@ -1,46 +1,58 @@
 import { UseFormSetError } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  useCreateOfficerMutation,
+  useOfficerQuery,
   useOfficersQuery,
+  useUpdateOfficerMutation,
 } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 import { showToast } from "../redux/slices/toastReducer";
 import OfficerEditor, { FormValues } from "./OfficerEditor";
+import { Error } from "./skeletons/Error";
+import { Loading } from "./skeletons/Loading";
 import SmallHeading from "./typography/SmallHeading";
 
-const defaultValues: FormValues = {
-  officerNum: "",
-  firstName: "",
-  lastName: "",
-};
-const CreateOfficer = () => {
-  const [createOfficer] = useCreateOfficerMutation();
+const EditOfficer = () => {
+  const { id } = useParams();
+  const { data, loading, error } = useOfficerQuery({
+    variables: { id: id || "" },
+  });
+
+  const [updateOfficer] = useUpdateOfficerMutation();
 
   const { refetch } = useOfficersQuery();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const defaultValues: FormValues = {
+    officerNum: data?.officer.officerNum as string,
+    firstName: data?.officer.officerNum as string,
+    lastName: data?.officer.officerNum as string,
+  };
+
   const onSubmit = async (
     input: FormValues,
     setError: UseFormSetError<FormValues>
   ) => {
     try {
-      const result = await await createOfficer({
+      if (!id) return;
+      const result = await updateOfficer({
         variables: {
-          input,
+          input: {
+            id,
+            ...input,
+          },
         },
       });
 
-      const resultValue = result.data?.createOfficer.officer;
+      const resultValue = result.data?.updateOfficer.officer;
 
       let errorMessage = "";
-      const resultUserErrors = result.data?.createOfficer.errors || [];
+      const resultUserErrors = result.data?.updateOfficer.errors || [];
       resultUserErrors.map(({ field, message }) => {
         errorMessage += `${field} ${message}\n`;
-        // if field is key of FormValues
         if (field in defaultValues) {
           setError(field as any, {
             type: "custom",
@@ -77,11 +89,18 @@ const CreateOfficer = () => {
     }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error text={error?.message} />;
+  }
+
   return (
     <div>
-      <SmallHeading heading="Create Officer" />
+      <SmallHeading heading="Update Officer" />
       <OfficerEditor onSubmitRHF={onSubmit} defaultValues={defaultValues} />
     </div>
   );
 };
-export default CreateOfficer;
+export default EditOfficer;

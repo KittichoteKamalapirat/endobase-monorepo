@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import BooleanResponse from '../endos/dto/boolean-response.input';
 import { CreateOfficerInput } from './dto/create-officer.input';
 import OfficerResponse from './dto/officer-response';
 import { UpdateOfficerInput } from './dto/update-officer.input';
@@ -17,6 +18,22 @@ export class OfficersService {
       const savedOfficer = await this.officersRepository.save(newOfficer);
       return { officer: savedOfficer };
     } catch (error) {
+      console.log('erorr', error);
+
+      if (
+        error.detail.includes(
+          `Key ("officerNum")=(${input.officerNum}) already exists`,
+        )
+      )
+        return {
+          errors: [
+            {
+              message: `An officer with this number already exists`,
+              field: 'officerNum',
+            },
+          ],
+        };
+
       return {
         errors: [
           {
@@ -26,6 +43,10 @@ export class OfficersService {
         ],
       };
     }
+  }
+
+  findOne(id: string) {
+    return this.officersRepository.findOne({ where: { id } });
   }
 
   findAll() {
@@ -40,12 +61,55 @@ export class OfficersService {
     return this.officersRepository.findOneBy({ officerNum });
   }
 
-  update(id: number, updateOfficerInput: UpdateOfficerInput) {
-    return `This action updates a #${id} officer`;
+  async update(
+    id: string,
+    input: UpdateOfficerInput,
+  ): Promise<OfficerResponse> {
+    try {
+      const existingOfficer = await this.findOne(id);
+      if (!existingOfficer)
+        return {
+          errors: [{ field: 'Officer', message: 'Cannot find the officer ' }],
+        };
+
+      const officer = await this.officersRepository.save({
+        id,
+        ...input,
+      });
+
+      return {
+        officer,
+      };
+    } catch (error) {
+      if (
+        error.detail.includes(
+          `Key ("officerNum")=(${input.officerNum}) already exists`,
+        )
+      )
+        return {
+          errors: [
+            {
+              message: `An officer with this number already exists`,
+              field: 'officerNum',
+            },
+          ],
+        };
+
+      return {
+        errors: [{ field: 'officer', message: 'An error occured ' }],
+      };
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} officer`;
+  async remove(id: string): Promise<BooleanResponse> {
+    try {
+      await this.officersRepository.delete(id);
+      return { value: true };
+    } catch (error) {
+      return {
+        errors: [{ field: 'officer', message: 'Cannot find the officer ' }],
+      };
+    }
   }
 
   // for admin

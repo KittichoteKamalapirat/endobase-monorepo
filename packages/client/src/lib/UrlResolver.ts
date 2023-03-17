@@ -18,6 +18,10 @@ class UrlResolver {
     return "/nimda";
   }
 
+  about() {
+    return "/about";
+  }
+
   adminDb() {
     return "/nimda/database";
   }
@@ -32,6 +36,14 @@ class UrlResolver {
 
   editOfficer(id: string) {
     return `/nimda/officer/${id}/edit`;
+  }
+
+  login() {
+    return "/login";
+  }
+
+  landing() {
+    return "/landing";
   }
 }
 

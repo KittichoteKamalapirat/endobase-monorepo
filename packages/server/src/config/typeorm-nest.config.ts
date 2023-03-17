@@ -12,13 +12,11 @@ import { Setting } from '../setting/entities/setting.entity';
 
 export const typeormConfigNest = {
   type: 'postgres' as const,
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-
-  password: '02321',
-  // database: process.env.NODE_ENV === "production" ? 'endosupply_prod' : "endosupply",
-  database: 'endosupply_prod',
+  host: process.env.PGHOST,
+  port: Number(process.env.PGPORT),
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
   entities: [
     Endo,
     Container,

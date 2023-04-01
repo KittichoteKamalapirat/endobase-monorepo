@@ -271,7 +271,7 @@ export class SerialportsService implements OnModuleInit {
       this.writeColor({
         col: col,
         row: row,
-        endoStatus: toBlinkCounter % 2 === 0 ? status : 'being_used', // ดำสลับกับสี
+        endoStatus: toBlinkCounter % 2 === 0 ? "drying" : 'being_used', // ฟ้าสลับกับ
       });
 
       toBlinkCounter--;

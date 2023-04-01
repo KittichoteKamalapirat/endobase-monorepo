@@ -113,7 +113,7 @@ const EndosTable = () => {
     {
       columns,
       data,
-      initialState: { pageSize: 50 },
+      initialState: { pageSize: 16 },
     },
     useGlobalFilter,
     useSortBy,
@@ -191,6 +191,7 @@ const EndosTable = () => {
             currPage={pageIndex + 1}
             pageSize={pageSize}
             totalItemsCount={endosData?.endos.length}
+            className="mt-4"
           />
         </div>
       </div>
@@ -244,9 +245,9 @@ const EndosTable = () => {
                       // if col is action => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action"
                         ? () =>
-                            navigate(`/endo/${(row.original as Endo).id}`, {
-                              state: { prev: "/" },
-                            })
+                          navigate(`/endo/${(row.original as Endo).id}`, {
+                            state: { prev: "/" },
+                          })
                         : undefined
                     }
                   >

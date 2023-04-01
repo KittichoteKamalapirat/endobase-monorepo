@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from "react-icons/bs";
+import { inactiveGrey, primaryColor } from "../../theme";
 import Button, { ButtonTypes } from "../Buttons/Button";
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
   pageSize: number;
   setCurrPage?: React.Dispatch<React.SetStateAction<number>>;
   totalItemsCount?: number;
+  className?: string
 }
 
 const PaginationControl = ({
@@ -21,38 +23,26 @@ const PaginationControl = ({
   canNextPage,
   canPreviousPage,
   pageNum,
-  setPageSize,
   currPage,
-  pageSize,
-  setCurrPage,
   totalItemsCount,
+  className
 }: Props) => {
   return (
-    <div className="flex justify-between mb-2">
+    <div className={classNames("flex flex-col items-end mb-2", className)}>
       <div className="flex items-center gap-4">
-        <Button
-          label=""
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-          type={ButtonTypes.TEXT}
-          startIcon={<BsFillCaretLeftFill />}
-        />
+
+        <BsFillCaretLeftFill onClick={() => previousPage()} color={canPreviousPage ? primaryColor : inactiveGrey} />
 
         <div id="page-indicator">
           <span className="font-bold">{currPage} </span> / {pageNum}
         </div>
 
-        <Button
-          label=""
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-          type={ButtonTypes.TEXT}
-          endIcon={<BsFillCaretRightFill />}
-        />
+        <BsFillCaretRightFill onClick={() => nextPage()} color={canNextPage ? primaryColor : inactiveGrey} />
+
       </div>
 
       <div className="flex flex-col items-end">
-        <select
+        {/* <select
           value={pageSize}
           onChange={(e) => {
             setPageSize(Number(e.target.value));
@@ -65,7 +55,7 @@ const PaginationControl = ({
               Show {size}
             </option>
           ))}
-        </select>
+        </select> */}
         {totalItemsCount ? (
           <p className={classNames("text-grey-500 text-sm")}>
             No. of results: {totalItemsCount}

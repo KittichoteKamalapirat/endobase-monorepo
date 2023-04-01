@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
 import { Endo } from "../generated/graphql";
+import { urlResolver } from "../lib/UrlResolver";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Badge from "./Badge";
 
@@ -12,6 +14,7 @@ interface Props {
 
 const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: Props) => {
 
+  const navigate = useNavigate()
 
   const readyNum = endos.filter(
     (endo) =>
@@ -42,12 +45,15 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
       endo.status === ENDO_STATUS.EXPIRED_AND_OUT
   ).length;
 
-  const handleFilter = (status: ENDO_STATUS_VALUES) => {
+  const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
+
     if (activeFilter === status) {
       setActiveFilter("");
       setFilter("");
+      navigate(urlResolver.endos(""))
       return;
     }
+    navigate(urlResolver.endos(status))
     setFilter(status);
     setActiveFilter(status);
   };
@@ -56,7 +62,6 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
 
   return (
     <div className="flex gap-2 flex-wrap">
-      {activeFilter}
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.READY)}
@@ -167,7 +172,7 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
-        onClick={() => setFilter("")}
+        onClick={() => handleFilter("")}
       >
         {/* <div className="col-span-1">Total</div> */}
         <Badge

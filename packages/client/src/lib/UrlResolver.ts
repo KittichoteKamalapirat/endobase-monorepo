@@ -3,6 +3,10 @@ class UrlResolver {
     return "/"; //http://localhost:3000
   }
 
+  endos(status: string) {
+    return `/?status=${status}`; //http://localhost:3000
+  }
+
   // API
   graphql() {
     // return config.graphqlHttpEndpoint;

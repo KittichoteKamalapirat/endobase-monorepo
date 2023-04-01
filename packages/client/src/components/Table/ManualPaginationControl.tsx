@@ -29,13 +29,21 @@ const ManualPaginationControl = ({
     <div className={classNames("flex flex-col items-end mb-2", className)}>
       <div className="flex items-center gap-4">
 
-        <BsFillCaretLeftFill onClick={() => previousPage()} color={canPreviousPage ? primaryColor : inactiveGrey} />
+
+        <button disabled={!canPreviousPage} onClick={() => previousPage()} type="button">
+          <BsFillCaretLeftFill color={canPreviousPage ? primaryColor : inactiveGrey} />
+        </button>
+
 
         <div id="page-indicator">
           <span className="font-bold">{currPage} </span> / {pageNum}
         </div>
 
-        <BsFillCaretRightFill onClick={() => nextPage()} color={canNextPage ? primaryColor : inactiveGrey} />
+        <button disabled={!canNextPage} onClick={() => nextPage()} type="button">
+          <BsFillCaretRightFill color={canNextPage ? primaryColor : inactiveGrey} />
+        </button>
+
+
 
       </div>
 

@@ -50,9 +50,9 @@ const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
 
-  const status = useQueryParam("status") || "";
+  const initialStatus = useQueryParam("status") as ENDO_STATUS_VALUES || "";
 
-
+  const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(initialStatus);
 
 
   const {
@@ -87,8 +87,8 @@ const EndosTable = () => {
         pickEndo,
         refetchEndos: refetch,
         isLargerThanBreakpoint,
-        status: status
-      })
+        status: activeFilter
+      }) as any
     }
 
 
@@ -97,9 +97,9 @@ const EndosTable = () => {
       refetchEndos: refetch,
       isLargerThanBreakpoint,
       currentPageIndex,
-      status
-    });
-  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex]);
+      status: activeFilter
+    }) as any;
+  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex, activeFilter]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
@@ -135,6 +135,7 @@ const EndosTable = () => {
     usePagination
   );
 
+  // if change page number => filter to only that column
   useEffect(() => {
     if (currentPageIndex !== 0) gotoPage(currentPageIndex);
   }, [refetch, columns, pageIndex]);
@@ -147,6 +148,10 @@ const EndosTable = () => {
   }
 
 
+
+  // useEffect(() => {
+  //   setFilter(defaultFilter)
+  // }, [setFilter, defaultFilter])
 
   // useEffect(() => {
   //   pageIndex
@@ -192,7 +197,8 @@ const EndosTable = () => {
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
                 setFilter={setGlobalFilter}
-                defaultFilter={status || ""}
+                activeFilter={activeFilter}
+                setActiveFilter={setActiveFilter}
 
               />
             )}
@@ -226,8 +232,6 @@ const EndosTable = () => {
           className="mt-4"
         /> */}
 
-
-        {currentPageIndex}
         <ManualPaginationControl
           nextPage={() => {
             setCurrentPageIndex(currentPageIndex + 1);

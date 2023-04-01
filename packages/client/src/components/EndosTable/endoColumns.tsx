@@ -16,7 +16,7 @@ interface Props {
   refetchEndos: any;
   isLargerThanBreakpoint: boolean;
   currentPageIndex: number
-  status: string
+  status: ENDO_STATUS_VALUES | ""
 }
 
 export const endoColumns = ({
@@ -121,7 +121,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "status",
-      Filter: ColumnFilter,
+      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} />,
       Cell: ({ value }: { value: ENDO_STATUS_VALUES }) => {
         const color = statusToColor[value] as keyof typeof bgConfig;
         const twBg = bgConfig[color];

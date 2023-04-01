@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Endo } from "../generated/graphql";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Badge from "./Badge";
 
 interface Props {
   endos: Endo[];
+  defaultFilter: ENDO_STATUS_VALUES,
   setFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
-  const [activeFilter, setActiveFilter] = useState<string>("");
+const EndoStatusTable2 = ({ endos, defaultFilter, setFilter }: Props) => {
+  const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(defaultFilter);
 
   const readyNum = endos.filter(
     (endo) =>
@@ -49,6 +50,14 @@ const EndoStatusTable2 = ({ endos, setFilter }: Props) => {
     setFilter(status);
     setActiveFilter(status);
   };
+
+
+
+  useEffect(() => {
+    setFilter(defaultFilter)
+  }, [setFilter, defaultFilter])
+
+  // if (defaultFilter) return <SubHeading heading={`EndoScopes: ${statusToLabel[defaultFilter]}`} />
 
   return (
     <div className="flex gap-2 flex-wrap">

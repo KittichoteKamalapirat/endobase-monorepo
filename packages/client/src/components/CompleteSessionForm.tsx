@@ -27,10 +27,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-          Exact<{
-            id: string;
-          }>
-        >
+        Exact<{
+          id: string;
+        }>
+      >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }

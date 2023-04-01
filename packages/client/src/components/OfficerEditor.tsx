@@ -13,9 +13,11 @@ export interface FormValues {
   officerNum: string;
   firstName: string;
   lastName: string;
+
 }
 
 interface Props {
+  isUpdate?: boolean
   defaultValues: FormValues;
   onSubmitRHF: (
     data: FormValues,
@@ -23,7 +25,7 @@ interface Props {
   ) => void;
 }
 
-const OfficerEditor = ({ defaultValues, onSubmitRHF }: Props) => {
+const OfficerEditor = ({ defaultValues, isUpdate = false, onSubmitRHF }: Props) => {
   const {
     control,
     handleSubmit,
@@ -73,7 +75,7 @@ const OfficerEditor = ({ defaultValues, onSubmitRHF }: Props) => {
         />
       </div>
       <Button
-        label="Update"
+        label={isUpdate ? "Update" : "Create"}
         buttonType={HTMLButtonType.SUBMIT}
         extraClass="w-24 mt-2"
       />

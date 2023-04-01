@@ -80,7 +80,7 @@ const CreateOfficer = () => {
   return (
     <div>
       <SmallHeading heading="Create Officer" />
-      <OfficerEditor onSubmitRHF={onSubmit} defaultValues={defaultValues} />
+      <OfficerEditor onSubmitRHF={onSubmit} defaultValues={defaultValues} isUpdate={false} />
     </div>
   );
 };

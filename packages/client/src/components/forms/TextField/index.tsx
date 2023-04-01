@@ -30,10 +30,10 @@ interface Props {
   helperText?: string;
   inputPaddingClass?: string;
   inputType?:
-    | InputType.Number
-    | InputType.Text
-    | InputType.Email
-    | InputType.Password;
+  | InputType.Number
+  | InputType.Text
+  | InputType.Email
+  | InputType.Password;
   isError?: boolean;
   label?: string;
   labelClass?: string;
@@ -72,7 +72,7 @@ const useClassNames = (
     ? ""
     : styles.input_no_spin_buttons;
 
-  const commonInputClass = `mt-2 h-12 w-[100%] rounded-lg border auto bg-ice px-4  ${disabledStyles} ${inputSpinButtonsClass}  w-full appearance-none focus:outline-none focus:border-primary focus:border-2`;
+  const commonInputClass = `h-12 w-[100%] rounded-lg border auto bg-ice px-4  ${disabledStyles} ${inputSpinButtonsClass}  w-full appearance-none focus:outline-none focus:border-primary focus:border-2`;
 
   const commonInputDivClass = `${widthClass} ${disabledStyles} ${extraClass}`;
 
@@ -80,18 +80,16 @@ const useClassNames = (
     case TextFieldTypes.OUTLINED:
       return {
         inputClass: commonInputClass,
-        inputDivClass: `${inputPaddingClass} ${commonInputDivClass} ${
-          displayError ? "border-red-500" : "border-grey-225"
-        }`,
+        inputDivClass: `${inputPaddingClass} ${commonInputDivClass} ${displayError ? "border-red-500" : "border-grey-225"
+          }`,
         labelBaseClass: disabledBaseStyles,
       };
 
     case TextFieldTypes.TEXT:
       return {
         inputClass: `bg-white ${commonInputClass}`,
-        inputDivClass: `${widthClass} ${
-          displayError ? "border-red-500" : "border-grey-225 "
-        }`,
+        inputDivClass: `${widthClass} ${displayError ? "border-red-500" : "border-grey-225 "
+          }`,
         labelBaseClass: disabledBaseStyles,
       };
 
@@ -99,9 +97,8 @@ const useClassNames = (
     default:
       return {
         inputClass: `bg-grey-100 ${commonInputClass}`,
-        inputDivClass: `bg-grey-100 pl-4.75 pr-4.5 ${commonInputDivClass} ${
-          displayError ? "border-red-500" : "border-grey-100"
-        }`,
+        inputDivClass: `bg-grey-100 pl-4.75 pr-4.5 ${commonInputDivClass} ${displayError ? "border-red-500" : "border-grey-100"
+          }`,
         labelBaseClass: disabledBaseStyles,
       };
   }
@@ -119,7 +116,7 @@ const TextField = ({
   inputType = InputType.Text,
   isError: isInputError = false,
   label = "",
-  labelClass = "mb-2",
+  labelClass = "mb-0",
   labelFontColour = "text-grey-420",
   name = "",
   placeholder = "",

@@ -2,21 +2,23 @@ import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
 import {
   Column,
+  useFilters,
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable,
+  useTable
 } from "react-table";
 import {
   Endo,
   useEndosQuery,
   usePickEndoMutation,
-  useSettingsQuery,
+  useSettingsQuery
 } from "../../generated/graphql";
 
 import { FaRegHospital } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { ICON_SIZE } from "../../constants";
+import { CONTAINER_CAPACITY, CONTAINER_NUM, ICON_SIZE } from "../../constants";
+import { useQueryParam } from "../../hooks/useQueryParam";
 import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 import { useScreenIsLargerThan } from "../../hooks/useScreenIsLargerThan";
 import { sortEndosByPosition } from "../../utils/sortEndosByPosition";
@@ -26,7 +28,7 @@ import CounterIndicator from "../CounterIndicator";
 import EndoStatusTable2 from "../EndoStatusTable2";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
-import PaginationControl from "../Table/PaginationControl";
+import ManualPaginationControl from "../Table/ManualPaginationControl";
 import SortHeader from "../Table/SortHeader";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
@@ -47,6 +49,11 @@ import { GlobalFilter } from "./GlobalFilter";
 const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
+
+  const status = useQueryParam("status") || "";
+
+
+
 
   const {
     data: settingsData,
@@ -70,27 +77,34 @@ const EndosTable = () => {
   const [pickEndo] = usePickEndoMutation();
   const refetchCounter = useRefetchCounter(refetch);
 
+
+  console.log('currentPageIndex', currentPageIndex)
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
     if (refetchCounter === 0) {
       return endoColumns({
+        currentPageIndex,
         pickEndo,
         refetchEndos: refetch,
         isLargerThanBreakpoint,
-      });
+        status: status
+      })
     }
+
 
     return endoColumns({
       pickEndo,
       refetchEndos: refetch,
       isLargerThanBreakpoint,
+      currentPageIndex,
+      status
     });
-  }, [pickEndo, refetch, isLargerThanBreakpoint]);
+  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
     return sortedEndos || [];
-  }, [loading, endosData, error]);
+  }, [loading, endosData, error, currentPageIndex]);
 
   const {
     getTableProps,
@@ -115,6 +129,7 @@ const EndosTable = () => {
       data,
       initialState: { pageSize: 16 },
     },
+    useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination
@@ -130,6 +145,12 @@ const EndosTable = () => {
   if (error || settingsError) {
     return <Error text={error?.message || settingsError?.message || ""} />;
   }
+
+
+
+  // useEffect(() => {
+  //   pageIndex
+  // }, [pageIndex])
 
   return (
     <div>
@@ -171,33 +192,64 @@ const EndosTable = () => {
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
                 setFilter={setGlobalFilter}
+                defaultFilter={status || ""}
+
               />
             )}
           </div>
 
-          <PaginationControl
-            nextPage={() => {
-              nextPage();
-              setCurrentPageIndex(pageIndex + 1);
-            }}
-            previousPage={() => {
-              previousPage();
-              setCurrentPageIndex(pageIndex - 1);
-            }}
-            canNextPage={canNextPage}
-            canPreviousPage={canPreviousPage}
-            pageNum={pageOptions.length}
-            setPageSize={setPageSize}
-            currPage={pageIndex + 1}
-            pageSize={pageSize}
-            totalItemsCount={endosData?.endos.length}
-            className="mt-4"
-          />
+
         </div>
       </div>
 
-      {/* only this component will get updated every seconds */}
-      <CounterIndicator refetch={refetch} />
+      <div className="flex justify-between items-end">
+
+        {/* only this component will get updated every seconds */}
+        <CounterIndicator refetch={refetch} />
+
+        {/* <PaginationControl
+          nextPage={() => {
+            nextPage();
+            setCurrentPageIndex(pageIndex + 1);
+          }}
+          previousPage={() => {
+            previousPage();
+            setCurrentPageIndex(pageIndex - 1);
+          }}
+          canNextPage={canNextPage}
+          canPreviousPage={canPreviousPage}
+          pageNum={pageOptions.length}
+          setPageSize={setPageSize}
+          currPage={pageIndex + 1}
+          pageSize={pageSize}
+          totalItemsCount={endosData?.endos.length}
+          className="mt-4"
+        /> */}
+
+
+        {currentPageIndex}
+        <ManualPaginationControl
+          nextPage={() => {
+            setCurrentPageIndex(currentPageIndex + 1);
+          }}
+          previousPage={() => {
+            setCurrentPageIndex(currentPageIndex - 1);
+          }}
+          canNextPage={currentPageIndex + 1 < CONTAINER_NUM}
+          canPreviousPage={currentPageIndex > 0}
+          pageNum={CONTAINER_NUM}
+          currPage={currentPageIndex + 1}
+          pageSize={CONTAINER_CAPACITY}
+          totalItemsCount={CONTAINER_NUM * CONTAINER_CAPACITY}
+          className="mt-4"
+        />
+
+
+
+
+      </div>
+
+
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -208,12 +260,15 @@ const EndosTable = () => {
                   key={index}
                 >
                   <div className="flex gap-2 items-center">
+
                     {col.render("Header")}
+
                     <SortHeader
                       isSorted={col.isSorted}
                       isSortedDesc={col.isSortedDesc}
                     />
                   </div>
+                  {col.canFilter ? col?.render('Filter') : null}
                 </TH>
               ))}
             </TR>

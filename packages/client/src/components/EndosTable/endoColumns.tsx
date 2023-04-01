@@ -9,17 +9,22 @@ import { TbActivityHeartbeat } from "react-icons/tb";
 import { bgConfig } from "../../utils/colorToTailwindBgColor";
 import { ENDO_STATUS_VALUES, statusToColor } from "../../utils/statusToColor";
 import ActionColumn from "./endoActionColumn";
+import { ColumnFilter } from "./ColumnFilter";
 
 interface Props {
   pickEndo: any;
   refetchEndos: any;
   isLargerThanBreakpoint: boolean;
+  currentPageIndex: number
+  status: string
 }
 
 export const endoColumns = ({
   pickEndo,
   refetchEndos,
   isLargerThanBreakpoint,
+  currentPageIndex,
+  status
 }: Props) => {
   return [
     {
@@ -31,6 +36,7 @@ export const endoColumns = ({
           refetchEndos={refetchEndos}
         />
       ),
+      Filter: ColumnFilter // cause error without this line
     },
     {
       Header: isLargerThanBreakpoint ? (
@@ -42,6 +48,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "serialNum",
+      Filter: ColumnFilter
     },
     {
       Header: isLargerThanBreakpoint ? (
@@ -53,50 +60,55 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "position",
+      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} />
     },
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Brand",
-            accessor: "brand",
-          },
-        ]
+        {
+          Header: "Brand",
+          accessor: "brand",
+          Filter: ColumnFilter
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Model",
-            accessor: "model",
-          },
-        ]
+        {
+          Header: "Model",
+          accessor: "model",
+          Filter: ColumnFilter
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Type",
-            accessor: "type",
-          },
-        ]
+        {
+          Header: "Type",
+          accessor: "type",
+          Filter: ColumnFilter
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Storage Time",
-            accessor: "lastPutBackISO",
-            Cell: ({
-              value: lastPubBackISO,
-            }: {
-              value: ENDO_STATUS_VALUES;
-            }) => {
-              dayjs.extend(relativeTime);
-              const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
-              return <div>{timeFromNow}</div>;
-            },
+        {
+          Header: "Storage Time",
+          accessor: "lastPutBackISO",
+          Filter: ColumnFilter,
+          Cell: ({
+            value: lastPubBackISO,
+          }: {
+            value: ENDO_STATUS_VALUES;
+          }) => {
+            dayjs.extend(relativeTime);
+            const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
+            return <div>{timeFromNow}</div>;
           },
-        ]
+        },
+      ]
       : []),
 
     {
@@ -109,6 +121,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "status",
+      Filter: ColumnFilter,
       Cell: ({ value }: { value: ENDO_STATUS_VALUES }) => {
         const color = statusToColor[value] as keyof typeof bgConfig;
         const twBg = bgConfig[color];

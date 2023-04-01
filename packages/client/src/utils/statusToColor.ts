@@ -14,12 +14,13 @@ export const ENDO_STATUS = {
   DISINFECTION_PASSED: "disinfection_passed",
   DISINFECTION_FAILED: "disinfection_failed",
   DRYING: "drying",
+  BEING_FIXED: "being_fixed"
 } as const;
 
 export type ENDO_STATUS_Keys = keyof typeof ENDO_STATUS;
 export type ENDO_STATUS_VALUES = typeof ENDO_STATUS[ENDO_STATUS_Keys]; //  "myValue1" | "myValue2"
 
-export const statusToColor = {
+export const statusToColor: Record<ENDO_STATUS_VALUES, string> = {
   [ENDO_STATUS.READY]: "green",
   [ENDO_STATUS.EXPIRE_SOON]: "orange",
   [ENDO_STATUS.BEING_USED]: "black",
@@ -31,9 +32,11 @@ export const statusToColor = {
   [ENDO_STATUS.DISINFECTION_PASSED]: "black",
   [ENDO_STATUS.DISINFECTION_FAILED]: "black",
   [ENDO_STATUS.DRYING]: "blue",
+  [ENDO_STATUS.BEING_FIXED]: "black",
+  
 };
 
-export const statusToBgColor = {
+export const statusToBgColor: Record<ENDO_STATUS_VALUES, string> = {
   [ENDO_STATUS.READY]: "bg-green-bg",
   [ENDO_STATUS.EXPIRE_SOON]: "bg-yellow-bg",
   [ENDO_STATUS.BEING_USED]: "bg-grey-50",
@@ -45,4 +48,5 @@ export const statusToBgColor = {
   [ENDO_STATUS.DISINFECTION_PASSED]: "bg-grey-50",
   [ENDO_STATUS.DISINFECTION_FAILED]: "bg-grey-50",
   [ENDO_STATUS.DRYING]: "bg-blue-bg",
+  [ENDO_STATUS.BEING_FIXED]: "bg-grey-0",
 };

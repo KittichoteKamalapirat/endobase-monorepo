@@ -9,6 +9,7 @@ import { useWashWithoutStoringMutation } from "../../generated/graphql";
 import { showToast } from "../../redux/slices/toastReducer";
 import { primaryColor } from "../../theme";
 import { ENDO_STATUS } from "../../utils/statusToColor";
+import { statusToLabel } from "../../utils/statusToLabel";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
 
@@ -96,6 +97,11 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           label="Take out and wash"
           onClick={() => handleUseEndo(endoId)}
         />
+      );
+
+    case ENDO_STATUS.BEING_FIXED:
+      return (
+        <div className="bg-grey-0 text-grey-800">{statusToLabel["being_fixed"]}</div>
       );
 
     case ENDO_STATUS.BEING_USED:

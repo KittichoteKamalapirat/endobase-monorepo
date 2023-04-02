@@ -2,17 +2,19 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
+import AddPatientForm from "../components/AddPatientForm";
 import BringToWashingRoomForm from "../components/BringToWashingRoomForm";
 import { ButtonTypes } from "../components/Buttons/Button";
 import LinkButton from "../components/Buttons/LinkButton";
 import CompleteSessionForm from "../components/CompleteSessionForm";
 import DisinfectForm from "../components/DisinfectForm";
+import EditPatientForm from "../components/EditPatientForm";
 import EndoDetail from "../components/EndoDetail";
 import Layout from "../components/layouts/Layout";
 import LeakTestForm from "../components/LeakTestForm";
 import NoPatientForm from "../components/NoPatientForm";
 import PatientDetail from "../components/PatientDetail";
-import PatientForm from "../components/PatientForm";
+import PatientForm from "../components/PatientEditor";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import TakeOutForm from "../components/TakeOutForm";
@@ -169,9 +171,9 @@ const Session = () => {
         ) : (
           <div id="patient-details">
             {patientId ? (
-              <PatientDetail patient={patient as Patient} />
+              <EditPatientForm patient={patient as Patient} className="my-4" disabled={disabledPatientForm} />
             ) : (
-              !disabledPatientForm && <PatientForm containerClass="my-4" disabled={disabledPatientForm} />
+              !disabledPatientForm && <AddPatientForm className="my-4" disabled={disabledPatientForm} />
             )}
           </div>
         )}

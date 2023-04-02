@@ -160,7 +160,7 @@ const Session = () => {
           takeOutAction && bringToWashingRoomAction && <NoPatientForm wasExpired={data.session.endoWasExpired} />
         ) : (
           <div id="patient-details">
-            {patientId ? (
+            {patient ? (
               <EditPatientForm patient={patient as Patient} className="my-4" disabled={disabledPatientForm} />
             ) : (
               !disabledPatientForm && <AddPatientForm className="my-4" disabled={disabledPatientForm} />

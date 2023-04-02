@@ -207,7 +207,7 @@ const EndosTable = () => {
             {endosData?.endos && endosData?.endos.length > 0 && (
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
-                setFilter={setGlobalFilter}
+                // setFilter={setGlobalFilter}
                 activeFilter={activeFilter}
                 setActiveFilter={setActiveFilter}
 

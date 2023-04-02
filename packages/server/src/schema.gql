@@ -52,6 +52,7 @@ type Session {
   id: ID!
   status: String!
   endoWasExpired: Boolean!
+  endoWasOutOfOrder: Boolean!
   endoId: String!
   endo: Endo!
   patientId: String
@@ -242,6 +243,7 @@ type Mutation {
   createSetting(input: CreateSettingInput!): Setting!
   updateSetting(input: UpdateSettingInput!): Setting!
   createEndo(input: CreateEndoInput!): Endo!
+  finishRepair(id: String!): Endo!
   deleteEndo(id: String!): BooleanResponse!
   updateEndo(id: String!, input: UpdateEndoInput!): Endo!
   updateDryingTime(input: UpdateDryingTimeInput!): Endo!
@@ -334,11 +336,13 @@ input CreateActionInput {
 input CreateSessionInput {
   endoId: String!
   endoWasExpired: Boolean!
+  endoWasOutOfOrder: Boolean!
 }
 
 input UpdateSessionInput {
   endoId: String
   endoWasExpired: Boolean
+  endoWasOutOfOrder: Boolean
   id: String
   status: String
   patientHN: String

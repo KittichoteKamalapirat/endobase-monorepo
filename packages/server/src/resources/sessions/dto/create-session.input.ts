@@ -7,4 +7,8 @@ export class CreateSessionInput {
 
   @Field(() => Boolean)
   endoWasExpired: boolean;
+
+  @Field(() => Boolean)
+  endoWasOutOfOrder: boolean;
+
 }

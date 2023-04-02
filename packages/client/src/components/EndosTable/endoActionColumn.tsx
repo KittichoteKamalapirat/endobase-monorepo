@@ -5,11 +5,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
 import { ICON_SIZE } from "../../constants";
-import { useWashWithoutStoringMutation } from "../../generated/graphql";
+import { useFinishRepairMutation, useWashWithoutStoringMutation } from "../../generated/graphql";
+import { urlResolver } from "../../lib/UrlResolver";
 import { showToast } from "../../redux/slices/toastReducer";
 import { primaryColor } from "../../theme";
 import { ENDO_STATUS } from "../../utils/statusToColor";
-import { statusToLabel } from "../../utils/statusToLabel";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
 
@@ -23,6 +23,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const navigate = useNavigate();
 
   const [washWithoutStoring] = useWashWithoutStoringMutation();
+  const [finishRepair] = useFinishRepairMutation()
 
   const handleUseEndo = async (id: string) => {
     try {
@@ -50,6 +51,45 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     }
   };
 
+
+  const handleFinishRepair = async (id: string) => {
+    try {
+      const result = await finishRepair({
+        variables: {
+          id,
+        },
+      });
+
+      const resultValue = result.data?.finishRepair.id;
+      if (resultValue) {
+        await refetchEndos()
+        dispatch(
+          showToast({
+            message: "Successfully updated the endoscope",
+            variant: "success",
+          })
+        );
+
+        navigate(urlResolver.endos(ENDO_STATUS.FIXED))
+        navigate(0)
+
+
+      } else {
+
+        dispatch(
+          showToast({
+            message: "An error occured",
+            variant: "error",
+          })
+        );
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+
+
   const handleRewash = async (id: string) => {
     try {
       const result = await washWithoutStoring({ variables: { id } });
@@ -68,6 +108,9 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
       );
     }
   };
+
+
+
   // 'ready', => use
   // 'expire_soon', => use
   //  'being_used', => wash
@@ -99,9 +142,28 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
         />
       );
 
-    case ENDO_STATUS.BEING_FIXED:
+    case ENDO_STATUS.OUT_OF_ORDER:
       return (
-        <div className="bg-grey-0 text-grey-800">{statusToLabel["being_fixed"]}</div>
+        <Button
+          label="Finished Repairing"
+          onClick={() => handleFinishRepair(endoId)}
+          type={ButtonTypes.SECONDARY}
+          startIcon={
+            <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />
+          }
+        />
+      );
+
+    case ENDO_STATUS.FIXED:
+      return (
+        <Button
+          label="Wash"
+          onClick={() => handleUseEndo(endoId)} // will update endoWasOutOfOrder => true in session
+          type={ButtonTypes.SECONDARY}
+          startIcon={
+            <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />
+          }
+        />
       );
 
     case ENDO_STATUS.BEING_USED:

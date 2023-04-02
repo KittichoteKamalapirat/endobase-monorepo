@@ -13,5 +13,6 @@ export const statusToLabel: Record<ENDO_STATUS_VALUES, string> = {
    disinfection_passed: "Disinfection Passed",
    disinfection_failed: "Disinfection Failed",
    drying: "Drying",
-   being_fixed: "Not Ready",
+   out_of_order: "Out of order",
+   fixed: "Fixed",
 }

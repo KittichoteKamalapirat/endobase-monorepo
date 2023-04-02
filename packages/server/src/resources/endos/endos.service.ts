@@ -111,17 +111,19 @@ export class EndosService {
     if (
       endo.status !== 'ready' &&
       endo.status !== 'expire_soon' &&
-      endo.status !== 'expired'
+      endo.status !== 'expired'&& 
+      endo.status !== 'fixed'
     )
       return new Error(
-        'You cannot pick this endo because its status is neither ready, expire_soon, nor expired',
+        'You cannot pick this endo because its status is neither ready, expire_soon, fixed, nor expired',
       );
     const existingSession = await this.findCurrentSessionByEndoId(id);
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
 
     // create a session
     const endoWasExpired = endo.status === 'expired';
-    await this.sessionsService.create({ endoId: id, endoWasExpired });
+    const endoWasOutOfOrder = endo.status === "fixed"
+    await this.sessionsService.create({ endoId: id, endoWasExpired, endoWasOutOfOrder });
     // create an action (take_out)
     // await this.actionsService.create({
     //   sessionId: session.id,
@@ -154,7 +156,7 @@ export class EndosService {
       // status = "expired"
       pickedEndo = await this.endosRepository.save({
         ...endo,
-        status: ENDO_STATUS_OBJ.EXPIRED_AND_OUT,
+        status:  endoWasExpired ? ENDO_STATUS_OBJ.EXPIRED_AND_OUT :  ENDO_STATUS_OBJ.FIXED ,
       });
     }
 
@@ -257,10 +259,15 @@ export class EndosService {
     const newSession = await this.sessionsService.create({
       endoId: id,
       endoWasExpired: false,
+      endoWasOutOfOrder: false,
     });
 
     return newSession;
   }
+
+
+  
+
 
   // for admin
   async removeAllRows() {

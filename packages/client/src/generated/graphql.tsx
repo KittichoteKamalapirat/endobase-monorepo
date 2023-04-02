@@ -102,6 +102,7 @@ export type CreateRepairRequestInput = {
 export type CreateSessionInput = {
   endoId: Scalars['String'];
   endoWasExpired: Scalars['Boolean'];
+  endoWasOutOfOrder: Scalars['Boolean'];
 };
 
 export type CreateSettingInput = {
@@ -195,6 +196,7 @@ export type Mutation = {
   deleteAllData: BooleanResponse;
   deleteEndo: BooleanResponse;
   deleteOfficer: BooleanResponse;
+  finishRepair: Endo;
   login: UserResponse;
   logout: Scalars['Boolean'];
   pickEndo: Endo;
@@ -283,6 +285,11 @@ export type MutationDeleteEndoArgs = {
 
 
 export type MutationDeleteOfficerArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationFinishRepairArgs = {
   id: Scalars['String'];
 };
 
@@ -558,6 +565,7 @@ export type Session = {
   endo: Endo;
   endoId: Scalars['String'];
   endoWasExpired: Scalars['Boolean'];
+  endoWasOutOfOrder: Scalars['Boolean'];
   id: Scalars['ID'];
   isoEndTime?: Maybe<Scalars['String']>;
   patient?: Maybe<Patient>;
@@ -644,6 +652,7 @@ export type UpdateSessionInput = {
   endTime?: InputMaybe<Scalars['String']>;
   endoId?: InputMaybe<Scalars['String']>;
   endoWasExpired?: InputMaybe<Scalars['Boolean']>;
+  endoWasOutOfOrder?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
   patientHN?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
@@ -798,6 +807,13 @@ export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
 
+export type FinishRepairMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FinishRepairMutation = { __typename?: 'Mutation', finishRepair: { __typename?: 'Endo', id: string } };
+
 export type CreateOfficerMutationVariables = Exact<{
   input: CreateOfficerInput;
 }>;
@@ -890,7 +906,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, endoWasExpired: boolean, patientId?: string | null, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;
@@ -1690,6 +1706,39 @@ export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Endo
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
 export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
+export const FinishRepairDocument = gql`
+    mutation FinishRepair($id: String!) {
+  finishRepair(id: $id) {
+    id
+  }
+}
+    `;
+export type FinishRepairMutationFn = Apollo.MutationFunction<FinishRepairMutation, FinishRepairMutationVariables>;
+
+/**
+ * __useFinishRepairMutation__
+ *
+ * To run a mutation, you first call `useFinishRepairMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFinishRepairMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [finishRepairMutation, { data, loading, error }] = useFinishRepairMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFinishRepairMutation(baseOptions?: Apollo.MutationHookOptions<FinishRepairMutation, FinishRepairMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FinishRepairMutation, FinishRepairMutationVariables>(FinishRepairDocument, options);
+      }
+export type FinishRepairMutationHookResult = ReturnType<typeof useFinishRepairMutation>;
+export type FinishRepairMutationResult = Apollo.MutationResult<FinishRepairMutation>;
+export type FinishRepairMutationOptions = Apollo.BaseMutationOptions<FinishRepairMutation, FinishRepairMutationVariables>;
 export const CreateOfficerDocument = gql`
     mutation CreateOfficer($input: CreateOfficerInput!) {
   createOfficer(input: $input) {
@@ -2221,8 +2270,13 @@ export const SessionDocument = gql`
   session(id: $id) {
     id
     endoId
+    endo {
+      id
+      status
+    }
     status
     endoWasExpired
+    endoWasOutOfOrder
     patientId
     patient {
       id

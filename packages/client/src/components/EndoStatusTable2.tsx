@@ -7,12 +7,14 @@ import Badge from "./Badge";
 
 interface Props {
   endos: Endo[];
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  // setFilter: React.Dispatch<React.SetStateAction<string>>;
   activeFilter: "" | ENDO_STATUS_VALUES
   setActiveFilter: Dispatch<SetStateAction<"" | ENDO_STATUS_VALUES>>
 }
 
-const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: Props) => {
+const EndoStatusTable2 = ({ endos,
+  // setFilter,
+  activeFilter, setActiveFilter }: Props) => {
 
   const navigate = useNavigate()
 
@@ -47,20 +49,26 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
 
   const beingFixedNum = endos.filter(
     (endo) =>
-      endo.status === ENDO_STATUS.BEING_FIXED
+      endo.status === ENDO_STATUS.OUT_OF_ORDER
   ).length;
+
+  const fixedNum = endos.filter(
+    (endo) =>
+      endo.status === ENDO_STATUS.FIXED
+  ).length;
+
 
 
   const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
 
     if (activeFilter === status) {
       setActiveFilter("");
-      setFilter("");
+      // setFilter("");
       navigate(urlResolver.endos(""))
       return;
     }
     navigate(urlResolver.endos(status))
-    setFilter(status);
+    // setFilter(status);
     setActiveFilter(status);
   };
 
@@ -178,20 +186,39 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
-        onClick={() => handleFilter(ENDO_STATUS.BEING_FIXED)}
+        onClick={() => handleFilter(ENDO_STATUS.OUT_OF_ORDER)}
       >
         <Badge
           size="md"
-          content={`Being Fixed: ${beingFixedNum}`}
+          content={`Out of Order: ${beingFixedNum}`}
           color={
-            activeFilter === ENDO_STATUS.BEING_FIXED
+            activeFilter === ENDO_STATUS.OUT_OF_ORDER
               ? "text-grey-0 border-grey-900"
               : "text-grey-900 border-grey-900"
           }
-          isActive={activeFilter === ENDO_STATUS.BEING_FIXED}
+          isActive={activeFilter === ENDO_STATUS.OUT_OF_ORDER}
           activeColor="bg-grey-900"
         />
       </div>
+
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.FIXED)}
+      >
+        <Badge
+          size="md"
+          content={`Fixed: ${fixedNum}`}
+          color={
+            activeFilter === ENDO_STATUS.FIXED
+              ? "text-grey-900 border-[#ffc2d1]"
+              : "text-grey-900 border-[#ffc2d1]"
+          }
+          isActive={activeFilter === ENDO_STATUS.FIXED}
+          activeColor="bg-[#ffc2d1]"
+        />
+      </div>
+
 
 
       <div

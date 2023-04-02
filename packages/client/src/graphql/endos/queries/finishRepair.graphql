@@ -1,0 +1,6 @@
+mutation FinishRepair($id: String!) {
+  finishRepair(id: $id) {
+    id
+    
+  }
+}

@@ -2,8 +2,13 @@ query Session($id: String!) {
   session(id: $id) {
     id
     endoId
+    endo{
+    id
+    status
+    }
     status
     endoWasExpired
+    endoWasOutOfOrder
     patientId
     patient {
       id

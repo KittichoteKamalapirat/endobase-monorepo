@@ -26,7 +26,8 @@ export const ENDO_STATUS_OBJ = {
   DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
   NO_ENDO: 'no_endo', // No endo in a tray (for writing color)
-  BEING_FIXED: "being_fixed"
+  OUT_OF_ORDER: "out_of_order",
+  FIXED: "fixed"
 } as const;
 
 export type ENDO_STATUS_KEYS = keyof typeof ENDO_STATUS_OBJ;
@@ -59,7 +60,8 @@ export const statusToColor: Record<ENDO_STATUS, number> = {
   [ENDO_STATUS_OBJ.DISINFECTION_FAILED]: 0,
   [ENDO_STATUS_OBJ.DRYING]: 4, // blue
   [ENDO_STATUS_OBJ.NO_ENDO]: 0,
-  [ENDO_STATUS_OBJ.BEING_FIXED]: 7, // white
+  [ENDO_STATUS_OBJ.OUT_OF_ORDER]: 7, // white
+  [ENDO_STATUS_OBJ.FIXED]: 5, // pink
 };
 @ObjectType()
 @Entity()

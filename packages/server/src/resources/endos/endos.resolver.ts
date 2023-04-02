@@ -57,6 +57,13 @@ export class EndosResolver {
     return this.endosService.createEndo(input);
   }
 
+  @Mutation(() => Endo)
+  finishRepair(
+    @Args({ name: 'id'}) id: string,
+  ): Promise<Endo | Error> {
+    return this.endosService.updateStatus(id, "fixed");
+  }
+
   @Mutation(() => BooleanResponse)
   deleteEndo(
     @Args({ name: 'id', type: () => String }) id: string,
@@ -97,6 +104,9 @@ export class EndosResolver {
   ): Promise<Session | Error> {
     return this.endosService.washWithoutStoring(id);
   }
+
+
+
 
   //   @ResolveField()
   //   async posts(@Parent() author: Author) {

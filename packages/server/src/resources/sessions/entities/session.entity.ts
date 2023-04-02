@@ -37,6 +37,11 @@ export class Session {
   @Field(() => Boolean)
   endoWasExpired: boolean; // no patient data required
 
+  @Column({ default: false })
+  @Field(() => Boolean)
+  endoWasOutOfOrder: boolean; // no patient data required
+
+
   // Endo
   @Column()
   @Field()

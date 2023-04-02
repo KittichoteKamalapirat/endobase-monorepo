@@ -25,10 +25,14 @@ export class RepairRequestResolver {
     return this.repairRequestService.findOne(id);
   }
 
+
   @Mutation(() => RepairRequestResponse)
   updateRepairRequest(@Args('input') input: UpdateRepairRequestInput) {
     return this.repairRequestService.update(input.id, input);
   }
+
+  
+
 
   @Mutation(() => BooleanResponse)
   removeRepairRequest(@Args('id') id: string) {

@@ -43,7 +43,7 @@ export class RepairRequestService {
         
       await this.endosService.updateStatus(
         input.endoId,
-          ENDO_STATUS_OBJ.BEING_FIXED
+          ENDO_STATUS_OBJ.OUT_OF_ORDER
       );
 
       const newRR = this.repairRequestsRepository.create({

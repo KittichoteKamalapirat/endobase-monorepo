@@ -26,6 +26,7 @@ import {
 import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 import { CARD_CLASSNAMES } from "../theme";
+import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
 
 const Session = () => {
   useIsAuth();
@@ -128,8 +129,8 @@ const Session = () => {
         )}
         {/* 2 */}
 
-        {data?.session.endoWasExpired ? (
-          <NoPatientForm />
+        {data?.session.endoWasExpired || data?.session.endoWasOutOfOrder ? (
+          <NoPatientForm status={data.session.endo.status as ENDO_STATUS_VALUES} />
         ) : (
           <div id="patient-details">
             {patientId ? (

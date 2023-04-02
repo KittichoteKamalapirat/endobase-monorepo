@@ -2,6 +2,8 @@ import classNames from "classnames";
 import { Link } from "react-router-dom";
 import { Endo } from "../generated/graphql";
 import { ACTION_CARD_CLASSNAMES, UNCLICKABLE_CARD_CLASSNAMES } from "../theme";
+import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
+import { statusToLabel } from "../utils/statusToLabel";
 import Badge from "./Badge";
 import SubHeading from "./typography/SubHeading";
 
@@ -43,7 +45,7 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
             {/* <div>{dryingTime} minutes</div> */}
             <div>
               {" "}
-              <Badge content={status} />{" "}
+              <Badge content={statusToLabel[status as ENDO_STATUS_VALUES]} />{" "}
             </div>
           </div>
         </div>

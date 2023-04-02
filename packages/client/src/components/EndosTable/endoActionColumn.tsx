@@ -29,7 +29,6 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const handleUseEndo = async (id: string) => {
     try {
       const pickedEndo = await pickEndo({ variables: { id } });
-      console.log("pickedEndo", pickedEndo);
       await refetchEndos(); // refetch so the link to /wash/null => /wash/session_id
 
       // dispatch(

@@ -286,7 +286,6 @@ export class EndosService {
     try {
       const trays = await this.traysService.findAll();
 
-      console.log('trays', trays);
       await Promise.all(
         trays.map((tray) => {
           const input = {

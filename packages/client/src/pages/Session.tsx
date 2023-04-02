@@ -82,16 +82,6 @@ const Session = () => {
   const disabledCompleteSessionForm = (!noNeedPatient && !patient) || !(takeOutAction && bringToWashingRoomAction && leakTestAction && disinfectAction)
 
 
-
-
-  console.log('data', data)
-  console.log('noNeedPatient', noNeedPatient)
-  console.log('patient', patient)
-  console.log('leakTestAction', leakTestAction)
-  console.log('takeOutAction', takeOutAction)
-  console.log('bringToWashingRoomAction', bringToWashingRoomAction,)
-  console.log('disabledDisinfectionForm', disabledDisinfectionForm,)
-
   useEffect(() => {
     if (
       !loading &&

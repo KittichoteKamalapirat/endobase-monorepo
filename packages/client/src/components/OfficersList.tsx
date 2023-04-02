@@ -23,7 +23,6 @@ const OfficersList = () => {
   const navigate = useNavigate();
 
   const handleDeleteOfficer = async (id: string) => {
-    console.log("id", id);
     try {
       const result = await deleteOfficer({
         variables: {

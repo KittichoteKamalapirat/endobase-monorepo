@@ -46,7 +46,6 @@ const UpdateSetting = ({ setting, defaultValues }: Props) => {
     defaultValues,
   });
 
-  console.log("isDirty", isDirty);
   const onSubmit = async (data: FormValues) => {
     if (!name) return;
     try {

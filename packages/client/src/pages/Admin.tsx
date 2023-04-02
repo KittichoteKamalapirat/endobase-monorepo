@@ -8,7 +8,6 @@ const Admin = () => {
   // for back button
   const { state } = useLocation();
 
-  console.log("state", state);
   const { prev } = state || {}; // read the prev route
 
   return (

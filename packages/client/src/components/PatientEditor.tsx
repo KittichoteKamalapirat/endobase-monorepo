@@ -37,10 +37,9 @@ const PatientEditor = ({ defaultValues, onSubmit, isEditing = false, containerCl
   const validateField = (value: string) => {
     console.log('value', value)
     if (value !== "Admin") return false
-
-
     return true;
   };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>

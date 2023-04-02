@@ -22,6 +22,14 @@ class UrlResolver {
     return "/nimda";
   }
 
+  requestRepair(id: string) {
+    return `/endo/${id}/request-repair`;
+  }
+
+  endo(id: string) {
+    return `/endo/${id}`;
+  }
+
   about() {
     return "/about";
   }

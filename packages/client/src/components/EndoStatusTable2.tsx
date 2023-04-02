@@ -45,6 +45,12 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
       endo.status === ENDO_STATUS.EXPIRED_AND_OUT
   ).length;
 
+  const beingFixedNum = endos.filter(
+    (endo) =>
+      endo.status === ENDO_STATUS.BEING_FIXED
+  ).length;
+
+
   const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
 
     if (activeFilter === status) {
@@ -169,6 +175,24 @@ const EndoStatusTable2 = ({ endos, setFilter, activeFilter, setActiveFilter }: P
           activeColor="bg-red"
         />
       </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.BEING_FIXED)}
+      >
+        <Badge
+          size="md"
+          content={`Being Fixed: ${beingFixedNum}`}
+          color={
+            activeFilter === ENDO_STATUS.BEING_FIXED
+              ? "text-grey-0 border-grey-900"
+              : "text-grey-900 border-grey-900"
+          }
+          isActive={activeFilter === ENDO_STATUS.BEING_FIXED}
+          activeColor="bg-grey-900"
+        />
+      </div>
+
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"

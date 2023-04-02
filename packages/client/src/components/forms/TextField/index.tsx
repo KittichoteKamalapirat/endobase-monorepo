@@ -200,7 +200,7 @@ const TextField = ({
         label={label}
         extraClass={`${labelClass} ${labelBaseClass}`}
         fontColour={labelFontColour}
-        displayOptionalLabel={!required}
+        displayOptionalLabel={false}
         optionalLabelStyle={optionalLabelStyle}
       />
       {control ? (

@@ -16,7 +16,7 @@ const EndoDetail = ({ endo, canBeClicked = true }: Props) => {
   if (!endo) return null;
 
   return (
-    <Link to={`/endo/${endo.id}`}>
+    <Link to={canBeClicked ? `/endo/${endo.id}` : "#"}>
       <div
         className={classNames(
           canBeClicked ? ACTION_CARD_CLASSNAMES : UNCLICKABLE_CARD_CLASSNAMES

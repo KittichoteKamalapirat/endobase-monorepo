@@ -23,6 +23,7 @@ import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
 import { ConfigModule } from '@nestjs/config';
 import { AdminModule } from './resources/admin/admin.module';
 import { EnvKey, getEnvPath } from './utils/getEnvPath';
+import { RepairRequestModule } from './resources/repair-request/repair-request.module';
 
 const ENV = process.env.NODE_ENV as EnvKey;
 console.log('env',process.env)
@@ -74,6 +75,7 @@ const envPath = getEnvPath(ENV);
     AuthModule,
     EndoCronsModule,
     AdminModule,
+    RepairRequestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

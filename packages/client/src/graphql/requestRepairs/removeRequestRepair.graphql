@@ -1,0 +1,9 @@
+mutation RemoveRepairRequest($id: String!) {
+  removeRepairRequest(id: $id) {
+    errors {
+      field
+      message
+    }
+    value
+  }
+}

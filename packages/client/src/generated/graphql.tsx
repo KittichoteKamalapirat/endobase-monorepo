@@ -93,6 +93,12 @@ export type CreatePatientInput = {
   hosNum: Scalars['String'];
 };
 
+export type CreateRepairRequestInput = {
+  endoId: Scalars['String'];
+  note: Scalars['String'];
+  officerNum: Scalars['String'];
+};
+
 export type CreateSessionInput = {
   endoId: Scalars['String'];
   endoWasExpired: Scalars['Boolean'];
@@ -132,6 +138,7 @@ export type Endo = {
   lastPutBackISO: Scalars['String'];
   model: Scalars['String'];
   position: Scalars['String'];
+  repairRequests?: Maybe<Array<RepairRequest>>;
   serialNum: Scalars['String'];
   sessions: Array<Session>;
   status: Scalars['String'];
@@ -180,6 +187,7 @@ export type Mutation = {
   createEndo: Endo;
   createOfficer: OfficerResponse;
   createPatient: Patient;
+  createRepairRequest: RepairRequestResponse;
   createSession: Session;
   createSetting: Setting;
   createSnapshot: Snapshot;
@@ -195,6 +203,7 @@ export type Mutation = {
   removeAction: Action;
   removeContainer: Container;
   removePatient: Patient;
+  removeRepairRequest: BooleanResponse;
   removeSession: Session;
   removeTray: Tray;
   removeUser: User;
@@ -203,6 +212,7 @@ export type Mutation = {
   updateDryingTime: Endo;
   updateEndo: Endo;
   updateOfficer: OfficerResponse;
+  updateRepairRequest: RepairRequestResponse;
   updateSession: Session;
   updateSessionPatient: Session;
   updateSetting: Setting;
@@ -239,6 +249,11 @@ export type MutationCreateOfficerArgs = {
 
 export type MutationCreatePatientArgs = {
   createPatientInput: CreatePatientInput;
+};
+
+
+export type MutationCreateRepairRequestArgs = {
+  input: CreateRepairRequestInput;
 };
 
 
@@ -302,6 +317,11 @@ export type MutationRemovePatientArgs = {
 };
 
 
+export type MutationRemoveRepairRequestArgs = {
+  id: Scalars['String'];
+};
+
+
 export type MutationRemoveSessionArgs = {
   id: Scalars['String'];
 };
@@ -343,6 +363,11 @@ export type MutationUpdateOfficerArgs = {
 };
 
 
+export type MutationUpdateRepairRequestArgs = {
+  input: UpdateRepairRequestInput;
+};
+
+
 export type MutationUpdateSessionArgs = {
   updateSessionInput: UpdateSessionInput;
 };
@@ -380,6 +405,7 @@ export type Officer = {
   id: Scalars['ID'];
   lastName: Scalars['String'];
   officerNum: Scalars['String'];
+  repairRequests: Array<RepairRequest>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -432,6 +458,8 @@ export type Query = {
   paginatedSnapshots: PaginatedSnapshotOutput;
   patient: Patient;
   patients: Array<Patient>;
+  repairRequest: RepairRequest;
+  repairRequests: Array<RepairRequest>;
   session: Session;
   sessions: Array<Session>;
   setting: Setting;
@@ -475,6 +503,11 @@ export type QueryPatientArgs = {
 };
 
 
+export type QueryRepairRequestArgs = {
+  id: Scalars['String'];
+};
+
+
 export type QuerySessionArgs = {
   id: Scalars['String'];
 };
@@ -492,6 +525,24 @@ export type QueryTrayArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['String'];
+};
+
+export type RepairRequest = {
+  __typename?: 'RepairRequest';
+  createdAt: Scalars['DateTime'];
+  endo: Endo;
+  endoId: Scalars['String'];
+  id: Scalars['ID'];
+  note: Scalars['String'];
+  officer: Officer;
+  officerId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type RepairRequestResponse = {
+  __typename?: 'RepairRequestResponse';
+  errors?: Maybe<Array<FieldError>>;
+  repairRequest?: Maybe<RepairRequest>;
 };
 
 export type RowAndColInput = {
@@ -579,6 +630,13 @@ export type UpdateOfficerInput = {
   firstName?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   lastName?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateRepairRequestInput = {
+  endoId?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
   officerNum?: InputMaybe<Scalars['String']>;
 };
 
@@ -772,6 +830,39 @@ export type OfficersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type OfficersQuery = { __typename?: 'Query', officers: Array<{ __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }> };
+
+export type CreateRepairRequestMutationVariables = Exact<{
+  input: CreateRepairRequestInput;
+}>;
+
+
+export type CreateRepairRequestMutation = { __typename?: 'Mutation', createRepairRequest: { __typename?: 'RepairRequestResponse', repairRequest?: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type RemoveRepairRequestMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type RemoveRepairRequestMutation = { __typename?: 'Mutation', removeRepairRequest: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type RepairRequestQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type RepairRequestQuery = { __typename?: 'Query', repairRequest: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } };
+
+export type RepairRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RepairRequestsQuery = { __typename?: 'Query', repairRequests: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } }> };
+
+export type UpdateRepairRequestMutationVariables = Exact<{
+  input: UpdateRepairRequestInput;
+}>;
+
+
+export type UpdateRepairRequestMutation = { __typename?: 'Mutation', updateRepairRequest: { __typename?: 'RepairRequestResponse', repairRequest?: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type BlinkLocationMutationVariables = Exact<{
   input: RowAndColInput;
@@ -1795,6 +1886,227 @@ export function useOfficersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<O
 export type OfficersQueryHookResult = ReturnType<typeof useOfficersQuery>;
 export type OfficersLazyQueryHookResult = ReturnType<typeof useOfficersLazyQuery>;
 export type OfficersQueryResult = Apollo.QueryResult<OfficersQuery, OfficersQueryVariables>;
+export const CreateRepairRequestDocument = gql`
+    mutation CreateRepairRequest($input: CreateRepairRequestInput!) {
+  createRepairRequest(input: $input) {
+    repairRequest {
+      id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type CreateRepairRequestMutationFn = Apollo.MutationFunction<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>;
+
+/**
+ * __useCreateRepairRequestMutation__
+ *
+ * To run a mutation, you first call `useCreateRepairRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRepairRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRepairRequestMutation, { data, loading, error }] = useCreateRepairRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>(CreateRepairRequestDocument, options);
+      }
+export type CreateRepairRequestMutationHookResult = ReturnType<typeof useCreateRepairRequestMutation>;
+export type CreateRepairRequestMutationResult = Apollo.MutationResult<CreateRepairRequestMutation>;
+export type CreateRepairRequestMutationOptions = Apollo.BaseMutationOptions<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>;
+export const RemoveRepairRequestDocument = gql`
+    mutation RemoveRepairRequest($id: String!) {
+  removeRepairRequest(id: $id) {
+    errors {
+      field
+      message
+    }
+    value
+  }
+}
+    `;
+export type RemoveRepairRequestMutationFn = Apollo.MutationFunction<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>;
+
+/**
+ * __useRemoveRepairRequestMutation__
+ *
+ * To run a mutation, you first call `useRemoveRepairRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveRepairRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeRepairRequestMutation, { data, loading, error }] = useRemoveRepairRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>(RemoveRepairRequestDocument, options);
+      }
+export type RemoveRepairRequestMutationHookResult = ReturnType<typeof useRemoveRepairRequestMutation>;
+export type RemoveRepairRequestMutationResult = Apollo.MutationResult<RemoveRepairRequestMutation>;
+export type RemoveRepairRequestMutationOptions = Apollo.BaseMutationOptions<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>;
+export const RepairRequestDocument = gql`
+    query RepairRequest($id: String!) {
+  repairRequest(id: $id) {
+    id
+    note
+    officerId
+    officer {
+      id
+    }
+    endoId
+    endo {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useRepairRequestQuery__
+ *
+ * To run a query within a React component, call `useRepairRequestQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRepairRequestQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRepairRequestQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRepairRequestQuery(baseOptions: Apollo.QueryHookOptions<RepairRequestQuery, RepairRequestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestQuery, RepairRequestQueryVariables>(RepairRequestDocument, options);
+      }
+export function useRepairRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestQuery, RepairRequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestQuery, RepairRequestQueryVariables>(RepairRequestDocument, options);
+        }
+export type RepairRequestQueryHookResult = ReturnType<typeof useRepairRequestQuery>;
+export type RepairRequestLazyQueryHookResult = ReturnType<typeof useRepairRequestLazyQuery>;
+export type RepairRequestQueryResult = Apollo.QueryResult<RepairRequestQuery, RepairRequestQueryVariables>;
+export const RepairRequestsDocument = gql`
+    query RepairRequests {
+  repairRequests {
+    id
+    note
+    officerId
+    officer {
+      id
+    }
+    endoId
+    endo {
+      id
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useRepairRequestsQuery__
+ *
+ * To run a query within a React component, call `useRepairRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRepairRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRepairRequestsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRepairRequestsQuery(baseOptions?: Apollo.QueryHookOptions<RepairRequestsQuery, RepairRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(RepairRequestsDocument, options);
+      }
+export function useRepairRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestsQuery, RepairRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(RepairRequestsDocument, options);
+        }
+export type RepairRequestsQueryHookResult = ReturnType<typeof useRepairRequestsQuery>;
+export type RepairRequestsLazyQueryHookResult = ReturnType<typeof useRepairRequestsLazyQuery>;
+export type RepairRequestsQueryResult = Apollo.QueryResult<RepairRequestsQuery, RepairRequestsQueryVariables>;
+export const UpdateRepairRequestDocument = gql`
+    mutation UpdateRepairRequest($input: UpdateRepairRequestInput!) {
+  updateRepairRequest(input: $input) {
+    repairRequest {
+      id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
+      }
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type UpdateRepairRequestMutationFn = Apollo.MutationFunction<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>;
+
+/**
+ * __useUpdateRepairRequestMutation__
+ *
+ * To run a mutation, you first call `useUpdateRepairRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateRepairRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateRepairRequestMutation, { data, loading, error }] = useUpdateRepairRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>(UpdateRepairRequestDocument, options);
+      }
+export type UpdateRepairRequestMutationHookResult = ReturnType<typeof useUpdateRepairRequestMutation>;
+export type UpdateRepairRequestMutationResult = Apollo.MutationResult<UpdateRepairRequestMutation>;
+export type UpdateRepairRequestMutationOptions = Apollo.BaseMutationOptions<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>;
 export const BlinkLocationDocument = gql`
     mutation BlinkLocation($input: RowAndColInput!) {
   blinkLocation(input: $input)

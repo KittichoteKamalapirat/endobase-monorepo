@@ -1,0 +1,14 @@
+query RepairRequest($id: String!) {
+  repairRequest(id: $id) {
+    id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
+      }
+  }
+}

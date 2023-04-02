@@ -1,0 +1,16 @@
+query RepairRequests {
+  repairRequests {
+    id
+    note
+    officerId
+    officer{
+      id
+    }
+    endoId
+    endo{
+      id
+    }
+    createdAt
+
+  }
+}

@@ -16,7 +16,7 @@ export type ACTION_TYPE =
   | 'disinfect'
   | 'store';
 
-export const ACTION_TYPE_OBJ = {
+export const ACTION_TYPE_OBJ: Record<string, ACTION_TYPE> = {
   TAKE_OUT: 'take_out',
   LEAK_TEST_AND_PREWASH: 'leak_test_and_prewash',
   DISINFECT: 'disinfect',

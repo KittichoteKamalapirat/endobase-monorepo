@@ -38,7 +38,7 @@ import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
-import { GlobalFilter } from "./GlobalFilter";
+import { EndosGlobalFilter } from "./EndosGlobalFilter";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -53,7 +53,7 @@ const EndosTable = () => {
   const initialStatus = useQueryParam("status") as ENDO_STATUS_VALUES || "";
 
   const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(initialStatus);
-
+  const [globalFilterValue, setGlobalFilterValue] = useState("")
 
   const {
     data: settingsData,
@@ -79,6 +79,7 @@ const EndosTable = () => {
 
 
   console.log('currentPageIndex', currentPageIndex)
+
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
     if (refetchCounter === 0) {
@@ -87,7 +88,8 @@ const EndosTable = () => {
         pickEndo,
         refetchEndos: refetch,
         isLargerThanBreakpoint,
-        status: activeFilter
+        status: activeFilter,
+        globalFilter: globalFilterValue
       }) as any
     }
 
@@ -97,9 +99,10 @@ const EndosTable = () => {
       refetchEndos: refetch,
       isLargerThanBreakpoint,
       currentPageIndex,
-      status: activeFilter
+      status: activeFilter,
+      globalFilter: globalFilterValue
     }) as any;
-  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex, activeFilter]);
+  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex, activeFilter, globalFilterValue]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
@@ -134,6 +137,11 @@ const EndosTable = () => {
     useSortBy,
     usePagination
   );
+
+  useEffect(() => {
+    setGlobalFilterValue(globalFilter as string)
+  }, [globalFilter, setGlobalFilterValue])
+
 
   // if change page number => filter to only that column
   useEffect(() => {
@@ -185,10 +193,13 @@ const EndosTable = () => {
 
         <div>
           <div className="my-4">
-            <GlobalFilter
+            <EndosGlobalFilter
+              // globalFilterValue={globalFilterValue}
+              // setGlobalFilterValue={setGlobalFilterValue}
               filter={globalFilter}
               setFilter={setGlobalFilter}
-              data={data}
+            // data={data}
+
             />
           </div>
 

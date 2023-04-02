@@ -1,3 +1,4 @@
+import { RepairRequest } from 'src/resources/repair-request/entities/repair-request.entity';
 import { Action } from '../resources/actions/entities/action.entity';
 import { Container } from '../resources/containers/entities/container.entity';
 import { EndoCron } from '../resources/endo-crons/entities/endo-cron.entity';
@@ -29,6 +30,7 @@ export const typeormConfigNest = {
     User,
     Setting,
     EndoCron,
+    RepairRequest,
   ],
   synchronize: true,
   logging: false,

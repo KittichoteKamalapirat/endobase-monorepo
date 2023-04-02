@@ -11,9 +11,10 @@ import {
   Endo,
   useDeleteEndoMutation,
   useEndoQuery,
-  useEndosQuery,
+  useEndosQuery
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
+import { urlResolver } from "../lib/UrlResolver";
 import { openConfirm } from "../redux/slices/confirmModalReducer";
 import { showToast } from "../redux/slices/toastReducer";
 
@@ -77,8 +78,8 @@ const EndoPage = () => {
   if (loading) {
     return <Loading />;
   }
-  if (error) {
-    return <Error text={error?.message} />;
+  if (error || !id) {
+    return <Error text={error?.message || "Cannot find the endoscope"} />;
   }
 
   return (
@@ -95,6 +96,14 @@ const EndoPage = () => {
         <div className="flex items-center justify-between my-4">
           <PageHeading heading="Endoscope Setting" />
           <div className="flex gap-2">
+            <LinkButton
+              label="Request repair"
+              href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(id)}`}
+              type={ButtonTypes.OUTLINED}
+            />
+
+
+
             <Button
               label="Edit"
               onClick={() => {
@@ -104,6 +113,7 @@ const EndoPage = () => {
               }}
               type={ButtonTypes.OUTLINED}
             />
+
             <Button
               label="Delete"
               onClick={handleConfirmModal}

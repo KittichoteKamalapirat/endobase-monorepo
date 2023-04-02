@@ -1,0 +1,21 @@
+mutation CreateRepairRequest($input: CreateRepairRequestInput!) {
+  createRepairRequest(input: $input) {
+    repairRequest {
+      id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
+      }
+      
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

@@ -17,6 +17,7 @@ interface Props {
   isLargerThanBreakpoint: boolean;
   currentPageIndex: number
   status: ENDO_STATUS_VALUES | ""
+  globalFilter: string
 }
 
 export const endoColumns = ({
@@ -24,7 +25,8 @@ export const endoColumns = ({
   refetchEndos,
   isLargerThanBreakpoint,
   currentPageIndex,
-  status
+  status,
+  globalFilter
 }: Props) => {
   return [
     {
@@ -60,7 +62,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "position",
-      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} />
+      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} globalFilter={globalFilter} />
     },
     ...(isLargerThanBreakpoint
       ? [
@@ -121,7 +123,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "status",
-      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} />,
+      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} globalFilter={globalFilter} />,
       Cell: ({ value }: { value: ENDO_STATUS_VALUES }) => {
         const color = statusToColor[value] as keyof typeof bgConfig;
         const twBg = bgConfig[color];

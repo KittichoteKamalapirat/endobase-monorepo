@@ -15,7 +15,6 @@ export const GlobalFilter = ({ filter, setFilter, data }: Props) => {
   }, SEARCH_DEBOUNCE);
 
   useEffect(() => {
-    console.log("set filter");
     if (data) setFilter(value);
     else setFilter(value);
   }, [value, setFilter, data]);

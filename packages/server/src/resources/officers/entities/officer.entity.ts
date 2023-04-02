@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { RepairRequest } from 'src/resources/repair-request/entities/repair-request.entity';
 
 import {
   Column,
@@ -36,6 +37,13 @@ export class Officer {
   @OneToMany(() => Action, (action) => action.officer, { cascade: true })
   @Field(() => [Action])
   actions: Action[];
+
+
+  @OneToMany(() => RepairRequest, (rr) => rr.officer, { cascade: true })
+  @Field(() => [RepairRequest])
+  repairRequests: RepairRequest[];
+
+
 
   @CreateDateColumn()
   @Field()

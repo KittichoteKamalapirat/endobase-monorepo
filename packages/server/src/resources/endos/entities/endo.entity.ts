@@ -1,4 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { RepairRequest } from 'src/resources/repair-request/entities/repair-request.entity';
 import {
   Column,
   CreateDateColumn,
@@ -117,6 +118,13 @@ export class Endo {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
+
+
+  @OneToMany(() => RepairRequest, (rr) => rr.endo, { cascade: true })
+  @Field(() => [RepairRequest], { nullable: true })
+  repairRequests: RepairRequest[];
+
+
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   @Field()

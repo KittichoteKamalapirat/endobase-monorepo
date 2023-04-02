@@ -27,8 +27,6 @@ const RequestRepairEditor = ({ containerClass, onSubmit, defaultValues }: Props)
   const {
     control,
     handleSubmit,
-    register,
-    watch,
     formState: { errors },
   } = useForm<ActionFormValues>({
     defaultValues

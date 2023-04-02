@@ -20,9 +20,7 @@ export class RepairRequest {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
-
   
-
   @Column()
   @Field()
   note: string;

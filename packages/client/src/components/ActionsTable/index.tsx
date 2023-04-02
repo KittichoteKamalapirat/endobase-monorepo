@@ -4,16 +4,19 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable,
+  useTable
 } from "react-table";
 
+import classNames from "classnames";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 import { Action, usePaginatedActionsQuery } from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
 import { GlobalFilter } from "../EndosSettingTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
 import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PaginationControl from "../Table/PaginationControl";
+import SortHeader from "../Table/SortHeader";
 import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
@@ -22,9 +25,6 @@ import THead from "../Table/THead";
 import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { actionColumns } from "./actionColumns";
-import SortHeader from "../Table/SortHeader";
-import { Link, useNavigate } from "react-router-dom";
-import classNames from "classnames";
 
 const ActionsTable = () => {
   const [currPage, setCurrPage] = useState(1);

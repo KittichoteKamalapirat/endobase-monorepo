@@ -4,6 +4,7 @@ import {
   useSessionQuery,
   useUpdateSessionPatientMutation,
 } from "../generated/graphql";
+import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -66,7 +67,7 @@ const PatientForm = ({ containerClass, disabled }: Props) => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="2. Who used this endoscope?" />
+      <SmallHeading heading={getActionLabel("patient")} />
 
       <div className="flex items-end">
         <TextField
@@ -83,6 +84,7 @@ const PatientForm = ({ containerClass, disabled }: Props) => {
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="ml-2.5 w-24"
+          disabled={disabled}
         />
       </div>
     </form>

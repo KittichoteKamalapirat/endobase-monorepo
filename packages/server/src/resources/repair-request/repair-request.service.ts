@@ -5,6 +5,7 @@ import BooleanResponse from '../endos/dto/boolean-response.input';
 import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
 import { OfficersService } from '../officers/officers.service';
+import { SessionsService } from '../sessions/sessions.service';
 import { CreateRepairRequestInput } from './dto/create-repair-request.input';
 import RepairRequestResponse from './dto/repair-request-response';
 import { UpdateRepairRequestInput } from './dto/update-repair-request.input';
@@ -18,13 +19,13 @@ export class RepairRequestService {
     private repairRequestsRepository: Repository<RepairRequest>,
     private officersService: OfficersService,
     private endosService: EndosService,
+  private sessionsService: SessionsService,
     
   ) {}
 
 
   async create(input: CreateRepairRequestInput): Promise<RepairRequestResponse> {
     try {
-
       const existingOfficer = await this.officersService.findOneByofficerNum(
         input.officerNum,
       );
@@ -41,6 +42,8 @@ export class RepairRequestService {
         };
       }
         
+
+      await this.sessionsService.endSessionByEndoId(input.endoId)
       await this.endosService.updateStatus(
         input.endoId,
           ENDO_STATUS_OBJ.OUT_OF_ORDER
@@ -67,13 +70,18 @@ export class RepairRequestService {
   }
 
   findAll() {
-    return this.repairRequestsRepository.find({relations: ["endo", "officer"]})
+    return this.repairRequestsRepository.find({relations: ["endo", "officer" , "endo.tray" , "endo.tray.container"]})
   }
+
+  findAllByEndoId(endoId: string) {
+    return this.repairRequestsRepository.find({where: {endoId}, relations: ["endo", "officer", "endo.tray" , "endo.tray.container"]})
+  }
+
 
   findOne(id: string) {
     return this.repairRequestsRepository.findOne({
       where: {id},
-      relations: ["endo", "officer"]
+      relations: ["endo", "officer", "endo.tray" , "endo.tray.container"]
     })
   }
 

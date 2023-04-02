@@ -1,6 +1,7 @@
 import { BsInboxesFill } from "react-icons/bs";
 import { FaFan } from "react-icons/fa";
 import { GiWaterRecycling } from "react-icons/gi";
+import { IoMdBuild } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
@@ -135,6 +136,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
       return <Button label="Pick" onClick={() => handleUseEndo(endoId)} />;
 
     case ENDO_STATUS.EXPIRED:
+    case ENDO_STATUS.FIXED:
       return (
         <Button
           label="Take out and wash"
@@ -149,34 +151,55 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           onClick={() => handleFinishRepair(endoId)}
           type={ButtonTypes.SECONDARY}
           startIcon={
-            <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />
+            <IoMdBuild size={ICON_SIZE} color={primaryColor} />
           }
         />
       );
 
-    case ENDO_STATUS.FIXED:
-      return (
-        <Button
-          label="Wash"
-          onClick={() => handleUseEndo(endoId)} // will update endoWasOutOfOrder => true in session
-          type={ButtonTypes.SECONDARY}
-          startIcon={
-            <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />
-          }
-        />
-      );
 
-    case ENDO_STATUS.BEING_USED:
+
+    case ENDO_STATUS.taken_out:
     case ENDO_STATUS.EXPIRED_AND_OUT:
-    case ENDO_STATUS.LEAK_TEST_FAILED:
+    case ENDO_STATUS.FIXED_AND_OUT:
+
       return (
         <LinkButton
           leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
-          label="Wash"
+          label="Take out"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
         />
       );
+
+
+
+    case ENDO_STATUS.BEING_USED:
+
+      return (
+        <LinkButton
+          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          label="Bring to Washing Room"
+          href={`/session/${row.original.currentSessionId}`}
+          type={ButtonTypes.SECONDARY}
+        />
+      );
+
+
+
+    case ENDO_STATUS.IN_WASHING_ROOM:
+    case ENDO_STATUS.LEAK_TEST_FAILED:
+      return (
+        <LinkButton
+          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          label="Leak Test"
+          href={`/session/${row.original.currentSessionId}`}
+          type={ButtonTypes.SECONDARY}
+        />
+      );
+
+
+
+
 
     case ENDO_STATUS.LEAK_TEST_PASSED:
     case ENDO_STATUS.DISINFECTION_FAILED:

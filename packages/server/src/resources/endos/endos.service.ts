@@ -150,13 +150,13 @@ export class EndosService {
       // save the new endo
       pickedEndo = await this.endosRepository.save({
         ...endo,
-        status: ENDO_STATUS_OBJ.BEING_USED,
+        status: ENDO_STATUS_OBJ.taken_out,
       });
     } else {
-      // status = "expired"
+      // status = "expired" or 
       pickedEndo = await this.endosRepository.save({
         ...endo,
-        status:  endoWasExpired ? ENDO_STATUS_OBJ.EXPIRED_AND_OUT :  ENDO_STATUS_OBJ.FIXED ,
+        status:  endoWasExpired ? ENDO_STATUS_OBJ.EXPIRED_AND_OUT :  ENDO_STATUS_OBJ.FIXED_AND_OUT  ,
       });
     }
 

@@ -20,6 +20,11 @@ export class RepairRequestResolver {
     return this.repairRequestService.findAll();
   }
 
+  @Query(() => [RepairRequest])
+  repairRequestsByEndo(@Args('endoId') endoId: string) {
+    return this.repairRequestService.findAllByEndoId(endoId);
+  }
+
   @Query(() => RepairRequest)
   repairRequest(@Args('id') id: string) {
     return this.repairRequestService.findOne(id);
@@ -30,9 +35,6 @@ export class RepairRequestResolver {
   updateRepairRequest(@Args('input') input: UpdateRepairRequestInput) {
     return this.repairRequestService.update(input.id, input);
   }
-
-  
-
 
   @Mutation(() => BooleanResponse)
   removeRepairRequest(@Args('id') id: string) {

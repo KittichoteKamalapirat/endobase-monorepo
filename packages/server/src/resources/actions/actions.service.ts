@@ -102,6 +102,18 @@ export class ActionsService {
 
     // update endo status
     switch (input.type) {
+      case ACTION_TYPE_OBJ.TAKE_OUT:
+        await this.endosService.updateStatus(
+          session.endoId,
+          ENDO_STATUS_OBJ.BEING_USED
+        );
+        break;
+      case ACTION_TYPE_OBJ.BRING_TO_WASHING_ROOM:
+        await this.endosService.updateStatus(
+          session.endoId,
+          ENDO_STATUS_OBJ.IN_WASHING_ROOM
+        );
+        break;
       case ACTION_TYPE_OBJ.LEAK_TEST_AND_PREWASH:
         // i need to know which endo
         await this.endosService.updateStatus(
@@ -119,6 +131,7 @@ export class ActionsService {
             : ENDO_STATUS_OBJ.DISINFECTION_FAILED,
         );
         break;
+      
       case ACTION_TYPE_OBJ.STORE:
         await this.endosService.updateStatus(
           session.endoId,

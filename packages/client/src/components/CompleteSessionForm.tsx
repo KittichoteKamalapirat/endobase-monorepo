@@ -14,6 +14,7 @@ import {
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
+import { getActionLabel } from "../utils/getActionStep";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import CheckboxField from "./forms/CheckboxField";
@@ -37,12 +38,10 @@ interface Props {
 
 enum FormNames {
   OFFICER_NUM = "officerNum",
-  PASSED_TEST = "passedTest",
 }
 
 interface FormValues {
   [FormNames.OFFICER_NUM]: string;
-  [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
 }
 
 const initialData = {
@@ -75,16 +74,14 @@ const CompleteSessionForm = ({
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
-    register,
     watch,
     setError,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
 
-  const testPassed = !!watch(FormNames.PASSED_TEST);
 
   const onSubmit = async (data: FormValues) => {
     if (disabled)
@@ -146,7 +143,7 @@ const CompleteSessionForm = ({
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="5. Put back to storage and dry" />
+      <SmallHeading heading={getActionLabel("store")} />
       <div>
         <TextField
           required
@@ -158,15 +155,15 @@ const CompleteSessionForm = ({
           error={errors[FormNames.OFFICER_NUM]}
         />
 
-        <div className="my-2">
+        {/* <div className="my-2">
           <CheckboxField
             {...register(FormNames.PASSED_TEST, { required: true })}
             option={{ value: "no need this", label: "Passed" }}
             isChecked={testPassed}
           />
-        </div>
+        </div> */}
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-4">
           <Button
             label="Blink location"
             buttonType={HTMLButtonType.BUTTON}
@@ -178,7 +175,7 @@ const CompleteSessionForm = ({
           <Button
             label="Save"
             buttonType={HTMLButtonType.SUBMIT}
-            disabled={!testPassed}
+            disabled={!isValid}
           />
         </div>
       </div>

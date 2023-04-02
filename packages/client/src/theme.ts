@@ -61,6 +61,9 @@ export const UNCLICKABLE_CARD_CLASSNAMES = classNames(
 export const BORDER_CLASSNAMES =
   "border-solid rounded-md border-2 border-grey-50 p-6 shadow-md my-4";
 
+  export const CRITICAL_CARD_CLASSNAMES =
+  "border-solid rounded-md border-2 border-red p-6 shadow-md my-4";
+
 export const ACTIVE_PAGE_CLASSNAMES =
   "text-primary-primary font-bold border-solid border-b-2 border-primary-primary rounded-t-md";
 

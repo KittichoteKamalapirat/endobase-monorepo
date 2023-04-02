@@ -1,8 +1,10 @@
 export const ACTION_TYPE_OBJ = {
+  bring_to_washing_room: "Bring to Washing oom",
   leak_test_and_prewash: "Leak Test and Prewash",
   take_out: "Take Out",
   disinfect: "Disinfect",
-  store: "Put back to storage",
+  store: "Put Back to Storage",
+  
 } as const;
 
 export type ACTION_TYPE_VALUES = keyof typeof ACTION_TYPE_OBJ;

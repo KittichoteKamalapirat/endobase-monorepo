@@ -1,18 +1,16 @@
-import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
-import { statusToLabel } from "../utils/statusToLabel";
 import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
-  status: ENDO_STATUS_VALUES
+  wasExpired: boolean
 }
-const NoPatientForm = ({ status }: Props) => {
+const NoPatientForm = ({ wasExpired }: Props) => {
   return (
     <div className="my-8">
-      <SmallHeading heading="2. Patient Detail" />
+      <SmallHeading heading="3. Patient Detail" />
 
       <div>
-        No patient data required because the status of this endoscope is {" "}
-        <span className="font-bold">{statusToLabel[status]}</span> .
+        No patient data required because this endoscope was {" "}
+        <span className="font-bold">{wasExpired ? "Expired" : "Out of Order"}</span> .
       </div>
     </div>
   );

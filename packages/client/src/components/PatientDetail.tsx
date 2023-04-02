@@ -1,4 +1,5 @@
 import { Patient } from "../generated/graphql";
+import { getActionLabel } from "../utils/getActionStep";
 import HDivider from "./layouts/HDivider";
 import SmallHeading from "./typography/SmallHeading";
 
@@ -14,7 +15,7 @@ const PatientDetail = ({ patient }: Props) => {
   return (
     <div>
       <SmallHeading
-        heading="Who used this endoscope?"
+        heading={getActionLabel("patient")}
         extraClass="text-grey-500"
       />
       <div className="flex gap-10 mt-4">

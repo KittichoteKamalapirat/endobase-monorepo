@@ -10,6 +10,8 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
+import { ACTION_TYPE_OBJ } from "../utils/actionTypeToLabel";
+import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
@@ -19,10 +21,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-          Exact<{
-            id: string;
-          }>
-        >
+        Exact<{
+          id: string;
+        }>
+      >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -112,7 +114,7 @@ const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="1. Take Out" />
+      <SmallHeading heading={getActionLabel("take_out")} />
       <div className="flex items-end">
         <TextField
           required

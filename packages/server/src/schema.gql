@@ -225,6 +225,7 @@ type Query {
   user(id: String!): User!
   me: User
   repairRequests: [RepairRequest!]!
+  repairRequestsByEndo(endoId: String!): [RepairRequest!]!
   repairRequest(id: String!): RepairRequest!
 }
 

@@ -1,22 +1,28 @@
+import { IoMdBuild } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
 import LinkButton from "../components/Buttons/LinkButton";
 import EndoDetail from "../components/EndoDetail";
 import Layout from "../components/layouts/Layout";
+import RepairRequestList from "../components/RepairRequestList";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import PageHeading from "../components/typography/PageHeading";
+import { ICON_SIZE } from "../constants";
 import {
   Endo,
   useDeleteEndoMutation,
   useEndoQuery,
-  useEndosQuery
+  useEndosQuery,
+  useFinishRepairMutation
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { urlResolver } from "../lib/UrlResolver";
 import { openConfirm } from "../redux/slices/confirmModalReducer";
 import { showToast } from "../redux/slices/toastReducer";
+import { primaryColor } from "../theme";
+import { ENDO_STATUS } from "../utils/statusToColor";
 
 const EndoPage = () => {
   useIsAuth();
@@ -25,15 +31,55 @@ const EndoPage = () => {
   const endoId = id || "";
   const { data, loading, error } = useEndoQuery({ variables: { id: endoId } });
 
-  const { refetch } = useEndosQuery();
+  const { refetch: refetchEndos } = useEndosQuery();
 
   const [deleteEndo] = useDeleteEndoMutation();
   const dispatch = useDispatch();
+  const [finishRepair] = useFinishRepairMutation()
 
   const navigate = useNavigate();
   // for back button
   const { state } = useLocation();
   const { prev } = state || {}; // read the prev route
+
+
+  const handleFinishRepair = async (id: string) => {
+    try {
+      const result = await finishRepair({
+        variables: {
+          id,
+        },
+      });
+
+      const resultValue = result.data?.finishRepair.id;
+      if (resultValue) {
+        await refetchEndos()
+        dispatch(
+          showToast({
+            message: "Successfully updated the endoscope",
+            variant: "success",
+          })
+        );
+
+        navigate(urlResolver.endos(ENDO_STATUS.FIXED))
+        navigate(0)
+
+
+      } else {
+
+        dispatch(
+          showToast({
+            message: "An error occured",
+            variant: "error",
+          })
+        );
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+
 
   const handleConfirmModal = () =>
     dispatch(
@@ -65,7 +111,7 @@ const EndoPage = () => {
           variant: "success",
         })
       );
-      await refetch(); // update cache after delete
+      await refetchEndos(); // update cache after delete
       navigate(prev ? `${prev}` : "/");
     } else
       dispatch(
@@ -96,11 +142,22 @@ const EndoPage = () => {
         <div className="flex items-center justify-between my-4">
           <PageHeading heading="Endoscope Setting" />
           <div className="flex gap-2">
-            <LinkButton
-              label="Request repair"
-              href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(id)}`}
+            {data?.endo.status === "out_of_order" ? <Button
+              label="Finished Repairing"
+              onClick={() => handleFinishRepair(endoId)}
               type={ButtonTypes.OUTLINED}
+              startIcon={
+                <IoMdBuild size={ICON_SIZE} color={primaryColor} />
+              }
             />
+              : <LinkButton
+                label="Request repair"
+                href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(id)}`}
+                type={ButtonTypes.OUTLINED}
+              />}
+
+
+
 
 
 
@@ -124,6 +181,8 @@ const EndoPage = () => {
 
         <EndoDetail endo={data?.endo as Endo} canBeClicked={false} />
       </div>
+
+      <RepairRequestList endoId={data?.endo.id as string} />
     </Layout>
   );
 };

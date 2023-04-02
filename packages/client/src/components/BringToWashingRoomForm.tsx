@@ -1,4 +1,5 @@
 import { ApolloQueryResult } from "@apollo/client";
+import { useEffect } from "react";
 import { Control, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -11,13 +12,12 @@ import {
 import { showToast } from "../redux/slices/toastReducer";
 import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
-import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
   containerClass?: string;
-  disabled: boolean; // if Leak Test and Prewash are not filled in
+  disabled: boolean;
   refetchEndo: (
     variables?:
       | Partial<
@@ -31,53 +31,46 @@ interface Props {
 
 enum FormNames {
   OFFICER_NUM = "officerNum",
-  PASSED_TEST = "passedTest",
 }
 
 interface FormValues {
   [FormNames.OFFICER_NUM]: string;
-  [FormNames.PASSED_TEST]: string | boolean;
 }
 
 const initialData = {
   officerNum: "",
-  passedTest: false,
 };
-const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
+const BringToWashingRoomForm = ({ refetchEndo, containerClass, disabled }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
-  }); // to update cache
+  });
 
   const {
     control,
-    formState: { errors },
     handleSubmit,
-    watch,
-    setError,
-    register,
+    formState: { errors },
+    setFocus, setError
+
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
 
-  const testPassed = !!watch(FormNames.PASSED_TEST);
-
   const dispatch = useDispatch();
-
   const onSubmit = async (data: FormValues) => {
     if (disabled)
       return setError("officerNum", {
         type: "custom",
-        message: "Please fill in the Leak Test Form first",
+        message: "Please fill in the take out form first",
       });
 
     try {
       if (!sessionId) return;
       const input = {
         sessionId,
-        type: "disinfect",
+        type: "bring_to_washing_room",
         officerNum: data.officerNum,
         passed: true,
       };
@@ -95,8 +88,6 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
       resultUserErrors.map(({ field, message }) => {
         errorMessage += `${message}\n`;
       });
-
-      console.log("error message", errorMessage);
 
       if (resultValue && resultUserErrors.length === 0) {
         dispatch(
@@ -119,9 +110,18 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
       console.log("error", error);
     }
   };
+
+  // This form only shows when it's empty
+  // If it's empty => mean that it's redirected from "Pick" button
+  useEffect(() => {
+    setFocus("officerNum");
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading={getActionLabel("disinfect")} />
+      <SmallHeading heading={getActionLabel("bring_to_washing_room")} />
       <div className="flex items-end">
         <TextField
           required
@@ -137,17 +137,10 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="ml-2.5 w-24"
-          disabled={!testPassed}
-        />
-      </div>
-      <div className="my-2">
-        <CheckboxField
-          {...register(FormNames.PASSED_TEST, { required: true })}
-          option={{ value: "no need this", label: "Passed" }}
-          isChecked={testPassed}
+          disabled={disabled}
         />
       </div>
     </form>
   );
 };
-export default DisinfectForm;
+export default BringToWashingRoomForm;

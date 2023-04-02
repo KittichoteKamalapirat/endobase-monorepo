@@ -17,7 +17,9 @@ import { Tray } from '../../trays/entities/tray.entity';
 export const ENDO_STATUS_OBJ = {
   READY: 'ready',
   EXPIRE_SOON: 'expire_soon',
+  taken_out: "taken_out",
   BEING_USED: 'being_used',
+  IN_WASHING_ROOM: 'in_washing_room',
   EXPIRED: 'expired',
   EXPIRED_AND_OUT: 'expired_and_out', // just for the frontend to know to display wash
   LEAK_TEST_FAILED: 'leak_test_failed',
@@ -27,7 +29,8 @@ export const ENDO_STATUS_OBJ = {
   DRYING: 'drying',
   NO_ENDO: 'no_endo', // No endo in a tray (for writing color)
   OUT_OF_ORDER: "out_of_order",
-  FIXED: "fixed"
+  FIXED: "fixed",
+  FIXED_AND_OUT: "fixed_and_out", // for "take out and wash"
 } as const;
 
 export type ENDO_STATUS_KEYS = keyof typeof ENDO_STATUS_OBJ;
@@ -51,7 +54,9 @@ export type ENDO_STATUS = (typeof ENDO_STATUS_OBJ)[ENDO_STATUS_KEYS];
 export const statusToColor: Record<ENDO_STATUS, number> = {
   [ENDO_STATUS_OBJ.READY]: 2, // green
   [ENDO_STATUS_OBJ.EXPIRE_SOON]: 3, // yellow
+  [ENDO_STATUS_OBJ.taken_out]: 0, // off
   [ENDO_STATUS_OBJ.BEING_USED]: 0, // off
+  [ENDO_STATUS_OBJ.IN_WASHING_ROOM]: 0, // off
   [ENDO_STATUS_OBJ.EXPIRED]: 1, // red
   [ENDO_STATUS_OBJ.EXPIRED_AND_OUT]: 1, // red
   [ENDO_STATUS_OBJ.LEAK_TEST_FAILED]: 0,
@@ -62,6 +67,7 @@ export const statusToColor: Record<ENDO_STATUS, number> = {
   [ENDO_STATUS_OBJ.NO_ENDO]: 0,
   [ENDO_STATUS_OBJ.OUT_OF_ORDER]: 7, // white
   [ENDO_STATUS_OBJ.FIXED]: 5, // pink
+  [ENDO_STATUS_OBJ.FIXED_AND_OUT]: 5,
 };
 @ObjectType()
 @Entity()

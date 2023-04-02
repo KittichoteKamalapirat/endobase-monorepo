@@ -467,6 +467,7 @@ export type Query = {
   patients: Array<Patient>;
   repairRequest: RepairRequest;
   repairRequests: Array<RepairRequest>;
+  repairRequestsByEndo: Array<RepairRequest>;
   session: Session;
   sessions: Array<Session>;
   setting: Setting;
@@ -512,6 +513,11 @@ export type QueryPatientArgs = {
 
 export type QueryRepairRequestArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryRepairRequestsByEndoArgs = {
+  endoId: Scalars['String'];
 };
 
 
@@ -872,6 +878,13 @@ export type RepairRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type RepairRequestsQuery = { __typename?: 'Query', repairRequests: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } }> };
+
+export type RepairRequestsByEndoQueryVariables = Exact<{
+  endoId: Scalars['String'];
+}>;
+
+
+export type RepairRequestsByEndoQuery = { __typename?: 'Query', repairRequestsByEndo: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }, endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string } }> };
 
 export type UpdateRepairRequestMutationVariables = Exact<{
   input: UpdateRepairRequestInput;
@@ -2108,6 +2121,62 @@ export function useRepairRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type RepairRequestsQueryHookResult = ReturnType<typeof useRepairRequestsQuery>;
 export type RepairRequestsLazyQueryHookResult = ReturnType<typeof useRepairRequestsLazyQuery>;
 export type RepairRequestsQueryResult = Apollo.QueryResult<RepairRequestsQuery, RepairRequestsQueryVariables>;
+export const RepairRequestsByEndoDocument = gql`
+    query RepairRequestsByEndo($endoId: String!) {
+  repairRequestsByEndo(endoId: $endoId) {
+    id
+    note
+    officerId
+    officer {
+      id
+      officerNum
+      firstName
+      lastName
+    }
+    endoId
+    endo {
+      id
+      serialNum
+      dryingTime
+      status
+      brand
+      type
+      model
+      lastPutBackISO
+      position
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useRepairRequestsByEndoQuery__
+ *
+ * To run a query within a React component, call `useRepairRequestsByEndoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRepairRequestsByEndoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRepairRequestsByEndoQuery({
+ *   variables: {
+ *      endoId: // value for 'endoId'
+ *   },
+ * });
+ */
+export function useRepairRequestsByEndoQuery(baseOptions: Apollo.QueryHookOptions<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>(RepairRequestsByEndoDocument, options);
+      }
+export function useRepairRequestsByEndoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>(RepairRequestsByEndoDocument, options);
+        }
+export type RepairRequestsByEndoQueryHookResult = ReturnType<typeof useRepairRequestsByEndoQuery>;
+export type RepairRequestsByEndoLazyQueryHookResult = ReturnType<typeof useRepairRequestsByEndoLazyQuery>;
+export type RepairRequestsByEndoQueryResult = Apollo.QueryResult<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>;
 export const UpdateRepairRequestDocument = gql`
     mutation UpdateRepairRequest($input: UpdateRepairRequestInput!) {
   updateRepairRequest(input: $input) {

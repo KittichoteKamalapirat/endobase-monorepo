@@ -22,8 +22,18 @@ const EndoStatusTable2 = ({ endos,
     (endo) =>
       endo.status === ENDO_STATUS.READY || endo.status === ENDO_STATUS.DRYING // Added dyring just in case even thought it wouldn't exist
   ).length;
+
+  const takenOutNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.taken_out
+  ).length;
+
+
   const beingUsedNum = endos.filter(
     (endo) => endo.status === ENDO_STATUS.BEING_USED
+  ).length;
+
+  const inWashingRoomNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.IN_WASHING_ROOM
   ).length;
 
   const leakTestPassedNum = endos.filter(
@@ -54,7 +64,7 @@ const EndoStatusTable2 = ({ endos,
 
   const fixedNum = endos.filter(
     (endo) =>
-      endo.status === ENDO_STATUS.FIXED
+      endo.status === ENDO_STATUS.FIXED || endo.status === ENDO_STATUS.FIXED_AND_OUT
   ).length;
 
 
@@ -94,6 +104,27 @@ const EndoStatusTable2 = ({ endos,
         />
       </div>
 
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.taken_out)}
+      >
+        {/* <div className="col-span-1">Being Used</div> */}
+        <Badge
+          size="md"
+          content={`Taken Out: ${takenOutNum}`}
+          color={
+            activeFilter === ENDO_STATUS.taken_out
+              ? "text-grey-0 border-grey-400"
+              : "text-grey-400 border-grey-400"
+          }
+          isActive={activeFilter === ENDO_STATUS.taken_out}
+          activeColor="bg-grey-400"
+        />
+      </div>
+
+
+
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
         onClick={() => handleFilter(ENDO_STATUS.BEING_USED)}
@@ -111,6 +142,25 @@ const EndoStatusTable2 = ({ endos,
           activeColor="bg-grey-400"
         />
       </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.IN_WASHING_ROOM)}
+      >
+        {/* <div className="col-span-1">Being Used</div> */}
+        <Badge
+          size="md"
+          content={`In Washing Room: ${inWashingRoomNum}`}
+          color={
+            activeFilter === ENDO_STATUS.IN_WASHING_ROOM
+              ? "text-grey-0 border-grey-400"
+              : "text-grey-400 border-grey-400"
+          }
+          isActive={activeFilter === ENDO_STATUS.IN_WASHING_ROOM}
+          activeColor="bg-grey-400"
+        />
+      </div>
+
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"

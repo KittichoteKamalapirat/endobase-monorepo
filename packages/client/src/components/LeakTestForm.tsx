@@ -6,16 +6,20 @@ import {
   EndoQuery,
   Exact,
   useCreateActionMutation,
-  useSessionQuery,
+  useSessionQuery
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
+import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
-import CheckboxField from "./forms/CheckboxField";
+import CreateRequestRepairAction from "./CreateRequestRepair";
+import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
+import SubHeading from "./typography/SubHeading";
 
 interface Props {
   containerClass?: string;
+  endoId: string
   disabled: boolean; // if Take Out Form is not completed yet
   refetchEndo: (
     variables?:
@@ -42,7 +46,7 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
+const LeakTestForm = ({ refetchEndo, containerClass, disabled, endoId }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -63,7 +67,12 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
 
   const dispatch = useDispatch();
 
-  const testPassed = !!watch(FormNames.PASSED_TEST);
+  const { officerNum, passedTest } = watch()
+
+
+  const testIsFailing = passedTest === "false";
+
+
 
   const onSubmit = async (data: FormValues) => {
     if (disabled)
@@ -118,34 +127,43 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading="3. Leak Test" />
-      <div className="flex items-end">
-        <TextField
-          required
-          name={FormNames.OFFICER_NUM}
-          control={control as unknown as Control}
-          label="Officer Number"
-          placeholder="Please insert officer number"
-          type={TextFieldTypes.OUTLINED}
-          error={errors[FormNames.OFFICER_NUM]}
-        />
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
+        <SmallHeading heading={getActionLabel("leak_test_and_prewash")} />
+        <div className="flex items-end">
+          <TextField
+            required
+            name={FormNames.OFFICER_NUM}
+            control={control as unknown as Control}
+            label="Officer Number"
+            placeholder="Please insert officer number"
+            type={TextFieldTypes.OUTLINED}
+            error={errors[FormNames.OFFICER_NUM]}
+          />
 
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="ml-2.5 w-24"
-          disabled={!testPassed}
-        />
-      </div>
-      <div className="my-2">
-        <CheckboxField
-          {...register(FormNames.PASSED_TEST, { required: true })}
-          option={{ value: "true", label: "Passed" }}
-          isChecked={testPassed}
-        />
-      </div>
-    </form>
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="ml-2.5 w-24"
+            disabled={testIsFailing}
+          />
+        </div>
+        <div className="mt-2">
+
+          <RadioField
+            {...register(FormNames.PASSED_TEST, { required: true })}
+            options={[{ value: "true", label: "Passed" }, { value: "false", label: "Failed" }]}
+          />
+        </div>
+
+      </form>
+      {testIsFailing &&
+        <div className="mt-4">
+          <SubHeading heading="Please fill in the form below" fontColor="text-red" />
+          <CreateRequestRepairAction officerNum={officerNum} isCritical endoId={endoId} />
+        </div>}
+
+    </div>
   );
 };
 export default LeakTestForm;

@@ -1,8 +1,8 @@
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
-import CreateRequestRepairAction from "./components/CreateRequestRepairAction";
+import CreateRequestRepairPage from "./components/CreateRequestRepair.page";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
@@ -52,7 +52,7 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
 
           <Route path="/" element={<Home />} />
-          <Route path={urlResolver.requestRepair(":id")} element={<CreateRequestRepairAction />} />
+          <Route path={urlResolver.requestRepair(":id")} element={<CreateRequestRepairPage />} />
           <Route path="containers" element={<Containers />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path={urlResolver.about()} element={<AboutPage />} />

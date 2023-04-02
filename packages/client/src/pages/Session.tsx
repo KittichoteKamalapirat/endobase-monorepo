@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
+import BringToWashingRoomForm from "../components/BringToWashingRoomForm";
 import { ButtonTypes } from "../components/Buttons/Button";
 import LinkButton from "../components/Buttons/LinkButton";
 import CompleteSessionForm from "../components/CompleteSessionForm";
@@ -21,12 +22,11 @@ import {
   Endo,
   Patient,
   useEndoQuery,
-  useSessionQuery,
+  useSessionQuery
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 import { CARD_CLASSNAMES } from "../theme";
-import { ENDO_STATUS_VALUES } from "../utils/statusToColor";
 
 const Session = () => {
   useIsAuth();
@@ -41,6 +41,7 @@ const Session = () => {
     variables: { id: sessionId },
   });
 
+
   const {
     data: endoData,
     loading: endoLoading,
@@ -51,7 +52,11 @@ const Session = () => {
   const { patientId, actions, patient } = data?.session || {};
 
   const takeOutAction = actions?.find(
-    (action) => action.type === "take_out" && action.passed
+    (action) => action.type === "take_out"
+  );
+
+  const bringToWashingRoomAction = actions?.find(
+    (action) => action.type === "bring_to_washing_room"
   );
 
   const leakTestAction = actions?.find(
@@ -63,6 +68,27 @@ const Session = () => {
   const storeAction = actions?.find((action) => action.type === "store");
 
   const dispatch = useDispatch();
+
+  const noNeedPatient = data?.session.endoWasExpired || data?.session.endoWasOutOfOrder
+
+  // hide if (don't have patient when patient is needed)
+  // and no previous actions
+  const disabledBringToWashingRoom = !takeOutAction
+  const disabledPatientForm = noNeedPatient || !(takeOutAction && bringToWashingRoomAction)
+  const disabledLeakTestForm = (!noNeedPatient && !patient) || !(takeOutAction && bringToWashingRoomAction)
+  const disabledDisinfectionForm = (!noNeedPatient && !patient) || !(takeOutAction && bringToWashingRoomAction && leakTestAction)
+  const disabledCompleteSessionForm = (!noNeedPatient && !patient) || !(takeOutAction && bringToWashingRoomAction && leakTestAction && disinfectAction)
+
+
+
+
+  console.log('data', data)
+  console.log('noNeedPatient', noNeedPatient)
+  console.log('patient', patient)
+  console.log('leakTestAction', leakTestAction)
+  console.log('takeOutAction', takeOutAction)
+  console.log('bringToWashingRoomAction', bringToWashingRoomAction,)
+  console.log('disabledDisinfectionForm', disabledDisinfectionForm,)
 
   useEffect(() => {
     if (
@@ -127,16 +153,25 @@ const Session = () => {
         ) : (
           <TakeOutForm containerClass="my-4" refetchEndo={refetchEndo} />
         )}
+
+
+        {/* 1 */}
+        {bringToWashingRoomAction ? (
+          <ActivityItem action={bringToWashingRoomAction as Partial<Action>} />
+        ) : (
+          !disabledBringToWashingRoom && <BringToWashingRoomForm containerClass="my-4" refetchEndo={refetchEndo} disabled={disabledBringToWashingRoom} />
+        )}
+
         {/* 2 */}
 
         {data?.session.endoWasExpired || data?.session.endoWasOutOfOrder ? (
-          <NoPatientForm status={data.session.endo.status as ENDO_STATUS_VALUES} />
+          takeOutAction && bringToWashingRoomAction && <NoPatientForm wasExpired={data.session.endoWasExpired} />
         ) : (
           <div id="patient-details">
             {patientId ? (
               <PatientDetail patient={patient as Patient} />
             ) : (
-              <PatientForm containerClass="my-4" disabled={!takeOutAction} />
+              !disabledPatientForm && <PatientForm containerClass="my-4" disabled={disabledPatientForm} />
             )}
           </div>
         )}
@@ -145,31 +180,32 @@ const Session = () => {
         {leakTestAction ? (
           <ActivityItem action={leakTestAction as Partial<Action>} />
         ) : (
-          <LeakTestForm
+          !disabledLeakTestForm && <LeakTestForm
             containerClass="my-4"
+            endoId={data?.session.endoId!}
             refetchEndo={refetchEndo}
-            disabled={!(takeOutAction && patient)}
+            disabled={disabledLeakTestForm}
           />
         )}
         {/* 4 */}
         {disinfectAction ? (
           <ActivityItem action={disinfectAction as Partial<Action>} />
         ) : (
-          <DisinfectForm
+          !disabledDisinfectionForm && <DisinfectForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
-            disabled={!(patient && takeOutAction && leakTestAction)}
+            disabled={disabledDisinfectionForm}
           />
         )}
         {/* 5 */}
         {storeAction ? (
           <ActivityItem action={storeAction as Partial<Action>} />
         ) : (
-          <CompleteSessionForm
+          !disabledCompleteSessionForm && <CompleteSessionForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
             endo={endoData?.endo as Endo}
-            disabled={!(takeOutAction && leakTestAction && disinfectAction)}
+            disabled={disabledCompleteSessionForm}
           />
         )}
       </div>

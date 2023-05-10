@@ -32,7 +32,7 @@ export const columnToArduinoIdMapper = {
 
     a: 6, // start from arduino 1
     b: 5,
-    c: 7,
+    // c: 7,
     d: 4,
     e: 3,
     f: 1,

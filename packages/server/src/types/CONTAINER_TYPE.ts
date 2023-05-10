@@ -7,7 +7,7 @@ import { SerialPort } from 'serialport';
 export const CONTAINER_TYPE_OBJ = {
   a: 'A',
   b: 'B',
-  c: 'C',
+  // c: 'C',
   d: 'D',
   e: 'E',
   f: 'F',

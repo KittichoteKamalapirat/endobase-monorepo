@@ -28,7 +28,9 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/");
+    if (process.env.REACT_APP_ENVIRONMENT !== "showcase")
+      navigate(urlResolver.login(), { replace: true });
+    else navigate(urlResolver.landing(), { replace: true });
     await apolloClient.resetStore();
   };
 

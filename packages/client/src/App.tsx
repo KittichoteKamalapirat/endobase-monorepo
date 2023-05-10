@@ -1,11 +1,12 @@
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import ContainerSnapshotDetailsButton from "./components/ContainerSnapshotDetailsButton";
 import ConfirmModal from "./components/modals/ConfirmModal";
 import Modal from "./components/modals/Modal";
 import SubscribeToOverHumOrTemp from "./hooks/SubscribeToOverHumOrTemp";
 import { urlResolver } from "./lib/UrlResolver";
+import AboutPage from "./pages/About.page";
 import Actions from "./pages/Actions";
 import Admin from "./pages/Admin";
 import AdminDbPage from "./pages/AdminDb.page";
@@ -17,6 +18,7 @@ import EditEndo from "./pages/EditEndo";
 import EditOfficerPage from "./pages/EditOfficer.page";
 import EndoPage from "./pages/Endo";
 import Home from "./pages/Home";
+import LandingPage from "./pages/Landing.page";
 import LoginPage from "./pages/Login";
 import Session from "./pages/Session";
 import { closeAlertModal } from "./redux/slices/alertModalReducer";
@@ -46,9 +48,12 @@ function App() {
 
           <Route path="/nimda/officer/:id/edit" element={<EditOfficerPage />} />
 
+          <Route path="/landing" element={<LandingPage />} />
+
           <Route path="/" element={<Home />} />
           <Route path="containers" element={<Containers />} />
-          <Route path="login" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path={urlResolver.about()} element={<AboutPage />} />
           {/* <Route path="snapshots" element={<Snapshots />} /> */}
           <Route path="setting" element={<ConfigSetting />} />
           <Route path="activities" element={<Actions />} />

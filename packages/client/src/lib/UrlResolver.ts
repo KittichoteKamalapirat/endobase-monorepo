@@ -1,5 +1,3 @@
-import { config } from "../constants";
-
 class UrlResolver {
   index() {
     return "/"; //http://localhost:3000
@@ -7,17 +5,21 @@ class UrlResolver {
 
   // API
   graphql() {
-    return config.graphqlHttpEndpoint;
+    // return config.graphqlHttpEndpoint;
+    return process.env.REACT_APP_GRAPHQL_HTTP_ENDPOINT as string;
   }
 
   graphqlSocket() {
-    // return `ws://192.168.1.66:4001/graphql`;
-    // return `http://localhost:4000/graphql`;
-    return config.graphqlSocketEndpoint;
+    // return config.graphqlSocketEndpoint;
+    return process.env.REACT_APP_GRAPHQL_WEB_SOCKET_ENDPOINT as string;
   }
 
   admin() {
     return "/nimda";
+  }
+
+  about() {
+    return "/about";
   }
 
   adminDb() {
@@ -34,6 +36,14 @@ class UrlResolver {
 
   editOfficer(id: string) {
     return `/nimda/officer/${id}/edit`;
+  }
+
+  login() {
+    return "/login";
+  }
+
+  landing() {
+    return "/landing";
   }
 }
 

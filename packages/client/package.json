@@ -33,7 +33,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "set PORT=3001 && react-scripts start",
+    "dev:win": "react-scripts start",
+    "dev:mac": "react-scripts start",
+    "dev:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",
+    "start:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",
     "prod-start": "react-scripts start",
     "build": "react-scripts build",
     "prod-static": "serve -l 80 -s build",

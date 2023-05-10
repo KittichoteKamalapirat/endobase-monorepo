@@ -22,14 +22,11 @@ import { SettingModule } from './setting/setting.module';
 import { EndoCronsModule } from './resources/endo-crons/endo-crons.module';
 import { ConfigModule } from '@nestjs/config';
 import { AdminModule } from './resources/admin/admin.module';
+import { EnvKey, getEnvPath } from './utils/getEnvPath';
 
-// could be "mac-dev", "win-dev", "wind-prod"
-const ENV = process.env.NODE_ENV;
-
-const envPath = (() => {
-  if (ENV === 'production') return '.env.production';
-  return '.env.development'; // no env or env===prod
-})();
+const ENV = process.env.NODE_ENV as EnvKey;
+console.log('env',process.env)
+const envPath = getEnvPath(ENV);
 
 @Module({
   imports: [
@@ -43,10 +40,8 @@ const envPath = (() => {
         origin: [
           'http://localhost:3000',
           'http://localhost:3001',
-          'http://localhost',
-          'http://192.168.1.200',
-          'http://192.168.0.100', // just in case
-        ], // in url bar: "endosupply/", "localhost"
+          process.env.CORS_ORIGIN,
+        ],
         credentials: true,
       },
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -58,9 +53,6 @@ const envPath = (() => {
       },
 
       context: ({ req, res }) => {
-        // get the cookie from the request
-        // verify the cookie
-        // attach the user object to the request object
         return { req, res };
       },
     }),

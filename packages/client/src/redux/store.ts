@@ -4,6 +4,7 @@ import alertModalReducer from "./slices/alertModalReducer";
 import confirmModalReducer from "./slices/confirmModalReducer";
 import saveCountReducer from "./slices/saveCountReducer";
 import toastReducer from "./slices/toastReducer";
+import filterReducer from "./slices/filterReducer";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     confirmModal: confirmModalReducer,
     saveCount: saveCountReducer,
     toast: toastReducer,
+    filter: filterReducer,
   },
 });
 

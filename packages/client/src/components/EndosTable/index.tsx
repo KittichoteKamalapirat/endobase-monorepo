@@ -41,6 +41,9 @@ import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { EndosGlobalFilter } from "./EndosGlobalFilter";
 import Badge from "../Badge";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { updateFilter } from "../../redux/slices/filterReducer";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -80,7 +83,14 @@ const EndosTable = () => {
   );
 
   const isLargerThanBreakpoint = useScreenIsLargerThan("md");
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  // const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
+  const { pageIndex: currentPageIndex } = useSelector(
+    (state: RootState) => state.filter
+  );
+
+  console.log("currentPageIndex", currentPageIndex);
+  const dispatch = useDispatch();
 
   const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[]);
 
@@ -169,7 +179,7 @@ const EndosTable = () => {
   }
 
   const handleSelectContainer = (pageIndex: number) => {
-    setCurrentPageIndex(pageIndex);
+    dispatch(updateFilter({ pageIndex }));
   };
   // useEffect(() => {
   //   setFilter(defaultFilter)
@@ -273,10 +283,10 @@ const EndosTable = () => {
 
         <ManualPaginationControl
           nextPage={() => {
-            setCurrentPageIndex(currentPageIndex + 1);
+            dispatch(updateFilter({ pageIndex: pageIndex + 1 }));
           }}
           previousPage={() => {
-            setCurrentPageIndex(currentPageIndex - 1);
+            dispatch(updateFilter({ pageIndex: pageIndex - 1 }));
           }}
           canNextPage={currentPageIndex + 1 < CONTAINER_NUM}
           canPreviousPage={currentPageIndex > 0}

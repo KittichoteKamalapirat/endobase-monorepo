@@ -102,10 +102,10 @@ const EndosTable = () => {
   const columns = useMemo<Column[]>(() => {
     if (refetchCounter === 0) {
       return endoColumns({
-        currentPageIndex,
         pickEndo,
         refetchEndos: refetch,
         isLargerThanBreakpoint,
+        currentPageIndex,
         status: activeFilter,
         globalFilter: globalFilterValue,
       }) as any;
@@ -128,6 +128,7 @@ const EndosTable = () => {
     globalFilterValue,
   ]);
 
+  console.log("columns", columns);
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
     return sortedEndos || [];
@@ -146,6 +147,7 @@ const EndosTable = () => {
     pageOptions, // for getting all pages num
     setPageSize, // for customize pageSize
     // pagination ends
+    rows,
     gotoPage,
     prepareRow,
     state: { pageIndex, globalFilter, pageSize }, // table state
@@ -154,7 +156,7 @@ const EndosTable = () => {
     {
       columns,
       data,
-      initialState: { pageSize: 16 },
+      initialState: { pageSize: 100 },
     },
     useFilters,
     useGlobalFilter,
@@ -171,12 +173,24 @@ const EndosTable = () => {
     if (currentPageIndex !== 0) gotoPage(currentPageIndex);
   }, [refetch, columns, pageIndex]);
 
-  if (loading || settingsLoading) {
+  if (loading || settingsLoading || containerLoading) {
     return <RowsSkeleton />;
   }
-  if (error || settingsError) {
-    return <Error text={error?.message || settingsError?.message || ""} />;
+  if (error || settingsError || containerError) {
+    return (
+      <Error
+        text={
+          error?.message ||
+          settingsError?.message ||
+          containerError?.message ||
+          ""
+        }
+      />
+    );
   }
+
+  const isPagination = activeFilter === "ready";
+  const pageRows = isPagination ? page : rows;
 
   const handleSelectContainer = (pageIndex: number) => {
     dispatch(updateFilter({ pageIndex }));
@@ -281,21 +295,23 @@ const EndosTable = () => {
           className="mt-4"
         /> */}
 
-        <ManualPaginationControl
-          nextPage={() => {
-            dispatch(updateFilter({ pageIndex: pageIndex + 1 }));
-          }}
-          previousPage={() => {
-            dispatch(updateFilter({ pageIndex: pageIndex - 1 }));
-          }}
-          canNextPage={currentPageIndex + 1 < CONTAINER_NUM}
-          canPreviousPage={currentPageIndex > 0}
-          pageNum={CONTAINER_NUM}
-          currPage={currentPageIndex + 1}
-          pageSize={CONTAINER_CAPACITY}
-          totalItemsCount={CONTAINER_NUM * CONTAINER_CAPACITY}
-          className="mt-4"
-        />
+        {isPagination && (
+          <ManualPaginationControl
+            nextPage={() => {
+              dispatch(updateFilter({ pageIndex: currentPageIndex + 1 }));
+            }}
+            previousPage={() => {
+              dispatch(updateFilter({ pageIndex: currentPageIndex - 1 }));
+            }}
+            canNextPage={currentPageIndex + 1 < CONTAINER_NUM}
+            canPreviousPage={currentPageIndex > 0}
+            pageNum={CONTAINER_NUM}
+            currPage={currentPageIndex + 1}
+            pageSize={CONTAINER_CAPACITY}
+            totalItemsCount={CONTAINER_NUM * CONTAINER_CAPACITY}
+            className="mt-4"
+          />
+        )}
       </div>
       <Table {...getTableProps()}>
         <THead>
@@ -321,10 +337,10 @@ const EndosTable = () => {
           ))}
         </THead>
         <TBody {...getTableBodyProps}>
-          {page.map((row, index) => {
+          {pageRows.map((row, index) => {
             prepareRow(row);
 
-            const rowStatus = (page[index].original as Endo)
+            const rowStatus = (pageRows[index].original as Endo)
               .status as ENDO_STATUS_VALUES;
             const rowColor = statusToBgColor[rowStatus];
 

@@ -111,7 +111,7 @@ export class EndosService {
     if (
       endo.status !== 'ready' &&
       endo.status !== 'expire_soon' &&
-      endo.status !== 'expired'&& 
+      endo.status !== 'expired' &&
       endo.status !== 'fixed'
     )
       return new Error(
@@ -122,8 +122,12 @@ export class EndosService {
 
     // create a session
     const endoWasExpired = endo.status === 'expired';
-    const endoWasOutOfOrder = endo.status === "fixed"
-    await this.sessionsService.create({ endoId: id, endoWasExpired, endoWasOutOfOrder });
+    const endoWasOutOfOrder = endo.status === 'fixed';
+    await this.sessionsService.create({
+      endoId: id,
+      endoWasExpired,
+      endoWasOutOfOrder,
+    });
     // create an action (take_out)
     // await this.actionsService.create({
     //   sessionId: session.id,
@@ -153,10 +157,12 @@ export class EndosService {
         status: ENDO_STATUS_OBJ.taken_out,
       });
     } else {
-      // status = "expired" or 
+      // status = "expired" or
       pickedEndo = await this.endosRepository.save({
         ...endo,
-        status:  endoWasExpired ? ENDO_STATUS_OBJ.EXPIRED_AND_OUT :  ENDO_STATUS_OBJ.FIXED_AND_OUT  ,
+        status: endoWasExpired
+          ? ENDO_STATUS_OBJ.EXPIRED_AND_OUT
+          : ENDO_STATUS_OBJ.FIXED_AND_OUT,
       });
     }
 
@@ -255,7 +261,7 @@ export class EndosService {
     // create a new session
 
     await this.sessionsService.endSessionByEndoId(id);
-    await this.updateStatus(id, 'being_used');
+    await this.updateStatus(id, 'taken_out');
     const newSession = await this.sessionsService.create({
       endoId: id,
       endoWasExpired: false,
@@ -264,10 +270,6 @@ export class EndosService {
 
     return newSession;
   }
-
-
-  
-
 
   // for admin
   async removeAllRows() {

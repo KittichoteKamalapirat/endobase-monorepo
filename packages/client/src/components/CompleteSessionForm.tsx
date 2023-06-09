@@ -2,7 +2,7 @@ import { ApolloQueryResult } from "@apollo/client";
 import { Control, useForm } from "react-hook-form";
 import { TbBulb } from "react-icons/tb";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ICON_SIZE } from "../constants";
 import {
   Endo,
@@ -10,7 +10,9 @@ import {
   Exact,
   useBlinkLocationMutation,
   useCreateActionMutation,
+  useEndosQuery,
   useSessionQuery,
+  useWashWithoutStoringMutation,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { primaryColor } from "../theme";
@@ -28,10 +30,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -55,10 +57,12 @@ const CompleteSessionForm = ({
   disabled,
 }: Props) => {
   const { id: sessionId } = useParams();
+  const [washWithoutStoring] = useWashWithoutStoringMutation();
   const [createAction] = useCreateActionMutation();
   const [blinkLocation] = useBlinkLocationMutation();
-
-  const { refetch } = useSessionQuery({
+  const { refetch: refetchEndos } = useEndosQuery();
+  const navigate = useNavigate();
+  const { refetch, data } = useSessionQuery({
     variables: { id: sessionId || "" },
   }); // to update cache
 
@@ -82,6 +86,24 @@ const CompleteSessionForm = ({
     defaultValues: initialData,
   });
 
+  const handleUseWithoutStoring = async (id: string) => {
+    try {
+      const result = await washWithoutStoring({ variables: { id } });
+
+      const sessionId = result.data?.washWithoutStoring.id;
+      await refetchEndos();
+      navigate(`/session/${sessionId}`, {
+        state: { prev: "/" },
+      });
+    } catch (error) {
+      dispatch(
+        showToast({
+          message: "An error occured!",
+          variant: "error",
+        })
+      );
+    }
+  };
 
   const onSubmit = async (data: FormValues) => {
     if (disabled)
@@ -164,13 +186,23 @@ const CompleteSessionForm = ({
         </div> */}
 
         <div className="flex gap-2 mt-4">
-          <Button
+          {/* <Button
             label="Blink location"
             buttonType={HTMLButtonType.BUTTON}
             type={ButtonTypes.OUTLINED}
             onClick={() => handleBlinkLocation("ready")}
             startIcon={<TbBulb color={primaryColor} size={ICON_SIZE + 10} />}
-          />
+          /> */}
+
+          {data?.session.endoId && (
+            <Button
+              label="Use Again"
+              buttonType={HTMLButtonType.BUTTON}
+              disabled={!isValid}
+              type={ButtonTypes.OUTLINED}
+              onClick={() => handleUseWithoutStoring(data.session.endoId)}
+            />
+          )}
 
           <Button
             label="Save"

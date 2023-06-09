@@ -10,7 +10,7 @@ interface Props {
   onSubmit: (data: PatientFormValues) => void;
   containerClass?: string;
   disabled: boolean; // if Take Out Form is not completed yet
-  isEditing?: boolean
+  isEditing?: boolean;
 }
 
 enum FormNames {
@@ -23,9 +23,13 @@ export interface PatientFormValues {
   [FormNames.ADMIN_CREDENTIAL]?: string;
 }
 
-
-const PatientEditor = ({ defaultValues, onSubmit, isEditing = false, containerClass, disabled }: Props) => {
-
+const PatientEditor = ({
+  defaultValues,
+  onSubmit,
+  isEditing = false,
+  containerClass,
+  disabled,
+}: Props) => {
   const {
     control,
     handleSubmit,
@@ -35,10 +39,9 @@ const PatientEditor = ({ defaultValues, onSubmit, isEditing = false, containerCl
   });
 
   const validateField = (value: string) => {
-    if (value !== "Admin") return false
+    if (value !== "Admin") return false;
     return true;
   };
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
@@ -56,19 +59,20 @@ const PatientEditor = ({ defaultValues, onSubmit, isEditing = false, containerCl
           error={errors[FormNames.PATIENT_HN_NUM]}
         />
 
-        {isDirty && isEditing && <TextField
-          required
-          name={FormNames.ADMIN_CREDENTIAL}
-          control={control as unknown as Control}
-          label="Admin Credential"
-          placeholder="Please insert a credential"
-          type={TextFieldTypes.OUTLINED}
-          extraClass="w-full"
-          validation={{ validate: validateField }}
-          inputType={InputType.Password}
-          error={errors[FormNames.ADMIN_CREDENTIAL]}
-        />
-        }
+        {isDirty && isEditing && (
+          <TextField
+            required
+            name={FormNames.ADMIN_CREDENTIAL}
+            control={control as unknown as Control}
+            label="Admin Credential"
+            placeholder="Please insert a credential"
+            type={TextFieldTypes.OUTLINED}
+            extraClass="w-full"
+            validation={{ validate: validateField }}
+            inputType={InputType.Password}
+            error={errors[FormNames.ADMIN_CREDENTIAL]}
+          />
+        )}
 
         <Button
           label="Save"

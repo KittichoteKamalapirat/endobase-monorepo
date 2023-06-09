@@ -6,7 +6,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "react-tooltip/dist/react-tooltip.css";
 import { ICON_SIZE } from "../../constants";
-import { useFinishRepairMutation, useWashWithoutStoringMutation } from "../../generated/graphql";
+import {
+  useFinishRepairMutation,
+  useWashWithoutStoringMutation,
+} from "../../generated/graphql";
 import { urlResolver } from "../../lib/UrlResolver";
 import { showToast } from "../../redux/slices/toastReducer";
 import { primaryColor } from "../../theme";
@@ -24,7 +27,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   const navigate = useNavigate();
 
   const [washWithoutStoring] = useWashWithoutStoringMutation();
-  const [finishRepair] = useFinishRepairMutation()
+  const [finishRepair] = useFinishRepairMutation();
 
   const handleUseEndo = async (id: string) => {
     try {
@@ -51,7 +54,6 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     }
   };
 
-
   const handleFinishRepair = async (id: string) => {
     try {
       const result = await finishRepair({
@@ -62,7 +64,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
       const resultValue = result.data?.finishRepair.id;
       if (resultValue) {
-        await refetchEndos()
+        await refetchEndos();
         dispatch(
           showToast({
             message: "Successfully updated the endoscope",
@@ -70,12 +72,9 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           })
         );
 
-        navigate(urlResolver.endos(ENDO_STATUS.FIXED))
-        navigate(0)
-
-
+        navigate(urlResolver.endos(ENDO_STATUS.FIXED));
+        navigate(0);
       } else {
-
         dispatch(
           showToast({
             message: "An error occured",
@@ -88,9 +87,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     }
   };
 
-
-
-  const handleRewash = async (id: string) => {
+  const handleUseWithoutStoring = async (id: string) => {
     try {
       const result = await washWithoutStoring({ variables: { id } });
 
@@ -109,8 +106,6 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     }
   };
 
-
-
   // 'ready', => use
   // 'expire_soon', => use
   //  'being_used', => wash
@@ -126,8 +121,9 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
   const isResponding = row.original.tray.container.isResponding;
 
-  if (process.env.REACT_APP_ENVIRONMENT !== "showcase" && !isResponding)
-    return <div className="text-grey-500">Offline</div>;
+  // TODO: uncomment this
+  // if (process.env.REACT_APP_ENVIRONMENT !== "showcase" && !isResponding)
+  //   return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
@@ -149,18 +145,13 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           label="Finished Repairing"
           onClick={() => handleFinishRepair(endoId)}
           type={ButtonTypes.SECONDARY}
-          startIcon={
-            <IoMdBuild size={ICON_SIZE} color={primaryColor} />
-          }
+          startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
         />
       );
-
-
 
     case ENDO_STATUS.taken_out:
     case ENDO_STATUS.EXPIRED_AND_OUT:
     case ENDO_STATUS.FIXED_AND_OUT:
-
       return (
         <LinkButton
           leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
@@ -170,10 +161,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
         />
       );
 
-
-
     case ENDO_STATUS.BEING_USED:
-
       return (
         <LinkButton
           leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
@@ -182,8 +170,6 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           type={ButtonTypes.SECONDARY}
         />
       );
-
-
 
     case ENDO_STATUS.IN_WASHING_ROOM:
     case ENDO_STATUS.LEAK_TEST_FAILED:
@@ -195,10 +181,6 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           type={ButtonTypes.SECONDARY}
         />
       );
-
-
-
-
 
     case ENDO_STATUS.LEAK_TEST_PASSED:
     case ENDO_STATUS.DISINFECTION_FAILED:
@@ -223,8 +205,8 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
           />
           {/* Combine Use and wash */}
           <Button
-            label="Rewash"
-            onClick={() => handleRewash(endoId)}
+            label="Use again"
+            onClick={() => handleUseWithoutStoring(endoId)}
             type={ButtonTypes.SECONDARY}
             startIcon={
               <GiWaterRecycling size={ICON_SIZE} color={primaryColor} />

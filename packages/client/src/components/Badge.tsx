@@ -7,6 +7,7 @@ interface Props {
   isActive?: boolean;
   activeColor?: string;
   size?: "sm" | "md";
+  onClick?: (...args: any[]) => void;
 }
 
 const Badge = ({
@@ -16,10 +17,11 @@ const Badge = ({
   activeColor = "",
   size = "sm",
   color = "text-primary-primary border-primary-primary",
+  onClick = () => {},
 }: Props) => {
   const commonClassName = "font-bold  border-[1px] border-solid rounded-md ";
   return (
-    <div aria-label={`badge-${content}`}>
+    <div aria-label={`badge-${content}`} onClick={onClick}>
       <span
         className={classNames(
           commonClassName,

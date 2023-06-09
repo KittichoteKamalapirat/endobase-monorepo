@@ -48,7 +48,7 @@ export class SerialportsService implements OnModuleInit {
     ); // make all fale by default
 
     if (process.env.NODE_ENV !== 'showcase') {
-      await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
+      // await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
       await this.settingService.initSetting();
     }
   }
@@ -271,7 +271,7 @@ export class SerialportsService implements OnModuleInit {
       this.writeColor({
         col: col,
         row: row,
-        endoStatus: toBlinkCounter % 2 === 0 ? "drying" : 'being_used', // ฟ้าสลับกับ
+        endoStatus: toBlinkCounter % 2 === 0 ? 'drying' : 'being_used', // ฟ้าสลับกับ
       });
 
       toBlinkCounter--;

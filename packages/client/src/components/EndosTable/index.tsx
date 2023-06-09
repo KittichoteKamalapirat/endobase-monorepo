@@ -6,13 +6,14 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from "react-table";
 import {
   Endo,
+  useContainersQuery,
   useEndosQuery,
   usePickEndoMutation,
-  useSettingsQuery
+  useSettingsQuery,
 } from "../../generated/graphql";
 
 import { FaRegHospital } from "react-icons/fa";
@@ -39,6 +40,7 @@ import TR from "../Table/TR";
 import PageHeading from "../typography/PageHeading";
 import { endoColumns } from "./endoColumns";
 import { EndosGlobalFilter } from "./EndosGlobalFilter";
+import Badge from "../Badge";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -50,16 +52,25 @@ const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
 
-  const initialStatus = useQueryParam("status") as ENDO_STATUS_VALUES || "";
+  const initialStatus = (useQueryParam("status") as ENDO_STATUS_VALUES) || "";
 
-  const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(initialStatus);
-  const [globalFilterValue, setGlobalFilterValue] = useState("")
+  const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(
+    initialStatus
+  );
+
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
 
   const {
     data: settingsData,
     loading: settingsLoading,
     error: settingsError,
   } = useSettingsQuery();
+
+  const {
+    data: containersData,
+    loading: containerLoading,
+    error: containerError,
+  } = useContainersQuery();
 
   const hospitalName = useMemo(
     () =>
@@ -77,9 +88,6 @@ const EndosTable = () => {
   const [pickEndo] = usePickEndoMutation();
   const refetchCounter = useRefetchCounter(refetch);
 
-
-  console.log('currentPageIndex', currentPageIndex)
-
   // the lib recommedns to use useMemo
   const columns = useMemo<Column[]>(() => {
     if (refetchCounter === 0) {
@@ -89,10 +97,9 @@ const EndosTable = () => {
         refetchEndos: refetch,
         isLargerThanBreakpoint,
         status: activeFilter,
-        globalFilter: globalFilterValue
-      }) as any
+        globalFilter: globalFilterValue,
+      }) as any;
     }
-
 
     return endoColumns({
       pickEndo,
@@ -100,9 +107,16 @@ const EndosTable = () => {
       isLargerThanBreakpoint,
       currentPageIndex,
       status: activeFilter,
-      globalFilter: globalFilterValue
+      globalFilter: globalFilterValue,
     }) as any;
-  }, [pickEndo, refetch, isLargerThanBreakpoint, currentPageIndex, activeFilter, globalFilterValue]);
+  }, [
+    pickEndo,
+    refetch,
+    isLargerThanBreakpoint,
+    currentPageIndex,
+    activeFilter,
+    globalFilterValue,
+  ]);
 
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
@@ -139,9 +153,8 @@ const EndosTable = () => {
   );
 
   useEffect(() => {
-    setGlobalFilterValue(globalFilter as string)
-  }, [globalFilter, setGlobalFilterValue])
-
+    setGlobalFilterValue(globalFilter as string);
+  }, [globalFilter, setGlobalFilterValue]);
 
   // if change page number => filter to only that column
   useEffect(() => {
@@ -155,8 +168,9 @@ const EndosTable = () => {
     return <Error text={error?.message || settingsError?.message || ""} />;
   }
 
-
-
+  const handleSelectContainer = (pageIndex: number) => {
+    setCurrentPageIndex(pageIndex);
+  };
   // useEffect(() => {
   //   setFilter(defaultFilter)
   // }, [setFilter, defaultFilter])
@@ -198,8 +212,7 @@ const EndosTable = () => {
               // setGlobalFilterValue={setGlobalFilterValue}
               filter={globalFilter}
               setFilter={setGlobalFilter}
-            // data={data}
-
+              // data={data}
             />
           </div>
 
@@ -207,20 +220,35 @@ const EndosTable = () => {
             {endosData?.endos && endosData?.endos.length > 0 && (
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
-                // setFilter={setGlobalFilter}
                 activeFilter={activeFilter}
                 setActiveFilter={setActiveFilter}
-
               />
             )}
           </div>
-
-
         </div>
       </div>
-
+      {/* container buttons */}
+      <div className={`grid grid-cols-${containersData?.containers.length}`}>
+        {containersData?.containers
+          .slice()
+          .sort((a, b) => (a.col === b.col ? 0 : a.col < b.col ? -1 : 1))
+          .map((container, index) => (
+            <Badge
+              key={`container-${index}`}
+              onClick={() => handleSelectContainer(index)}
+              size="md"
+              content={`Container ${container.col.toUpperCase()}`}
+              color={
+                index === currentPageIndex
+                  ? "text-grey-0 border-primary"
+                  : "text-grey-400 border-grey-400"
+              }
+              isActive={index === currentPageIndex}
+              activeColor="bg-primary"
+            />
+          ))}
+      </div>
       <div className="flex justify-between items-end">
-
         {/* only this component will get updated every seconds */}
         <CounterIndicator refetch={refetch} />
 
@@ -258,13 +286,7 @@ const EndosTable = () => {
           totalItemsCount={CONTAINER_NUM * CONTAINER_CAPACITY}
           className="mt-4"
         />
-
-
-
-
       </div>
-
-
       <Table {...getTableProps()}>
         <THead>
           {headerGroups.map((group, index) => (
@@ -275,7 +297,6 @@ const EndosTable = () => {
                   key={index}
                 >
                   <div className="flex gap-2 items-center">
-
                     {col.render("Header")}
 
                     <SortHeader
@@ -283,7 +304,7 @@ const EndosTable = () => {
                       isSortedDesc={col.isSortedDesc}
                     />
                   </div>
-                  {col.canFilter ? col?.render('Filter') : null}
+                  {col.canFilter ? col?.render("Filter") : null}
                 </TH>
               ))}
             </TR>
@@ -315,9 +336,9 @@ const EndosTable = () => {
                       // if col is action => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action"
                         ? () =>
-                          navigate(`/endo/${(row.original as Endo).id}`, {
-                            state: { prev: "/" },
-                          })
+                            navigate(`/endo/${(row.original as Endo).id}`, {
+                              state: { prev: "/" },
+                            })
                         : undefined
                     }
                   >

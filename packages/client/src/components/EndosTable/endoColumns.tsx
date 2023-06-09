@@ -15,9 +15,9 @@ interface Props {
   pickEndo: any;
   refetchEndos: any;
   isLargerThanBreakpoint: boolean;
-  currentPageIndex: number
-  status: ENDO_STATUS_VALUES | ""
-  globalFilter: string
+  currentPageIndex: number;
+  status: ENDO_STATUS_VALUES | "";
+  globalFilter: string;
 }
 
 export const endoColumns = ({
@@ -26,7 +26,7 @@ export const endoColumns = ({
   isLargerThanBreakpoint,
   currentPageIndex,
   status,
-  globalFilter
+  globalFilter,
 }: Props) => {
   return [
     {
@@ -38,7 +38,7 @@ export const endoColumns = ({
           refetchEndos={refetchEndos}
         />
       ),
-      Filter: ColumnFilter // cause error without this line
+      Filter: ColumnFilter, // cause error without this line
     },
     {
       Header: isLargerThanBreakpoint ? (
@@ -50,7 +50,7 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "serialNum",
-      Filter: ColumnFilter
+      Filter: ColumnFilter,
     },
     {
       Header: isLargerThanBreakpoint ? (
@@ -62,55 +62,62 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "position",
-      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} globalFilter={globalFilter} />
+      Filter: (data: any) => (
+        <ColumnFilter
+          status={status}
+          column={data?.column}
+          currentPageIndex={currentPageIndex}
+          globalFilter={globalFilter}
+        />
+      ),
     },
     ...(isLargerThanBreakpoint
       ? [
-        {
-          Header: "Brand",
-          accessor: "brand",
-          Filter: ColumnFilter
-        },
-      ]
-      : []),
-
-    ...(isLargerThanBreakpoint
-      ? [
-        {
-          Header: "Model",
-          accessor: "model",
-          Filter: ColumnFilter
-        },
-      ]
-      : []),
-
-    ...(isLargerThanBreakpoint
-      ? [
-        {
-          Header: "Type",
-          accessor: "type",
-          Filter: ColumnFilter
-        },
-      ]
-      : []),
-
-    ...(isLargerThanBreakpoint
-      ? [
-        {
-          Header: "Storage Time",
-          accessor: "lastPutBackISO",
-          Filter: ColumnFilter,
-          Cell: ({
-            value: lastPubBackISO,
-          }: {
-            value: ENDO_STATUS_VALUES;
-          }) => {
-            dayjs.extend(relativeTime);
-            const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
-            return <div>{timeFromNow}</div>;
+          {
+            Header: "Brand",
+            accessor: "brand",
+            Filter: ColumnFilter,
           },
-        },
-      ]
+        ]
+      : []),
+
+    ...(isLargerThanBreakpoint
+      ? [
+          {
+            Header: "Model",
+            accessor: "model",
+            Filter: ColumnFilter,
+          },
+        ]
+      : []),
+
+    ...(isLargerThanBreakpoint
+      ? [
+          {
+            Header: "Type",
+            accessor: "type",
+            Filter: ColumnFilter,
+          },
+        ]
+      : []),
+
+    ...(isLargerThanBreakpoint
+      ? [
+          {
+            Header: "Storage Time",
+            accessor: "lastPutBackISO",
+            Filter: ColumnFilter,
+            Cell: ({
+              value: lastPubBackISO,
+            }: {
+              value: ENDO_STATUS_VALUES;
+            }) => {
+              dayjs.extend(relativeTime);
+              const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
+              return <div>{timeFromNow}</div>;
+            },
+          },
+        ]
       : []),
 
     {
@@ -123,7 +130,14 @@ export const endoColumns = ({
         </div>
       ),
       accessor: "status",
-      Filter: (data: any) => < ColumnFilter status={status} column={data?.column} currentPageIndex={currentPageIndex} globalFilter={globalFilter} />,
+      Filter: (data: any) => (
+        <ColumnFilter
+          status={status}
+          column={data?.column}
+          currentPageIndex={currentPageIndex}
+          globalFilter={globalFilter}
+        />
+      ),
       Cell: ({ value }: { value: ENDO_STATUS_VALUES }) => {
         const color = statusToColor[value] as keyof typeof bgConfig;
         const twBg = bgConfig[color];

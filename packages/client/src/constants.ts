@@ -9,8 +9,8 @@ export const ICON_SIZE = 15;
 export const HOSPITAL_NAME = "Songkhla Hospital";
 export const brandName = "Endo Supply";
 
-export const CONTAINER_NUM = 7
-export const CONTAINER_CAPACITY = 16
+export const CONTAINER_NUM = 7;
+export const CONTAINER_CAPACITY = 16;
 // localhost
 const prod = {
   graphqlHttpEndpoint: "http://localhost:4001/graphql",

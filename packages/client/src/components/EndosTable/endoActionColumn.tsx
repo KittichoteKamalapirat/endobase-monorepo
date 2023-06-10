@@ -121,9 +121,8 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
   const isResponding = row.original.tray.container.isResponding;
 
-  // TODO: uncomment this
-  // if (process.env.REACT_APP_ENVIRONMENT !== "showcase" && !isResponding)
-  //   return <div className="text-grey-500">Offline</div>;
+  if (process.env.REACT_APP_ENVIRONMENT !== "showcase" && !isResponding)
+    return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:

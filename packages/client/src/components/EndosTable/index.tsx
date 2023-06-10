@@ -44,6 +44,7 @@ import Badge from "../Badge";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateFilter } from "../../redux/slices/filterReducer";
+import { locations } from "./ColumnFilter";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -55,11 +56,7 @@ const EndosTable = () => {
   const navigate = useNavigate();
   const { data: endosData, loading, error, refetch } = useEndosQuery();
 
-  const initialStatus = (useQueryParam("status") as ENDO_STATUS_VALUES) || "";
-
-  const [activeFilter, setActiveFilter] = useState<ENDO_STATUS_VALUES | "">(
-    initialStatus
-  );
+  // const initialStatus = (useQueryParam("status") as ENDO_STATUS_VALUES) || "";
 
   const [globalFilterValue, setGlobalFilterValue] = useState("");
 
@@ -85,7 +82,7 @@ const EndosTable = () => {
   const isLargerThanBreakpoint = useScreenIsLargerThan("md");
   // const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
-  const { pageIndex: currentPageIndex } = useSelector(
+  const { pageIndex: currentPageIndex, status: activeStatus } = useSelector(
     (state: RootState) => state.filter
   );
 
@@ -105,7 +102,7 @@ const EndosTable = () => {
         refetchEndos: refetch,
         isLargerThanBreakpoint,
         currentPageIndex,
-        status: activeFilter,
+        status: activeStatus,
         globalFilter: globalFilterValue,
       }) as any;
     }
@@ -115,7 +112,7 @@ const EndosTable = () => {
       refetchEndos: refetch,
       isLargerThanBreakpoint,
       currentPageIndex,
-      status: activeFilter,
+      status: activeStatus,
       globalFilter: globalFilterValue,
     }) as any;
   }, [
@@ -123,7 +120,7 @@ const EndosTable = () => {
     refetch,
     isLargerThanBreakpoint,
     currentPageIndex,
-    activeFilter,
+    activeStatus,
     globalFilterValue,
   ]);
 
@@ -162,6 +159,17 @@ const EndosTable = () => {
     usePagination
   );
 
+  const isPagination = activeStatus === "ready" || activeStatus === "";
+  const pageRows = isPagination ? page : rows;
+
+  const handleSelectContainer = (pageIndex: number) => {
+    console.log("pageIndex", pageIndex);
+    console.log("currentPageIndex", currentPageIndex);
+    if (pageIndex === currentPageIndex)
+      return dispatch(updateFilter({ pageIndex: -1 }));
+    dispatch(updateFilter({ pageIndex }));
+  };
+
   useEffect(() => {
     setGlobalFilterValue(globalFilter as string);
   }, [globalFilter, setGlobalFilterValue]);
@@ -170,6 +178,8 @@ const EndosTable = () => {
   useEffect(() => {
     if (currentPageIndex !== 0) gotoPage(currentPageIndex);
   }, [refetch, columns, pageIndex]);
+
+  // if status !=  ""(total) or ready => do not filter container
 
   if (loading || settingsLoading || containerLoading) {
     return <RowsSkeleton />;
@@ -186,22 +196,6 @@ const EndosTable = () => {
       />
     );
   }
-
-  const isPagination = activeFilter === "ready";
-  const pageRows = isPagination ? page : rows;
-
-  const handleSelectContainer = (pageIndex: number) => {
-    if (pageIndex === currentPageIndex)
-      return dispatch(updateFilter({ pageIndex: -1 }));
-    dispatch(updateFilter({ pageIndex }));
-  };
-  // useEffect(() => {
-  //   setFilter(defaultFilter)
-  // }, [setFilter, defaultFilter])
-
-  // useEffect(() => {
-  //   pageIndex
-  // }, [pageIndex])
 
   return (
     <div>
@@ -244,8 +238,7 @@ const EndosTable = () => {
             {endosData?.endos && endosData?.endos.length > 0 && (
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
-                activeFilter={activeFilter}
-                setActiveFilter={setActiveFilter}
+                activeStatus={activeStatus}
               />
             )}
           </div>
@@ -261,7 +254,13 @@ const EndosTable = () => {
               key={`container-${index}`}
               onClick={() => handleSelectContainer(index)}
               size="md"
-              content={`Container ${container.col.toUpperCase()}`}
+              content={`Container ${container.col.toUpperCase()}: ${
+                endosData?.endos.filter(
+                  (endo) =>
+                    locations[index].toLowerCase() ===
+                      endo.tray.container.col && endo.status === activeStatus
+                ).length
+              } `}
               color={
                 currentPageIndex === -1 || index === currentPageIndex
                   ? "text-grey-0 border-primary"

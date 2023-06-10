@@ -4,19 +4,23 @@ import { Endo } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Badge from "./Badge";
+import { useDispatch } from "react-redux";
+import { updateFilter } from "../redux/slices/filterReducer";
 
 interface Props {
   endos: Endo[];
   // setFilter: React.Dispatch<React.SetStateAction<string>>;
-  activeFilter: "" | ENDO_STATUS_VALUES
-  setActiveFilter: Dispatch<SetStateAction<"" | ENDO_STATUS_VALUES>>
+  activeStatus: "" | ENDO_STATUS_VALUES;
 }
 
-const EndoStatusTable2 = ({ endos,
+const EndoStatusTable2 = ({
+  endos,
   // setFilter,
-  activeFilter, setActiveFilter }: Props) => {
+  activeStatus,
+}: Props) => {
+  const dispatch = useDispatch();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const readyNum = endos.filter(
     (endo) =>
@@ -26,7 +30,6 @@ const EndoStatusTable2 = ({ endos,
   const takenOutNum = endos.filter(
     (endo) => endo.status === ENDO_STATUS.taken_out
   ).length;
-
 
   const beingUsedNum = endos.filter(
     (endo) => endo.status === ENDO_STATUS.BEING_USED
@@ -58,28 +61,29 @@ const EndoStatusTable2 = ({ endos,
   ).length;
 
   const beingFixedNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.OUT_OF_ORDER
+    (endo) => endo.status === ENDO_STATUS.OUT_OF_ORDER
   ).length;
 
   const fixedNum = endos.filter(
     (endo) =>
-      endo.status === ENDO_STATUS.FIXED || endo.status === ENDO_STATUS.FIXED_AND_OUT
+      endo.status === ENDO_STATUS.FIXED ||
+      endo.status === ENDO_STATUS.FIXED_AND_OUT
   ).length;
 
-
-
   const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
+    // clean container filter (pagination)
+    if (status !== "ready" && status !== "")
+      dispatch(updateFilter({ pageIndex: -1 }));
 
-    if (activeFilter === status) {
-      setActiveFilter("");
+    if (activeStatus === status) {
+      dispatch(updateFilter({ status: "" }));
       // setFilter("");
-      navigate(urlResolver.endos(""))
+      navigate(urlResolver.endos(""));
       return;
     }
-    navigate(urlResolver.endos(status))
+    navigate(urlResolver.endos(status));
     // setFilter(status);
-    setActiveFilter(status);
+    dispatch(updateFilter({ status }));
   };
 
   // if (defaultFilter) return <SubHeading heading={`EndoScopes: ${statusToLabel[defaultFilter]}`} />
@@ -95,15 +99,14 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Ready: ${readyNum}`}
           color={
-            activeFilter === ENDO_STATUS.READY
+            activeStatus === ENDO_STATUS.READY
               ? "text-grey-0 border-green"
               : "text-green border-green"
           }
-          isActive={activeFilter === ENDO_STATUS.READY}
+          isActive={activeStatus === ENDO_STATUS.READY}
           activeColor="bg-green"
         />
       </div>
-
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
@@ -114,16 +117,14 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Taken Out: ${takenOutNum}`}
           color={
-            activeFilter === ENDO_STATUS.taken_out
+            activeStatus === ENDO_STATUS.taken_out
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeFilter === ENDO_STATUS.taken_out}
+          isActive={activeStatus === ENDO_STATUS.taken_out}
           activeColor="bg-grey-400"
         />
       </div>
-
-
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
@@ -134,11 +135,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Being Used: ${beingUsedNum}`}
           color={
-            activeFilter === ENDO_STATUS.BEING_USED
+            activeStatus === ENDO_STATUS.BEING_USED
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeFilter === ENDO_STATUS.BEING_USED}
+          isActive={activeStatus === ENDO_STATUS.BEING_USED}
           activeColor="bg-grey-400"
         />
       </div>
@@ -152,15 +153,14 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`In Washing Room: ${inWashingRoomNum}`}
           color={
-            activeFilter === ENDO_STATUS.IN_WASHING_ROOM
+            activeStatus === ENDO_STATUS.IN_WASHING_ROOM
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeFilter === ENDO_STATUS.IN_WASHING_ROOM}
+          isActive={activeStatus === ENDO_STATUS.IN_WASHING_ROOM}
           activeColor="bg-grey-400"
         />
       </div>
-
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
@@ -171,11 +171,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Leak Tested: ${leakTestPassedNum}`}
           color={
-            activeFilter === ENDO_STATUS.LEAK_TEST_PASSED
+            activeStatus === ENDO_STATUS.LEAK_TEST_PASSED
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeFilter === ENDO_STATUS.LEAK_TEST_PASSED}
+          isActive={activeStatus === ENDO_STATUS.LEAK_TEST_PASSED}
           activeColor="bg-grey-400"
         />
       </div>
@@ -189,11 +189,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Disinfected: ${disinfectionPassedNum}`}
           color={
-            activeFilter === ENDO_STATUS.DISINFECTION_PASSED
+            activeStatus === ENDO_STATUS.DISINFECTION_PASSED
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeFilter === ENDO_STATUS.DISINFECTION_PASSED}
+          isActive={activeStatus === ENDO_STATUS.DISINFECTION_PASSED}
           activeColor="bg-grey-400"
         />
       </div>
@@ -207,11 +207,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Expire Soon: ${expireSoonNum}`}
           color={
-            activeFilter === ENDO_STATUS.EXPIRE_SOON
+            activeStatus === ENDO_STATUS.EXPIRE_SOON
               ? "text-grey-900 border-yellow"
               : "text-grey-900 border-yellow"
           }
-          isActive={activeFilter === ENDO_STATUS.EXPIRE_SOON}
+          isActive={activeStatus === ENDO_STATUS.EXPIRE_SOON}
           activeColor="bg-yellow"
         />
       </div>
@@ -225,11 +225,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Expired: ${expiredNum}`}
           color={
-            activeFilter === ENDO_STATUS.EXPIRED
+            activeStatus === ENDO_STATUS.EXPIRED
               ? "text-grey-0 border-red"
               : "text-red border-red"
           }
-          isActive={activeFilter === ENDO_STATUS.EXPIRED}
+          isActive={activeStatus === ENDO_STATUS.EXPIRED}
           activeColor="bg-red"
         />
       </div>
@@ -242,15 +242,14 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Out of Order: ${beingFixedNum}`}
           color={
-            activeFilter === ENDO_STATUS.OUT_OF_ORDER
+            activeStatus === ENDO_STATUS.OUT_OF_ORDER
               ? "text-grey-0 border-grey-900"
               : "text-grey-900 border-grey-900"
           }
-          isActive={activeFilter === ENDO_STATUS.OUT_OF_ORDER}
+          isActive={activeStatus === ENDO_STATUS.OUT_OF_ORDER}
           activeColor="bg-grey-900"
         />
       </div>
-
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
@@ -260,16 +259,14 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Fixed: ${fixedNum}`}
           color={
-            activeFilter === ENDO_STATUS.FIXED
+            activeStatus === ENDO_STATUS.FIXED
               ? "text-grey-900 border-[#ffc2d1]"
               : "text-grey-900 border-[#ffc2d1]"
           }
-          isActive={activeFilter === ENDO_STATUS.FIXED}
+          isActive={activeStatus === ENDO_STATUS.FIXED}
           activeColor="bg-[#ffc2d1]"
         />
       </div>
-
-
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
@@ -280,11 +277,11 @@ const EndoStatusTable2 = ({ endos,
           size="md"
           content={`Total: ${endos.length}`}
           color={
-            activeFilter === ""
+            activeStatus === ""
               ? "text-grey-0 border-primary"
               : "text-primary border-primary"
           }
-          isActive={activeFilter === ""}
+          isActive={activeStatus === ""}
           activeColor="bg-primary"
         />
       </div>

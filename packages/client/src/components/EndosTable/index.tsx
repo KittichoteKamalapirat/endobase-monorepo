@@ -193,6 +193,8 @@ const EndosTable = () => {
   const pageRows = isPagination ? page : rows;
 
   const handleSelectContainer = (pageIndex: number) => {
+    if (pageIndex === currentPageIndex)
+      return dispatch(updateFilter({ pageIndex: -1 }));
     dispatch(updateFilter({ pageIndex }));
   };
   // useEffect(() => {
@@ -263,11 +265,11 @@ const EndosTable = () => {
               size="md"
               content={`Container ${container.col.toUpperCase()}`}
               color={
-                index === currentPageIndex
+                currentPageIndex === -1 || index === currentPageIndex
                   ? "text-grey-0 border-primary"
                   : "text-grey-400 border-grey-400"
               }
-              isActive={index === currentPageIndex}
+              isActive={currentPageIndex === -1 || index === currentPageIndex}
               activeColor="bg-primary"
             />
           ))}

@@ -24,7 +24,7 @@ export const ColumnFilter = ({
       return;
     }
     // do not filter pageIndex if not
-    if (Header === "Status" && status !== "ready") {
+    if (Header === "Status" && status !== "ready" && status !== "") {
       setFilter(status);
       return;
     }

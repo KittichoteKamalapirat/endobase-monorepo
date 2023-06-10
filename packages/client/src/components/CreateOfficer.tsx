@@ -14,6 +14,7 @@ const defaultValues: FormValues = {
   officerNum: "",
   firstName: "",
   lastName: "",
+  type: "hos_officer",
 };
 const CreateOfficer = () => {
   const [createOfficer] = useCreateOfficerMutation();
@@ -80,7 +81,11 @@ const CreateOfficer = () => {
   return (
     <div>
       <SmallHeading heading="Create Officer" />
-      <OfficerEditor onSubmitRHF={onSubmit} defaultValues={defaultValues} isUpdate={false} />
+      <OfficerEditor
+        onSubmitRHF={onSubmit}
+        defaultValues={defaultValues}
+        isUpdate={false}
+      />
     </div>
   );
 };

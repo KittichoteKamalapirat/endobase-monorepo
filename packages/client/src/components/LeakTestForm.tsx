@@ -6,7 +6,7 @@ import {
   EndoQuery,
   Exact,
   useCreateActionMutation,
-  useSessionQuery
+  useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import { getActionLabel } from "../utils/getActionStep";
@@ -19,15 +19,15 @@ import SubHeading from "./typography/SubHeading";
 
 interface Props {
   containerClass?: string;
-  endoId: string
+  endoId: string;
   disabled: boolean; // if Take Out Form is not completed yet
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -46,7 +46,12 @@ const initialData = {
   officerNum: "",
   passedTest: false,
 };
-const LeakTestForm = ({ refetchEndo, containerClass, disabled, endoId }: Props) => {
+const LeakTestForm = ({
+  refetchEndo,
+  containerClass,
+  disabled,
+  endoId,
+}: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -67,12 +72,9 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled, endoId }: Props) 
 
   const dispatch = useDispatch();
 
-  const { officerNum, passedTest } = watch()
-
+  const { officerNum, passedTest } = watch();
 
   const testIsFailing = passedTest === "false";
-
-
 
   const onSubmit = async (data: FormValues) => {
     if (disabled)
@@ -148,21 +150,29 @@ const LeakTestForm = ({ refetchEndo, containerClass, disabled, endoId }: Props) 
             disabled={testIsFailing}
           />
         </div>
-        <div className="mt-2">
-
+        <div className="mt-4">
           <RadioField
             {...register(FormNames.PASSED_TEST, { required: true })}
-            options={[{ value: "true", label: "Passed" }, { value: "false", label: "Failed" }]}
+            options={[
+              { value: "true", label: "Passed" },
+              { value: "false", label: "Failed" },
+            ]}
           />
         </div>
-
       </form>
-      {testIsFailing &&
+      {testIsFailing && (
         <div className="mt-4">
-          <SubHeading heading="Please fill in the form below" fontColor="text-red" />
-          <CreateRequestRepairAction officerNum={officerNum} isCritical endoId={endoId} />
-        </div>}
-
+          <SubHeading
+            heading="Please fill in the form below"
+            fontColor="text-red"
+          />
+          <CreateRequestRepairAction
+            officerNum={officerNum}
+            isCritical
+            endoId={endoId}
+          />
+        </div>
+      )}
     </div>
   );
 };

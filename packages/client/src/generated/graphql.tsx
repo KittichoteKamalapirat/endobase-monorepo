@@ -86,6 +86,7 @@ export type CreateOfficerInput = {
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   officerNum: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type CreatePatientInput = {
@@ -413,6 +414,7 @@ export type Officer = {
   lastName: Scalars['String'];
   officerNum: Scalars['String'];
   repairRequests: Array<RepairRequest>;
+  type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -645,6 +647,7 @@ export type UpdateOfficerInput = {
   id: Scalars['String'];
   lastName?: InputMaybe<Scalars['String']>;
   officerNum?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateRepairRequestInput = {
@@ -825,7 +828,7 @@ export type CreateOfficerMutationVariables = Exact<{
 }>;
 
 
-export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteOfficerMutationVariables = Exact<{
   id: Scalars['String'];
@@ -839,19 +842,19 @@ export type UpdateOfficerMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOfficerMutation = { __typename?: 'Mutation', updateOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type UpdateOfficerMutation = { __typename?: 'Mutation', updateOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type OfficerQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
 
-export type OfficerQuery = { __typename?: 'Query', officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string } };
+export type OfficerQuery = { __typename?: 'Query', officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } };
 
 export type OfficersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OfficersQuery = { __typename?: 'Query', officers: Array<{ __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }> };
+export type OfficersQuery = { __typename?: 'Query', officers: Array<{ __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string }> };
 
 export type CreateRepairRequestMutationVariables = Exact<{
   input: CreateRepairRequestInput;
@@ -1760,6 +1763,7 @@ export const CreateOfficerDocument = gql`
       officerNum
       firstName
       lastName
+      type
     }
     errors {
       field
@@ -1839,6 +1843,7 @@ export const UpdateOfficerDocument = gql`
       officerNum
       firstName
       lastName
+      type
     }
     errors {
       field
@@ -1880,6 +1885,7 @@ export const OfficerDocument = gql`
     officerNum
     firstName
     lastName
+    type
   }
 }
     `;
@@ -1918,6 +1924,7 @@ export const OfficersDocument = gql`
     officerNum
     firstName
     lastName
+    type
   }
 }
     `;

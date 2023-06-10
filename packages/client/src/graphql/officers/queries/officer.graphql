@@ -4,5 +4,6 @@ query Officer($id: String!) {
     officerNum
     firstName
     lastName
+    type
   }
 }

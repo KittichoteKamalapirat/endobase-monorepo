@@ -1,23 +1,29 @@
 import { Control, useForm, UseFormSetError } from "react-hook-form";
 import Button, { HTMLButtonType } from "./Buttons/Button";
+import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
-import SmallHeading from "./typography/SmallHeading";
+import {
+  OFFICER_TYPE_VALUES,
+  officerTypeOptions,
+} from "../utils/officerTypeToLabel";
+import FormFieldLabel from "./forms/FormFieldLabel";
 
 export enum FormNames {
   OFFICER_NUM = "officerNum",
   FIRST_NAME = "firstName",
   LAST_NAME = "lastName",
+  OFFICER_TYPE = "type",
 }
 
 export interface FormValues {
   officerNum: string;
   firstName: string;
   lastName: string;
-
+  type: OFFICER_TYPE_VALUES;
 }
 
 interface Props {
-  isUpdate?: boolean
+  isUpdate?: boolean;
   defaultValues: FormValues;
   onSubmitRHF: (
     data: FormValues,
@@ -25,10 +31,15 @@ interface Props {
   ) => void;
 }
 
-const OfficerEditor = ({ defaultValues, isUpdate = false, onSubmitRHF }: Props) => {
+const OfficerEditor = ({
+  defaultValues,
+  isUpdate = false,
+  onSubmitRHF,
+}: Props) => {
   const {
     control,
     handleSubmit,
+    register,
     formState: { errors },
     setError,
   } = useForm<FormValues>({
@@ -43,7 +54,7 @@ const OfficerEditor = ({ defaultValues, isUpdate = false, onSubmitRHF }: Props) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex items-start gap-2">
+      <div className="flex flex-col items-start gap-2">
         <TextField
           required
           name="officerNum"
@@ -73,11 +84,20 @@ const OfficerEditor = ({ defaultValues, isUpdate = false, onSubmitRHF }: Props) 
           type={TextFieldTypes.OUTLINED}
           error={errors.lastName}
         />
+
+        <div className="mt-2">
+          <FormFieldLabel label="Officer Type" />
+          <RadioField
+            {...register(FormNames.OFFICER_TYPE, { required: true })}
+            options={officerTypeOptions}
+          />
+        </div>
       </div>
+
       <Button
         label={isUpdate ? "Update" : "Create"}
         buttonType={HTMLButtonType.SUBMIT}
-        extraClass="w-24 mt-2"
+        extraClass="w-36 mt-8"
       />
     </form>
   );

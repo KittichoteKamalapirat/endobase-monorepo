@@ -28,10 +28,13 @@ const RadioField = forwardRef(
       <>
         <FormFieldLabel label={label} extraClass={`${labelClass} `} />
 
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-4">
           {options.map((option) => (
             <div key={option.value}>
-              <label htmlFor={option.value} className="text-xl border rounded-md px-4 py-2 hover:cursor-pointer" >
+              <label
+                htmlFor={option.value}
+                className="text-xl border rounded-md px-4 py-2 hover:cursor-pointer"
+              >
                 <input
                   ref={ref as RefCallBack}
                   id={option.value}
@@ -40,7 +43,6 @@ const RadioField = forwardRef(
                   onChange={onChange}
                   onBlur={onBlur}
                   value={option.value}
-
                 />
                 <span className="ml-1">{option.label}</span>
               </label>

@@ -4,5 +4,6 @@ query Officers {
     officerNum
     firstName
     lastName
+    type
   }
 }

@@ -1,4 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
+import { OfficerType } from '../entities/officer.entity';
 
 @InputType()
 export class CreateOfficerInput {
@@ -10,4 +11,7 @@ export class CreateOfficerInput {
 
   @Field(() => String)
   lastName: string;
+
+  @Field(() => String)
+  type: OfficerType;
 }

@@ -14,6 +14,8 @@ import { Action } from '../../actions/entities/action.entity';
 // relations
 // OneToMany: actions
 
+export type OfficerType = 'hos_officer' | 'endo_technician';
+
 @Entity()
 @ObjectType()
 export class Officer {
@@ -33,17 +35,18 @@ export class Officer {
   @Field()
   lastName: string;
 
+  @Column({ default: 'hos_officer' })
+  @Field(() => String)
+  type: OfficerType;
+
   // actions
   @OneToMany(() => Action, (action) => action.officer, { cascade: true })
   @Field(() => [Action])
   actions: Action[];
 
-
   @OneToMany(() => RepairRequest, (rr) => rr.officer, { cascade: true })
   @Field(() => [RepairRequest])
   repairRequests: RepairRequest[];
-
-
 
   @CreateDateColumn()
   @Field()

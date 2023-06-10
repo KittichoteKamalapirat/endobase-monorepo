@@ -15,6 +15,10 @@ import LinkButton from "./Buttons/LinkButton";
 import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
 import SubHeading from "./typography/SubHeading";
+import {
+  OFFICER_TYPE_OBJ,
+  OFFICER_TYPE_VALUES,
+} from "../utils/officerTypeToLabel";
 
 const OfficersList = () => {
   const { data, loading, error, refetch } = useOfficersQuery();
@@ -72,18 +76,19 @@ const OfficersList = () => {
       </div>
 
       <div className="mt-4 border">
-        <div className="grid grid-cols-12 font-bold  text-lg">
-          <div className="col-span-1 bg-grey-50 p-2">#</div>
-          <div className="col-span-3 bg-grey-50 p-2">Officer Number</div>
-          <div className="col-span-3 bg-grey-50 p-2">First Name</div>
-          <div className="col-span-3 bg-grey-50 p-2">Last Name</div>
+        <div className="grid grid-cols-12 font-bold text-lg">
+          <div className="col-span-2 bg-grey-50 p-2">#</div>
+          <div className="col-span-2 bg-grey-50 p-2">Officer Number</div>
+          <div className="col-span-2 bg-grey-50 p-2">First Name</div>
+          <div className="col-span-2 bg-grey-50 p-2">Last Name</div>
+          <div className="col-span-2 bg-grey-50 p-2">Type</div>
           <div className="col-span-2 bg-grey-50 p-2"></div>
         </div>
         {data?.officers.map((officer, index) => (
           <div className="grid grid-cols-12 " key={index}>
             <div
               className={classNames(
-                "col-span-1 p-2",
+                "col-span-2 p-2",
                 index % 2 === 0 && "bg-primary-50"
               )}
             >
@@ -91,7 +96,7 @@ const OfficersList = () => {
             </div>
             <div
               className={classNames(
-                "col-span-3 p-2",
+                "col-span-2 p-2",
                 index % 2 === 0 && "bg-primary-50"
               )}
             >
@@ -99,7 +104,7 @@ const OfficersList = () => {
             </div>
             <div
               className={classNames(
-                "col-span-3 p-2",
+                "col-span-2 p-2",
                 index % 2 === 0 && "bg-primary-50"
               )}
             >
@@ -107,11 +112,19 @@ const OfficersList = () => {
             </div>
             <div
               className={classNames(
-                "col-span-3 p-2",
+                "col-span-2 p-2",
                 index % 2 === 0 && "bg-primary-50"
               )}
             >
               {officer.lastName}
+            </div>
+            <div
+              className={classNames(
+                "col-span-2 p-2",
+                index % 2 === 0 && "bg-primary-50"
+              )}
+            >
+              {OFFICER_TYPE_OBJ[officer.type as OFFICER_TYPE_VALUES]}
             </div>
             <div
               className={classNames(

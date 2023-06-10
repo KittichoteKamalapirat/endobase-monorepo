@@ -5,6 +5,7 @@ mutation UpdateOfficer($input: UpdateOfficerInput!) {
       officerNum
       firstName
       lastName
+      type
     }
 
     errors {

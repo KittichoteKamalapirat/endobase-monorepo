@@ -13,40 +13,37 @@ import { RepairRequest } from './entities/repair-request.entity';
 
 @Injectable()
 export class RepairRequestService {
-
   constructor(
     @InjectRepository(RepairRequest)
     private repairRequestsRepository: Repository<RepairRequest>,
     private officersService: OfficersService,
     private endosService: EndosService,
-  private sessionsService: SessionsService,
-    
+    private sessionsService: SessionsService,
   ) {}
 
-
-  async create(input: CreateRepairRequestInput): Promise<RepairRequestResponse> {
+  async create(
+    input: CreateRepairRequestInput,
+  ): Promise<RepairRequestResponse> {
     try {
       const existingOfficer = await this.officersService.findOneByofficerNum(
         input.officerNum,
       );
-  
 
       if (!existingOfficer) {
         return {
           errors: [
             {
-              message: "This officer number does not exist",
+              message: 'This officer number does not exist',
               field: 'officerNum',
             },
           ],
         };
       }
-        
 
-      await this.sessionsService.endSessionByEndoId(input.endoId)
+      await this.sessionsService.endSessionByEndoId(input.endoId);
       await this.endosService.updateStatus(
         input.endoId,
-          ENDO_STATUS_OBJ.OUT_OF_ORDER
+        ENDO_STATUS_OBJ.OUT_OF_ORDER,
       );
 
       const newRR = this.repairRequestsRepository.create({
@@ -55,37 +52,42 @@ export class RepairRequestService {
         officerId: existingOfficer.id,
       });
 
-
-      const savedRR = await this.repairRequestsRepository.save(newRR)
-
+      const savedRR = await this.repairRequestsRepository.save(newRR);
 
       const returnedRR = await this.findOne(savedRR.id);
 
       return { repairRequest: returnedRR };
     } catch (error) {
       return {
-        errors: [{ field: "repairRequest", message: "An error occured " }],
+        errors: [{ field: 'repairRequest', message: 'An error occured ' }],
       };
     }
   }
 
   findAll() {
-    return this.repairRequestsRepository.find({relations: ["endo", "officer" , "endo.tray" , "endo.tray.container"]})
+    return this.repairRequestsRepository.find({
+      relations: ['endo', 'officer', 'endo.tray', 'endo.tray.container'],
+    });
   }
 
   findAllByEndoId(endoId: string) {
-    return this.repairRequestsRepository.find({where: {endoId}, relations: ["endo", "officer", "endo.tray" , "endo.tray.container"]})
+    return this.repairRequestsRepository.find({
+      where: { endoId },
+      relations: ['endo', 'officer', 'endo.tray', 'endo.tray.container'],
+    });
   }
-
 
   findOne(id: string) {
     return this.repairRequestsRepository.findOne({
-      where: {id},
-      relations: ["endo", "officer", "endo.tray" , "endo.tray.container"]
-    })
+      where: { id },
+      relations: ['endo', 'officer', 'endo.tray', 'endo.tray.container'],
+    });
   }
 
-  async update(id: string, input: UpdateRepairRequestInput): Promise<RepairRequestResponse> {
+  async update(
+    id: string,
+    input: UpdateRepairRequestInput,
+  ): Promise<RepairRequestResponse> {
     try {
       // check officer number
       const existingOfficer = await this.officersService.findOneByofficerNum(
@@ -96,34 +98,34 @@ export class RepairRequestService {
         return {
           errors: [
             {
-              message: "This officer number does not exist",
+              message: 'This officer number does not exist',
               field: 'officerNum',
             },
           ],
         };
       }
-        
 
       const existingRepairRequest = await this.findOne(id);
       if (!existingRepairRequest)
         return {
-          errors: [{ field: "repairRequest", message: "Cannot find the salon " }],
+          errors: [
+            { field: 'repairRequest', message: 'Cannot find the salon ' },
+          ],
         };
-      
+
       const newInput = {
         id,
         note: input.note,
         endoId: input.endoId,
         officerId: existingOfficer.id,
-
-      }
+      };
       await this.repairRequestsRepository.save(newInput);
 
       const savedRR = await this.findOne(id);
       return { repairRequest: savedRR };
     } catch (error) {
       return {
-        errors: [{ field: "repairRequest", message: "An error occured " }],
+        errors: [{ field: 'repairRequest', message: 'An error occured ' }],
       };
     }
   }
@@ -133,13 +135,18 @@ export class RepairRequestService {
       const existing = await this.findOne(id);
       if (!existing)
         return {
-          errors: [{ field: "repairRequest", message: "Cannot find the repair request" }],
+          errors: [
+            {
+              field: 'repairRequest',
+              message: 'Cannot find the repair request',
+            },
+          ],
         };
       await this.repairRequestsRepository.delete(id);
       return { value: true };
     } catch (error) {
       return {
-        errors: [{ field: "repairRequest", message: "An error occured" }],
+        errors: [{ field: 'repairRequest', message: 'An error occured' }],
       };
     }
   }

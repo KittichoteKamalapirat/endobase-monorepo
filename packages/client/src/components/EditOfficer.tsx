@@ -12,6 +12,7 @@ import OfficerEditor, { FormValues } from "./OfficerEditor";
 import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
 import SmallHeading from "./typography/SmallHeading";
+import { OFFICER_TYPE_VALUES } from "../utils/officerTypeToLabel";
 
 const EditOfficer = () => {
   const { id } = useParams();
@@ -30,6 +31,7 @@ const EditOfficer = () => {
     officerNum: data?.officer.officerNum as string,
     firstName: data?.officer.officerNum as string,
     lastName: data?.officer.officerNum as string,
+    type: data?.officer.type as OFFICER_TYPE_VALUES,
   };
 
   const onSubmit = async (
@@ -99,7 +101,11 @@ const EditOfficer = () => {
   return (
     <div>
       <SmallHeading heading="Update Officer" />
-      <OfficerEditor onSubmitRHF={onSubmit} defaultValues={defaultValues} />
+      <OfficerEditor
+        onSubmitRHF={onSubmit}
+        defaultValues={defaultValues}
+        isUpdate
+      />
     </div>
   );
 };

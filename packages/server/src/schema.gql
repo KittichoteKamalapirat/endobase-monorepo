@@ -22,6 +22,7 @@ type Officer {
   officerNum: String!
   firstName: String!
   lastName: String!
+  type: String!
   actions: [Action!]!
   repairRequests: [RepairRequest!]!
   createdAt: DateTime!
@@ -364,12 +365,14 @@ input CreateOfficerInput {
   officerNum: String!
   firstName: String!
   lastName: String!
+  type: String!
 }
 
 input UpdateOfficerInput {
   officerNum: String
   firstName: String
   lastName: String
+  type: String
   id: String!
 }
 

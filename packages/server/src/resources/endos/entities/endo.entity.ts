@@ -17,7 +17,7 @@ import { Tray } from '../../trays/entities/tray.entity';
 export const ENDO_STATUS_OBJ = {
   READY: 'ready',
   EXPIRE_SOON: 'expire_soon',
-  taken_out: "taken_out",
+  SELECTED: 'selected',
   BEING_USED: 'being_used',
   IN_WASHING_ROOM: 'in_washing_room',
   EXPIRED: 'expired',
@@ -28,9 +28,9 @@ export const ENDO_STATUS_OBJ = {
   DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
   NO_ENDO: 'no_endo', // No endo in a tray (for writing color)
-  OUT_OF_ORDER: "out_of_order",
-  FIXED: "fixed",
-  FIXED_AND_OUT: "fixed_and_out", // for "take out and wash"
+  OUT_OF_ORDER: 'out_of_order',
+  FIXED: 'fixed',
+  FIXED_AND_OUT: 'fixed_and_out', // for "take out and wash"
 } as const;
 
 export type ENDO_STATUS_KEYS = keyof typeof ENDO_STATUS_OBJ;
@@ -54,7 +54,7 @@ export type ENDO_STATUS = (typeof ENDO_STATUS_OBJ)[ENDO_STATUS_KEYS];
 export const statusToColor: Record<ENDO_STATUS, number> = {
   [ENDO_STATUS_OBJ.READY]: 2, // green
   [ENDO_STATUS_OBJ.EXPIRE_SOON]: 3, // yellow
-  [ENDO_STATUS_OBJ.taken_out]: 0, // off
+  [ENDO_STATUS_OBJ.SELECTED]: 0, // off
   [ENDO_STATUS_OBJ.BEING_USED]: 0, // off
   [ENDO_STATUS_OBJ.IN_WASHING_ROOM]: 0, // off
   [ENDO_STATUS_OBJ.EXPIRED]: 1, // red
@@ -127,12 +127,9 @@ export class Endo {
   @Field()
   createdAt: Date;
 
-
   @OneToMany(() => RepairRequest, (rr) => rr.endo, { cascade: true })
   @Field(() => [RepairRequest], { nullable: true })
   repairRequests: RepairRequest[];
-
-
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   @Field()

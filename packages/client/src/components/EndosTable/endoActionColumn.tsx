@@ -128,7 +128,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
     case ENDO_STATUS.READY:
-      return <Button label="Pick" onClick={() => handleUseEndo(endoId)} />;
+      return <Button label="Select" onClick={() => handleUseEndo(endoId)} />;
 
     case ENDO_STATUS.EXPIRED:
     case ENDO_STATUS.FIXED:
@@ -149,7 +149,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
         />
       );
 
-    case ENDO_STATUS.taken_out:
+    case ENDO_STATUS.SELECTED:
     case ENDO_STATUS.EXPIRED_AND_OUT:
     case ENDO_STATUS.FIXED_AND_OUT:
       return (

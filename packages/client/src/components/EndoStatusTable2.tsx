@@ -1,11 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Endo } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
+import { updateFilter } from "../redux/slices/filterReducer";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Badge from "./Badge";
-import { useDispatch } from "react-redux";
-import { updateFilter } from "../redux/slices/filterReducer";
+import { filterEndoByStatus } from "../utils/filterEndoByStatus";
 
 interface Props {
   endos: Endo[];
@@ -23,51 +23,42 @@ const EndoStatusTable2 = ({
   const navigate = useNavigate();
 
   const readyNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.READY || endo.status === ENDO_STATUS.DRYING // Added dyring just in case even thought it wouldn't exist
+    (endo) => filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "ready") // Added dyring just in case even thought it wouldn't exist
   ).length;
 
-  const takenOutNum = endos.filter(
-    (endo) => endo.status === ENDO_STATUS.taken_out
+  const selectedOutNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "selected")
   ).length;
 
-  const beingUsedNum = endos.filter(
-    (endo) => endo.status === ENDO_STATUS.BEING_USED
+  const beingUsedNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "being_used")
   ).length;
 
-  const inWashingRoomNum = endos.filter(
-    (endo) => endo.status === ENDO_STATUS.IN_WASHING_ROOM
+  const inWashingRoomNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "in_washing_room")
   ).length;
 
-  const leakTestPassedNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.LEAK_TEST_PASSED ||
-      endo.status === ENDO_STATUS.LEAK_TEST_FAILED
+  const leakTestPassedNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "leak_test_passed")
   ).length;
 
-  const disinfectionPassedNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.DISINFECTION_PASSED ||
-      endo.status === ENDO_STATUS.DISINFECTION_FAILED
+  const disinfectionPassedNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "disinfection_passed")
   ).length;
 
-  const expireSoonNum = endos.filter(
-    (endo) => endo.status === ENDO_STATUS.EXPIRE_SOON
+  const expireSoonNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "expire_soon")
   ).length;
-  const expiredNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.EXPIRED ||
-      endo.status === ENDO_STATUS.EXPIRED_AND_OUT
+  const expiredNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "expired")
   ).length;
 
-  const beingFixedNum = endos.filter(
-    (endo) => endo.status === ENDO_STATUS.OUT_OF_ORDER
+  const beingFixedNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "out_of_order")
   ).length;
 
-  const fixedNum = endos.filter(
-    (endo) =>
-      endo.status === ENDO_STATUS.FIXED ||
-      endo.status === ENDO_STATUS.FIXED_AND_OUT
+  const fixedNum = endos.filter((endo) =>
+    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "fixed")
   ).length;
 
   const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
@@ -110,18 +101,18 @@ const EndoStatusTable2 = ({
 
       <div
         className="flex justify-between gap-2 hover:cursor-pointer"
-        onClick={() => handleFilter(ENDO_STATUS.taken_out)}
+        onClick={() => handleFilter(ENDO_STATUS.SELECTED)}
       >
         {/* <div className="col-span-1">Being Used</div> */}
         <Badge
           size="md"
-          content={`Taken Out: ${takenOutNum}`}
+          content={`Selected: ${selectedOutNum}`}
           color={
-            activeStatus === ENDO_STATUS.taken_out
+            activeStatus === ENDO_STATUS.SELECTED
               ? "text-grey-0 border-grey-400"
               : "text-grey-400 border-grey-400"
           }
-          isActive={activeStatus === ENDO_STATUS.taken_out}
+          isActive={activeStatus === ENDO_STATUS.SELECTED}
           activeColor="bg-grey-400"
         />
       </div>

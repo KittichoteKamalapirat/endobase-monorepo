@@ -45,6 +45,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateFilter } from "../../redux/slices/filterReducer";
 import { locations } from "./ColumnFilter";
+import { filterEndoByStatus } from "../../utils/filterEndoByStatus";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -235,6 +236,7 @@ const EndosTable = () => {
           </div>
 
           <div className="mb-2">
+            <p className="font-bold text-lg">Status</p>
             {endosData?.endos && endosData?.endos.length > 0 && (
               <EndoStatusTable2
                 endos={endosData?.endos as Endo[]}
@@ -245,6 +247,7 @@ const EndosTable = () => {
         </div>
       </div>
       {/* container buttons */}
+      <p className="font-bold text-lg">Containers</p>
       <div className={`grid grid-cols-${containersData?.containers.length}`}>
         {containersData?.containers
           .slice()
@@ -253,12 +256,17 @@ const EndosTable = () => {
             <Badge
               key={`container-${index}`}
               onClick={() => handleSelectContainer(index)}
-              size="md"
-              content={`Container ${container.col.toUpperCase()}: ${
+              size="lg"
+              content={`${container.col.toUpperCase()}: ${
                 endosData?.endos.filter(
                   (endo) =>
-                    locations[index].toLowerCase() ===
-                      endo.tray.container.col && endo.status === activeStatus
+                    (locations[index].toLowerCase() ===
+                      endo.tray.container.col &&
+                      filterEndoByStatus(
+                        endo.status as ENDO_STATUS_VALUES,
+                        activeStatus
+                      )) ||
+                    activeStatus === ""
                 ).length
               } `}
               color={

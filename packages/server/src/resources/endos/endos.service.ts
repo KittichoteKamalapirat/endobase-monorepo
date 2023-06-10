@@ -154,7 +154,7 @@ export class EndosService {
       // save the new endo
       pickedEndo = await this.endosRepository.save({
         ...endo,
-        status: ENDO_STATUS_OBJ.taken_out,
+        status: ENDO_STATUS_OBJ.SELECTED,
       });
     } else {
       // status = "expired" or
@@ -261,7 +261,7 @@ export class EndosService {
     // create a new session
 
     await this.sessionsService.endSessionByEndoId(id);
-    await this.updateStatus(id, 'taken_out');
+    await this.updateStatus(id, 'selected');
     const newSession = await this.sessionsService.create({
       endoId: id,
       endoWasExpired: false,

@@ -1,14 +1,30 @@
 import classNames from "classnames";
 
+import { ObjectValues } from "../types";
+
+const SIZE = {
+  SMALL: "sm",
+  MEDIUM: "md",
+  LARGE: "lg",
+};
+
+type Sizes = ObjectValues<typeof SIZE>;
+
 interface Props {
   content: string;
   color?: string;
   extraClass?: string;
   isActive?: boolean;
   activeColor?: string;
-  size?: "sm" | "md";
+  size?: Sizes;
   onClick?: (...args: any[]) => void;
 }
+
+const SIZE_CLASS_NAME: Record<Sizes, string> = {
+  sm: "text-sm  py-[1px] px-1",
+  md: "text-md  py-[1px] px-1",
+  lg: "text-lg  py-[1px] px-4",
+};
 
 const Badge = ({
   content,
@@ -32,7 +48,7 @@ const Badge = ({
           color,
           extraClass,
           isActive && activeColor,
-          size === "sm" ? "text-sm  py-[1px] px-1" : "text-md  py-[1px] px-1"
+          SIZE_CLASS_NAME[size]
         )}
       >
         {content}

@@ -137,8 +137,6 @@ export class EndoCronsService implements OnModuleInit {
 
     if (saveToDb) await this.saveInDb(input);
 
-    console.log('schedule created');
-
     return;
   }
 
@@ -265,7 +263,7 @@ export class EndoCronsService implements OnModuleInit {
         ),
       );
     } catch (error) {
-      console.log('error remove endoCrons', error);
+      console.error('error remove endoCrons', error);
     }
   }
 }

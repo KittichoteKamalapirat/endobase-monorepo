@@ -82,12 +82,8 @@ export class ContainersService {
       updatedInput,
     );
 
-    console.log('trays num', container.trays.length);
-
     const syncTurnlightsOff = async () => {
       for (const tray of container.trays) {
-        console.log('tray', tray);
-
         await this.serialportsService.turnLightsOff({
           col: container.col,
           row: tray.row,
@@ -97,10 +93,9 @@ export class ContainersService {
       }
     };
     try {
-      const result = await syncTurnlightsOff();
-      console.log('result', result);
+      await syncTurnlightsOff();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     return {
       container: updatedContainer,
@@ -140,7 +135,7 @@ export class ContainersService {
     try {
       await syncTurnlightsOn();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     return {
@@ -159,7 +154,7 @@ export class ContainersService {
         ),
       );
     } catch (error) {
-      console.log('error remove containers', error);
+      console.error('error remove containers', error);
     }
   }
 
@@ -177,7 +172,7 @@ export class ContainersService {
       );
       return true;
     } catch (error) {
-      console.log('error populating containers', error);
+      console.error('error populating containers', error);
     }
   }
 }

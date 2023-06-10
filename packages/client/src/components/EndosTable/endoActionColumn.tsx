@@ -83,7 +83,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

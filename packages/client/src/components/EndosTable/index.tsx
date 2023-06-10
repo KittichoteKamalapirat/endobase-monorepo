@@ -89,7 +89,6 @@ const EndosTable = () => {
     (state: RootState) => state.filter
   );
 
-  console.log("currentPageIndex", currentPageIndex);
   const dispatch = useDispatch();
 
   const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[]);
@@ -128,7 +127,6 @@ const EndosTable = () => {
     globalFilterValue,
   ]);
 
-  console.log("columns", columns);
   const data = useMemo(() => {
     if (error || loading || endosData?.endos.length === 0) return [];
     return sortedEndos || [];
@@ -361,8 +359,9 @@ const EndosTable = () => {
                     isnumeric={cell.column.isNumeric}
                     key={index}
                     onClick={
-                      // if col is action => don't navigate! (nested links are not allowed)
-                      cell.column.Header !== "Action"
+                      // if col is action or others => don't navigate! (nested links are not allowed)
+                      cell.column.Header !== "Action" &&
+                      cell.column.id !== "others"
                         ? () =>
                             navigate(`/endo/${(row.original as Endo).id}`, {
                               state: { prev: "/" },

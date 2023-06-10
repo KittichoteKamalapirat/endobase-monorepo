@@ -87,7 +87,7 @@ export class SettingService {
         ),
       );
     } catch (error) {
-      console.log('error remove settings', error);
+      console.error('error remove settings', error);
     }
   }
 
@@ -137,7 +137,7 @@ export class SettingService {
       await this.settingRepository.save(newRow4);
       return true;
     } catch (error) {
-      console.log('error populating users', error);
+      console.error('error populating users', error);
     }
   }
 }

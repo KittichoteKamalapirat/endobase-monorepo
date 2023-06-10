@@ -18,7 +18,7 @@ export class OfficersService {
       const savedOfficer = await this.officersRepository.save(newOfficer);
       return { officer: savedOfficer };
     } catch (error) {
-      console.log('erorr', error);
+      console.error('erorr', error);
 
       if (
         error.detail.includes(
@@ -123,7 +123,7 @@ export class OfficersService {
         ),
       );
     } catch (error) {
-      console.log('error remove officers', error);
+      console.error('error remove officers', error);
     }
   }
 }

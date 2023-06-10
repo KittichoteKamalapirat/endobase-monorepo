@@ -81,7 +81,7 @@ export class SnapshotsService {
         ),
       );
     } catch (error) {
-      console.log('error remove snapshots', error);
+      console.error('error remove snapshots', error);
     }
   }
 }

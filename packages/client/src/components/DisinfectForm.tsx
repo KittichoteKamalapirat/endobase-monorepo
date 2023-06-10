@@ -107,8 +107,6 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
         errorMessage += `${message}\n`;
       });
 
-      console.log("error message", errorMessage);
-
       if (resultValue && resultUserErrors.length === 0) {
         dispatch(
           showToast({
@@ -127,7 +125,7 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

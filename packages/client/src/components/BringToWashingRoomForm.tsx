@@ -21,10 +21,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -40,7 +40,11 @@ interface FormValues {
 const initialData = {
   officerNum: "",
 };
-const BringToWashingRoomForm = ({ refetchEndo, containerClass, disabled }: Props) => {
+const BringToWashingRoomForm = ({
+  refetchEndo,
+  containerClass,
+  disabled,
+}: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -52,8 +56,8 @@ const BringToWashingRoomForm = ({ refetchEndo, containerClass, disabled }: Props
     control,
     handleSubmit,
     formState: { errors },
-    setFocus, setError
-
+    setFocus,
+    setError,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
@@ -107,7 +111,7 @@ const BringToWashingRoomForm = ({ refetchEndo, containerClass, disabled }: Props
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

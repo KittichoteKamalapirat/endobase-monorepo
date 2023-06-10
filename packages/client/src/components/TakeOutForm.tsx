@@ -21,10 +21,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -100,7 +100,7 @@ const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

@@ -30,7 +30,7 @@ export const ColumnFilter = ({
     }
 
     if (typeof currentPageIndex === "number" && Header === "Location") {
-      if (status !== "ready") return;
+      if (status !== "ready" && status !== "") return;
       setFilter(locations[currentPageIndex]);
       return;
     }

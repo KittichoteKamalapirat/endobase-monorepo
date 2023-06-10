@@ -59,7 +59,7 @@ const ContainerActionColumn = ({ row }: Props) => {
           })
         );
     } catch (error) {
-      console.log("error turn lights on", error);
+      console.error("error turn lights on", error);
     }
   };
 

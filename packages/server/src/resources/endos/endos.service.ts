@@ -34,7 +34,7 @@ export class EndosService {
 
   async findAll(): Promise<Endo[]> {
     const endos = await this.endosRepository.find({
-      relations: ['tray', 'tray.container'],
+      relations: ['tray', 'tray.container', 'repairRequests'],
       // loadRelationIds: true,
       order: {
         type: 'ASC',
@@ -280,7 +280,7 @@ export class EndosService {
         endos.map((endo) => this.endosRepository.delete({ id: endo.id })),
       );
     } catch (error) {
-      console.log('error remove endos', error);
+      console.error('error remove endos', error);
     }
   }
 
@@ -304,7 +304,7 @@ export class EndosService {
 
       return true;
     } catch (error) {
-      console.log('error populating containers', error);
+      console.error('error populating containers', error);
     }
   }
 }

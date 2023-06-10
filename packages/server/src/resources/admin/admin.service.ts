@@ -44,7 +44,7 @@ export class AdminService {
 
       return { value: true };
     } catch (error) {
-      console.log('error delete all data', error);
+      console.error('error delete all data', error);
 
       return {
         errors: [{ field: 'admin', message: 'Cannot delete all data ' }],
@@ -62,7 +62,7 @@ export class AdminService {
       await this.endosService.populateRows();
       return { value: true };
     } catch (error) {
-      console.log('error delete all data', error);
+      console.error('error delete all data', error);
 
       return {
         errors: [{ field: 'admin', message: 'Cannot populate all data ' }],

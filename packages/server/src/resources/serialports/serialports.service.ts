@@ -76,20 +76,18 @@ export class SerialportsService implements OnModuleInit {
       this.activeSerialportObj = activeSerialportObj;
       console.log('active ports', this.activeSerialportObj);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   @Timeout(CREATE_SNAPSHOT_TIMEOUT)
   async createSnapshotTimeout() {
     // wait a bit for modbus to connect
-    // console.log('create snapshot timeout');
     await this.createSnapshot();
   }
 
   @Cron(CronExpression.EVERY_HOUR)
   async createSnapshotCron() {
-    // console.log('create snapshot cron');
     await this.createSnapshot();
   }
 
@@ -117,28 +115,24 @@ export class SerialportsService implements OnModuleInit {
           hum,
           containerId: container.id,
         };
-        // console.log('snapshots be created');
         await this.snapshotsService.create(input);
       }
     };
     try {
       await syncCreateSnapshots();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
   // wait a bit for modbus to connect
   @Timeout(UPDATE_CONTAINER_STATS_TIMEOUT)
   async updateContainerStatusCronTimeout() {
-    // console.log('update container stats timeout');
     await this.updateContainerStatus();
   }
 
   @Cron('*/15 * * * * *')
   async updateContainerStatusCron() {
-    // console.log('update container stats every 15 sec');
-    // console.log('modbus status', this.activeSerialportObj);
     await this.updateContainerStatus();
   }
 
@@ -168,10 +162,9 @@ export class SerialportsService implements OnModuleInit {
       }
     };
     try {
-      // console.log('update container stats');
       await syncUpdateContainers();
     } catch (error) {
-      console.log('error update container status', error.message);
+      console.error('error update container status', error.message);
     }
   }
 

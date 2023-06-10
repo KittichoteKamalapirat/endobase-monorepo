@@ -4,13 +4,23 @@ import { BsInboxesFill } from "react-icons/bs";
 import { ICON_SIZE } from "../../constants";
 import { primaryColor } from "../../theme";
 // import { getCurrentBreakpoint } from "../../hooks/useScreenIsLargerThan";
-import { CgHashtag } from "react-icons/cg";
+import { CgBandAid, CgHashtag } from "react-icons/cg";
 import { TbActivityHeartbeat } from "react-icons/tb";
 import { bgConfig } from "../../utils/colorToTailwindBgColor";
 import { ENDO_STATUS_VALUES, statusToColor } from "../../utils/statusToColor";
-import ActionColumn from "./endoActionColumn";
 import { ColumnFilter } from "./ColumnFilter";
+import ActionColumn from "./endoActionColumn";
 
+import { MdHistory } from "react-icons/md";
+import { EndosQuery } from "../../generated/graphql";
+import IconButton from "../Buttons/IconButton";
+import { IoMdBuild } from "react-icons/io";
+import { ButtonTypes } from "../Buttons/Button";
+import { urlResolver } from "../../lib/UrlResolver";
+import LinkButton from "../Buttons/LinkButton";
+import { Link } from "react-router-dom";
+
+type EndosQueryEndo = EndosQuery["endos"][number];
 interface Props {
   pickEndo: any;
   refetchEndos: any;
@@ -125,7 +135,6 @@ export const endoColumns = ({
         "Status"
       ) : (
         <div className="mx-auto">
-          {" "}
           <TbActivityHeartbeat size={ICON_SIZE + 4} color={primaryColor} />
         </div>
       ),
@@ -153,5 +162,49 @@ export const endoColumns = ({
         );
       },
     },
+    ...(isLargerThanBreakpoint
+      ? [
+          {
+            Header: isLargerThanBreakpoint ? (
+              "Others"
+            ) : (
+              <div className="mx-auto">
+                <MdHistory size={ICON_SIZE + 4} color={primaryColor} />
+              </div>
+            ),
+            accessor: "others", // just so it's not error
+            Cell: ({ row }: { row: { original: EndosQueryEndo } }) => {
+              const endoId = row.original.id;
+              const hadRequestRepair =
+                row.original.repairRequests &&
+                Boolean(row.original.repairRequests?.length > 0);
+              if (!hadRequestRepair) return null;
+              return (
+                <div className="flex items-center gap-2">
+                  <CgBandAid
+                    size={ICON_SIZE + 8}
+                    color={primaryColor}
+                    className="p-1"
+                  />
+
+                  <Link
+                    to={`${urlResolver.requestRepair(
+                      endoId
+                    )}?prev=${urlResolver.endo(endoId)}`}
+                    type={ButtonTypes.OUTLINED}
+                  >
+                    <IoMdBuild
+                      size={ICON_SIZE + 8}
+                      color={primaryColor}
+                      className=" hover:bg-grey-100 rounded-full p-1"
+                    />
+                  </Link>
+                </div>
+              );
+            },
+            Filter: ColumnFilter, // cause error without this line
+          },
+        ]
+      : []),
   ];
 };

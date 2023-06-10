@@ -160,7 +160,7 @@ const CompleteSessionForm = ({
       );
       handleBlinkLocation(ENDO_STATUS.READY);
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
   return (

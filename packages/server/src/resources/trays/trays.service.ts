@@ -59,7 +59,7 @@ export class TraysService {
         trays.map((tray) => this.traysRepository.delete({ id: tray.id })),
       );
     } catch (error) {
-      console.log('error remove trays', error);
+      console.error('error remove trays', error);
     }
   }
 
@@ -83,7 +83,7 @@ export class TraysService {
       });
       return true;
     } catch (error) {
-      console.log('error populating containers', error);
+      console.error('error populating containers', error);
     }
   }
 }

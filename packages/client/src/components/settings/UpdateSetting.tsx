@@ -61,7 +61,7 @@ const UpdateSetting = ({ setting, defaultValues }: Props) => {
         })
       );
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
 

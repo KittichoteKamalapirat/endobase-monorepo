@@ -57,7 +57,7 @@ export class PatientsService {
         ),
       );
     } catch (error) {
-      console.log('error remove patients', error);
+      console.error('error remove patients', error);
     }
   }
 }

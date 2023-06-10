@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+// if pageIndex === -1 => show every
 export interface Filter {
   pageIndex: number; // container index
 }

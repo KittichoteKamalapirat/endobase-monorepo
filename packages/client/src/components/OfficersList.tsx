@@ -59,7 +59,7 @@ const OfficersList = () => {
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
   if (loading) return <Loading />;

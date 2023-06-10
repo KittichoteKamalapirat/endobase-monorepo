@@ -814,7 +814,7 @@ export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id:
 export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, repairRequests?: Array<{ __typename?: 'RepairRequest', id: string }> | null, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
 
 export type FinishRepairMutationVariables = Exact<{
   id: Scalars['String'];
@@ -1683,6 +1683,9 @@ export const EndosDocument = gql`
     lastPutBackISO
     dryingTime
     position
+    repairRequests {
+      id
+    }
     tray {
       id
       row

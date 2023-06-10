@@ -11,6 +11,9 @@ query endos {
     lastPutBackISO
     dryingTime
     position
+    repairRequests {
+      id
+    }
     tray {
       id
       row

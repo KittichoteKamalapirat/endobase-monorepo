@@ -8,7 +8,7 @@ import { LoginInput } from './dto/login.input';
 
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService) {}
 
   async login(data: LoginInput, req: RequestWithSession) {
     const response = await this.validateUser(data.username, data.password);
@@ -63,7 +63,7 @@ export class AuthService {
           secure: IS_PROD,
         });
         if (err) {
-          // console.log(err);
+          console.error(err);
           resolve(false);
           return;
         }

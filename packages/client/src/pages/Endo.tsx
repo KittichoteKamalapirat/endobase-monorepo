@@ -15,7 +15,7 @@ import {
   useDeleteEndoMutation,
   useEndoQuery,
   useEndosQuery,
-  useFinishRepairMutation
+  useFinishRepairMutation,
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
 import { urlResolver } from "../lib/UrlResolver";
@@ -35,13 +35,12 @@ const EndoPage = () => {
 
   const [deleteEndo] = useDeleteEndoMutation();
   const dispatch = useDispatch();
-  const [finishRepair] = useFinishRepairMutation()
+  const [finishRepair] = useFinishRepairMutation();
 
   const navigate = useNavigate();
   // for back button
   const { state } = useLocation();
   const { prev } = state || {}; // read the prev route
-
 
   const handleFinishRepair = async (id: string) => {
     try {
@@ -53,7 +52,7 @@ const EndoPage = () => {
 
       const resultValue = result.data?.finishRepair.id;
       if (resultValue) {
-        await refetchEndos()
+        await refetchEndos();
         dispatch(
           showToast({
             message: "Successfully updated the endoscope",
@@ -61,12 +60,9 @@ const EndoPage = () => {
           })
         );
 
-        navigate(urlResolver.endos(ENDO_STATUS.FIXED))
-        navigate(0)
-
-
+        navigate(urlResolver.endos(ENDO_STATUS.FIXED));
+        navigate(0);
       } else {
-
         dispatch(
           showToast({
             message: "An error occured",
@@ -75,11 +71,9 @@ const EndoPage = () => {
         );
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
-
-
 
   const handleConfirmModal = () =>
     dispatch(
@@ -142,24 +136,22 @@ const EndoPage = () => {
         <div className="flex items-center justify-between my-4">
           <PageHeading heading="Endoscope Setting" />
           <div className="flex gap-2">
-            {data?.endo.status === "out_of_order" ? <Button
-              label="Finished Repairing"
-              onClick={() => handleFinishRepair(endoId)}
-              type={ButtonTypes.OUTLINED}
-              startIcon={
-                <IoMdBuild size={ICON_SIZE} color={primaryColor} />
-              }
-            />
-              : <LinkButton
-                label="Request repair"
-                href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(id)}`}
+            {data?.endo.status === "out_of_order" ? (
+              <Button
+                label="Finished Repairing"
+                onClick={() => handleFinishRepair(endoId)}
                 type={ButtonTypes.OUTLINED}
-              />}
-
-
-
-
-
+                startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
+              />
+            ) : (
+              <LinkButton
+                label="Request repair"
+                href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(
+                  id
+                )}`}
+                type={ButtonTypes.OUTLINED}
+              />
+            )}
 
             <Button
               label="Edit"

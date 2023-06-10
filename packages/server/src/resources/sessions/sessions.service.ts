@@ -146,7 +146,7 @@ export class SessionsService {
         ),
       );
     } catch (error) {
-      console.log('error remove sessions', error);
+      console.error('error remove sessions', error);
     }
   }
 }

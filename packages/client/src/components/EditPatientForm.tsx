@@ -3,23 +3,18 @@ import { useParams } from "react-router-dom";
 import {
   Patient,
   useSessionQuery,
-  useUpdateSessionPatientMutation
+  useUpdateSessionPatientMutation,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import PatientEditor, { PatientFormValues } from "./PatientEditor";
 
 interface Props {
   disabled: boolean; // if Take Out Form is not completed yet
-  className?: string
-  patient: Patient
+  className?: string;
+  patient: Patient;
 }
 
-
-
-
-
 const EditPatientForm = ({ patient, disabled, className }: Props) => {
-
   const defaultValues = {
     patientHnNum: patient.hosNum,
   };
@@ -29,10 +24,9 @@ const EditPatientForm = ({ patient, disabled, className }: Props) => {
     variables: { id: sessionId || "" },
   }); // to update cache
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [updatePatientInSession] = useUpdateSessionPatientMutation();
-
 
   const onSubmit = async (data: PatientFormValues) => {
     try {
@@ -54,23 +48,27 @@ const EditPatientForm = ({ patient, disabled, className }: Props) => {
         },
       });
 
-      if (result.data?.updateSessionPatient) return dispatch(
-        showToast({
-          message: "Successfully updated the patient",
-          variant: "success",
-        })
-      );
+      if (result.data?.updateSessionPatient)
+        return dispatch(
+          showToast({
+            message: "Successfully updated the patient",
+            variant: "success",
+          })
+        );
       refetch();
     } catch (error) {
-      console.log("error", error);
+      console.error("error", error);
     }
   };
   return (
     <div className={className}>
-      <PatientEditor defaultValues={defaultValues} onSubmit={onSubmit} disabled={disabled} isEditing />
-
+      <PatientEditor
+        defaultValues={defaultValues}
+        onSubmit={onSubmit}
+        disabled={disabled}
+        isEditing
+      />
     </div>
-
   );
 };
 export default EditPatientForm;

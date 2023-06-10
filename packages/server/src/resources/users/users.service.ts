@@ -138,7 +138,7 @@ export class UsersService {
         users.map((user) => this.usersRepository.delete({ id: user.id })),
       );
     } catch (error) {
-      console.log('error remove users', error);
+      console.error('error remove users', error);
     }
   }
 
@@ -154,7 +154,7 @@ export class UsersService {
       await this.usersRepository.save(newRow);
       return true;
     } catch (error) {
-      console.log('error populating users', error);
+      console.error('error populating users', error);
     }
   }
 }

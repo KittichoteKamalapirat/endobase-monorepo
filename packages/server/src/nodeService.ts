@@ -2,7 +2,7 @@ var Service = require('node-windows').Service;
 
 // Create a new service object
 var svc = new Service({
-  name: 'endo_supply_server_20',
+  name: 'endo_supply_server_26',
   description: 'An endoscope data management system iOT',
   script: 'C:\\Program Files\\endobase-monorepo\\packages\\server\\dist\\main.js',
   nodeOptions: [

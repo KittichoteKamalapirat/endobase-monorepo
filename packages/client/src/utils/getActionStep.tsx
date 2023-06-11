@@ -13,7 +13,7 @@ export const getActionLabel = (actionType: ACTION_TYPE_VALUES | "patient") => {
         case "disinfect":
             return "5. Disinfection"
         case "store":
-            return "6. Put back to storage and dry"
+            return "6. Put back to storage or use again"
 
     }
 }

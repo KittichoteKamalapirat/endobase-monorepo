@@ -16,7 +16,7 @@
     "execute": "ts-node ./src/console.ts",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "prod": "set NODE_ENV=production && node dist/nodeService.js",
+    "prod": "set NODE_ENV=hadyai && node dist/nodeService.js",
     "deploy": "yarn build && yarn prod",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

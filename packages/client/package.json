@@ -33,7 +33,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev:win": "react-scripts start",
+    "dev:win": "set REACT_APP_ENVIRONMENT=localhost&& react-scripts start",
     "dev:mac": "REACT_APP_ENVIRONMENT=localhost react-scripts start",
     "dev:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",
     "start:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",
@@ -44,7 +44,7 @@
     "eject": "react-scripts eject",
     "gen": "graphql-codegen --config codegen.ts",
     "build-image": "docker build . -t endobase",
-    "deploy-container": "docker container run -d -p 80:80 --name endobase_react 2712151de988"
+    "deploy-container": "docker container run -d -p 80:80 --name endobase_react 1d8c46b556acd405f5c7be7b4ee138062fe33b4b1925b44244ce48b74945aef9"
   },
   "eslintConfig": {
     "extends": [

@@ -81,51 +81,51 @@ export const endoColumns = ({
     },
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Brand",
-            accessor: "brand",
-            Filter: ColumnFilter,
-          },
-        ]
+        {
+          Header: "Brand",
+          accessor: "brand",
+          Filter: ColumnFilter,
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Model",
-            accessor: "model",
-            Filter: ColumnFilter,
-          },
-        ]
+        {
+          Header: "Model",
+          accessor: "model",
+          Filter: ColumnFilter,
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Type",
-            accessor: "type",
-            Filter: ColumnFilter,
-          },
-        ]
+        {
+          Header: "Type",
+          accessor: "type",
+          Filter: ColumnFilter,
+        },
+      ]
       : []),
 
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: "Storage Time",
-            accessor: "lastPutBackISO",
-            Filter: ColumnFilter,
-            Cell: ({
-              value: lastPubBackISO,
-            }: {
-              value: ENDO_STATUS_VALUES;
-            }) => {
-              dayjs.extend(relativeTime);
-              const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
-              return <div>{timeFromNow}</div>;
-            },
+        {
+          Header: "Storage Time",
+          accessor: "lastPutBackISO",
+          Filter: ColumnFilter,
+          Cell: ({
+            value: lastPubBackISO,
+          }: {
+            value: ENDO_STATUS_VALUES;
+          }) => {
+            dayjs.extend(relativeTime);
+            const timeFromNow = dayjs(lastPubBackISO).fromNow(true);
+            return <div>{timeFromNow}</div>;
           },
-        ]
+        },
+      ]
       : []),
 
     {
@@ -162,47 +162,48 @@ export const endoColumns = ({
     },
     ...(isLargerThanBreakpoint
       ? [
-          {
-            Header: isLargerThanBreakpoint ? (
-              "Others"
-            ) : (
-              <div className="mx-auto">
-                <MdHistory size={ICON_SIZE + 4} color={primaryColor} />
-              </div>
-            ),
-            accessor: "others", // just so it's not error
-            Cell: ({ row }: { row: { original: EndosQueryEndo } }) => {
-              const endoId = row.original.id;
-              const hadRequestRepair =
-                row.original.repairRequests &&
-                Boolean(row.original.repairRequests?.length > 0);
-              if (!hadRequestRepair) return null;
-              return (
-                <div className="flex items-center gap-2">
-                  <CgBandAid
+        {
+          Header: isLargerThanBreakpoint ? (
+            "Others"
+          ) : (
+            <div className="mx-auto">
+              <MdHistory size={ICON_SIZE + 4} color={primaryColor} />
+            </div>
+          ),
+          accessor: "others", // just so it's not error
+          Cell: ({ row }: { row: { original: EndosQueryEndo } }) => {
+            const endoId = row.original.id;
+            const hadRequestRepair =
+              row.original.repairRequests &&
+              Boolean(row.original.repairRequests?.length > 0);
+
+            return (
+              <div className="flex items-center gap-2">
+
+                <Link
+                  to={`${urlResolver.requestRepair(
+                    endoId
+                  )}?prev=${urlResolver.endo(endoId)}`}
+                  type={ButtonTypes.OUTLINED}
+                >
+                  <IoMdBuild
                     size={ICON_SIZE + 8}
                     color={primaryColor}
-                    className="p-1"
+                    className=" hover:bg-grey-100 rounded-full p-1"
                   />
+                </Link>
+                {hadRequestRepair && <CgBandAid
+                  size={ICON_SIZE + 8}
+                  color={primaryColor}
+                  className="p-1"
+                />}
 
-                  <Link
-                    to={`${urlResolver.requestRepair(
-                      endoId
-                    )}?prev=${urlResolver.endo(endoId)}`}
-                    type={ButtonTypes.OUTLINED}
-                  >
-                    <IoMdBuild
-                      size={ICON_SIZE + 8}
-                      color={primaryColor}
-                      className=" hover:bg-grey-100 rounded-full p-1"
-                    />
-                  </Link>
-                </div>
-              );
-            },
-            Filter: ColumnFilter, // cause error without this line
+              </div>
+            );
           },
-        ]
+          Filter: ColumnFilter, // cause error without this line
+        },
+      ]
       : []),
   ];
 };

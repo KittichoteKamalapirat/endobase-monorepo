@@ -53,10 +53,7 @@ export class SerialportsService implements OnModuleInit {
         (process.env.NODE_ENV as Env) !== 'showcase' &&
         (process.env.NODE_ENV as Env) !== 'localhost'
       ) {
-        console.log('init modbus')
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
-        console.log('successfully inited')
-        console.log('init setting')
         await this.settingService.initSetting();
       }
     } catch (error) {
@@ -153,13 +150,10 @@ export class SerialportsService implements OnModuleInit {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
 
-        console.log('arduinoId', arduinoId)
         this.modbus.setID(arduinoId);
-        console.log('to read input')
 
         try {
           const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
-          console.log('input read')
           // update just in case the sp did not init correctly when server starts
           if (typeof val.data[1] === 'number') {
             // got value back

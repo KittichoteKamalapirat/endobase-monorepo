@@ -15,32 +15,32 @@ export const ColumnFilter = ({
   status,
   globalFilter,
 }: Props) => {
-  const { filterValue, setFilter, Header } = column || {};
+  const { filterValue, setFilter, id } = column || {};
 
   useEffect(() => {
     if (globalFilter) {
-      Header === "Location" && setFilter("");
-      Header === "Status" && setFilter("");
+      id === "position" && setFilter("");
+      id === "status" && setFilter("");
       return;
     }
     // // do not filter pageIndex if not
-    // if (Header === "Status" && status !== "ready" && status !== "") {
+    // if (id === "Status" && status !== "ready" && status !== "") {
     //   setFilter(status);
     //   return;
     // }
 
     // filter pageIndex
-    if (Header === "Location" && currentPageIndex !== -1) {
+    if (id === "position" && currentPageIndex !== -1) {
       setFilter(locations[currentPageIndex]);
     }
 
-    if (Header === "Status") {
+    if (id === "status") {
       // if (status !== "ready" && status !== "") return;
       // setFilter(locations[currentPageIndex]);
       setFilter(status);
       // return;
     }
-  }, [currentPageIndex, Header, status]);
+  }, [currentPageIndex, id, status]);
 
   return (
     <input

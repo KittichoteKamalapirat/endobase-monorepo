@@ -7,10 +7,6 @@ export type Env =
 
 export const getEnvPath = () => {
   const env = process.env.NODE_ENV as Env;
-  console.log('env', env)
-  console.log('boolean', env === "localhost")
-  console.log('type', typeof env)
-  console.log(`xxx${env}xxx`)
   switch (env) {
     case 'hadyai':
       return '.env.hadyai';

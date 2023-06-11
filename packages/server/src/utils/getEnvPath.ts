@@ -1,16 +1,25 @@
-import { ObjectKeys } from '.';
+export type Env =
+  | 'development'
+  | 'production'
+  | 'localhost'
+  | 'showcase'
+  | 'hadyai';
 
-const ENV = {
-  showcase: 'showcase',
-  hadyai: 'hadyai',
-  development: 'development',
-} as const;
-
-export type EnvKey = ObjectKeys<typeof ENV>;
-
-export const getEnvPath = (NODE_ENV: EnvKey) => {
-  console.log('NODE_ENV', NODE_ENV);
-  const envSuffix = ENV[NODE_ENV];
-  const envPath = envSuffix ? `.env.${envSuffix}` : '.env';
-  return envPath;
+export const getEnvPath = () => {
+  const env = process.env.NODE_ENV as Env;
+  switch (env) {
+    case 'hadyai':
+      return '.env.hadyai';
+    case 'development':
+      return '.env.development';
+    case 'production':
+      return '.env.production';
+    case 'localhost':
+      return '.env.localhost';
+    case 'showcase':
+      return '.env.showcase';
+    default:
+      const _unreachable: never = env;
+      throw `Unexpected NODE_ENV value: ${_unreachable}`;
+  }
 };

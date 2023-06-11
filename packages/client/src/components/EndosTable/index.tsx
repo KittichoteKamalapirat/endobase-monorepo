@@ -17,35 +17,34 @@ import {
 } from "../../generated/graphql";
 
 import { FaRegHospital } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CONTAINER_CAPACITY, CONTAINER_NUM, ICON_SIZE } from "../../constants";
-import { useQueryParam } from "../../hooks/useQueryParam";
 import { useRefetchCounter } from "../../hooks/useRefetchCounter";
 import { useScreenIsLargerThan } from "../../hooks/useScreenIsLargerThan";
+import { updateFilter } from "../../redux/slices/filterReducer";
+import { RootState } from "../../redux/store";
+import { filterEndoByStatus } from "../../utils/filterEndoByStatus";
 import { sortEndosByPosition } from "../../utils/sortEndosByPosition";
 import { ENDO_STATUS_VALUES, statusToBgColor } from "../../utils/statusToColor";
+import Badge from "../Badge";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import CounterIndicator from "../CounterIndicator";
 import EndoStatusTable2 from "../EndoStatusTable2";
-import { Error } from "../skeletons/Error";
-import RowsSkeleton from "../skeletons/RowsSkeleton";
 import ManualPaginationControl from "../Table/ManualPaginationControl";
 import SortHeader from "../Table/SortHeader";
-import Table from "../Table/Table";
 import TBody from "../Table/TBody";
 import TD from "../Table/TD";
 import TH from "../Table/TH";
 import THead from "../Table/THead";
 import TR from "../Table/TR";
+import Table from "../Table/Table";
+import { Error } from "../skeletons/Error";
+import RowsSkeleton from "../skeletons/RowsSkeleton";
 import PageHeading from "../typography/PageHeading";
-import { endoColumns } from "./endoColumns";
-import { EndosGlobalFilter } from "./EndosGlobalFilter";
-import Badge from "../Badge";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { updateFilter } from "../../redux/slices/filterReducer";
 import { locations } from "./ColumnFilter";
-import { filterEndoByStatus } from "../../utils/filterEndoByStatus";
+import { EndosGlobalFilter } from "./EndosGlobalFilter";
+import { endoColumns } from "./endoColumns";
 // 1. get the data
 // 2. define the columns
 // 3. create a table instance
@@ -248,7 +247,8 @@ const EndosTable = () => {
       </div>
       {/* container buttons */}
       <p className="font-bold text-lg">Containers</p>
-      <div className={`grid grid-cols-${containersData?.containers.length}`}>
+      {/* TODO: when containers num changes  */}
+      <div className={`grid grid-cols-7`}>
         {containersData?.containers
           .slice()
           .sort((a, b) => (a.col === b.col ? 0 : a.col < b.col ? -1 : 1))

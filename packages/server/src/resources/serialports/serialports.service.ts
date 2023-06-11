@@ -24,6 +24,7 @@ import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
+import { Env } from '../../utils/getEnvPath';
 
 @Injectable()
 export class SerialportsService implements OnModuleInit {
@@ -47,7 +48,10 @@ export class SerialportsService implements OnModuleInit {
       (key) => (this.activeSerialportObj[key] = false),
     ); // make all fale by default
 
-    if (process.env.NODE_ENV !== 'showcase') {
+    if (
+      (process.env.NODE_ENV as Env) !== 'showcase' &&
+      (process.env.NODE_ENV as Env) !== 'localhost'
+    ) {
       await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
       await this.settingService.initSetting();
     }

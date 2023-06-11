@@ -11,14 +11,12 @@ import { ENDO_STATUS_VALUES, statusToColor } from "../../utils/statusToColor";
 import { ColumnFilter } from "./ColumnFilter";
 import ActionColumn from "./endoActionColumn";
 
-import { MdHistory } from "react-icons/md";
-import { EndosQuery } from "../../generated/graphql";
-import IconButton from "../Buttons/IconButton";
 import { IoMdBuild } from "react-icons/io";
-import { ButtonTypes } from "../Buttons/Button";
-import { urlResolver } from "../../lib/UrlResolver";
-import LinkButton from "../Buttons/LinkButton";
+import { MdHistory } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { EndosQuery } from "../../generated/graphql";
+import { urlResolver } from "../../lib/UrlResolver";
+import { ButtonTypes } from "../Buttons/Button";
 
 type EndosQueryEndo = EndosQuery["endos"][number];
 interface Props {

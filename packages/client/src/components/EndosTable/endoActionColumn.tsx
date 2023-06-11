@@ -121,7 +121,11 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
 
   const isResponding = row.original.tray.container.isResponding;
 
-  if (process.env.REACT_APP_ENVIRONMENT !== "showcase" && !isResponding)
+  if (
+    process.env.REACT_APP_ENVIRONMENT !== "showcase" &&
+    process.env.REACT_APP_ENVIRONMENT !== "localhost" &&
+    !isResponding
+  )
     return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {

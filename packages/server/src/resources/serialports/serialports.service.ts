@@ -41,7 +41,7 @@ export class SerialportsService implements OnModuleInit {
     @Inject(forwardRef(() => ContainersService))
     private containersService: ContainersService,
     private settingService: SettingService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     Object.keys(CONTAINER_TYPE_OBJ).forEach(
@@ -66,6 +66,7 @@ export class SerialportsService implements OnModuleInit {
         const arduinoId = columnToArduinoIdMapper[key];
         this.modbus.setID(arduinoId);
         const val = await this.modbus.readInputRegisters(0, 3);
+        console.log('key and val', key, val)
         if (val) activeSerialportObj[key] = true;
         else activeSerialportObj[key] = false;
       }

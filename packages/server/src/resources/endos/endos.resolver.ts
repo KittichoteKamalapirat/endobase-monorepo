@@ -17,13 +17,13 @@ import { Session } from '../sessions/entities/session.entity';
 
 @Resolver(() => Endo)
 export class EndosResolver {
-  constructor(private endosService: EndosService) {}
+  constructor(private endosService: EndosService) { }
 
   @ResolveField(() => String)
   position(@Root() endo: Endo): string {
     const row = endo.tray.row;
     const col = endo.tray.container.col;
-    const colDisplay = CONTAINER_TYPE_OBJ[col];
+    const colDisplay = CONTAINER_TYPE_OBJ[col] || "C" // TODO;
     return `${colDisplay}${row}`;
   }
 

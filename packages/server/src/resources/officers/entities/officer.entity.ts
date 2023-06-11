@@ -27,11 +27,11 @@ export class Officer {
   @Field()
   officerNum: string;
 
-  @Column()
+  @Column({ default: "" })
   @Field()
   firstName: string;
 
-  @Column()
+  @Column({ default: "" })
   @Field()
   lastName: string;
 

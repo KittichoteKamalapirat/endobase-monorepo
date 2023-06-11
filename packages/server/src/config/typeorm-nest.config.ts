@@ -33,5 +33,5 @@ export const typeormConfigNest = {
     RepairRequest,
   ],
   synchronize: true,
-  logging: true,
+  logging: false,
 };

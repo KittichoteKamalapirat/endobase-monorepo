@@ -33,7 +33,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev:win": "react-scripts start",
+    "dev:win": "set REACT_APP_ENVIRONMENT=localhost&& react-scripts start",
     "dev:mac": "REACT_APP_ENVIRONMENT=localhost react-scripts start",
     "dev:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",
     "start:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",

@@ -41,20 +41,28 @@ export class SerialportsService implements OnModuleInit {
     @Inject(forwardRef(() => ContainersService))
     private containersService: ContainersService,
     private settingService: SettingService,
-  ) {}
+  ) { }
 
   async onModuleInit() {
     Object.keys(CONTAINER_TYPE_OBJ).forEach(
       (key) => (this.activeSerialportObj[key] = false),
     ); // make all fale by default
 
-    if (
-      (process.env.NODE_ENV as Env) !== 'showcase' &&
-      (process.env.NODE_ENV as Env) !== 'localhost'
-    ) {
-      await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
-      await this.settingService.initSetting();
+    try {
+      if (
+        (process.env.NODE_ENV as Env) !== 'showcase' &&
+        (process.env.NODE_ENV as Env) !== 'localhost'
+      ) {
+        console.log('init modbus')
+        await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
+        console.log('successfully inited')
+        console.log('init setting')
+        await this.settingService.initSetting();
+      }
+    } catch (error) {
+      console.log('error init modbus in serialport.server', error)
     }
+
   }
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
@@ -144,25 +152,34 @@ export class SerialportsService implements OnModuleInit {
     const syncUpdateContainers = async () => {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
+
+        console.log('arduinoId', arduinoId)
         this.modbus.setID(arduinoId);
+        console.log('to read input')
 
-        const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
+        try {
+          const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
+          console.log('input read')
+          // update just in case the sp did not init correctly when server starts
+          if (typeof val.data[1] === 'number') {
+            // got value back
+            this.activeSerialportObj[key] = true;
+          }
 
-        // update just in case the sp did not init correctly when server starts
-        if (typeof val.data[1] === 'number') {
-          // got value back
-          this.activeSerialportObj[key] = true;
+          const temp = String(val.data[2] / 10);
+          const hum = String(val.data[3] / 10);
+
+          const input: UpdateContainerStatsInput = {
+            col: key as CONTAINER_TYPE_VALUES,
+            currTemp: temp,
+            currHum: hum,
+          };
+
+          await this.containersService.updateStats(input);
+        } catch (error) {
+          console.error('error in synUpdateContainers', error)
         }
 
-        const temp = String(val.data[2] / 10);
-        const hum = String(val.data[3] / 10);
-
-        const input: UpdateContainerStatsInput = {
-          col: key as CONTAINER_TYPE_VALUES,
-          currTemp: temp,
-          currHum: hum,
-        };
-        await this.containersService.updateStats(input);
       }
     };
     try {

@@ -29,8 +29,8 @@ const EditOfficer = () => {
 
   const defaultValues: FormValues = {
     officerNum: data?.officer.officerNum as string,
-    firstName: data?.officer.officerNum as string,
-    lastName: data?.officer.officerNum as string,
+    firstName: data?.officer.firstName as string,
+    lastName: data?.officer.lastName as string,
     type: data?.officer.type as OFFICER_TYPE_VALUES,
   };
 

@@ -30,10 +30,10 @@ interface Props {
   refetchEndo: (
     variables?:
       | Partial<
-        Exact<{
-          id: string;
-        }>
-      >
+          Exact<{
+            id: string;
+          }>
+        >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
@@ -91,9 +91,10 @@ const CompleteSessionForm = ({
       const result = await washWithoutStoring({ variables: { id } });
 
       const sessionId = result.data?.washWithoutStoring.id;
+      const officerNum = watch(FormNames.OFFICER_NUM);
       await refetchEndos();
       navigate(`/session/${sessionId}`, {
-        state: { prev: "/" },
+        state: { prev: "/", officerNum },
       });
     } catch (error) {
       dispatch(

@@ -10,7 +10,6 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import { ACTION_TYPE_OBJ } from "../utils/actionTypeToLabel";
 import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
@@ -27,6 +26,7 @@ interface Props {
         >
       | undefined
   ) => Promise<ApolloQueryResult<EndoQuery>>;
+  initialOfficerNum?: string;
 }
 
 enum FormNames {
@@ -37,10 +37,14 @@ interface FormValues {
   [FormNames.OFFICER_NUM]: string;
 }
 
-const initialData = {
-  officerNum: "",
-};
-const TakeOutForm = ({ refetchEndo, containerClass }: Props) => {
+const TakeOutForm = ({
+  refetchEndo,
+  initialOfficerNum,
+  containerClass,
+}: Props) => {
+  const initialData = {
+    officerNum: initialOfficerNum || "",
+  };
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 

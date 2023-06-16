@@ -10,14 +10,12 @@ import CompleteSessionForm from "../components/CompleteSessionForm";
 import DisinfectForm from "../components/DisinfectForm";
 import EditPatientForm from "../components/EditPatientForm";
 import EndoDetail from "../components/EndoDetail";
-import Layout from "../components/layouts/Layout";
 import LeakTestForm from "../components/LeakTestForm";
 import NoPatientForm from "../components/NoPatientForm";
-import PatientDetail from "../components/PatientDetail";
-import PatientForm from "../components/PatientEditor";
+import TakeOutForm from "../components/TakeOutForm";
+import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
-import TakeOutForm from "../components/TakeOutForm";
 import PageHeading from "../components/typography/PageHeading";
 import {
   Action,
@@ -36,9 +34,10 @@ const Session = () => {
 
   // for back button
   const { state } = useLocation();
-  const { prev } = state || {}; // read the prev route
+  const { prev, officerNum } = state || {}; // read the prev route
 
   const sessionId = id || "";
+
   const { data, loading, error } = useSessionQuery({
     variables: { id: sessionId },
   });
@@ -152,7 +151,11 @@ const Session = () => {
         {takeOutAction ? (
           <ActivityItem action={takeOutAction as Partial<Action>} />
         ) : (
-          <TakeOutForm containerClass="my-4" refetchEndo={refetchEndo} />
+          <TakeOutForm
+            containerClass="my-4"
+            refetchEndo={refetchEndo}
+            initialOfficerNum={officerNum}
+          />
         )}
 
         {/* 1 */}

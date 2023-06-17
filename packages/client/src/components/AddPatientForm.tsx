@@ -12,8 +12,9 @@ interface Props {
   className?: string;
 }
 
-const defaultValues = {
+const defaultValues: PatientFormValues = {
   patientHnNum: "",
+  method: "create",
 };
 
 const AddPatientForm = ({ disabled, className }: Props) => {

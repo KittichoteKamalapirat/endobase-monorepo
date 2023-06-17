@@ -15,8 +15,10 @@ interface Props {
 }
 
 const EditPatientForm = ({ patient, disabled, className }: Props) => {
-  const defaultValues = {
+  const defaultValues: PatientFormValues = {
     patientHnNum: patient.hosNum,
+    method: "edit",
+    adminCredential: "",
   };
 
   const { id: sessionId } = useParams();

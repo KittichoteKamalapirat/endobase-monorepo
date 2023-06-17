@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Control, useForm } from "react-hook-form";
+import { Control, FieldErrorsImpl, useForm } from "react-hook-form";
 import { z } from "zod";
 import { InputType } from "../constants/inputType";
 import { getActionLabel } from "../utils/getActionStep";
@@ -21,25 +21,32 @@ enum FormNames {
   ADMIN_CREDENTIAL = "adminCredential",
 }
 
-export interface PatientFormValues {
-  [FormNames.PATIENT_HN_NUM]: string;
-  [FormNames.ADMIN_CREDENTIAL]?: string;
-}
+// export interface PatientFormValues {
+//   [FormNames.PATIENT_HN_NUM]: string;
+//   [FormNames.ADMIN_CREDENTIAL]?: string;
+// }
 
-const schema = z.object({
-  adminCredential: z.string().refine(
-    (value) => {
-      console.log("adminvalue", value);
-      return typeof value == "undefined" || value === "Admin";
-    },
-    {
-      message: "Invalid admin credential",
-    }
-  ),
+const isCreateSchema = z.object({
+  method: z.literal("create"),
   patientHnNum: z
     .string()
     .length(7, { message: "Must be exactly 7 characters long" }),
 });
+
+const isEditSchema = z.object({
+  method: z.literal("edit"),
+  adminCredential: z.string().refine((value) => value === "Admin", {
+    message: "Invalid admin credential",
+  }),
+  patientHnNum: z
+    .string()
+    .length(7, { message: "Must be exactly 7 characters long" }),
+});
+
+const schema = z.discriminatedUnion("method", [isCreateSchema, isEditSchema]);
+// type CreateFormData = z.infer<typeof isCreateSchema>;
+type EditFormData = z.infer<typeof isEditSchema>;
+export type PatientFormValues = z.infer<typeof schema>;
 
 const PatientEditor = ({
   defaultValues,
@@ -106,7 +113,7 @@ const PatientEditor = ({
             extraClass="w-full"
             validation={{ validate: validateAdminField }}
             inputType={InputType.Password}
-            error={errors[FormNames.ADMIN_CREDENTIAL]}
+            error={(errors as FieldErrorsImpl<EditFormData>).adminCredential}
           />
         )}
 

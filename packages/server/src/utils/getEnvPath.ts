@@ -7,6 +7,7 @@ export type Env =
 
 export const getEnvPath = () => {
   const env = process.env.NODE_ENV as Env;
+  console.log(`NODE_ENV=${env}...`)
   switch (env) {
     case 'hadyai':
       return '.env.hadyai';
@@ -20,8 +21,9 @@ export const getEnvPath = () => {
     case 'showcase':
       return '.env.showcase';
     default:
-      console.log('out')
-      const _unreachable: never = env;
-      throw `Unexpected NODE_ENV value: ${_unreachable}`;
+      return '.env.hadyai';
+    // console.log('env unreachable')
+    // const _unreachable: never = env;
+    // throw `Unexpected NODE_ENV value: ${_unreachable}`;
   }
 };

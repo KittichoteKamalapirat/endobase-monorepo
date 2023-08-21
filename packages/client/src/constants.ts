@@ -16,8 +16,8 @@ export const CONTAINER_CAPACITY = 16;
 const prod = {
   // graphqlHttpEndpoint: "http://localhost:4001/graphql",
   // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
-  graphqlHttpEndpoint: "http://192.168.0.100:4001/graphql",
-  graphqlSocketEndpoint: "ws://192.168.0.100:4001/graphql",
+  graphqlHttpEndpoint: "http://xxx.xxx.xxx.xxx:4001/graphql", // this one is not used, use in .env
+  graphqlSocketEndpoint: "ws://xxx.xxx.xxx.xxx:4001/graphql",
 };
 
 const dev = {

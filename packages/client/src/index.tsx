@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ErrorBoundary } from "react-error-boundary";
+import { Provider as ReduxProvider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import ErrorFallback from "./components/ErrorFallback";
+import "./index.css";
 import { client } from "./lib/apollo";
 import store from "./redux/store";
-import { Provider as ReduxProvider } from "react-redux";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,13 +17,20 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ReduxProvider store={store}>
-        <ApolloProvider client={client}>
-          <App />
-        </ApolloProvider>
-      </ReduxProvider>
-    </BrowserRouter>
+    <ErrorBoundary
+      fallbackRender={ErrorFallback}
+      onError={() =>
+        console.log("An error occured and catched with Error Boundary")
+      }
+    >
+      <BrowserRouter>
+        <ReduxProvider store={store}>
+          <ApolloProvider client={client}>
+            <App />
+          </ApolloProvider>
+        </ReduxProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

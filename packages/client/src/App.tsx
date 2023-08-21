@@ -34,6 +34,9 @@ function App() {
 
   const dispatch = useDispatch();
 
+  // const { showBoundary } = useErrorBoundary();
+  // useEffect(() => showBoundary(new Error("Error occured test ")), []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -52,7 +55,10 @@ function App() {
           <Route path="/landing" element={<LandingPage />} />
 
           <Route path="/" element={<Home />} />
-          <Route path={urlResolver.requestRepair(":id")} element={<CreateRequestRepairPage />} />
+          <Route
+            path={urlResolver.requestRepair(":id")}
+            element={<CreateRequestRepairPage />}
+          />
           <Route path="containers" element={<Containers />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path={urlResolver.about()} element={<AboutPage />} />

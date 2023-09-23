@@ -1,16 +1,10 @@
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -23,178 +17,178 @@ export type Scalars = {
 };
 
 export type Action = {
-  __typename?: "Action";
-  createdAt: Scalars["DateTime"];
-  id: Scalars["ID"];
-  note: Scalars["String"];
+  __typename?: 'Action';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  note: Scalars['String'];
   officer: Officer;
-  officerId: Scalars["String"];
-  passed?: Maybe<Scalars["Boolean"]>;
+  officerId: Scalars['String'];
+  passed?: Maybe<Scalars['Boolean']>;
   session: Session;
-  sessionId: Scalars["String"];
-  type: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  sessionId: Scalars['String'];
+  type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ActionResponse = {
-  __typename?: "ActionResponse";
+  __typename?: 'ActionResponse';
   action?: Maybe<Action>;
   errors?: Maybe<Array<FieldError>>;
 };
 
 export type BooleanResponse = {
-  __typename?: "BooleanResponse";
+  __typename?: 'BooleanResponse';
   errors?: Maybe<Array<FieldError>>;
-  value?: Maybe<Scalars["Boolean"]>;
+  value?: Maybe<Scalars['Boolean']>;
 };
 
 export type Container = {
-  __typename?: "Container";
-  col: Scalars["String"];
-  createdAt: Scalars["DateTime"];
-  currHum: Scalars["String"];
-  currTemp: Scalars["String"];
-  id: Scalars["ID"];
-  isResponding: Scalars["Boolean"];
-  lightsAreOn: Scalars["Boolean"];
+  __typename?: 'Container';
+  col: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  currHum: Scalars['String'];
+  currTemp: Scalars['String'];
+  id: Scalars['ID'];
+  isResponding: Scalars['Boolean'];
+  lightsAreOn: Scalars['Boolean'];
   snapshots: Array<Snapshot>;
   trays: Array<Tray>;
-  updatedAt: Scalars["DateTime"];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ContainerResponse = {
-  __typename?: "ContainerResponse";
+  __typename?: 'ContainerResponse';
   container?: Maybe<Container>;
   errors?: Maybe<Array<FieldError>>;
 };
 
 export type CreateActionInput = {
-  failedFeedback?: InputMaybe<Scalars["String"]>;
-  note?: InputMaybe<Scalars["String"]>;
-  officerNum: Scalars["String"];
-  passed?: InputMaybe<Scalars["Boolean"]>;
-  sessionId: Scalars["String"];
-  type: Scalars["String"];
+  failedFeedback?: InputMaybe<Scalars['String']>;
+  note?: InputMaybe<Scalars['String']>;
+  officerNum: Scalars['String'];
+  passed?: InputMaybe<Scalars['Boolean']>;
+  sessionId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type CreateContainerInput = {
   /** Example field (placeholder) */
-  exampleField: Scalars["Int"];
+  exampleField: Scalars['Int'];
 };
 
 export type CreateEndoInput = {
-  brand: Scalars["String"];
-  dryingTime: Scalars["Int"];
-  model: Scalars["String"];
-  serialNum: Scalars["String"];
-  trayId: Scalars["String"];
-  type: Scalars["String"];
+  brand: Scalars['String'];
+  dryingTime: Scalars['Int'];
+  model: Scalars['String'];
+  serialNum: Scalars['String'];
+  trayId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type CreateOfficerInput = {
-  firstName: Scalars["String"];
-  lastName: Scalars["String"];
-  officerNum: Scalars["String"];
-  type: Scalars["String"];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  officerNum: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type CreatePatientInput = {
   /** Example field (placeholder) */
-  hosNum: Scalars["String"];
+  hosNum: Scalars['String'];
 };
 
 export type CreateRepairRequestInput = {
-  endoId: Scalars["String"];
-  note: Scalars["String"];
-  officerNum: Scalars["String"];
-  source: Scalars["String"];
-  toBeEndoStatus: Scalars["String"];
+  endoId: Scalars['String'];
+  note: Scalars['String'];
+  officerNum: Scalars['String'];
+  source: Scalars['String'];
+  toBeEndoStatus: Scalars['String'];
 };
 
 export type CreateSessionInput = {
-  endoId: Scalars["String"];
-  endoWasExpired: Scalars["Boolean"];
-  endoWasOutOfOrder: Scalars["Boolean"];
+  endoId: Scalars['String'];
+  endoWasExpired: Scalars['Boolean'];
+  endoWasOutOfOrder: Scalars['Boolean'];
 };
 
 export type CreateSettingInput = {
-  name: Scalars["String"];
-  value: Scalars["String"];
+  name: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type CreateSnapshotInput = {
-  containerId: Scalars["String"];
-  hum: Scalars["String"];
-  systemStatus: Scalars["String"];
-  temp: Scalars["String"];
+  containerId: Scalars['String'];
+  hum: Scalars['String'];
+  systemStatus: Scalars['String'];
+  temp: Scalars['String'];
 };
 
 export type CreateTrayInput = {
-  containerId: Scalars["String"];
+  containerId: Scalars['String'];
   /** row inside a container */
-  row: Scalars["Int"];
+  row: Scalars['Int'];
 };
 
 export type CreateUserInput = {
-  password: Scalars["String"];
-  username: Scalars["String"];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Endo = {
-  __typename?: "Endo";
-  brand: Scalars["String"];
-  createdAt: Scalars["DateTime"];
-  currentSessionId?: Maybe<Scalars["String"]>;
-  dryingTime: Scalars["Int"];
+  __typename?: 'Endo';
+  brand: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  currentSessionId?: Maybe<Scalars['String']>;
+  dryingTime: Scalars['Int'];
   endoCrons: Array<EndoCron>;
-  id: Scalars["ID"];
-  lastPutBackISO: Scalars["String"];
-  model: Scalars["String"];
-  position: Scalars["String"];
+  id: Scalars['ID'];
+  lastPutBackISO: Scalars['String'];
+  model: Scalars['String'];
+  position: Scalars['String'];
   repairRequests?: Maybe<Array<RepairRequest>>;
-  serialNum: Scalars["String"];
+  serialNum: Scalars['String'];
   sessions: Array<Session>;
-  status: Scalars["String"];
+  status: Scalars['String'];
   tray: Tray;
-  trayId: Scalars["String"];
-  type: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  trayId: Scalars['String'];
+  type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type EndoCron = {
-  __typename?: "EndoCron";
-  createdAt: Scalars["DateTime"];
+  __typename?: 'EndoCron';
+  createdAt: Scalars['DateTime'];
   endo: Endo;
-  endoId: Scalars["String"];
-  id: Scalars["ID"];
-  isoDate: Scalars["String"];
-  toBeStatus: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  endoId: Scalars['String'];
+  id: Scalars['ID'];
+  isoDate: Scalars['String'];
+  toBeStatus: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type FieldError = {
-  __typename?: "FieldError";
-  field: Scalars["String"];
-  message: Scalars["String"];
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type IPaginationMetaClass = {
-  __typename?: "IPaginationMetaClass";
-  currentPage: Scalars["Int"];
-  itemCount: Scalars["Int"];
-  itemsPerPage: Scalars["Int"];
-  totalItems: Scalars["Int"];
-  totalPages: Scalars["Int"];
+  __typename?: 'IPaginationMetaClass';
+  currentPage: Scalars['Int'];
+  itemCount: Scalars['Int'];
+  itemsPerPage: Scalars['Int'];
+  totalItems: Scalars['Int'];
+  totalPages: Scalars['Int'];
 };
 
 export type LoginInput = {
-  password: Scalars["String"];
-  username: Scalars["String"];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
-  blinkLocation: Scalars["Boolean"];
+  __typename?: 'Mutation';
+  blinkLocation: Scalars['Boolean'];
   createAction: ActionResponse;
   createContainer: Container;
   createEndo: Endo;
@@ -210,7 +204,7 @@ export type Mutation = {
   deleteOfficer: BooleanResponse;
   finishRepair: Endo;
   login: UserResponse;
-  logout: Scalars["Boolean"];
+  logout: Scalars['Boolean'];
   pickEndo: Endo;
   populateAllData: BooleanResponse;
   register: UserResponse;
@@ -236,209 +230,246 @@ export type Mutation = {
   washWithoutStoring: Session;
 };
 
+
 export type MutationBlinkLocationArgs = {
   input: RowAndColInput;
 };
+
 
 export type MutationCreateActionArgs = {
   input: CreateActionInput;
 };
 
+
 export type MutationCreateContainerArgs = {
   createContainerInput: CreateContainerInput;
 };
+
 
 export type MutationCreateEndoArgs = {
   input: CreateEndoInput;
 };
 
+
 export type MutationCreateOfficerArgs = {
   input: CreateOfficerInput;
 };
+
 
 export type MutationCreatePatientArgs = {
   createPatientInput: CreatePatientInput;
 };
 
+
 export type MutationCreateRepairRequestArgs = {
   input: CreateRepairRequestInput;
 };
+
 
 export type MutationCreateSessionArgs = {
   input: CreateSessionInput;
 };
 
+
 export type MutationCreateSettingArgs = {
   input: CreateSettingInput;
 };
+
 
 export type MutationCreateSnapshotArgs = {
   input: CreateSnapshotInput;
 };
 
+
 export type MutationCreateTrayArgs = {
   input: CreateTrayInput;
 };
 
+
 export type MutationDeleteEndoArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationDeleteOfficerArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
+
 export type MutationFinishRepairArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationLoginArgs = {
   input: LoginInput;
 };
 
+
 export type MutationPickEndoArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationRegisterArgs = {
   input: CreateUserInput;
 };
 
+
 export type MutationRemoveActionArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type MutationRemoveContainerArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type MutationRemovePatientArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type MutationRemoveRepairRequestArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationRemoveSessionArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationRemoveTrayArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type MutationRemoveUserArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type MutationTurnLightsOffArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
+
 export type MutationTurnLightsOnArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type MutationUpdateActionArgs = {
   input: UpdateActionInput;
 };
 
+
 export type MutationUpdateDryingTimeArgs = {
   input: UpdateDryingTimeInput;
 };
 
+
 export type MutationUpdateEndoArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
   input: UpdateEndoInput;
 };
+
 
 export type MutationUpdateOfficerArgs = {
   input: UpdateOfficerInput;
 };
 
+
 export type MutationUpdateRepairRequestArgs = {
   input: UpdateRepairRequestInput;
 };
+
 
 export type MutationUpdateSessionArgs = {
   updateSessionInput: UpdateSessionInput;
 };
 
+
 export type MutationUpdateSessionPatientArgs = {
   input: UpdateSessionPatientInput;
 };
+
 
 export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput;
 };
 
+
 export type MutationUpdateTrayArgs = {
   updateTrayInput: UpdateTrayInput;
 };
+
 
 export type MutationUpdateUserArgs = {
   updateUserInput: UpdateUserInput;
 };
 
+
 export type MutationWashWithoutStoringArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
 export type Officer = {
-  __typename?: "Officer";
+  __typename?: 'Officer';
   actions: Array<Action>;
-  createdAt: Scalars["DateTime"];
-  firstName: Scalars["String"];
-  id: Scalars["ID"];
-  lastName: Scalars["String"];
-  officerNum: Scalars["String"];
+  createdAt: Scalars['DateTime'];
+  firstName: Scalars['String'];
+  id: Scalars['ID'];
+  lastName: Scalars['String'];
+  officerNum: Scalars['String'];
   repairRequests: Array<RepairRequest>;
-  type: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type OfficerResponse = {
-  __typename?: "OfficerResponse";
+  __typename?: 'OfficerResponse';
   errors?: Maybe<Array<FieldError>>;
   officer?: Maybe<Officer>;
 };
 
 export type PaginatedActionOutput = {
-  __typename?: "PaginatedActionOutput";
+  __typename?: 'PaginatedActionOutput';
   items: Array<Action>;
   meta: IPaginationMetaClass;
 };
 
 export type PaginatedInput = {
-  limit?: Scalars["Int"];
-  page?: Scalars["Int"];
+  limit?: Scalars['Int'];
+  page?: Scalars['Int'];
 };
 
 export type PaginatedSnapshotOutput = {
-  __typename?: "PaginatedSnapshotOutput";
+  __typename?: 'PaginatedSnapshotOutput';
   items: Array<Snapshot>;
   meta: IPaginationMetaClass;
 };
 
 export type Patient = {
-  __typename?: "Patient";
-  createdAt: Scalars["DateTime"];
-  hosNum: Scalars["String"];
-  id: Scalars["ID"];
+  __typename?: 'Patient';
+  createdAt: Scalars['DateTime'];
+  hosNum: Scalars['String'];
+  id: Scalars['ID'];
   sessions: Array<Session>;
-  updatedAt: Scalars["DateTime"];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   actions: Array<Action>;
   container: Container;
   containers: Array<Container>;
   emptyTrays: Array<Tray>;
   endo: Endo;
   endoCronsInDb: Array<EndoCron>;
-  endoCronsInMemory: Array<Scalars["String"]>;
+  endoCronsInMemory: Array<Scalars['String']>;
   endos: Array<Endo>;
   me?: Maybe<User>;
   officer: Officer;
@@ -462,1066 +493,544 @@ export type Query = {
   users: Array<User>;
 };
 
+
 export type QueryContainerArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type QueryEndoArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
+
 export type QueryOfficerArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type QueryPaginatedActionsArgs = {
   input: PaginatedInput;
 };
 
+
 export type QueryPaginatedSnapshotsArgs = {
   input: PaginatedInput;
 };
 
+
 export type QueryPatientArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type QueryRepairRequestArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type QueryRepairRequestsByEndoArgs = {
-  endoId: Scalars["String"];
+  endoId: Scalars['String'];
 };
+
 
 export type QuerySessionArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
+
 
 export type QuerySettingArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
+
 
 export type QueryTrayArgs = {
-  id: Scalars["Int"];
+  id: Scalars['Int'];
 };
 
+
 export type QueryUserArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
 export type RepairRequest = {
-  __typename?: "RepairRequest";
-  createdAt: Scalars["DateTime"];
+  __typename?: 'RepairRequest';
+  createdAt: Scalars['DateTime'];
   endo: Endo;
-  endoId: Scalars["String"];
-  id: Scalars["ID"];
-  note: Scalars["String"];
+  endoId: Scalars['String'];
+  id: Scalars['ID'];
+  note: Scalars['String'];
   officer: Officer;
-  officerId: Scalars["String"];
-  source: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  officerId: Scalars['String'];
+  source: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type RepairRequestResponse = {
-  __typename?: "RepairRequestResponse";
+  __typename?: 'RepairRequestResponse';
   errors?: Maybe<Array<FieldError>>;
   repairRequest?: Maybe<RepairRequest>;
 };
 
 export type RowAndColInput = {
-  col: Scalars["String"];
-  row: Scalars["Int"];
-  status: Scalars["String"];
+  col: Scalars['String'];
+  row: Scalars['Int'];
+  status: Scalars['String'];
 };
 
 export type Session = {
-  __typename?: "Session";
+  __typename?: 'Session';
   actions?: Maybe<Array<Action>>;
-  createdAt: Scalars["DateTime"];
+  createdAt: Scalars['DateTime'];
   endo: Endo;
-  endoId: Scalars["String"];
-  endoWasExpired: Scalars["Boolean"];
-  endoWasOutOfOrder: Scalars["Boolean"];
-  id: Scalars["ID"];
-  isoEndTime?: Maybe<Scalars["String"]>;
+  endoId: Scalars['String'];
+  endoWasExpired: Scalars['Boolean'];
+  endoWasOutOfOrder: Scalars['Boolean'];
+  id: Scalars['ID'];
+  isoEndTime?: Maybe<Scalars['String']>;
   patient?: Maybe<Patient>;
-  patientId?: Maybe<Scalars["String"]>;
-  patientUsedEndo: Scalars["Boolean"];
-  status: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  patientId?: Maybe<Scalars['String']>;
+  patientUsedEndo: Scalars['Boolean'];
+  status: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Setting = {
-  __typename?: "Setting";
-  createdAt: Scalars["DateTime"];
-  description: Scalars["String"];
-  id: Scalars["ID"];
-  label: Scalars["String"];
-  name: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
-  value: Scalars["String"];
+  __typename?: 'Setting';
+  createdAt: Scalars['DateTime'];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  label: Scalars['String'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['String'];
 };
 
 export type Snapshot = {
-  __typename?: "Snapshot";
+  __typename?: 'Snapshot';
   container: Container;
-  containerId: Scalars["String"];
-  createdAt: Scalars["DateTime"];
-  hum: Scalars["String"];
-  id: Scalars["ID"];
-  systemStatus: Scalars["String"];
-  temp: Scalars["String"];
-  updatedAt: Scalars["DateTime"];
+  containerId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  hum: Scalars['String'];
+  id: Scalars['ID'];
+  systemStatus: Scalars['String'];
+  temp: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Subscription = {
-  __typename?: "Subscription";
+  __typename?: 'Subscription';
   subscribeToOverHumOrTemp: Snapshot;
 };
 
+
 export type SubscriptionSubscribeToOverHumOrTempArgs = {
-  humThreshold: Scalars["String"];
-  tempThreshold: Scalars["String"];
+  humThreshold: Scalars['String'];
+  tempThreshold: Scalars['String'];
 };
 
 export type Tray = {
-  __typename?: "Tray";
+  __typename?: 'Tray';
   container: Container;
-  containerId: Scalars["String"];
-  createdAt: Scalars["DateTime"];
+  containerId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   endo?: Maybe<Endo>;
-  id: Scalars["ID"];
-  position: Scalars["String"];
-  row: Scalars["Float"];
-  updatedAt: Scalars["DateTime"];
+  id: Scalars['ID'];
+  position: Scalars['String'];
+  row: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UpdateActionInput = {
-  failedFeedback?: InputMaybe<Scalars["String"]>;
-  id: Scalars["String"];
-  note?: InputMaybe<Scalars["String"]>;
-  officerNum?: InputMaybe<Scalars["String"]>;
-  passed?: InputMaybe<Scalars["Boolean"]>;
-  sessionId?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<Scalars["String"]>;
+  failedFeedback?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
+  passed?: InputMaybe<Scalars['Boolean']>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateDryingTimeInput = {
-  endoId: Scalars["String"];
-  mins: Scalars["Int"];
+  endoId: Scalars['String'];
+  mins: Scalars['Int'];
 };
 
 export type UpdateEndoInput = {
-  brand: Scalars["String"];
-  dryingTime: Scalars["Int"];
-  model: Scalars["String"];
-  serialNum: Scalars["String"];
-  trayId: Scalars["String"];
-  type: Scalars["String"];
+  brand: Scalars['String'];
+  dryingTime: Scalars['Int'];
+  model: Scalars['String'];
+  serialNum: Scalars['String'];
+  trayId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UpdateOfficerInput = {
-  firstName?: InputMaybe<Scalars["String"]>;
-  id: Scalars["String"];
-  lastName?: InputMaybe<Scalars["String"]>;
-  officerNum?: InputMaybe<Scalars["String"]>;
-  type?: InputMaybe<Scalars["String"]>;
+  firstName?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  lastName?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateRepairRequestInput = {
-  endoId?: InputMaybe<Scalars["String"]>;
-  id: Scalars["String"];
-  note?: InputMaybe<Scalars["String"]>;
-  officerNum?: InputMaybe<Scalars["String"]>;
-  source?: InputMaybe<Scalars["String"]>;
-  toBeEndoStatus?: InputMaybe<Scalars["String"]>;
+  endoId?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<Scalars['String']>;
+  toBeEndoStatus?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateSessionInput = {
-  endTime?: InputMaybe<Scalars["String"]>;
-  endoId?: InputMaybe<Scalars["String"]>;
-  endoWasExpired?: InputMaybe<Scalars["Boolean"]>;
-  endoWasOutOfOrder?: InputMaybe<Scalars["Boolean"]>;
-  id?: InputMaybe<Scalars["String"]>;
-  patientHN?: InputMaybe<Scalars["String"]>;
-  status?: InputMaybe<Scalars["String"]>;
+  endTime?: InputMaybe<Scalars['String']>;
+  endoId?: InputMaybe<Scalars['String']>;
+  endoWasExpired?: InputMaybe<Scalars['Boolean']>;
+  endoWasOutOfOrder?: InputMaybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['String']>;
+  patientHN?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateSessionPatientInput = {
-  id?: InputMaybe<Scalars["String"]>;
-  patientHN: Scalars["String"];
-  patientUsedEndo: Scalars["Boolean"];
+  id?: InputMaybe<Scalars['String']>;
+  patientHN: Scalars['String'];
+  patientUsedEndo: Scalars['Boolean'];
 };
 
 export type UpdateSettingInput = {
-  name: Scalars["String"];
-  value: Scalars["String"];
+  name: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type UpdateTrayInput = {
-  containerId?: InputMaybe<Scalars["String"]>;
-  id: Scalars["Int"];
+  containerId?: InputMaybe<Scalars['String']>;
+  id: Scalars['Int'];
   /** row inside a container */
-  row?: InputMaybe<Scalars["Int"]>;
+  row?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateUserInput = {
-  id: Scalars["Int"];
-  password?: InputMaybe<Scalars["String"]>;
-  username?: InputMaybe<Scalars["String"]>;
+  id: Scalars['Int'];
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
-  __typename?: "User";
-  id: Scalars["ID"];
-  password: Scalars["String"];
-  username: Scalars["String"];
+  __typename?: 'User';
+  id: Scalars['ID'];
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserResponse = {
-  __typename?: "UserResponse";
+  __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
 
-export type ActionsQueryVariables = Exact<{ [key: string]: never }>;
+export type ActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type ActionsQuery = {
-  __typename?: "Query";
-  actions: Array<{
-    __typename?: "Action";
-    id: string;
-    passed?: boolean | null;
-    note: string;
-    type: string;
-    createdAt: any;
-    officerId: string;
-    officer: { __typename?: "Officer"; officerNum: string };
-    session: {
-      __typename?: "Session";
-      id: string;
-      status: string;
-      endoId: string;
-      patientId?: string | null;
-      endo: {
-        __typename?: "Endo";
-        brand: string;
-        type: string;
-        model: string;
-        serialNum: string;
-        position: string;
-      };
-      patient?: { __typename?: "Patient"; hosNum: string } | null;
-    };
-  }>;
-};
+
+export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, note: string, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
 
 export type PaginatedActionsQueryVariables = Exact<{
   input: PaginatedInput;
 }>;
 
-export type PaginatedActionsQuery = {
-  __typename?: "Query";
-  paginatedActions: {
-    __typename?: "PaginatedActionOutput";
-    meta: {
-      __typename?: "IPaginationMetaClass";
-      totalItems: number;
-      totalPages: number;
-      itemCount: number;
-      itemsPerPage: number;
-      currentPage: number;
-    };
-    items: Array<{
-      __typename?: "Action";
-      id: string;
-      passed?: boolean | null;
-      type: string;
-      note: string;
-      createdAt: any;
-      officerId: string;
-      sessionId: string;
-      officer: { __typename?: "Officer"; officerNum: string };
-      session: {
-        __typename?: "Session";
-        id: string;
-        status: string;
-        endoId: string;
-        patientId?: string | null;
-        endo: {
-          __typename?: "Endo";
-          brand: string;
-          type: string;
-          model: string;
-          position: string;
-          serialNum: string;
-        };
-        patient?: { __typename?: "Patient"; hosNum: string } | null;
-      };
-    }>;
-  };
-};
 
-export type DeleteAllDataMutationVariables = Exact<{ [key: string]: never }>;
+export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, type: string, note: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientUsedEndo: boolean, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
 
-export type DeleteAllDataMutation = {
-  __typename?: "Mutation";
-  deleteAllData: {
-    __typename?: "BooleanResponse";
-    value?: boolean | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+export type DeleteAllDataMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type PopulateAllDataMutationVariables = Exact<{ [key: string]: never }>;
 
-export type PopulateAllDataMutation = {
-  __typename?: "Mutation";
-  populateAllData: {
-    __typename?: "BooleanResponse";
-    value?: boolean | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+export type DeleteAllDataMutation = { __typename?: 'Mutation', deleteAllData: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
+export type PopulateAllDataMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PopulateAllDataMutation = { __typename?: 'Mutation', populateAllData: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
-export type LoginMutation = {
-  __typename?: "Mutation";
-  login: {
-    __typename?: "UserResponse";
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-    user?: { __typename?: "User"; id: string; username: string } | null;
-  };
-};
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'User', id: string, username: string } | null } };
 
-export type LogoutMutation = { __typename?: "Mutation"; logout: boolean };
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeQuery = {
-  __typename?: "Query";
-  me?: { __typename?: "User"; id: string; username: string } | null;
-};
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string } | null };
 
 export type TurnLightsOffMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type TurnLightsOffMutation = {
-  __typename?: "Mutation";
-  turnLightsOff: {
-    __typename?: "ContainerResponse";
-    container?: {
-      __typename?: "Container";
-      id: string;
-      col: string;
-      currTemp: string;
-      currHum: string;
-      lightsAreOn: boolean;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type TurnLightsOffMutation = { __typename?: 'Mutation', turnLightsOff: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type TurnLightsOnMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type TurnLightsOnMutation = {
-  __typename?: "Mutation";
-  turnLightsOn: {
-    __typename?: "ContainerResponse";
-    container?: {
-      __typename?: "Container";
-      id: string;
-      col: string;
-      currTemp: string;
-      currHum: string;
-      lightsAreOn: boolean;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
 
-export type ContainersQueryVariables = Exact<{ [key: string]: never }>;
+export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
-export type ContainersQuery = {
-  __typename?: "Query";
-  containers: Array<{
-    __typename?: "Container";
-    id: string;
-    col: string;
-    currTemp: string;
-    currHum: string;
-    isResponding: boolean;
-    lightsAreOn: boolean;
-  }>;
-};
+export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ContainersQuery = { __typename?: 'Query', containers: Array<{ __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, isResponding: boolean, lightsAreOn: boolean }> };
 
 export type CreateEndoMutationVariables = Exact<{
   input: CreateEndoInput;
 }>;
 
-export type CreateEndoMutation = {
-  __typename?: "Mutation";
-  createEndo: {
-    __typename?: "Endo";
-    id: string;
-    trayId: string;
-    brand: string;
-    serialNum: string;
-    dryingTime: number;
-    type: string;
-    model: string;
-  };
-};
+
+export type CreateEndoMutation = { __typename?: 'Mutation', createEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, serialNum: string, dryingTime: number, type: string, model: string } };
 
 export type DeleteEndoMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type DeleteEndoMutation = {
-  __typename?: "Mutation";
-  deleteEndo: {
-    __typename?: "BooleanResponse";
-    value?: boolean | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type DeleteEndoMutation = { __typename?: 'Mutation', deleteEndo: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type PickEndoMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type PickEndoMutation = {
-  __typename?: "Mutation";
-  pickEndo: {
-    __typename?: "Endo";
-    id: string;
-    trayId: string;
-    brand: string;
-    type: string;
-    model: string;
-    status: string;
-    currentSessionId?: string | null;
-  };
-};
+
+export type PickEndoMutation = { __typename?: 'Mutation', pickEndo: { __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null } };
 
 export type UpdateDryingTimeMutationVariables = Exact<{
   input: UpdateDryingTimeInput;
 }>;
 
-export type UpdateDryingTimeMutation = {
-  __typename?: "Mutation";
-  updateDryingTime: { __typename?: "Endo"; id: string; dryingTime: number };
-};
+
+export type UpdateDryingTimeMutation = { __typename?: 'Mutation', updateDryingTime: { __typename?: 'Endo', id: string, dryingTime: number } };
 
 export type UpdateEndoMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
   input: UpdateEndoInput;
 }>;
 
-export type UpdateEndoMutation = {
-  __typename?: "Mutation";
-  updateEndo: {
-    __typename?: "Endo";
-    id: string;
-    trayId: string;
-    serialNum: string;
-    dryingTime: number;
-    brand: string;
-    type: string;
-    model: string;
-  };
-};
+
+export type UpdateEndoMutation = { __typename?: 'Mutation', updateEndo: { __typename?: 'Endo', id: string, trayId: string, serialNum: string, dryingTime: number, brand: string, type: string, model: string } };
 
 export type WashWithoutStoringMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type WashWithoutStoringMutation = {
-  __typename?: "Mutation";
-  washWithoutStoring: { __typename?: "Session"; id: string };
-};
+
+export type WashWithoutStoringMutation = { __typename?: 'Mutation', washWithoutStoring: { __typename?: 'Session', id: string } };
 
 export type EndoQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type EndoQuery = {
-  __typename?: "Query";
-  endo: {
-    __typename?: "Endo";
-    id: string;
-    serialNum: string;
-    dryingTime: number;
-    status: string;
-    brand: string;
-    type: string;
-    model: string;
-    lastPutBackISO: string;
-    position: string;
-    trayId: string;
-    tray: {
-      __typename?: "Tray";
-      id: string;
-      row: number;
-      position: string;
-      container: { __typename?: "Container"; id: string; col: string };
-    };
-  };
-};
 
-export type EndosQueryVariables = Exact<{ [key: string]: never }>;
+export type EndoQuery = { __typename?: 'Query', endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string, trayId: string, tray: { __typename?: 'Tray', id: string, row: number, position: string, container: { __typename?: 'Container', id: string, col: string } } } };
 
-export type EndosQuery = {
-  __typename?: "Query";
-  endos: Array<{
-    __typename?: "Endo";
-    id: string;
-    trayId: string;
-    brand: string;
-    type: string;
-    model: string;
-    status: string;
-    currentSessionId?: string | null;
-    serialNum: string;
-    lastPutBackISO: string;
-    dryingTime: number;
-    position: string;
-    repairRequests?: Array<{ __typename?: "RepairRequest"; id: string }> | null;
-    tray: {
-      __typename?: "Tray";
-      id: string;
-      row: number;
-      container: {
-        __typename?: "Container";
-        id: string;
-        col: string;
-        isResponding: boolean;
-      };
-    };
-  }>;
-};
+export type EndosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EndosQuery = { __typename?: 'Query', endos: Array<{ __typename?: 'Endo', id: string, trayId: string, brand: string, type: string, model: string, status: string, currentSessionId?: string | null, serialNum: string, lastPutBackISO: string, dryingTime: number, position: string, repairRequests?: Array<{ __typename?: 'RepairRequest', id: string }> | null, tray: { __typename?: 'Tray', id: string, row: number, container: { __typename?: 'Container', id: string, col: string, isResponding: boolean } } }> };
 
 export type FinishRepairMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type FinishRepairMutation = {
-  __typename?: "Mutation";
-  finishRepair: { __typename?: "Endo"; id: string };
-};
+
+export type FinishRepairMutation = { __typename?: 'Mutation', finishRepair: { __typename?: 'Endo', id: string } };
 
 export type CreateOfficerMutationVariables = Exact<{
   input: CreateOfficerInput;
 }>;
 
-export type CreateOfficerMutation = {
-  __typename?: "Mutation";
-  createOfficer: {
-    __typename?: "OfficerResponse";
-    officer?: {
-      __typename?: "Officer";
-      id: string;
-      officerNum: string;
-      firstName: string;
-      lastName: string;
-      type: string;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type CreateOfficerMutation = { __typename?: 'Mutation', createOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type DeleteOfficerMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type DeleteOfficerMutation = {
-  __typename?: "Mutation";
-  deleteOfficer: {
-    __typename?: "BooleanResponse";
-    value?: boolean | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type DeleteOfficerMutation = { __typename?: 'Mutation', deleteOfficer: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateOfficerMutationVariables = Exact<{
   input: UpdateOfficerInput;
 }>;
 
-export type UpdateOfficerMutation = {
-  __typename?: "Mutation";
-  updateOfficer: {
-    __typename?: "OfficerResponse";
-    officer?: {
-      __typename?: "Officer";
-      id: string;
-      officerNum: string;
-      firstName: string;
-      lastName: string;
-      type: string;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type UpdateOfficerMutation = { __typename?: 'Mutation', updateOfficer: { __typename?: 'OfficerResponse', officer?: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type OfficerQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type OfficerQuery = {
-  __typename?: "Query";
-  officer: {
-    __typename?: "Officer";
-    id: string;
-    officerNum: string;
-    firstName: string;
-    lastName: string;
-    type: string;
-  };
-};
 
-export type OfficersQueryVariables = Exact<{ [key: string]: never }>;
+export type OfficerQuery = { __typename?: 'Query', officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string } };
 
-export type OfficersQuery = {
-  __typename?: "Query";
-  officers: Array<{
-    __typename?: "Officer";
-    id: string;
-    officerNum: string;
-    firstName: string;
-    lastName: string;
-    type: string;
-  }>;
-};
+export type OfficersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OfficersQuery = { __typename?: 'Query', officers: Array<{ __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string, type: string }> };
 
 export type CreateRepairRequestMutationVariables = Exact<{
   input: CreateRepairRequestInput;
 }>;
 
-export type CreateRepairRequestMutation = {
-  __typename?: "Mutation";
-  createRepairRequest: {
-    __typename?: "RepairRequestResponse";
-    repairRequest?: {
-      __typename?: "RepairRequest";
-      id: string;
-      note: string;
-      officerId: string;
-      endoId: string;
-      officer: { __typename?: "Officer"; id: string };
-      endo: { __typename?: "Endo"; id: string };
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type CreateRepairRequestMutation = { __typename?: 'Mutation', createRepairRequest: { __typename?: 'RepairRequestResponse', repairRequest?: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type RemoveRepairRequestMutationVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type RemoveRepairRequestMutation = {
-  __typename?: "Mutation";
-  removeRepairRequest: {
-    __typename?: "BooleanResponse";
-    value?: boolean | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type RemoveRepairRequestMutation = { __typename?: 'Mutation', removeRepairRequest: { __typename?: 'BooleanResponse', value?: boolean | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type RepairRequestQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type RepairRequestQuery = {
-  __typename?: "Query";
-  repairRequest: {
-    __typename?: "RepairRequest";
-    id: string;
-    note: string;
-    officerId: string;
-    endoId: string;
-    officer: { __typename?: "Officer"; id: string };
-    endo: { __typename?: "Endo"; id: string };
-  };
-};
 
-export type RepairRequestsQueryVariables = Exact<{ [key: string]: never }>;
+export type RepairRequestQuery = { __typename?: 'Query', repairRequest: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } };
 
-export type RepairRequestsQuery = {
-  __typename?: "Query";
-  repairRequests: Array<{
-    __typename?: "RepairRequest";
-    id: string;
-    note: string;
-    officerId: string;
-    endoId: string;
-    createdAt: any;
-    officer: { __typename?: "Officer"; id: string };
-    endo: { __typename?: "Endo"; id: string };
-  }>;
-};
+export type RepairRequestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RepairRequestsQuery = { __typename?: 'Query', repairRequests: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } }> };
 
 export type RepairRequestsByEndoQueryVariables = Exact<{
-  endoId: Scalars["String"];
+  endoId: Scalars['String'];
 }>;
 
-export type RepairRequestsByEndoQuery = {
-  __typename?: "Query";
-  repairRequestsByEndo: Array<{
-    __typename?: "RepairRequest";
-    id: string;
-    note: string;
-    officerId: string;
-    endoId: string;
-    createdAt: any;
-    officer: {
-      __typename?: "Officer";
-      id: string;
-      officerNum: string;
-      firstName: string;
-      lastName: string;
-    };
-    endo: {
-      __typename?: "Endo";
-      id: string;
-      serialNum: string;
-      dryingTime: number;
-      status: string;
-      brand: string;
-      type: string;
-      model: string;
-      lastPutBackISO: string;
-      position: string;
-    };
-  }>;
-};
+
+export type RepairRequestsByEndoQuery = { __typename?: 'Query', repairRequestsByEndo: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }, endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string } }> };
 
 export type UpdateRepairRequestMutationVariables = Exact<{
   input: UpdateRepairRequestInput;
 }>;
 
-export type UpdateRepairRequestMutation = {
-  __typename?: "Mutation";
-  updateRepairRequest: {
-    __typename?: "RepairRequestResponse";
-    repairRequest?: {
-      __typename?: "RepairRequest";
-      id: string;
-      note: string;
-      officerId: string;
-      endoId: string;
-      officer: { __typename?: "Officer"; id: string };
-      endo: { __typename?: "Endo"; id: string };
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type UpdateRepairRequestMutation = { __typename?: 'Mutation', updateRepairRequest: { __typename?: 'RepairRequestResponse', repairRequest?: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type BlinkLocationMutationVariables = Exact<{
   input: RowAndColInput;
 }>;
 
-export type BlinkLocationMutation = {
-  __typename?: "Mutation";
-  blinkLocation: boolean;
-};
+
+export type BlinkLocationMutation = { __typename?: 'Mutation', blinkLocation: boolean };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
 }>;
 
-export type CreateActionMutation = {
-  __typename?: "Mutation";
-  createAction: {
-    __typename?: "ActionResponse";
-    action?: {
-      __typename?: "Action";
-      id: string;
-      type: string;
-      passed?: boolean | null;
-      sessionId: string;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed?: boolean | null, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateActionMutationVariables = Exact<{
   input: UpdateActionInput;
 }>;
 
-export type UpdateActionMutation = {
-  __typename?: "Mutation";
-  updateAction: {
-    __typename?: "ActionResponse";
-    action?: {
-      __typename?: "Action";
-      id: string;
-      type: string;
-      passed?: boolean | null;
-      sessionId: string;
-    } | null;
-    errors?: Array<{
-      __typename?: "FieldError";
-      field: string;
-      message: string;
-    }> | null;
-  };
-};
+
+export type UpdateActionMutation = { __typename?: 'Mutation', updateAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed?: boolean | null, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateSessionPatientMutationVariables = Exact<{
   input: UpdateSessionPatientInput;
 }>;
 
-export type UpdateSessionPatientMutation = {
-  __typename?: "Mutation";
-  updateSessionPatient: {
-    __typename?: "Session";
-    id: string;
-    endoId: string;
-    status: string;
-    patientId?: string | null;
-  };
-};
+
+export type UpdateSessionPatientMutation = { __typename?: 'Mutation', updateSessionPatient: { __typename?: 'Session', id: string, endoId: string, status: string, patientId?: string | null } };
 
 export type SessionQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type SessionQuery = {
-  __typename?: "Query";
-  session: {
-    __typename?: "Session";
-    id: string;
-    endoId: string;
-    status: string;
-    patientUsedEndo: boolean;
-    endoWasExpired: boolean;
-    endoWasOutOfOrder: boolean;
-    patientId?: string | null;
-    endo: { __typename?: "Endo"; id: string; status: string };
-    patient?: { __typename?: "Patient"; id: string; hosNum: string } | null;
-    actions?: Array<{
-      __typename?: "Action";
-      id: string;
-      passed?: boolean | null;
-      type: string;
-      note: string;
-      createdAt: any;
-      officerId: string;
-      officer: { __typename?: "Officer"; id: string; officerNum: string };
-    }> | null;
-  };
-};
+
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientUsedEndo: boolean, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;
 }>;
 
-export type UpdateSettingMutation = {
-  __typename?: "Mutation";
-  updateSetting: {
-    __typename?: "Setting";
-    id: string;
-    name: string;
-    value: string;
-  };
-};
 
-export type SettingsQueryVariables = Exact<{ [key: string]: never }>;
+export type UpdateSettingMutation = { __typename?: 'Mutation', updateSetting: { __typename?: 'Setting', id: string, name: string, value: string } };
 
-export type SettingsQuery = {
-  __typename?: "Query";
-  settings: Array<{
-    __typename?: "Setting";
-    id: string;
-    name: string;
-    label: string;
-    description: string;
-    value: string;
-  }>;
-};
+export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type SnapshotIntervalMinsQueryVariables = Exact<{
-  [key: string]: never;
-}>;
 
-export type SnapshotIntervalMinsQuery = {
-  __typename?: "Query";
-  snapshotIntervalMins: {
-    __typename?: "Setting";
-    id: string;
-    name: string;
-    value: string;
-    label: string;
-    description: string;
-  };
-};
+export type SettingsQuery = { __typename?: 'Query', settings: Array<{ __typename?: 'Setting', id: string, name: string, label: string, description: string, value: string }> };
+
+export type SnapshotIntervalMinsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SnapshotIntervalMinsQuery = { __typename?: 'Query', snapshotIntervalMins: { __typename?: 'Setting', id: string, name: string, value: string, label: string, description: string } };
 
 export type PaginatedSnapshotsQueryVariables = Exact<{
   input: PaginatedInput;
 }>;
 
-export type PaginatedSnapshotsQuery = {
-  __typename?: "Query";
-  paginatedSnapshots: {
-    __typename?: "PaginatedSnapshotOutput";
-    meta: {
-      __typename?: "IPaginationMetaClass";
-      totalItems: number;
-      totalPages: number;
-      itemCount: number;
-      itemsPerPage: number;
-      currentPage: number;
-    };
-    items: Array<{
-      __typename?: "Snapshot";
-      id: string;
-      hum: string;
-      temp: string;
-      systemStatus: string;
-      containerId: string;
-      createdAt: any;
-      container: { __typename?: "Container"; id: string; col: string };
-    }>;
-  };
-};
 
-export type SnapshotsQueryVariables = Exact<{ [key: string]: never }>;
+export type PaginatedSnapshotsQuery = { __typename?: 'Query', paginatedSnapshots: { __typename?: 'PaginatedSnapshotOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, containerId: string, createdAt: any, container: { __typename?: 'Container', id: string, col: string } }> } };
 
-export type SnapshotsQuery = {
-  __typename?: "Query";
-  snapshots: Array<{
-    __typename?: "Snapshot";
-    id: string;
-    hum: string;
-    temp: string;
-    systemStatus: string;
-    createdAt: any;
-    containerId: string;
-    container: { __typename?: "Container"; id: string; col: string };
-  }>;
-};
+export type SnapshotsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SnapshotsQuery = { __typename?: 'Query', snapshots: Array<{ __typename?: 'Snapshot', id: string, hum: string, temp: string, systemStatus: string, createdAt: any, containerId: string, container: { __typename?: 'Container', id: string, col: string } }> };
 
 export type SubscribeToOverHumOrTempSubscriptionVariables = Exact<{
-  humThreshold: Scalars["String"];
-  tempThreshold: Scalars["String"];
+  humThreshold: Scalars['String'];
+  tempThreshold: Scalars['String'];
 }>;
 
-export type SubscribeToOverHumOrTempSubscription = {
-  __typename?: "Subscription";
-  subscribeToOverHumOrTemp: {
-    __typename?: "Snapshot";
-    id: string;
-    hum: string;
-    temp: string;
-    container: { __typename?: "Container"; id: string; col: string };
-  };
-};
 
-export type EmptyTraysQueryVariables = Exact<{ [key: string]: never }>;
+export type SubscribeToOverHumOrTempSubscription = { __typename?: 'Subscription', subscribeToOverHumOrTemp: { __typename?: 'Snapshot', id: string, hum: string, temp: string, container: { __typename?: 'Container', id: string, col: string } } };
 
-export type EmptyTraysQuery = {
-  __typename?: "Query";
-  emptyTrays: Array<{
-    __typename?: "Tray";
-    id: string;
-    position: string;
-    row: number;
-    container: { __typename?: "Container"; id: string };
-  }>;
-};
+export type EmptyTraysQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmptyTraysQuery = { __typename?: 'Query', emptyTrays: Array<{ __typename?: 'Tray', id: string, position: string, row: number, container: { __typename?: 'Container', id: string } }> };
+
 
 export const ActionsDocument = gql`
-  query Actions {
-    actions {
+    query Actions {
+  actions {
+    id
+    passed
+    note
+    type
+    createdAt
+    officerId
+    officer {
+      officerNum
+    }
+    session {
       id
-      passed
-      note
-      type
-      createdAt
-      officerId
-      officer {
-        officerNum
+      status
+      endoId
+      endo {
+        brand
+        type
+        model
+        serialNum
+        position
       }
-      session {
-        id
-        status
-        endoId
-        endo {
-          brand
-          type
-          model
-          serialNum
-          position
-        }
-        patientId
-        patient {
-          hosNum
-        }
+      patientId
+      patient {
+        hosNum
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useActionsQuery__
@@ -1538,71 +1047,59 @@ export const ActionsDocument = gql`
  *   },
  * });
  */
-export function useActionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<ActionsQuery, ActionsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ActionsQuery, ActionsQueryVariables>(
-    ActionsDocument,
-    options
-  );
-}
-export function useActionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ActionsQuery, ActionsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ActionsQuery, ActionsQueryVariables>(
-    ActionsDocument,
-    options
-  );
-}
+export function useActionsQuery(baseOptions?: Apollo.QueryHookOptions<ActionsQuery, ActionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActionsQuery, ActionsQueryVariables>(ActionsDocument, options);
+      }
+export function useActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActionsQuery, ActionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActionsQuery, ActionsQueryVariables>(ActionsDocument, options);
+        }
 export type ActionsQueryHookResult = ReturnType<typeof useActionsQuery>;
 export type ActionsLazyQueryHookResult = ReturnType<typeof useActionsLazyQuery>;
-export type ActionsQueryResult = Apollo.QueryResult<
-  ActionsQuery,
-  ActionsQueryVariables
->;
+export type ActionsQueryResult = Apollo.QueryResult<ActionsQuery, ActionsQueryVariables>;
 export const PaginatedActionsDocument = gql`
-  query PaginatedActions($input: PaginatedInput!) {
-    paginatedActions(input: $input) {
-      meta {
-        totalItems
-        totalPages
-        itemCount
-        itemsPerPage
-        currentPage
+    query PaginatedActions($input: PaginatedInput!) {
+  paginatedActions(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      passed
+      type
+      note
+      createdAt
+      officerId
+      officer {
+        officerNum
       }
-      items {
+      sessionId
+      session {
         id
-        passed
-        type
-        note
-        createdAt
-        officerId
-        officer {
-          officerNum
+        status
+        endoId
+        patientUsedEndo
+        endo {
+          brand
+          type
+          model
+          position
+          serialNum
         }
-        sessionId
-        session {
-          id
-          status
-          endoId
-          endo {
-            brand
-            type
-            model
-            position
-            serialNum
-          }
-          patientId
-          patient {
-            hosNum
-          }
+        patientId
+        patient {
+          hosNum
         }
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __usePaginatedActionsQuery__
@@ -1620,55 +1117,29 @@ export const PaginatedActionsDocument = gql`
  *   },
  * });
  */
-export function usePaginatedActionsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    PaginatedActionsQuery,
-    PaginatedActionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<PaginatedActionsQuery, PaginatedActionsQueryVariables>(
-    PaginatedActionsDocument,
-    options
-  );
-}
-export function usePaginatedActionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PaginatedActionsQuery,
-    PaginatedActionsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    PaginatedActionsQuery,
-    PaginatedActionsQueryVariables
-  >(PaginatedActionsDocument, options);
-}
-export type PaginatedActionsQueryHookResult = ReturnType<
-  typeof usePaginatedActionsQuery
->;
-export type PaginatedActionsLazyQueryHookResult = ReturnType<
-  typeof usePaginatedActionsLazyQuery
->;
-export type PaginatedActionsQueryResult = Apollo.QueryResult<
-  PaginatedActionsQuery,
-  PaginatedActionsQueryVariables
->;
-export const DeleteAllDataDocument = gql`
-  mutation DeleteAllData {
-    deleteAllData {
-      value
-      errors {
-        field
-        message
+export function usePaginatedActionsQuery(baseOptions: Apollo.QueryHookOptions<PaginatedActionsQuery, PaginatedActionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaginatedActionsQuery, PaginatedActionsQueryVariables>(PaginatedActionsDocument, options);
       }
+export function usePaginatedActionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedActionsQuery, PaginatedActionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaginatedActionsQuery, PaginatedActionsQueryVariables>(PaginatedActionsDocument, options);
+        }
+export type PaginatedActionsQueryHookResult = ReturnType<typeof usePaginatedActionsQuery>;
+export type PaginatedActionsLazyQueryHookResult = ReturnType<typeof usePaginatedActionsLazyQuery>;
+export type PaginatedActionsQueryResult = Apollo.QueryResult<PaginatedActionsQuery, PaginatedActionsQueryVariables>;
+export const DeleteAllDataDocument = gql`
+    mutation DeleteAllData {
+  deleteAllData {
+    value
+    errors {
+      field
+      message
     }
   }
-`;
-export type DeleteAllDataMutationFn = Apollo.MutationFunction<
-  DeleteAllDataMutation,
-  DeleteAllDataMutationVariables
->;
+}
+    `;
+export type DeleteAllDataMutationFn = Apollo.MutationFunction<DeleteAllDataMutation, DeleteAllDataMutationVariables>;
 
 /**
  * __useDeleteAllDataMutation__
@@ -1686,42 +1157,25 @@ export type DeleteAllDataMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteAllDataMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteAllDataMutation,
-    DeleteAllDataMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteAllDataMutation,
-    DeleteAllDataMutationVariables
-  >(DeleteAllDataDocument, options);
-}
-export type DeleteAllDataMutationHookResult = ReturnType<
-  typeof useDeleteAllDataMutation
->;
-export type DeleteAllDataMutationResult =
-  Apollo.MutationResult<DeleteAllDataMutation>;
-export type DeleteAllDataMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAllDataMutation,
-  DeleteAllDataMutationVariables
->;
-export const PopulateAllDataDocument = gql`
-  mutation PopulateAllData {
-    populateAllData {
-      value
-      errors {
-        field
-        message
+export function useDeleteAllDataMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAllDataMutation, DeleteAllDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAllDataMutation, DeleteAllDataMutationVariables>(DeleteAllDataDocument, options);
       }
+export type DeleteAllDataMutationHookResult = ReturnType<typeof useDeleteAllDataMutation>;
+export type DeleteAllDataMutationResult = Apollo.MutationResult<DeleteAllDataMutation>;
+export type DeleteAllDataMutationOptions = Apollo.BaseMutationOptions<DeleteAllDataMutation, DeleteAllDataMutationVariables>;
+export const PopulateAllDataDocument = gql`
+    mutation PopulateAllData {
+  populateAllData {
+    value
+    errors {
+      field
+      message
     }
   }
-`;
-export type PopulateAllDataMutationFn = Apollo.MutationFunction<
-  PopulateAllDataMutation,
-  PopulateAllDataMutationVariables
->;
+}
+    `;
+export type PopulateAllDataMutationFn = Apollo.MutationFunction<PopulateAllDataMutation, PopulateAllDataMutationVariables>;
 
 /**
  * __usePopulateAllDataMutation__
@@ -1739,45 +1193,28 @@ export type PopulateAllDataMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function usePopulateAllDataMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PopulateAllDataMutation,
-    PopulateAllDataMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    PopulateAllDataMutation,
-    PopulateAllDataMutationVariables
-  >(PopulateAllDataDocument, options);
-}
-export type PopulateAllDataMutationHookResult = ReturnType<
-  typeof usePopulateAllDataMutation
->;
-export type PopulateAllDataMutationResult =
-  Apollo.MutationResult<PopulateAllDataMutation>;
-export type PopulateAllDataMutationOptions = Apollo.BaseMutationOptions<
-  PopulateAllDataMutation,
-  PopulateAllDataMutationVariables
->;
+export function usePopulateAllDataMutation(baseOptions?: Apollo.MutationHookOptions<PopulateAllDataMutation, PopulateAllDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PopulateAllDataMutation, PopulateAllDataMutationVariables>(PopulateAllDataDocument, options);
+      }
+export type PopulateAllDataMutationHookResult = ReturnType<typeof usePopulateAllDataMutation>;
+export type PopulateAllDataMutationResult = Apollo.MutationResult<PopulateAllDataMutation>;
+export type PopulateAllDataMutationOptions = Apollo.BaseMutationOptions<PopulateAllDataMutation, PopulateAllDataMutationVariables>;
 export const LoginDocument = gql`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
-      errors {
-        field
-        message
-      }
-      user {
-        id
-        username
-      }
+    mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      username
     }
   }
-`;
-export type LoginMutationFn = Apollo.MutationFunction<
-  LoginMutation,
-  LoginMutationVariables
->;
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
  * __useLoginMutation__
@@ -1796,33 +1233,19 @@ export type LoginMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginMutation,
-    LoginMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    options
-  );
-}
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<
-  LoginMutation,
-  LoginMutationVariables
->;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
-  mutation Logout {
-    logout
-  }
-`;
-export type LogoutMutationFn = Apollo.MutationFunction<
-  LogoutMutation,
-  LogoutMutationVariables
->;
+    mutation Logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
  * __useLogoutMutation__
@@ -1840,32 +1263,21 @@ export type LogoutMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useLogoutMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LogoutMutation,
-    LogoutMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(
-    LogoutDocument,
-    options
-  );
-}
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = Apollo.BaseMutationOptions<
-  LogoutMutation,
-  LogoutMutationVariables
->;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
-  query Me {
-    me {
-      id
-      username
-    }
+    query Me {
+  me {
+    id
+    username
   }
-`;
+}
+    `;
 
 /**
  * __useMeQuery__
@@ -1882,42 +1294,35 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(
-  baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
-export function useMeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-}
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const TurnLightsOffDocument = gql`
-  mutation TurnLightsOff($id: String!) {
-    turnLightsOff(id: $id) {
-      container {
-        id
-        col
-        currTemp
-        currHum
-        lightsAreOn
-      }
-      errors {
-        field
-        message
-      }
+    mutation TurnLightsOff($id: String!) {
+  turnLightsOff(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type TurnLightsOffMutationFn = Apollo.MutationFunction<
-  TurnLightsOffMutation,
-  TurnLightsOffMutationVariables
->;
+}
+    `;
+export type TurnLightsOffMutationFn = Apollo.MutationFunction<TurnLightsOffMutation, TurnLightsOffMutationVariables>;
 
 /**
  * __useTurnLightsOffMutation__
@@ -1936,48 +1341,31 @@ export type TurnLightsOffMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useTurnLightsOffMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    TurnLightsOffMutation,
-    TurnLightsOffMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    TurnLightsOffMutation,
-    TurnLightsOffMutationVariables
-  >(TurnLightsOffDocument, options);
-}
-export type TurnLightsOffMutationHookResult = ReturnType<
-  typeof useTurnLightsOffMutation
->;
-export type TurnLightsOffMutationResult =
-  Apollo.MutationResult<TurnLightsOffMutation>;
-export type TurnLightsOffMutationOptions = Apollo.BaseMutationOptions<
-  TurnLightsOffMutation,
-  TurnLightsOffMutationVariables
->;
+export function useTurnLightsOffMutation(baseOptions?: Apollo.MutationHookOptions<TurnLightsOffMutation, TurnLightsOffMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TurnLightsOffMutation, TurnLightsOffMutationVariables>(TurnLightsOffDocument, options);
+      }
+export type TurnLightsOffMutationHookResult = ReturnType<typeof useTurnLightsOffMutation>;
+export type TurnLightsOffMutationResult = Apollo.MutationResult<TurnLightsOffMutation>;
+export type TurnLightsOffMutationOptions = Apollo.BaseMutationOptions<TurnLightsOffMutation, TurnLightsOffMutationVariables>;
 export const TurnLightsOnDocument = gql`
-  mutation TurnLightsOn($id: String!) {
-    turnLightsOn(id: $id) {
-      container {
-        id
-        col
-        currTemp
-        currHum
-        lightsAreOn
-      }
-      errors {
-        field
-        message
-      }
+    mutation TurnLightsOn($id: String!) {
+  turnLightsOn(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type TurnLightsOnMutationFn = Apollo.MutationFunction<
-  TurnLightsOnMutation,
-  TurnLightsOnMutationVariables
->;
+}
+    `;
+export type TurnLightsOnMutationFn = Apollo.MutationFunction<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
 
 /**
  * __useTurnLightsOnMutation__
@@ -1996,39 +1384,25 @@ export type TurnLightsOnMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useTurnLightsOnMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    TurnLightsOnMutation,
-    TurnLightsOnMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    TurnLightsOnMutation,
-    TurnLightsOnMutationVariables
-  >(TurnLightsOnDocument, options);
-}
-export type TurnLightsOnMutationHookResult = ReturnType<
-  typeof useTurnLightsOnMutation
->;
-export type TurnLightsOnMutationResult =
-  Apollo.MutationResult<TurnLightsOnMutation>;
-export type TurnLightsOnMutationOptions = Apollo.BaseMutationOptions<
-  TurnLightsOnMutation,
-  TurnLightsOnMutationVariables
->;
+export function useTurnLightsOnMutation(baseOptions?: Apollo.MutationHookOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TurnLightsOnMutation, TurnLightsOnMutationVariables>(TurnLightsOnDocument, options);
+      }
+export type TurnLightsOnMutationHookResult = ReturnType<typeof useTurnLightsOnMutation>;
+export type TurnLightsOnMutationResult = Apollo.MutationResult<TurnLightsOnMutation>;
+export type TurnLightsOnMutationOptions = Apollo.BaseMutationOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
 export const ContainersDocument = gql`
-  query Containers {
-    containers {
-      id
-      col
-      currTemp
-      currHum
-      isResponding
-      lightsAreOn
-    }
+    query Containers {
+  containers {
+    id
+    col
+    currTemp
+    currHum
+    isResponding
+    lightsAreOn
   }
-`;
+}
+    `;
 
 /**
  * __useContainersQuery__
@@ -2045,55 +1419,31 @@ export const ContainersDocument = gql`
  *   },
  * });
  */
-export function useContainersQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    ContainersQuery,
-    ContainersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ContainersQuery, ContainersQueryVariables>(
-    ContainersDocument,
-    options
-  );
-}
-export function useContainersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ContainersQuery,
-    ContainersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ContainersQuery, ContainersQueryVariables>(
-    ContainersDocument,
-    options
-  );
-}
+export function useContainersQuery(baseOptions?: Apollo.QueryHookOptions<ContainersQuery, ContainersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ContainersQuery, ContainersQueryVariables>(ContainersDocument, options);
+      }
+export function useContainersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContainersQuery, ContainersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ContainersQuery, ContainersQueryVariables>(ContainersDocument, options);
+        }
 export type ContainersQueryHookResult = ReturnType<typeof useContainersQuery>;
-export type ContainersLazyQueryHookResult = ReturnType<
-  typeof useContainersLazyQuery
->;
-export type ContainersQueryResult = Apollo.QueryResult<
-  ContainersQuery,
-  ContainersQueryVariables
->;
+export type ContainersLazyQueryHookResult = ReturnType<typeof useContainersLazyQuery>;
+export type ContainersQueryResult = Apollo.QueryResult<ContainersQuery, ContainersQueryVariables>;
 export const CreateEndoDocument = gql`
-  mutation createEndo($input: CreateEndoInput!) {
-    createEndo(input: $input) {
-      id
-      trayId
-      brand
-      serialNum
-      dryingTime
-      type
-      model
-    }
+    mutation createEndo($input: CreateEndoInput!) {
+  createEndo(input: $input) {
+    id
+    trayId
+    brand
+    serialNum
+    dryingTime
+    type
+    model
   }
-`;
-export type CreateEndoMutationFn = Apollo.MutationFunction<
-  CreateEndoMutation,
-  CreateEndoMutationVariables
->;
+}
+    `;
+export type CreateEndoMutationFn = Apollo.MutationFunction<CreateEndoMutation, CreateEndoMutationVariables>;
 
 /**
  * __useCreateEndoMutation__
@@ -2112,42 +1462,25 @@ export type CreateEndoMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateEndoMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateEndoMutation,
-    CreateEndoMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateEndoMutation, CreateEndoMutationVariables>(
-    CreateEndoDocument,
-    options
-  );
-}
-export type CreateEndoMutationHookResult = ReturnType<
-  typeof useCreateEndoMutation
->;
-export type CreateEndoMutationResult =
-  Apollo.MutationResult<CreateEndoMutation>;
-export type CreateEndoMutationOptions = Apollo.BaseMutationOptions<
-  CreateEndoMutation,
-  CreateEndoMutationVariables
->;
-export const DeleteEndoDocument = gql`
-  mutation DeleteEndo($id: String!) {
-    deleteEndo(id: $id) {
-      value
-      errors {
-        field
-        message
+export function useCreateEndoMutation(baseOptions?: Apollo.MutationHookOptions<CreateEndoMutation, CreateEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateEndoMutation, CreateEndoMutationVariables>(CreateEndoDocument, options);
       }
+export type CreateEndoMutationHookResult = ReturnType<typeof useCreateEndoMutation>;
+export type CreateEndoMutationResult = Apollo.MutationResult<CreateEndoMutation>;
+export type CreateEndoMutationOptions = Apollo.BaseMutationOptions<CreateEndoMutation, CreateEndoMutationVariables>;
+export const DeleteEndoDocument = gql`
+    mutation DeleteEndo($id: String!) {
+  deleteEndo(id: $id) {
+    value
+    errors {
+      field
+      message
     }
   }
-`;
-export type DeleteEndoMutationFn = Apollo.MutationFunction<
-  DeleteEndoMutation,
-  DeleteEndoMutationVariables
->;
+}
+    `;
+export type DeleteEndoMutationFn = Apollo.MutationFunction<DeleteEndoMutation, DeleteEndoMutationVariables>;
 
 /**
  * __useDeleteEndoMutation__
@@ -2166,44 +1499,27 @@ export type DeleteEndoMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteEndoMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteEndoMutation,
-    DeleteEndoMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteEndoMutation, DeleteEndoMutationVariables>(
-    DeleteEndoDocument,
-    options
-  );
-}
-export type DeleteEndoMutationHookResult = ReturnType<
-  typeof useDeleteEndoMutation
->;
-export type DeleteEndoMutationResult =
-  Apollo.MutationResult<DeleteEndoMutation>;
-export type DeleteEndoMutationOptions = Apollo.BaseMutationOptions<
-  DeleteEndoMutation,
-  DeleteEndoMutationVariables
->;
+export function useDeleteEndoMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEndoMutation, DeleteEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEndoMutation, DeleteEndoMutationVariables>(DeleteEndoDocument, options);
+      }
+export type DeleteEndoMutationHookResult = ReturnType<typeof useDeleteEndoMutation>;
+export type DeleteEndoMutationResult = Apollo.MutationResult<DeleteEndoMutation>;
+export type DeleteEndoMutationOptions = Apollo.BaseMutationOptions<DeleteEndoMutation, DeleteEndoMutationVariables>;
 export const PickEndoDocument = gql`
-  mutation pickEndo($id: String!) {
-    pickEndo(id: $id) {
-      id
-      trayId
-      brand
-      type
-      model
-      status
-      currentSessionId
-    }
+    mutation pickEndo($id: String!) {
+  pickEndo(id: $id) {
+    id
+    trayId
+    brand
+    type
+    model
+    status
+    currentSessionId
   }
-`;
-export type PickEndoMutationFn = Apollo.MutationFunction<
-  PickEndoMutation,
-  PickEndoMutationVariables
->;
+}
+    `;
+export type PickEndoMutationFn = Apollo.MutationFunction<PickEndoMutation, PickEndoMutationVariables>;
 
 /**
  * __usePickEndoMutation__
@@ -2222,36 +1538,22 @@ export type PickEndoMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function usePickEndoMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PickEndoMutation,
-    PickEndoMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<PickEndoMutation, PickEndoMutationVariables>(
-    PickEndoDocument,
-    options
-  );
-}
+export function usePickEndoMutation(baseOptions?: Apollo.MutationHookOptions<PickEndoMutation, PickEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PickEndoMutation, PickEndoMutationVariables>(PickEndoDocument, options);
+      }
 export type PickEndoMutationHookResult = ReturnType<typeof usePickEndoMutation>;
 export type PickEndoMutationResult = Apollo.MutationResult<PickEndoMutation>;
-export type PickEndoMutationOptions = Apollo.BaseMutationOptions<
-  PickEndoMutation,
-  PickEndoMutationVariables
->;
+export type PickEndoMutationOptions = Apollo.BaseMutationOptions<PickEndoMutation, PickEndoMutationVariables>;
 export const UpdateDryingTimeDocument = gql`
-  mutation updateDryingTime($input: UpdateDryingTimeInput!) {
-    updateDryingTime(input: $input) {
-      id
-      dryingTime
-    }
+    mutation updateDryingTime($input: UpdateDryingTimeInput!) {
+  updateDryingTime(input: $input) {
+    id
+    dryingTime
   }
-`;
-export type UpdateDryingTimeMutationFn = Apollo.MutationFunction<
-  UpdateDryingTimeMutation,
-  UpdateDryingTimeMutationVariables
->;
+}
+    `;
+export type UpdateDryingTimeMutationFn = Apollo.MutationFunction<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
 
 /**
  * __useUpdateDryingTimeMutation__
@@ -2270,44 +1572,27 @@ export type UpdateDryingTimeMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateDryingTimeMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateDryingTimeMutation,
-    UpdateDryingTimeMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateDryingTimeMutation,
-    UpdateDryingTimeMutationVariables
-  >(UpdateDryingTimeDocument, options);
-}
-export type UpdateDryingTimeMutationHookResult = ReturnType<
-  typeof useUpdateDryingTimeMutation
->;
-export type UpdateDryingTimeMutationResult =
-  Apollo.MutationResult<UpdateDryingTimeMutation>;
-export type UpdateDryingTimeMutationOptions = Apollo.BaseMutationOptions<
-  UpdateDryingTimeMutation,
-  UpdateDryingTimeMutationVariables
->;
+export function useUpdateDryingTimeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>(UpdateDryingTimeDocument, options);
+      }
+export type UpdateDryingTimeMutationHookResult = ReturnType<typeof useUpdateDryingTimeMutation>;
+export type UpdateDryingTimeMutationResult = Apollo.MutationResult<UpdateDryingTimeMutation>;
+export type UpdateDryingTimeMutationOptions = Apollo.BaseMutationOptions<UpdateDryingTimeMutation, UpdateDryingTimeMutationVariables>;
 export const UpdateEndoDocument = gql`
-  mutation updateEndo($id: String!, $input: UpdateEndoInput!) {
-    updateEndo(id: $id, input: $input) {
-      id
-      trayId
-      serialNum
-      dryingTime
-      brand
-      type
-      model
-    }
+    mutation updateEndo($id: String!, $input: UpdateEndoInput!) {
+  updateEndo(id: $id, input: $input) {
+    id
+    trayId
+    serialNum
+    dryingTime
+    brand
+    type
+    model
   }
-`;
-export type UpdateEndoMutationFn = Apollo.MutationFunction<
-  UpdateEndoMutation,
-  UpdateEndoMutationVariables
->;
+}
+    `;
+export type UpdateEndoMutationFn = Apollo.MutationFunction<UpdateEndoMutation, UpdateEndoMutationVariables>;
 
 /**
  * __useUpdateEndoMutation__
@@ -2327,38 +1612,21 @@ export type UpdateEndoMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateEndoMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateEndoMutation,
-    UpdateEndoMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateEndoMutation, UpdateEndoMutationVariables>(
-    UpdateEndoDocument,
-    options
-  );
-}
-export type UpdateEndoMutationHookResult = ReturnType<
-  typeof useUpdateEndoMutation
->;
-export type UpdateEndoMutationResult =
-  Apollo.MutationResult<UpdateEndoMutation>;
-export type UpdateEndoMutationOptions = Apollo.BaseMutationOptions<
-  UpdateEndoMutation,
-  UpdateEndoMutationVariables
->;
+export function useUpdateEndoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEndoMutation, UpdateEndoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEndoMutation, UpdateEndoMutationVariables>(UpdateEndoDocument, options);
+      }
+export type UpdateEndoMutationHookResult = ReturnType<typeof useUpdateEndoMutation>;
+export type UpdateEndoMutationResult = Apollo.MutationResult<UpdateEndoMutation>;
+export type UpdateEndoMutationOptions = Apollo.BaseMutationOptions<UpdateEndoMutation, UpdateEndoMutationVariables>;
 export const WashWithoutStoringDocument = gql`
-  mutation WashWithoutStoring($id: String!) {
-    washWithoutStoring(id: $id) {
-      id
-    }
+    mutation WashWithoutStoring($id: String!) {
+  washWithoutStoring(id: $id) {
+    id
   }
-`;
-export type WashWithoutStoringMutationFn = Apollo.MutationFunction<
-  WashWithoutStoringMutation,
-  WashWithoutStoringMutationVariables
->;
+}
+    `;
+export type WashWithoutStoringMutationFn = Apollo.MutationFunction<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>;
 
 /**
  * __useWashWithoutStoringMutation__
@@ -2377,52 +1645,38 @@ export type WashWithoutStoringMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useWashWithoutStoringMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    WashWithoutStoringMutation,
-    WashWithoutStoringMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    WashWithoutStoringMutation,
-    WashWithoutStoringMutationVariables
-  >(WashWithoutStoringDocument, options);
-}
-export type WashWithoutStoringMutationHookResult = ReturnType<
-  typeof useWashWithoutStoringMutation
->;
-export type WashWithoutStoringMutationResult =
-  Apollo.MutationResult<WashWithoutStoringMutation>;
-export type WashWithoutStoringMutationOptions = Apollo.BaseMutationOptions<
-  WashWithoutStoringMutation,
-  WashWithoutStoringMutationVariables
->;
+export function useWashWithoutStoringMutation(baseOptions?: Apollo.MutationHookOptions<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>(WashWithoutStoringDocument, options);
+      }
+export type WashWithoutStoringMutationHookResult = ReturnType<typeof useWashWithoutStoringMutation>;
+export type WashWithoutStoringMutationResult = Apollo.MutationResult<WashWithoutStoringMutation>;
+export type WashWithoutStoringMutationOptions = Apollo.BaseMutationOptions<WashWithoutStoringMutation, WashWithoutStoringMutationVariables>;
 export const EndoDocument = gql`
-  query Endo($id: String!) {
-    endo(id: $id) {
+    query Endo($id: String!) {
+  endo(id: $id) {
+    id
+    serialNum
+    dryingTime
+    status
+    brand
+    type
+    model
+    lastPutBackISO
+    position
+    trayId
+    tray {
       id
-      serialNum
-      dryingTime
-      status
-      brand
-      type
-      model
-      lastPutBackISO
+      row
       position
-      trayId
-      tray {
+      container {
         id
-        row
-        position
-        container {
-          id
-          col
-        }
+        col
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useEndoQuery__
@@ -2440,53 +1694,46 @@ export const EndoDocument = gql`
  *   },
  * });
  */
-export function useEndoQuery(
-  baseOptions: Apollo.QueryHookOptions<EndoQuery, EndoQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EndoQuery, EndoQueryVariables>(EndoDocument, options);
-}
-export function useEndoLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<EndoQuery, EndoQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EndoQuery, EndoQueryVariables>(
-    EndoDocument,
-    options
-  );
-}
+export function useEndoQuery(baseOptions: Apollo.QueryHookOptions<EndoQuery, EndoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EndoQuery, EndoQueryVariables>(EndoDocument, options);
+      }
+export function useEndoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EndoQuery, EndoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EndoQuery, EndoQueryVariables>(EndoDocument, options);
+        }
 export type EndoQueryHookResult = ReturnType<typeof useEndoQuery>;
 export type EndoLazyQueryHookResult = ReturnType<typeof useEndoLazyQuery>;
 export type EndoQueryResult = Apollo.QueryResult<EndoQuery, EndoQueryVariables>;
 export const EndosDocument = gql`
-  query endos {
-    endos {
+    query endos {
+  endos {
+    id
+    trayId
+    brand
+    type
+    model
+    status
+    currentSessionId
+    serialNum
+    lastPutBackISO
+    dryingTime
+    position
+    repairRequests {
       id
-      trayId
-      brand
-      type
-      model
-      status
-      currentSessionId
-      serialNum
-      lastPutBackISO
-      dryingTime
-      position
-      repairRequests {
+    }
+    tray {
+      id
+      row
+      container {
         id
-      }
-      tray {
-        id
-        row
-        container {
-          id
-          col
-          isResponding
-        }
+        col
+        isResponding
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useEndosQuery__
@@ -2503,41 +1750,25 @@ export const EndosDocument = gql`
  *   },
  * });
  */
-export function useEndosQuery(
-  baseOptions?: Apollo.QueryHookOptions<EndosQuery, EndosQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EndosQuery, EndosQueryVariables>(
-    EndosDocument,
-    options
-  );
-}
-export function useEndosLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<EndosQuery, EndosQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EndosQuery, EndosQueryVariables>(
-    EndosDocument,
-    options
-  );
-}
+export function useEndosQuery(baseOptions?: Apollo.QueryHookOptions<EndosQuery, EndosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EndosQuery, EndosQueryVariables>(EndosDocument, options);
+      }
+export function useEndosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EndosQuery, EndosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EndosQuery, EndosQueryVariables>(EndosDocument, options);
+        }
 export type EndosQueryHookResult = ReturnType<typeof useEndosQuery>;
 export type EndosLazyQueryHookResult = ReturnType<typeof useEndosLazyQuery>;
-export type EndosQueryResult = Apollo.QueryResult<
-  EndosQuery,
-  EndosQueryVariables
->;
+export type EndosQueryResult = Apollo.QueryResult<EndosQuery, EndosQueryVariables>;
 export const FinishRepairDocument = gql`
-  mutation FinishRepair($id: String!) {
-    finishRepair(id: $id) {
-      id
-    }
+    mutation FinishRepair($id: String!) {
+  finishRepair(id: $id) {
+    id
   }
-`;
-export type FinishRepairMutationFn = Apollo.MutationFunction<
-  FinishRepairMutation,
-  FinishRepairMutationVariables
->;
+}
+    `;
+export type FinishRepairMutationFn = Apollo.MutationFunction<FinishRepairMutation, FinishRepairMutationVariables>;
 
 /**
  * __useFinishRepairMutation__
@@ -2556,48 +1787,31 @@ export type FinishRepairMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useFinishRepairMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    FinishRepairMutation,
-    FinishRepairMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    FinishRepairMutation,
-    FinishRepairMutationVariables
-  >(FinishRepairDocument, options);
-}
-export type FinishRepairMutationHookResult = ReturnType<
-  typeof useFinishRepairMutation
->;
-export type FinishRepairMutationResult =
-  Apollo.MutationResult<FinishRepairMutation>;
-export type FinishRepairMutationOptions = Apollo.BaseMutationOptions<
-  FinishRepairMutation,
-  FinishRepairMutationVariables
->;
+export function useFinishRepairMutation(baseOptions?: Apollo.MutationHookOptions<FinishRepairMutation, FinishRepairMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FinishRepairMutation, FinishRepairMutationVariables>(FinishRepairDocument, options);
+      }
+export type FinishRepairMutationHookResult = ReturnType<typeof useFinishRepairMutation>;
+export type FinishRepairMutationResult = Apollo.MutationResult<FinishRepairMutation>;
+export type FinishRepairMutationOptions = Apollo.BaseMutationOptions<FinishRepairMutation, FinishRepairMutationVariables>;
 export const CreateOfficerDocument = gql`
-  mutation CreateOfficer($input: CreateOfficerInput!) {
-    createOfficer(input: $input) {
-      officer {
-        id
-        officerNum
-        firstName
-        lastName
-        type
-      }
-      errors {
-        field
-        message
-      }
+    mutation CreateOfficer($input: CreateOfficerInput!) {
+  createOfficer(input: $input) {
+    officer {
+      id
+      officerNum
+      firstName
+      lastName
+      type
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type CreateOfficerMutationFn = Apollo.MutationFunction<
-  CreateOfficerMutation,
-  CreateOfficerMutationVariables
->;
+}
+    `;
+export type CreateOfficerMutationFn = Apollo.MutationFunction<CreateOfficerMutation, CreateOfficerMutationVariables>;
 
 /**
  * __useCreateOfficerMutation__
@@ -2616,42 +1830,25 @@ export type CreateOfficerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateOfficerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateOfficerMutation,
-    CreateOfficerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateOfficerMutation,
-    CreateOfficerMutationVariables
-  >(CreateOfficerDocument, options);
-}
-export type CreateOfficerMutationHookResult = ReturnType<
-  typeof useCreateOfficerMutation
->;
-export type CreateOfficerMutationResult =
-  Apollo.MutationResult<CreateOfficerMutation>;
-export type CreateOfficerMutationOptions = Apollo.BaseMutationOptions<
-  CreateOfficerMutation,
-  CreateOfficerMutationVariables
->;
-export const DeleteOfficerDocument = gql`
-  mutation DeleteOfficer($id: String!) {
-    deleteOfficer(id: $id) {
-      value
-      errors {
-        field
-        message
+export function useCreateOfficerMutation(baseOptions?: Apollo.MutationHookOptions<CreateOfficerMutation, CreateOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOfficerMutation, CreateOfficerMutationVariables>(CreateOfficerDocument, options);
       }
+export type CreateOfficerMutationHookResult = ReturnType<typeof useCreateOfficerMutation>;
+export type CreateOfficerMutationResult = Apollo.MutationResult<CreateOfficerMutation>;
+export type CreateOfficerMutationOptions = Apollo.BaseMutationOptions<CreateOfficerMutation, CreateOfficerMutationVariables>;
+export const DeleteOfficerDocument = gql`
+    mutation DeleteOfficer($id: String!) {
+  deleteOfficer(id: $id) {
+    value
+    errors {
+      field
+      message
     }
   }
-`;
-export type DeleteOfficerMutationFn = Apollo.MutationFunction<
-  DeleteOfficerMutation,
-  DeleteOfficerMutationVariables
->;
+}
+    `;
+export type DeleteOfficerMutationFn = Apollo.MutationFunction<DeleteOfficerMutation, DeleteOfficerMutationVariables>;
 
 /**
  * __useDeleteOfficerMutation__
@@ -2670,48 +1867,31 @@ export type DeleteOfficerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteOfficerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteOfficerMutation,
-    DeleteOfficerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteOfficerMutation,
-    DeleteOfficerMutationVariables
-  >(DeleteOfficerDocument, options);
-}
-export type DeleteOfficerMutationHookResult = ReturnType<
-  typeof useDeleteOfficerMutation
->;
-export type DeleteOfficerMutationResult =
-  Apollo.MutationResult<DeleteOfficerMutation>;
-export type DeleteOfficerMutationOptions = Apollo.BaseMutationOptions<
-  DeleteOfficerMutation,
-  DeleteOfficerMutationVariables
->;
+export function useDeleteOfficerMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOfficerMutation, DeleteOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOfficerMutation, DeleteOfficerMutationVariables>(DeleteOfficerDocument, options);
+      }
+export type DeleteOfficerMutationHookResult = ReturnType<typeof useDeleteOfficerMutation>;
+export type DeleteOfficerMutationResult = Apollo.MutationResult<DeleteOfficerMutation>;
+export type DeleteOfficerMutationOptions = Apollo.BaseMutationOptions<DeleteOfficerMutation, DeleteOfficerMutationVariables>;
 export const UpdateOfficerDocument = gql`
-  mutation UpdateOfficer($input: UpdateOfficerInput!) {
-    updateOfficer(input: $input) {
-      officer {
-        id
-        officerNum
-        firstName
-        lastName
-        type
-      }
-      errors {
-        field
-        message
-      }
+    mutation UpdateOfficer($input: UpdateOfficerInput!) {
+  updateOfficer(input: $input) {
+    officer {
+      id
+      officerNum
+      firstName
+      lastName
+      type
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type UpdateOfficerMutationFn = Apollo.MutationFunction<
-  UpdateOfficerMutation,
-  UpdateOfficerMutationVariables
->;
+}
+    `;
+export type UpdateOfficerMutationFn = Apollo.MutationFunction<UpdateOfficerMutation, UpdateOfficerMutationVariables>;
 
 /**
  * __useUpdateOfficerMutation__
@@ -2730,38 +1910,24 @@ export type UpdateOfficerMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateOfficerMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateOfficerMutation,
-    UpdateOfficerMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateOfficerMutation,
-    UpdateOfficerMutationVariables
-  >(UpdateOfficerDocument, options);
-}
-export type UpdateOfficerMutationHookResult = ReturnType<
-  typeof useUpdateOfficerMutation
->;
-export type UpdateOfficerMutationResult =
-  Apollo.MutationResult<UpdateOfficerMutation>;
-export type UpdateOfficerMutationOptions = Apollo.BaseMutationOptions<
-  UpdateOfficerMutation,
-  UpdateOfficerMutationVariables
->;
+export function useUpdateOfficerMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOfficerMutation, UpdateOfficerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOfficerMutation, UpdateOfficerMutationVariables>(UpdateOfficerDocument, options);
+      }
+export type UpdateOfficerMutationHookResult = ReturnType<typeof useUpdateOfficerMutation>;
+export type UpdateOfficerMutationResult = Apollo.MutationResult<UpdateOfficerMutation>;
+export type UpdateOfficerMutationOptions = Apollo.BaseMutationOptions<UpdateOfficerMutation, UpdateOfficerMutationVariables>;
 export const OfficerDocument = gql`
-  query Officer($id: String!) {
-    officer(id: $id) {
-      id
-      officerNum
-      firstName
-      lastName
-      type
-    }
+    query Officer($id: String!) {
+  officer(id: $id) {
+    id
+    officerNum
+    firstName
+    lastName
+    type
   }
-`;
+}
+    `;
 
 /**
  * __useOfficerQuery__
@@ -2779,41 +1945,28 @@ export const OfficerDocument = gql`
  *   },
  * });
  */
-export function useOfficerQuery(
-  baseOptions: Apollo.QueryHookOptions<OfficerQuery, OfficerQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OfficerQuery, OfficerQueryVariables>(
-    OfficerDocument,
-    options
-  );
-}
-export function useOfficerLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<OfficerQuery, OfficerQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<OfficerQuery, OfficerQueryVariables>(
-    OfficerDocument,
-    options
-  );
-}
+export function useOfficerQuery(baseOptions: Apollo.QueryHookOptions<OfficerQuery, OfficerQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OfficerQuery, OfficerQueryVariables>(OfficerDocument, options);
+      }
+export function useOfficerLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OfficerQuery, OfficerQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OfficerQuery, OfficerQueryVariables>(OfficerDocument, options);
+        }
 export type OfficerQueryHookResult = ReturnType<typeof useOfficerQuery>;
 export type OfficerLazyQueryHookResult = ReturnType<typeof useOfficerLazyQuery>;
-export type OfficerQueryResult = Apollo.QueryResult<
-  OfficerQuery,
-  OfficerQueryVariables
->;
+export type OfficerQueryResult = Apollo.QueryResult<OfficerQuery, OfficerQueryVariables>;
 export const OfficersDocument = gql`
-  query Officers {
-    officers {
-      id
-      officerNum
-      firstName
-      lastName
-      type
-    }
+    query Officers {
+  officers {
+    id
+    officerNum
+    firstName
+    lastName
+    type
   }
-`;
+}
+    `;
 
 /**
  * __useOfficersQuery__
@@ -2830,61 +1983,40 @@ export const OfficersDocument = gql`
  *   },
  * });
  */
-export function useOfficersQuery(
-  baseOptions?: Apollo.QueryHookOptions<OfficersQuery, OfficersQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OfficersQuery, OfficersQueryVariables>(
-    OfficersDocument,
-    options
-  );
-}
-export function useOfficersLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    OfficersQuery,
-    OfficersQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<OfficersQuery, OfficersQueryVariables>(
-    OfficersDocument,
-    options
-  );
-}
-export type OfficersQueryHookResult = ReturnType<typeof useOfficersQuery>;
-export type OfficersLazyQueryHookResult = ReturnType<
-  typeof useOfficersLazyQuery
->;
-export type OfficersQueryResult = Apollo.QueryResult<
-  OfficersQuery,
-  OfficersQueryVariables
->;
-export const CreateRepairRequestDocument = gql`
-  mutation CreateRepairRequest($input: CreateRepairRequestInput!) {
-    createRepairRequest(input: $input) {
-      repairRequest {
-        id
-        note
-        officerId
-        officer {
-          id
-        }
-        endoId
-        endo {
-          id
-        }
+export function useOfficersQuery(baseOptions?: Apollo.QueryHookOptions<OfficersQuery, OfficersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OfficersQuery, OfficersQueryVariables>(OfficersDocument, options);
       }
-      errors {
-        field
-        message
+export function useOfficersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OfficersQuery, OfficersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OfficersQuery, OfficersQueryVariables>(OfficersDocument, options);
+        }
+export type OfficersQueryHookResult = ReturnType<typeof useOfficersQuery>;
+export type OfficersLazyQueryHookResult = ReturnType<typeof useOfficersLazyQuery>;
+export type OfficersQueryResult = Apollo.QueryResult<OfficersQuery, OfficersQueryVariables>;
+export const CreateRepairRequestDocument = gql`
+    mutation CreateRepairRequest($input: CreateRepairRequestInput!) {
+  createRepairRequest(input: $input) {
+    repairRequest {
+      id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
       }
     }
+    errors {
+      field
+      message
+    }
   }
-`;
-export type CreateRepairRequestMutationFn = Apollo.MutationFunction<
-  CreateRepairRequestMutation,
-  CreateRepairRequestMutationVariables
->;
+}
+    `;
+export type CreateRepairRequestMutationFn = Apollo.MutationFunction<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>;
 
 /**
  * __useCreateRepairRequestMutation__
@@ -2903,42 +2035,25 @@ export type CreateRepairRequestMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateRepairRequestMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateRepairRequestMutation,
-    CreateRepairRequestMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateRepairRequestMutation,
-    CreateRepairRequestMutationVariables
-  >(CreateRepairRequestDocument, options);
-}
-export type CreateRepairRequestMutationHookResult = ReturnType<
-  typeof useCreateRepairRequestMutation
->;
-export type CreateRepairRequestMutationResult =
-  Apollo.MutationResult<CreateRepairRequestMutation>;
-export type CreateRepairRequestMutationOptions = Apollo.BaseMutationOptions<
-  CreateRepairRequestMutation,
-  CreateRepairRequestMutationVariables
->;
-export const RemoveRepairRequestDocument = gql`
-  mutation RemoveRepairRequest($id: String!) {
-    removeRepairRequest(id: $id) {
-      errors {
-        field
-        message
+export function useCreateRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>(CreateRepairRequestDocument, options);
       }
-      value
+export type CreateRepairRequestMutationHookResult = ReturnType<typeof useCreateRepairRequestMutation>;
+export type CreateRepairRequestMutationResult = Apollo.MutationResult<CreateRepairRequestMutation>;
+export type CreateRepairRequestMutationOptions = Apollo.BaseMutationOptions<CreateRepairRequestMutation, CreateRepairRequestMutationVariables>;
+export const RemoveRepairRequestDocument = gql`
+    mutation RemoveRepairRequest($id: String!) {
+  removeRepairRequest(id: $id) {
+    errors {
+      field
+      message
     }
+    value
   }
-`;
-export type RemoveRepairRequestMutationFn = Apollo.MutationFunction<
-  RemoveRepairRequestMutation,
-  RemoveRepairRequestMutationVariables
->;
+}
+    `;
+export type RemoveRepairRequestMutationFn = Apollo.MutationFunction<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>;
 
 /**
  * __useRemoveRepairRequestMutation__
@@ -2957,43 +2072,29 @@ export type RemoveRepairRequestMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRemoveRepairRequestMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RemoveRepairRequestMutation,
-    RemoveRepairRequestMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    RemoveRepairRequestMutation,
-    RemoveRepairRequestMutationVariables
-  >(RemoveRepairRequestDocument, options);
-}
-export type RemoveRepairRequestMutationHookResult = ReturnType<
-  typeof useRemoveRepairRequestMutation
->;
-export type RemoveRepairRequestMutationResult =
-  Apollo.MutationResult<RemoveRepairRequestMutation>;
-export type RemoveRepairRequestMutationOptions = Apollo.BaseMutationOptions<
-  RemoveRepairRequestMutation,
-  RemoveRepairRequestMutationVariables
->;
+export function useRemoveRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>(RemoveRepairRequestDocument, options);
+      }
+export type RemoveRepairRequestMutationHookResult = ReturnType<typeof useRemoveRepairRequestMutation>;
+export type RemoveRepairRequestMutationResult = Apollo.MutationResult<RemoveRepairRequestMutation>;
+export type RemoveRepairRequestMutationOptions = Apollo.BaseMutationOptions<RemoveRepairRequestMutation, RemoveRepairRequestMutationVariables>;
 export const RepairRequestDocument = gql`
-  query RepairRequest($id: String!) {
-    repairRequest(id: $id) {
+    query RepairRequest($id: String!) {
+  repairRequest(id: $id) {
+    id
+    note
+    officerId
+    officer {
       id
-      note
-      officerId
-      officer {
-        id
-      }
-      endoId
-      endo {
-        id
-      }
+    }
+    endoId
+    endo {
+      id
     }
   }
-`;
+}
+    `;
 
 /**
  * __useRepairRequestQuery__
@@ -3011,57 +2112,34 @@ export const RepairRequestDocument = gql`
  *   },
  * });
  */
-export function useRepairRequestQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RepairRequestQuery,
-    RepairRequestQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<RepairRequestQuery, RepairRequestQueryVariables>(
-    RepairRequestDocument,
-    options
-  );
-}
-export function useRepairRequestLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RepairRequestQuery,
-    RepairRequestQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<RepairRequestQuery, RepairRequestQueryVariables>(
-    RepairRequestDocument,
-    options
-  );
-}
-export type RepairRequestQueryHookResult = ReturnType<
-  typeof useRepairRequestQuery
->;
-export type RepairRequestLazyQueryHookResult = ReturnType<
-  typeof useRepairRequestLazyQuery
->;
-export type RepairRequestQueryResult = Apollo.QueryResult<
-  RepairRequestQuery,
-  RepairRequestQueryVariables
->;
+export function useRepairRequestQuery(baseOptions: Apollo.QueryHookOptions<RepairRequestQuery, RepairRequestQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestQuery, RepairRequestQueryVariables>(RepairRequestDocument, options);
+      }
+export function useRepairRequestLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestQuery, RepairRequestQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestQuery, RepairRequestQueryVariables>(RepairRequestDocument, options);
+        }
+export type RepairRequestQueryHookResult = ReturnType<typeof useRepairRequestQuery>;
+export type RepairRequestLazyQueryHookResult = ReturnType<typeof useRepairRequestLazyQuery>;
+export type RepairRequestQueryResult = Apollo.QueryResult<RepairRequestQuery, RepairRequestQueryVariables>;
 export const RepairRequestsDocument = gql`
-  query RepairRequests {
-    repairRequests {
+    query RepairRequests {
+  repairRequests {
+    id
+    note
+    officerId
+    officer {
       id
-      note
-      officerId
-      officer {
-        id
-      }
-      endoId
-      endo {
-        id
-      }
-      createdAt
     }
+    endoId
+    endo {
+      id
+    }
+    createdAt
   }
-`;
+}
+    `;
 
 /**
  * __useRepairRequestsQuery__
@@ -3078,68 +2156,45 @@ export const RepairRequestsDocument = gql`
  *   },
  * });
  */
-export function useRepairRequestsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    RepairRequestsQuery,
-    RepairRequestsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(
-    RepairRequestsDocument,
-    options
-  );
-}
-export function useRepairRequestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RepairRequestsQuery,
-    RepairRequestsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(
-    RepairRequestsDocument,
-    options
-  );
-}
-export type RepairRequestsQueryHookResult = ReturnType<
-  typeof useRepairRequestsQuery
->;
-export type RepairRequestsLazyQueryHookResult = ReturnType<
-  typeof useRepairRequestsLazyQuery
->;
-export type RepairRequestsQueryResult = Apollo.QueryResult<
-  RepairRequestsQuery,
-  RepairRequestsQueryVariables
->;
+export function useRepairRequestsQuery(baseOptions?: Apollo.QueryHookOptions<RepairRequestsQuery, RepairRequestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(RepairRequestsDocument, options);
+      }
+export function useRepairRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestsQuery, RepairRequestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestsQuery, RepairRequestsQueryVariables>(RepairRequestsDocument, options);
+        }
+export type RepairRequestsQueryHookResult = ReturnType<typeof useRepairRequestsQuery>;
+export type RepairRequestsLazyQueryHookResult = ReturnType<typeof useRepairRequestsLazyQuery>;
+export type RepairRequestsQueryResult = Apollo.QueryResult<RepairRequestsQuery, RepairRequestsQueryVariables>;
 export const RepairRequestsByEndoDocument = gql`
-  query RepairRequestsByEndo($endoId: String!) {
-    repairRequestsByEndo(endoId: $endoId) {
+    query RepairRequestsByEndo($endoId: String!) {
+  repairRequestsByEndo(endoId: $endoId) {
+    id
+    note
+    officerId
+    officer {
       id
-      note
-      officerId
-      officer {
-        id
-        officerNum
-        firstName
-        lastName
-      }
-      endoId
-      endo {
-        id
-        serialNum
-        dryingTime
-        status
-        brand
-        type
-        model
-        lastPutBackISO
-        position
-      }
-      createdAt
+      officerNum
+      firstName
+      lastName
     }
+    endoId
+    endo {
+      id
+      serialNum
+      dryingTime
+      status
+      brand
+      type
+      model
+      lastPutBackISO
+      position
+    }
+    createdAt
   }
-`;
+}
+    `;
 
 /**
  * __useRepairRequestsByEndoQuery__
@@ -3157,66 +2212,40 @@ export const RepairRequestsByEndoDocument = gql`
  *   },
  * });
  */
-export function useRepairRequestsByEndoQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RepairRequestsByEndoQuery,
-    RepairRequestsByEndoQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    RepairRequestsByEndoQuery,
-    RepairRequestsByEndoQueryVariables
-  >(RepairRequestsByEndoDocument, options);
-}
-export function useRepairRequestsByEndoLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RepairRequestsByEndoQuery,
-    RepairRequestsByEndoQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    RepairRequestsByEndoQuery,
-    RepairRequestsByEndoQueryVariables
-  >(RepairRequestsByEndoDocument, options);
-}
-export type RepairRequestsByEndoQueryHookResult = ReturnType<
-  typeof useRepairRequestsByEndoQuery
->;
-export type RepairRequestsByEndoLazyQueryHookResult = ReturnType<
-  typeof useRepairRequestsByEndoLazyQuery
->;
-export type RepairRequestsByEndoQueryResult = Apollo.QueryResult<
-  RepairRequestsByEndoQuery,
-  RepairRequestsByEndoQueryVariables
->;
-export const UpdateRepairRequestDocument = gql`
-  mutation UpdateRepairRequest($input: UpdateRepairRequestInput!) {
-    updateRepairRequest(input: $input) {
-      repairRequest {
-        id
-        note
-        officerId
-        officer {
-          id
-        }
-        endoId
-        endo {
-          id
-        }
+export function useRepairRequestsByEndoQuery(baseOptions: Apollo.QueryHookOptions<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>(RepairRequestsByEndoDocument, options);
       }
-      errors {
-        field
-        message
+export function useRepairRequestsByEndoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>(RepairRequestsByEndoDocument, options);
+        }
+export type RepairRequestsByEndoQueryHookResult = ReturnType<typeof useRepairRequestsByEndoQuery>;
+export type RepairRequestsByEndoLazyQueryHookResult = ReturnType<typeof useRepairRequestsByEndoLazyQuery>;
+export type RepairRequestsByEndoQueryResult = Apollo.QueryResult<RepairRequestsByEndoQuery, RepairRequestsByEndoQueryVariables>;
+export const UpdateRepairRequestDocument = gql`
+    mutation UpdateRepairRequest($input: UpdateRepairRequestInput!) {
+  updateRepairRequest(input: $input) {
+    repairRequest {
+      id
+      note
+      officerId
+      officer {
+        id
+      }
+      endoId
+      endo {
+        id
       }
     }
+    errors {
+      field
+      message
+    }
   }
-`;
-export type UpdateRepairRequestMutationFn = Apollo.MutationFunction<
-  UpdateRepairRequestMutation,
-  UpdateRepairRequestMutationVariables
->;
+}
+    `;
+export type UpdateRepairRequestMutationFn = Apollo.MutationFunction<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>;
 
 /**
  * __useUpdateRepairRequestMutation__
@@ -3235,36 +2264,19 @@ export type UpdateRepairRequestMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateRepairRequestMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateRepairRequestMutation,
-    UpdateRepairRequestMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateRepairRequestMutation,
-    UpdateRepairRequestMutationVariables
-  >(UpdateRepairRequestDocument, options);
-}
-export type UpdateRepairRequestMutationHookResult = ReturnType<
-  typeof useUpdateRepairRequestMutation
->;
-export type UpdateRepairRequestMutationResult =
-  Apollo.MutationResult<UpdateRepairRequestMutation>;
-export type UpdateRepairRequestMutationOptions = Apollo.BaseMutationOptions<
-  UpdateRepairRequestMutation,
-  UpdateRepairRequestMutationVariables
->;
+export function useUpdateRepairRequestMutation(baseOptions?: Apollo.MutationHookOptions<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>(UpdateRepairRequestDocument, options);
+      }
+export type UpdateRepairRequestMutationHookResult = ReturnType<typeof useUpdateRepairRequestMutation>;
+export type UpdateRepairRequestMutationResult = Apollo.MutationResult<UpdateRepairRequestMutation>;
+export type UpdateRepairRequestMutationOptions = Apollo.BaseMutationOptions<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>;
 export const BlinkLocationDocument = gql`
-  mutation BlinkLocation($input: RowAndColInput!) {
-    blinkLocation(input: $input)
-  }
-`;
-export type BlinkLocationMutationFn = Apollo.MutationFunction<
-  BlinkLocationMutation,
-  BlinkLocationMutationVariables
->;
+    mutation BlinkLocation($input: RowAndColInput!) {
+  blinkLocation(input: $input)
+}
+    `;
+export type BlinkLocationMutationFn = Apollo.MutationFunction<BlinkLocationMutation, BlinkLocationMutationVariables>;
 
 /**
  * __useBlinkLocationMutation__
@@ -3283,47 +2295,30 @@ export type BlinkLocationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useBlinkLocationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    BlinkLocationMutation,
-    BlinkLocationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    BlinkLocationMutation,
-    BlinkLocationMutationVariables
-  >(BlinkLocationDocument, options);
-}
-export type BlinkLocationMutationHookResult = ReturnType<
-  typeof useBlinkLocationMutation
->;
-export type BlinkLocationMutationResult =
-  Apollo.MutationResult<BlinkLocationMutation>;
-export type BlinkLocationMutationOptions = Apollo.BaseMutationOptions<
-  BlinkLocationMutation,
-  BlinkLocationMutationVariables
->;
+export function useBlinkLocationMutation(baseOptions?: Apollo.MutationHookOptions<BlinkLocationMutation, BlinkLocationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BlinkLocationMutation, BlinkLocationMutationVariables>(BlinkLocationDocument, options);
+      }
+export type BlinkLocationMutationHookResult = ReturnType<typeof useBlinkLocationMutation>;
+export type BlinkLocationMutationResult = Apollo.MutationResult<BlinkLocationMutation>;
+export type BlinkLocationMutationOptions = Apollo.BaseMutationOptions<BlinkLocationMutation, BlinkLocationMutationVariables>;
 export const CreateActionDocument = gql`
-  mutation createAction($input: CreateActionInput!) {
-    createAction(input: $input) {
-      action {
-        id
-        type
-        passed
-        sessionId
-      }
-      errors {
-        field
-        message
-      }
+    mutation createAction($input: CreateActionInput!) {
+  createAction(input: $input) {
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type CreateActionMutationFn = Apollo.MutationFunction<
-  CreateActionMutation,
-  CreateActionMutationVariables
->;
+}
+    `;
+export type CreateActionMutationFn = Apollo.MutationFunction<CreateActionMutation, CreateActionMutationVariables>;
 
 /**
  * __useCreateActionMutation__
@@ -3342,47 +2337,30 @@ export type CreateActionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateActionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateActionMutation,
-    CreateActionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateActionMutation,
-    CreateActionMutationVariables
-  >(CreateActionDocument, options);
-}
-export type CreateActionMutationHookResult = ReturnType<
-  typeof useCreateActionMutation
->;
-export type CreateActionMutationResult =
-  Apollo.MutationResult<CreateActionMutation>;
-export type CreateActionMutationOptions = Apollo.BaseMutationOptions<
-  CreateActionMutation,
-  CreateActionMutationVariables
->;
+export function useCreateActionMutation(baseOptions?: Apollo.MutationHookOptions<CreateActionMutation, CreateActionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateActionMutation, CreateActionMutationVariables>(CreateActionDocument, options);
+      }
+export type CreateActionMutationHookResult = ReturnType<typeof useCreateActionMutation>;
+export type CreateActionMutationResult = Apollo.MutationResult<CreateActionMutation>;
+export type CreateActionMutationOptions = Apollo.BaseMutationOptions<CreateActionMutation, CreateActionMutationVariables>;
 export const UpdateActionDocument = gql`
-  mutation updateAction($input: UpdateActionInput!) {
-    updateAction(input: $input) {
-      action {
-        id
-        type
-        passed
-        sessionId
-      }
-      errors {
-        field
-        message
-      }
+    mutation updateAction($input: UpdateActionInput!) {
+  updateAction(input: $input) {
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
     }
   }
-`;
-export type UpdateActionMutationFn = Apollo.MutationFunction<
-  UpdateActionMutation,
-  UpdateActionMutationVariables
->;
+}
+    `;
+export type UpdateActionMutationFn = Apollo.MutationFunction<UpdateActionMutation, UpdateActionMutationVariables>;
 
 /**
  * __useUpdateActionMutation__
@@ -3401,41 +2379,24 @@ export type UpdateActionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateActionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateActionMutation,
-    UpdateActionMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateActionMutation,
-    UpdateActionMutationVariables
-  >(UpdateActionDocument, options);
-}
-export type UpdateActionMutationHookResult = ReturnType<
-  typeof useUpdateActionMutation
->;
-export type UpdateActionMutationResult =
-  Apollo.MutationResult<UpdateActionMutation>;
-export type UpdateActionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateActionMutation,
-  UpdateActionMutationVariables
->;
+export function useUpdateActionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateActionMutation, UpdateActionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateActionMutation, UpdateActionMutationVariables>(UpdateActionDocument, options);
+      }
+export type UpdateActionMutationHookResult = ReturnType<typeof useUpdateActionMutation>;
+export type UpdateActionMutationResult = Apollo.MutationResult<UpdateActionMutation>;
+export type UpdateActionMutationOptions = Apollo.BaseMutationOptions<UpdateActionMutation, UpdateActionMutationVariables>;
 export const UpdateSessionPatientDocument = gql`
-  mutation updateSessionPatient($input: UpdateSessionPatientInput!) {
-    updateSessionPatient(input: $input) {
-      id
-      endoId
-      status
-      patientId
-    }
+    mutation updateSessionPatient($input: UpdateSessionPatientInput!) {
+  updateSessionPatient(input: $input) {
+    id
+    endoId
+    status
+    patientId
   }
-`;
-export type UpdateSessionPatientMutationFn = Apollo.MutationFunction<
-  UpdateSessionPatientMutation,
-  UpdateSessionPatientMutationVariables
->;
+}
+    `;
+export type UpdateSessionPatientMutationFn = Apollo.MutationFunction<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>;
 
 /**
  * __useUpdateSessionPatientMutation__
@@ -3454,60 +2415,46 @@ export type UpdateSessionPatientMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateSessionPatientMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateSessionPatientMutation,
-    UpdateSessionPatientMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateSessionPatientMutation,
-    UpdateSessionPatientMutationVariables
-  >(UpdateSessionPatientDocument, options);
-}
-export type UpdateSessionPatientMutationHookResult = ReturnType<
-  typeof useUpdateSessionPatientMutation
->;
-export type UpdateSessionPatientMutationResult =
-  Apollo.MutationResult<UpdateSessionPatientMutation>;
-export type UpdateSessionPatientMutationOptions = Apollo.BaseMutationOptions<
-  UpdateSessionPatientMutation,
-  UpdateSessionPatientMutationVariables
->;
+export function useUpdateSessionPatientMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>(UpdateSessionPatientDocument, options);
+      }
+export type UpdateSessionPatientMutationHookResult = ReturnType<typeof useUpdateSessionPatientMutation>;
+export type UpdateSessionPatientMutationResult = Apollo.MutationResult<UpdateSessionPatientMutation>;
+export type UpdateSessionPatientMutationOptions = Apollo.BaseMutationOptions<UpdateSessionPatientMutation, UpdateSessionPatientMutationVariables>;
 export const SessionDocument = gql`
-  query Session($id: String!) {
-    session(id: $id) {
+    query Session($id: String!) {
+  session(id: $id) {
+    id
+    endoId
+    endo {
       id
-      endoId
-      endo {
-        id
-        status
-      }
       status
-      patientUsedEndo
-      endoWasExpired
-      endoWasOutOfOrder
-      patientId
-      patient {
+    }
+    status
+    patientUsedEndo
+    endoWasExpired
+    endoWasOutOfOrder
+    patientId
+    patient {
+      id
+      hosNum
+    }
+    actions {
+      id
+      passed
+      type
+      note
+      createdAt
+      officerId
+      officer {
         id
-        hosNum
-      }
-      actions {
-        id
-        passed
-        type
-        note
-        createdAt
-        officerId
-        officer {
-          id
-          officerNum
-        }
+        officerNum
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useSessionQuery__
@@ -3525,43 +2472,27 @@ export const SessionDocument = gql`
  *   },
  * });
  */
-export function useSessionQuery(
-  baseOptions: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SessionQuery, SessionQueryVariables>(
-    SessionDocument,
-    options
-  );
-}
-export function useSessionLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(
-    SessionDocument,
-    options
-  );
-}
+export function useSessionQuery(baseOptions: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+      }
+export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(SessionDocument, options);
+        }
 export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
 export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
-export type SessionQueryResult = Apollo.QueryResult<
-  SessionQuery,
-  SessionQueryVariables
->;
+export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
 export const UpdateSettingDocument = gql`
-  mutation UpdateSetting($input: UpdateSettingInput!) {
-    updateSetting(input: $input) {
-      id
-      name
-      value
-    }
+    mutation UpdateSetting($input: UpdateSettingInput!) {
+  updateSetting(input: $input) {
+    id
+    name
+    value
   }
-`;
-export type UpdateSettingMutationFn = Apollo.MutationFunction<
-  UpdateSettingMutation,
-  UpdateSettingMutationVariables
->;
+}
+    `;
+export type UpdateSettingMutationFn = Apollo.MutationFunction<UpdateSettingMutation, UpdateSettingMutationVariables>;
 
 /**
  * __useUpdateSettingMutation__
@@ -3580,38 +2511,24 @@ export type UpdateSettingMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateSettingMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateSettingMutation,
-    UpdateSettingMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateSettingMutation,
-    UpdateSettingMutationVariables
-  >(UpdateSettingDocument, options);
-}
-export type UpdateSettingMutationHookResult = ReturnType<
-  typeof useUpdateSettingMutation
->;
-export type UpdateSettingMutationResult =
-  Apollo.MutationResult<UpdateSettingMutation>;
-export type UpdateSettingMutationOptions = Apollo.BaseMutationOptions<
-  UpdateSettingMutation,
-  UpdateSettingMutationVariables
->;
+export function useUpdateSettingMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSettingMutation, UpdateSettingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSettingMutation, UpdateSettingMutationVariables>(UpdateSettingDocument, options);
+      }
+export type UpdateSettingMutationHookResult = ReturnType<typeof useUpdateSettingMutation>;
+export type UpdateSettingMutationResult = Apollo.MutationResult<UpdateSettingMutation>;
+export type UpdateSettingMutationOptions = Apollo.BaseMutationOptions<UpdateSettingMutation, UpdateSettingMutationVariables>;
 export const SettingsDocument = gql`
-  query Settings {
-    settings {
-      id
-      name
-      label
-      description
-      value
-    }
+    query Settings {
+  settings {
+    id
+    name
+    label
+    description
+    value
   }
-`;
+}
+    `;
 
 /**
  * __useSettingsQuery__
@@ -3628,46 +2545,28 @@ export const SettingsDocument = gql`
  *   },
  * });
  */
-export function useSettingsQuery(
-  baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(
-    SettingsDocument,
-    options
-  );
-}
-export function useSettingsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SettingsQuery,
-    SettingsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(
-    SettingsDocument,
-    options
-  );
-}
+export function useSettingsQuery(baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+      }
+export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+        }
 export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
-export type SettingsLazyQueryHookResult = ReturnType<
-  typeof useSettingsLazyQuery
->;
-export type SettingsQueryResult = Apollo.QueryResult<
-  SettingsQuery,
-  SettingsQueryVariables
->;
+export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
+export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
 export const SnapshotIntervalMinsDocument = gql`
-  query SnapshotIntervalMins {
-    snapshotIntervalMins {
-      id
-      name
-      value
-      label
-      description
-    }
+    query SnapshotIntervalMins {
+  snapshotIntervalMins {
+    id
+    name
+    value
+    label
+    description
   }
-`;
+}
+    `;
 
 /**
  * __useSnapshotIntervalMinsQuery__
@@ -3684,65 +2583,42 @@ export const SnapshotIntervalMinsDocument = gql`
  *   },
  * });
  */
-export function useSnapshotIntervalMinsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    SnapshotIntervalMinsQuery,
-    SnapshotIntervalMinsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    SnapshotIntervalMinsQuery,
-    SnapshotIntervalMinsQueryVariables
-  >(SnapshotIntervalMinsDocument, options);
-}
-export function useSnapshotIntervalMinsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SnapshotIntervalMinsQuery,
-    SnapshotIntervalMinsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    SnapshotIntervalMinsQuery,
-    SnapshotIntervalMinsQueryVariables
-  >(SnapshotIntervalMinsDocument, options);
-}
-export type SnapshotIntervalMinsQueryHookResult = ReturnType<
-  typeof useSnapshotIntervalMinsQuery
->;
-export type SnapshotIntervalMinsLazyQueryHookResult = ReturnType<
-  typeof useSnapshotIntervalMinsLazyQuery
->;
-export type SnapshotIntervalMinsQueryResult = Apollo.QueryResult<
-  SnapshotIntervalMinsQuery,
-  SnapshotIntervalMinsQueryVariables
->;
-export const PaginatedSnapshotsDocument = gql`
-  query PaginatedSnapshots($input: PaginatedInput!) {
-    paginatedSnapshots(input: $input) {
-      meta {
-        totalItems
-        totalPages
-        itemCount
-        itemsPerPage
-        currentPage
+export function useSnapshotIntervalMinsQuery(baseOptions?: Apollo.QueryHookOptions<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>(SnapshotIntervalMinsDocument, options);
       }
-      items {
-        id
-        hum
-        temp
-        systemStatus
-        containerId
-        createdAt
-        container {
-          id
-          col
+export function useSnapshotIntervalMinsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>(SnapshotIntervalMinsDocument, options);
         }
+export type SnapshotIntervalMinsQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsQuery>;
+export type SnapshotIntervalMinsLazyQueryHookResult = ReturnType<typeof useSnapshotIntervalMinsLazyQuery>;
+export type SnapshotIntervalMinsQueryResult = Apollo.QueryResult<SnapshotIntervalMinsQuery, SnapshotIntervalMinsQueryVariables>;
+export const PaginatedSnapshotsDocument = gql`
+    query PaginatedSnapshots($input: PaginatedInput!) {
+  paginatedSnapshots(input: $input) {
+    meta {
+      totalItems
+      totalPages
+      itemCount
+      itemsPerPage
+      currentPage
+    }
+    items {
+      id
+      hum
+      temp
+      systemStatus
+      containerId
+      createdAt
+      container {
+        id
+        col
       }
     }
   }
-`;
+}
+    `;
 
 /**
  * __usePaginatedSnapshotsQuery__
@@ -3760,56 +2636,33 @@ export const PaginatedSnapshotsDocument = gql`
  *   },
  * });
  */
-export function usePaginatedSnapshotsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    PaginatedSnapshotsQuery,
-    PaginatedSnapshotsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    PaginatedSnapshotsQuery,
-    PaginatedSnapshotsQueryVariables
-  >(PaginatedSnapshotsDocument, options);
-}
-export function usePaginatedSnapshotsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PaginatedSnapshotsQuery,
-    PaginatedSnapshotsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    PaginatedSnapshotsQuery,
-    PaginatedSnapshotsQueryVariables
-  >(PaginatedSnapshotsDocument, options);
-}
-export type PaginatedSnapshotsQueryHookResult = ReturnType<
-  typeof usePaginatedSnapshotsQuery
->;
-export type PaginatedSnapshotsLazyQueryHookResult = ReturnType<
-  typeof usePaginatedSnapshotsLazyQuery
->;
-export type PaginatedSnapshotsQueryResult = Apollo.QueryResult<
-  PaginatedSnapshotsQuery,
-  PaginatedSnapshotsQueryVariables
->;
-export const SnapshotsDocument = gql`
-  query Snapshots {
-    snapshots {
-      id
-      hum
-      temp
-      systemStatus
-      createdAt
-      containerId
-      container {
-        id
-        col
+export function usePaginatedSnapshotsQuery(baseOptions: Apollo.QueryHookOptions<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>(PaginatedSnapshotsDocument, options);
       }
+export function usePaginatedSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>(PaginatedSnapshotsDocument, options);
+        }
+export type PaginatedSnapshotsQueryHookResult = ReturnType<typeof usePaginatedSnapshotsQuery>;
+export type PaginatedSnapshotsLazyQueryHookResult = ReturnType<typeof usePaginatedSnapshotsLazyQuery>;
+export type PaginatedSnapshotsQueryResult = Apollo.QueryResult<PaginatedSnapshotsQuery, PaginatedSnapshotsQueryVariables>;
+export const SnapshotsDocument = gql`
+    query Snapshots {
+  snapshots {
+    id
+    hum
+    temp
+    systemStatus
+    createdAt
+    containerId
+    container {
+      id
+      col
     }
   }
-`;
+}
+    `;
 
 /**
  * __useSnapshotsQuery__
@@ -3826,54 +2679,33 @@ export const SnapshotsDocument = gql`
  *   },
  * });
  */
-export function useSnapshotsQuery(
-  baseOptions?: Apollo.QueryHookOptions<SnapshotsQuery, SnapshotsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<SnapshotsQuery, SnapshotsQueryVariables>(
-    SnapshotsDocument,
-    options
-  );
-}
-export function useSnapshotsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SnapshotsQuery,
-    SnapshotsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<SnapshotsQuery, SnapshotsQueryVariables>(
-    SnapshotsDocument,
-    options
-  );
-}
-export type SnapshotsQueryHookResult = ReturnType<typeof useSnapshotsQuery>;
-export type SnapshotsLazyQueryHookResult = ReturnType<
-  typeof useSnapshotsLazyQuery
->;
-export type SnapshotsQueryResult = Apollo.QueryResult<
-  SnapshotsQuery,
-  SnapshotsQueryVariables
->;
-export const SubscribeToOverHumOrTempDocument = gql`
-  subscription SubscribeToOverHumOrTemp(
-    $humThreshold: String!
-    $tempThreshold: String!
-  ) {
-    subscribeToOverHumOrTemp(
-      humThreshold: $humThreshold
-      tempThreshold: $tempThreshold
-    ) {
-      id
-      hum
-      temp
-      container {
-        id
-        col
+export function useSnapshotsQuery(baseOptions?: Apollo.QueryHookOptions<SnapshotsQuery, SnapshotsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SnapshotsQuery, SnapshotsQueryVariables>(SnapshotsDocument, options);
       }
+export function useSnapshotsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SnapshotsQuery, SnapshotsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SnapshotsQuery, SnapshotsQueryVariables>(SnapshotsDocument, options);
+        }
+export type SnapshotsQueryHookResult = ReturnType<typeof useSnapshotsQuery>;
+export type SnapshotsLazyQueryHookResult = ReturnType<typeof useSnapshotsLazyQuery>;
+export type SnapshotsQueryResult = Apollo.QueryResult<SnapshotsQuery, SnapshotsQueryVariables>;
+export const SubscribeToOverHumOrTempDocument = gql`
+    subscription SubscribeToOverHumOrTemp($humThreshold: String!, $tempThreshold: String!) {
+  subscribeToOverHumOrTemp(
+    humThreshold: $humThreshold
+    tempThreshold: $tempThreshold
+  ) {
+    id
+    hum
+    temp
+    container {
+      id
+      col
     }
   }
-`;
+}
+    `;
 
 /**
  * __useSubscribeToOverHumOrTempSubscription__
@@ -3892,35 +2724,24 @@ export const SubscribeToOverHumOrTempDocument = gql`
  *   },
  * });
  */
-export function useSubscribeToOverHumOrTempSubscription(
-  baseOptions: Apollo.SubscriptionHookOptions<
-    SubscribeToOverHumOrTempSubscription,
-    SubscribeToOverHumOrTempSubscriptionVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSubscription<
-    SubscribeToOverHumOrTempSubscription,
-    SubscribeToOverHumOrTempSubscriptionVariables
-  >(SubscribeToOverHumOrTempDocument, options);
-}
-export type SubscribeToOverHumOrTempSubscriptionHookResult = ReturnType<
-  typeof useSubscribeToOverHumOrTempSubscription
->;
-export type SubscribeToOverHumOrTempSubscriptionResult =
-  Apollo.SubscriptionResult<SubscribeToOverHumOrTempSubscription>;
-export const EmptyTraysDocument = gql`
-  query EmptyTrays {
-    emptyTrays {
-      id
-      position
-      row
-      container {
-        id
+export function useSubscribeToOverHumOrTempSubscription(baseOptions: Apollo.SubscriptionHookOptions<SubscribeToOverHumOrTempSubscription, SubscribeToOverHumOrTempSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<SubscribeToOverHumOrTempSubscription, SubscribeToOverHumOrTempSubscriptionVariables>(SubscribeToOverHumOrTempDocument, options);
       }
+export type SubscribeToOverHumOrTempSubscriptionHookResult = ReturnType<typeof useSubscribeToOverHumOrTempSubscription>;
+export type SubscribeToOverHumOrTempSubscriptionResult = Apollo.SubscriptionResult<SubscribeToOverHumOrTempSubscription>;
+export const EmptyTraysDocument = gql`
+    query EmptyTrays {
+  emptyTrays {
+    id
+    position
+    row
+    container {
+      id
     }
   }
-`;
+}
+    `;
 
 /**
  * __useEmptyTraysQuery__
@@ -3937,35 +2758,14 @@ export const EmptyTraysDocument = gql`
  *   },
  * });
  */
-export function useEmptyTraysQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    EmptyTraysQuery,
-    EmptyTraysQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(
-    EmptyTraysDocument,
-    options
-  );
-}
-export function useEmptyTraysLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    EmptyTraysQuery,
-    EmptyTraysQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(
-    EmptyTraysDocument,
-    options
-  );
-}
+export function useEmptyTraysQuery(baseOptions?: Apollo.QueryHookOptions<EmptyTraysQuery, EmptyTraysQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(EmptyTraysDocument, options);
+      }
+export function useEmptyTraysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EmptyTraysQuery, EmptyTraysQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EmptyTraysQuery, EmptyTraysQueryVariables>(EmptyTraysDocument, options);
+        }
 export type EmptyTraysQueryHookResult = ReturnType<typeof useEmptyTraysQuery>;
-export type EmptyTraysLazyQueryHookResult = ReturnType<
-  typeof useEmptyTraysLazyQuery
->;
-export type EmptyTraysQueryResult = Apollo.QueryResult<
-  EmptyTraysQuery,
-  EmptyTraysQueryVariables
->;
+export type EmptyTraysLazyQueryHookResult = ReturnType<typeof useEmptyTraysLazyQuery>;
+export type EmptyTraysQueryResult = Apollo.QueryResult<EmptyTraysQuery, EmptyTraysQueryVariables>;

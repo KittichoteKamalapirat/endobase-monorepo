@@ -46,6 +46,13 @@ export const actionColumns = () => {
       accessor: "session.patient.hosNum",
     },
     {
+      Header: "Use",
+      accessor: "session.patientUsedEndo",
+      Cell: ({ value }: { value: string }) => {
+        return <div>{value ? "Yes" : "No"}</div>;
+      },
+    },
+    {
       Header: "Officer",
       accessor: "officer.officerNum",
     },

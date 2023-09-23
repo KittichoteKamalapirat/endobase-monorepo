@@ -22,6 +22,7 @@ query PaginatedActions($input: PaginatedInput!) {
         id
         status
         endoId
+        patientUsedEndo
         endo {
           brand
           type

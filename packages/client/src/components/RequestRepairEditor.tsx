@@ -42,7 +42,7 @@ const RequestRepairEditor = ({
       <div className="flex gap-2 items-center">
         <IoMdBuild color="000" size={ICON_SIZE} />
         <SmallHeading
-          heading={isWaitRepairRequest ? "Wait Repair" : "Request repair"}
+          heading={isWaitRepairRequest ? "Wait for Repair" : "Request repair"}
         />
       </div>
 

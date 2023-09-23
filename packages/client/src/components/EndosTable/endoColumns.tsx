@@ -180,9 +180,7 @@ export const endoColumns = ({
               return (
                 <div className="flex items-center gap-2">
                   <Link
-                    to={`${urlResolver.requestRepair(
-                      endoId
-                    )}?prev=${urlResolver.endo(endoId)}`}
+                    to={`${urlResolver.requestRepair(endoId)}`}
                     type={ButtonTypes.OUTLINED}
                   >
                     <IoMdBuild

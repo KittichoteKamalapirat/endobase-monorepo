@@ -149,7 +149,7 @@ const EndoPage = () => {
               <div className="flex gap-2">
                 <LinkButton
                   label={`Wait repair ${
-                    status === "waiting_for_repair" && "(Current)"
+                    status === "waiting_for_repair" ? "(Current)" : ""
                   }`}
                   href={`${urlResolver.waitRequestRepair(
                     id

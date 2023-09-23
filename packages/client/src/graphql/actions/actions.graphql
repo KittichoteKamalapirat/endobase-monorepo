@@ -2,6 +2,7 @@ query Actions {
   actions {
     id
     passed
+    note
     type
     createdAt
     officerId

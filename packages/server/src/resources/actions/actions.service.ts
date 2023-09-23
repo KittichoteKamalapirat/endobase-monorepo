@@ -20,6 +20,8 @@ import { SessionsService } from '../sessions/sessions.service';
 import ActionResponse from './dto/action-response';
 import { CreateActionInput } from './dto/create-action.input';
 import { Action, ACTION_TYPE_OBJ } from './entities/action.entity';
+import { UpdateActionInput } from './dto/update-action.input';
+import { getErrorResponse } from '../../utils/getErrorResponse';
 
 @Injectable()
 export class ActionsService {
@@ -194,6 +196,31 @@ export class ActionsService {
   // handleTimeout() {
   //   this.logger.debug('called after 1 sec');
   // }
+
+  async update(input: UpdateActionInput) {
+    try {
+      const existingOfficer = await this.officersService.findOneByofficerNum(
+        input.officerNum,
+      );
+      if (!existingOfficer)
+        return getErrorResponse(
+          'officerNum',
+          'This officer number does not exist',
+        );
+
+      const existingAction = await this.actionsRepository.findOneBy({
+        id: input.id,
+      });
+      if (!existingAction)
+        return getErrorResponse('action', 'Cannot find the action to update');
+
+      const updatedAction = { ...existingAction, ...input };
+      const savedAction = await this.actionsRepository.save(updatedAction);
+      return { action: savedAction };
+    } catch (error) {
+      return getErrorResponse('officerNum', 'An error occured');
+    }
+  }
 
   async findAll() {
     const actions = await this.actionsRepository.find({

@@ -37,6 +37,7 @@ type Action {
   officerId: String!
   officer: Officer!
   type: String!
+  note: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -252,6 +253,7 @@ type Mutation {
   pickEndo(id: String!): Endo!
   washWithoutStoring(id: String!): Session!
   createAction(input: CreateActionInput!): ActionResponse!
+  updateAction(input: UpdateActionInput!): ActionResponse!
   removeAction(id: Int!): Action!
   createSession(input: CreateSessionInput!): Session!
   updateSession(updateSessionInput: UpdateSessionInput!): Session!
@@ -333,6 +335,16 @@ input CreateActionInput {
   type: String!
   passed: Boolean!
   officerNum: String!
+  note: String
+}
+
+input UpdateActionInput {
+  sessionId: String
+  type: String
+  passed: Boolean
+  officerNum: String
+  note: String
+  id: String!
 }
 
 input CreateSessionInput {

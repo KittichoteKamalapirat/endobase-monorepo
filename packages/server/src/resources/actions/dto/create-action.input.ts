@@ -19,4 +19,7 @@ export class CreateActionInput {
 
   @Field(() => String)
   officerNum: string;
+
+  @Field(() => String, { nullable: true })
+  note?: string;
 }

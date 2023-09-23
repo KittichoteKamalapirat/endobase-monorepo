@@ -8,6 +8,10 @@ import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 
+export const validateAdminField = (value: string) => {
+  if (value !== "Admin") return false;
+  return true;
+};
 interface Props {
   defaultValues: PatientFormValues;
   onSubmit: (data: PatientFormValues) => void;
@@ -45,7 +49,7 @@ const isEditSchema = z.object({
 
 const schema = z.discriminatedUnion("method", [isCreateSchema, isEditSchema]);
 // type CreateFormData = z.infer<typeof isCreateSchema>;
-type EditFormData = z.infer<typeof isEditSchema>;
+type EditFormData = z.infer<typeof isEditSchema>; // for admin field type
 export type PatientFormValues = z.infer<typeof schema>;
 
 const PatientEditor = ({
@@ -59,28 +63,16 @@ const PatientEditor = ({
     control,
     handleSubmit,
     formState: { errors, isDirty, isValid },
-    watch,
   } = useForm<PatientFormValues>({
     defaultValues,
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  console.log("watch", watch());
-
-  const validateAdminField = (value: string) => {
-    if (value !== "Admin") return false;
-    return true;
-  };
-
   const validatePatientField = (value: string) => {
     if (value.length !== 7) return false;
     return true;
   };
-
-  console.log("errors", errors);
-  console.log("isValid", isValid);
-  console.log("isDirty", isDirty);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>

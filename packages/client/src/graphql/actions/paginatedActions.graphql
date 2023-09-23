@@ -11,6 +11,7 @@ query PaginatedActions($input: PaginatedInput!) {
       id
       passed
       type
+      note
       createdAt
       officerId
       officer {

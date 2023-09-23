@@ -20,6 +20,7 @@ export type Action = {
   __typename?: 'Action';
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  note: Scalars['String'];
   officer: Officer;
   officerId: Scalars['String'];
   passed: Scalars['Boolean'];
@@ -62,6 +63,7 @@ export type ContainerResponse = {
 };
 
 export type CreateActionInput = {
+  note?: InputMaybe<Scalars['String']>;
   officerNum: Scalars['String'];
   passed: Scalars['Boolean'];
   sessionId: Scalars['String'];
@@ -212,6 +214,7 @@ export type Mutation = {
   removeUser: User;
   turnLightsOff: ContainerResponse;
   turnLightsOn: ContainerResponse;
+  updateAction: ActionResponse;
   updateDryingTime: Endo;
   updateEndo: Endo;
   updateOfficer: OfficerResponse;
@@ -352,6 +355,11 @@ export type MutationTurnLightsOffArgs = {
 
 export type MutationTurnLightsOnArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateActionArgs = {
+  input: UpdateActionInput;
 };
 
 
@@ -628,6 +636,15 @@ export type Tray = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type UpdateActionInput = {
+  id: Scalars['String'];
+  note?: InputMaybe<Scalars['String']>;
+  officerNum?: InputMaybe<Scalars['String']>;
+  passed?: InputMaybe<Scalars['Boolean']>;
+  sessionId?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateDryingTimeInput = {
   endoId: Scalars['String'];
   mins: Scalars['Int'];
@@ -706,14 +723,14 @@ export type UserResponse = {
 export type ActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
+export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed: boolean, note: string, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
 
 export type PaginatedActionsQueryVariables = Exact<{
   input: PaginatedInput;
 }>;
 
 
-export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
+export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
 
 export type DeleteAllDataMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -910,6 +927,13 @@ export type CreateActionMutationVariables = Exact<{
 
 export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type UpdateActionMutationVariables = Exact<{
+  input: UpdateActionInput;
+}>;
+
+
+export type UpdateActionMutation = { __typename?: 'Mutation', updateAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type UpdateSessionPatientMutationVariables = Exact<{
   input: UpdateSessionPatientInput;
 }>;
@@ -922,7 +946,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;
@@ -972,6 +996,7 @@ export const ActionsDocument = gql`
   actions {
     id
     passed
+    note
     type
     createdAt
     officerId
@@ -1038,6 +1063,7 @@ export const PaginatedActionsDocument = gql`
       id
       passed
       type
+      note
       createdAt
       officerId
       officer {
@@ -2308,6 +2334,48 @@ export function useCreateActionMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateActionMutationHookResult = ReturnType<typeof useCreateActionMutation>;
 export type CreateActionMutationResult = Apollo.MutationResult<CreateActionMutation>;
 export type CreateActionMutationOptions = Apollo.BaseMutationOptions<CreateActionMutation, CreateActionMutationVariables>;
+export const UpdateActionDocument = gql`
+    mutation updateAction($input: UpdateActionInput!) {
+  updateAction(input: $input) {
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type UpdateActionMutationFn = Apollo.MutationFunction<UpdateActionMutation, UpdateActionMutationVariables>;
+
+/**
+ * __useUpdateActionMutation__
+ *
+ * To run a mutation, you first call `useUpdateActionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateActionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateActionMutation, { data, loading, error }] = useUpdateActionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateActionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateActionMutation, UpdateActionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateActionMutation, UpdateActionMutationVariables>(UpdateActionDocument, options);
+      }
+export type UpdateActionMutationHookResult = ReturnType<typeof useUpdateActionMutation>;
+export type UpdateActionMutationResult = Apollo.MutationResult<UpdateActionMutation>;
+export type UpdateActionMutationOptions = Apollo.BaseMutationOptions<UpdateActionMutation, UpdateActionMutationVariables>;
 export const UpdateSessionPatientDocument = gql`
     mutation updateSessionPatient($input: UpdateSessionPatientInput!) {
   updateSessionPatient(input: $input) {
@@ -2365,6 +2433,7 @@ export const SessionDocument = gql`
       id
       passed
       type
+      note
       createdAt
       officerId
       officer {

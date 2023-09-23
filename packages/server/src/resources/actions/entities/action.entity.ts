@@ -19,11 +19,10 @@ export type ACTION_TYPE =
 
 export const ACTION_TYPE_OBJ: Record<string, ACTION_TYPE> = {
   TAKE_OUT: 'take_out',
-  BRING_TO_WASHING_ROOM: "bring_to_washing_room",
+  BRING_TO_WASHING_ROOM: 'bring_to_washing_room',
   LEAK_TEST_AND_PREWASH: 'leak_test_and_prewash',
   DISINFECT: 'disinfect',
   STORE: 'store',
-  
 } as const;
 
 // click "use this endoscope" => create a session
@@ -65,6 +64,10 @@ export class Action {
   @Column()
   @Field()
   type: ACTION_TYPE;
+
+  @Column({ default: '', nullable: true })
+  @Field()
+  note: string;
 
   @CreateDateColumn()
   @Field()

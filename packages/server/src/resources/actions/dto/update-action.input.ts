@@ -4,5 +4,5 @@ import { CreateActionInput } from './create-action.input';
 @InputType()
 export class UpdateActionInput extends PartialType(CreateActionInput) {
   @Field(() => String)
-  officerNum?: string;
+  id: string;
 }

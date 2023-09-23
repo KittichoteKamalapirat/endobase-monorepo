@@ -1,0 +1,14 @@
+mutation updateAction($input: UpdateActionInput!) {
+  updateAction(input: $input) {
+    action {
+      id
+      type
+      passed
+      sessionId
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

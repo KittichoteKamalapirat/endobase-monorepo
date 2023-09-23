@@ -12,7 +12,7 @@ import EditPatientForm from "../components/EditPatientForm";
 import EndoDetail from "../components/EndoDetail";
 import LeakTestForm from "../components/LeakTestForm";
 import NoPatientForm from "../components/NoPatientForm";
-import TakeOutForm from "../components/TakeOutForm";
+import TakeoutFormWrapper from "../components/TakeOut/TakeoutFormWrapper";
 import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
@@ -40,6 +40,7 @@ const Session = () => {
 
   const { data, loading, error } = useSessionQuery({
     variables: { id: sessionId },
+    skip: !sessionId,
   });
 
   const {
@@ -47,7 +48,10 @@ const Session = () => {
     loading: endoLoading,
     error: endoError,
     refetch: refetchEndo,
-  } = useEndoQuery({ variables: { id: data?.session.endoId || "" } });
+  } = useEndoQuery({
+    variables: { id: data?.session.endoId || "" },
+    skip: !data?.session.endoId,
+  });
 
   const { patientId, actions, patient } = data?.session || {};
 
@@ -132,6 +136,7 @@ const Session = () => {
       </Layout>
     );
 
+  console.log("takeOutAction,takeOutAction", takeOutAction);
   return (
     <Layout>
       <div className="flex justify-start my-4">
@@ -148,15 +153,23 @@ const Session = () => {
 
       <div className={CARD_CLASSNAMES}>
         {/* 1 */}
-        {takeOutAction ? (
+        {/* {takeOutAction ? (
           <ActivityItem action={takeOutAction as Partial<Action>} />
         ) : (
           <TakeOutForm
             containerClass="my-4"
             refetchEndo={refetchEndo}
-            initialOfficerNum={officerNum}
+            // initialOfficerNum={officerNum}
+            initialValues={{ officerNum, note: "" }}
           />
-        )}
+        )} */}
+
+        <TakeoutFormWrapper
+          className="my-4"
+          endoId={endoData?.endo.id || ""}
+          routeOfficerNum={officerNum}
+          action={takeOutAction}
+        />
 
         {/* 1 */}
         {bringToWashingRoomAction ? (

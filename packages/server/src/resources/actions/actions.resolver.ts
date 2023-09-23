@@ -7,6 +7,7 @@ import { PaginatedInput } from "../common/dto/import { InputType, Int, Field } f
 import { CreateActionInput } from './dto/create-action.input';
 import { PaginatedActionOutput } from './dto/paginated-action.output';
 import ActionResponse from './dto/action-response';
+import { UpdateActionInput } from './dto/update-action.input';
 
 @Resolver(() => Action)
 export class ActionsResolver {
@@ -15,6 +16,10 @@ export class ActionsResolver {
   @Mutation(() => ActionResponse)
   createAction(@Args('input') input: CreateActionInput) {
     return this.actionsService.create(input);
+  }
+  @Mutation(() => ActionResponse)
+  updateAction(@Args('input') input: UpdateActionInput) {
+    return this.actionsService.update(input);
   }
 
   @Query(() => [Action], { name: 'actions' })

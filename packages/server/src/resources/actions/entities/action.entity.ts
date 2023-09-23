@@ -37,8 +37,8 @@ export class Action {
   @Field(() => ID)
   id: string;
 
-  @Column({ default: true })
-  @Field()
+  @Column({ default: true, nullable: true })
+  @Field({ nullable: true })
   passed: boolean;
 
   @Column()

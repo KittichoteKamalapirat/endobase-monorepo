@@ -23,7 +23,7 @@ export type Action = {
   note: Scalars['String'];
   officer: Officer;
   officerId: Scalars['String'];
-  passed: Scalars['Boolean'];
+  passed?: Maybe<Scalars['Boolean']>;
   session: Session;
   sessionId: Scalars['String'];
   type: Scalars['String'];
@@ -63,9 +63,10 @@ export type ContainerResponse = {
 };
 
 export type CreateActionInput = {
+  faildFeedback?: InputMaybe<Scalars['String']>;
   note?: InputMaybe<Scalars['String']>;
   officerNum: Scalars['String'];
-  passed: Scalars['Boolean'];
+  passed?: InputMaybe<Scalars['Boolean']>;
   sessionId: Scalars['String'];
   type: Scalars['String'];
 };
@@ -559,6 +560,7 @@ export type RepairRequest = {
   note: Scalars['String'];
   officer: Officer;
   officerId: Scalars['String'];
+  source: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -638,6 +640,7 @@ export type Tray = {
 };
 
 export type UpdateActionInput = {
+  faildFeedback?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   note?: InputMaybe<Scalars['String']>;
   officerNum?: InputMaybe<Scalars['String']>;
@@ -725,14 +728,14 @@ export type UserResponse = {
 export type ActionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed: boolean, note: string, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
+export type ActionsQuery = { __typename?: 'Query', actions: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, note: string, type: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, serialNum: string, position: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> };
 
 export type PaginatedActionsQueryVariables = Exact<{
   input: PaginatedInput;
 }>;
 
 
-export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
+export type PaginatedActionsQuery = { __typename?: 'Query', paginatedActions: { __typename?: 'PaginatedActionOutput', meta: { __typename?: 'IPaginationMetaClass', totalItems: number, totalPages: number, itemCount: number, itemsPerPage: number, currentPage: number }, items: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, type: string, note: string, createdAt: any, officerId: string, sessionId: string, officer: { __typename?: 'Officer', officerNum: string }, session: { __typename?: 'Session', id: string, status: string, endoId: string, patientId?: string | null, endo: { __typename?: 'Endo', brand: string, type: string, model: string, position: string, serialNum: string }, patient?: { __typename?: 'Patient', hosNum: string } | null } }> } };
 
 export type DeleteAllDataMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -927,14 +930,14 @@ export type CreateActionMutationVariables = Exact<{
 }>;
 
 
-export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type CreateActionMutation = { __typename?: 'Mutation', createAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed?: boolean | null, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateActionMutationVariables = Exact<{
   input: UpdateActionInput;
 }>;
 
 
-export type UpdateActionMutation = { __typename?: 'Mutation', updateAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed: boolean, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type UpdateActionMutation = { __typename?: 'Mutation', updateAction: { __typename?: 'ActionResponse', action?: { __typename?: 'Action', id: string, type: string, passed?: boolean | null, sessionId: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type UpdateSessionPatientMutationVariables = Exact<{
   input: UpdateSessionPatientInput;
@@ -948,7 +951,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientUsedEndo: boolean, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientUsedEndo: boolean, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed?: boolean | null, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;

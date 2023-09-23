@@ -10,6 +10,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export type REPAIR_REQUEST_SRC =
+  | 'leak_test' // รั่วเลยเรียกช่าง (from session page)
+  | 'disinfection' // // เฟลเลยเรียกช่าง (from session page)
+  | 'wait_repair' // เป็นไรไม่รู้ รอช่างมาดู
+  | 'request_repair'; // ช่างเอากล้องไปแล้ว
+// if source = request_repair => end status will be out_of_order
+// otherwise => end status will be waiting_for_repair
 @ObjectType()
 @Entity()
 export class RepairRequest {
@@ -20,10 +27,14 @@ export class RepairRequest {
   @CreateDateColumn()
   @Field()
   createdAt: Date;
-  
+
   @Column()
   @Field()
   note: string;
+
+  @Column({ nullable: true }) // TODO remove this
+  @Field(() => String)
+  source: REPAIR_REQUEST_SRC;
 
   // relationships
   @Column()
@@ -36,7 +47,6 @@ export class RepairRequest {
   @Field(() => Endo)
   endo: Endo;
 
-
   @Column()
   @Field()
   officerId: string;
@@ -47,9 +57,7 @@ export class RepairRequest {
   @Field(() => Officer)
   officer: Officer;
 
-
   @UpdateDateColumn()
   @Field()
   updatedAt: Date;
-
 }

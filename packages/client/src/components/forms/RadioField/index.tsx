@@ -41,12 +41,12 @@ const RadioField = forwardRef(
           {options.map((option) => (
             <div key={option.value}>
               <label
-                htmlFor={option.value}
+                htmlFor={`${option.label}-${option.value}`}
                 className="text-xl border rounded-md px-4 py-2 hover:cursor-pointer"
               >
                 <input
                   ref={ref as RefCallBack}
-                  id={option.value}
+                  id={`${option.label}-${option.value}`}
                   name={name}
                   type="radio"
                   onChange={onChange}

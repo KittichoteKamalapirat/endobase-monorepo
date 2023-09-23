@@ -16,7 +16,8 @@ export const ENDO_STATUS = {
   DISINFECTION_PASSED: "disinfection_passed",
   DISINFECTION_FAILED: "disinfection_failed",
   DRYING: "drying",
-  OUT_OF_ORDER: "out_of_order",
+  WAITING_FOR_REPAIR: "waiting_for_repair", // waiting for mechanics to check
+  OUT_OF_ORDER: "out_of_order", // from request_repair endo is with mechanics (out of hospital)
   FIXED: "fixed",
   FIXED_AND_OUT: "fixed_and_out", // for "take out and wash"
 } as const;
@@ -38,7 +39,9 @@ export const statusToColor: Record<ENDO_STATUS_VALUES, string> = {
   [ENDO_STATUS.DISINFECTION_PASSED]: "black",
   [ENDO_STATUS.DISINFECTION_FAILED]: "black",
   [ENDO_STATUS.DRYING]: "blue",
+  [ENDO_STATUS.WAITING_FOR_REPAIR]: "black",
   [ENDO_STATUS.OUT_OF_ORDER]: "black",
+
   [ENDO_STATUS.FIXED]: "black",
   [ENDO_STATUS.FIXED_AND_OUT]: "black",
 };
@@ -57,6 +60,7 @@ export const statusToBgColor: Record<ENDO_STATUS_VALUES, string> = {
   [ENDO_STATUS.DISINFECTION_PASSED]: "bg-grey-50",
   [ENDO_STATUS.DISINFECTION_FAILED]: "bg-grey-50",
   [ENDO_STATUS.DRYING]: "bg-blue-bg",
+  [ENDO_STATUS.WAITING_FOR_REPAIR]: "bg-grey-0",
   [ENDO_STATUS.OUT_OF_ORDER]: "bg-grey-0",
   [ENDO_STATUS.FIXED]: "bg-[#FFF1F5]", // pink
   [ENDO_STATUS.FIXED_AND_OUT]: "bg-[#FFF1F5]", // pink

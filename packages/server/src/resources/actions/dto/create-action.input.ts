@@ -6,6 +6,9 @@ import { ACTION_TYPE } from '../entities/action.entity';
 // which patient? => inside sessionId (update session''s patientId if first action of the session)
 // what kinda of aciton? => type
 // which officerId
+
+type FailedFeedback = 'bring_to_washing_room' | 're_leak_test' | 'wait_repair';
+
 @InputType()
 export class CreateActionInput {
   @Field(() => String)
@@ -14,8 +17,12 @@ export class CreateActionInput {
   @Field(() => String)
   type: ACTION_TYPE;
 
-  @Field(() => Boolean)
-  passed: boolean;
+  // for leak test and disinfection
+  @Field(() => String, { nullable: true })
+  faildFeedback?: FailedFeedback;
+
+  @Field(() => Boolean, { nullable: true })
+  passed?: boolean;
 
   @Field(() => String)
   officerNum: string;

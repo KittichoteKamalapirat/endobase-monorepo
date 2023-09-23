@@ -27,6 +27,8 @@ import {
 import { useIsAuth } from "../hooks/useIsAuth";
 import { showToast } from "../redux/slices/toastReducer";
 import { CARD_CLASSNAMES } from "../theme";
+import SmallHeading from "../components/typography/SmallHeading";
+import { getActionLabel } from "../utils/getActionStep";
 
 const Session = () => {
   useIsAuth();
@@ -55,7 +57,25 @@ const Session = () => {
 
   const { actions, patient } = data?.session || {};
 
+  console.log("status", data?.session.endo.status);
+  // const highlightTakeOutForm = data?.session.endo.status === "being_used";
+  const highlightBringToWashingRoomForm =
+    data?.session.endo.status === "being_used";
+  // const highlightPatientForm = data?.session.endo.status === "being_used";
+  const highlightLeakTestForm = data?.session.endo.status === "in_washing_room";
+  const highlightDisinfecForm =
+    data?.session.endo.status === "leak_test_passed";
+  const highlightStoreForm = data?.session.endo.status === "being_used";
+
   const takeOutAction = actions?.find((action) => action.type === "take_out");
+  const leakTestActons = actions?.filter(
+    (action) => action.type === "leak_test_and_prewash"
+  );
+  console.log("takeOutActions", leakTestActons);
+
+  const bringToWashingRoomActions = actions?.filter(
+    (action) => action.type === "bring_to_washing_room"
+  );
 
   const bringToWashingRoomAction = actions?.find(
     (action) => action.type === "bring_to_washing_room"
@@ -76,16 +96,21 @@ const Session = () => {
 
   // hide if (don't have patient when patient is needed)
   // and no previous actions
-  const disabledBringToWashingRoom = !takeOutAction;
+  const disabledBringToWashingRoom =
+    !takeOutAction || data?.session.endo.status !== "being_used";
+
+  console.log("takeOutAction", takeOutAction);
   const disabledPatientForm =
     noNeedPatient || !(takeOutAction && bringToWashingRoomAction);
 
   const disabledLeakTestForm =
     (!noNeedPatient && !patient) ||
-    !(takeOutAction && bringToWashingRoomAction);
+    !(takeOutAction && bringToWashingRoomAction) ||
+    data?.session.endo.status !== "in_washing_room";
   const disabledDisinfectionForm =
     (!noNeedPatient && !patient) ||
-    !(takeOutAction && bringToWashingRoomAction && leakTestAction);
+    !(takeOutAction && bringToWashingRoomAction && leakTestAction) ||
+    data?.session.endo.status !== "leak_test_passed";
   const disabledCompleteSessionForm =
     (!noNeedPatient && !patient) ||
     !(
@@ -171,20 +196,27 @@ const Session = () => {
           action={takeOutAction}
         />
 
-        {/* 1 */}
-        {bringToWashingRoomAction ? (
-          <ActivityItem action={bringToWashingRoomAction as Partial<Action>} />
-        ) : (
-          !disabledBringToWashingRoom && (
-            <BringToWashingRoomForm
-              containerClass="my-4"
-              refetchEndo={refetchEndo}
-              disabled={disabledBringToWashingRoom}
+        {/* 2 */}
+        <div>
+          <SmallHeading heading={getActionLabel("bring_to_washing_room")} />
+          {bringToWashingRoomActions?.map((action, index) => (
+            <ActivityItem
+              key={`bring-to-washing-room-action-${index}`}
+              action={action as Partial<Action>}
+              showHeading={false}
+              showPassed={false}
             />
-          )
+          ))}
+        </div>
+        {!disabledBringToWashingRoom && (
+          <BringToWashingRoomForm
+            className="my-4 "
+            refetchEndo={refetchEndo}
+            disabled={disabledBringToWashingRoom}
+          />
         )}
 
-        {/* 2 */}
+        {/* 3 */}
 
         {data?.session.endoWasExpired || data?.session.endoWasOutOfOrder ? (
           takeOutAction &&
@@ -211,20 +243,27 @@ const Session = () => {
           </div>
         )}
 
-        {/* 3 */}
-        {leakTestAction ? (
-          <ActivityItem action={leakTestAction as Partial<Action>} />
-        ) : (
-          !disabledLeakTestForm && (
+        {/* 4 */}
+        <div>
+          <SmallHeading heading={getActionLabel("leak_test_and_prewash")} />
+          {leakTestActons?.map((action, index) => (
+            <ActivityItem
+              key={`leak-test-action-${index}`}
+              action={action as Partial<Action>}
+              showHeading={false}
+            />
+          ))}
+          {!disabledLeakTestForm && (
             <LeakTestForm
               containerClass="my-4"
               endoId={data?.session.endoId!}
               refetchEndo={refetchEndo}
               disabled={disabledLeakTestForm}
             />
-          )
-        )}
-        {/* 4 */}
+          )}
+        </div>
+
+        {/* 5 */}
         {disinfectAction ? (
           <ActivityItem action={disinfectAction as Partial<Action>} />
         ) : (
@@ -236,7 +275,7 @@ const Session = () => {
             />
           )
         )}
-        {/* 5 */}
+        {/* 6 */}
         {storeAction ? (
           <ActivityItem action={storeAction as Partial<Action>} />
         ) : (

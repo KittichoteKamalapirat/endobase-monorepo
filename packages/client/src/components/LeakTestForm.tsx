@@ -1,7 +1,8 @@
 import { ApolloQueryResult } from "@apollo/client";
-import { Control, useForm } from "react-hook-form";
+import { Control, FieldErrorsImpl, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { z } from "zod";
 import {
   EndoQuery,
   Exact,
@@ -9,13 +10,12 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import CreateRequestRepairAction from "./CreateRequestRepair";
 import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
-import SmallHeading from "./typography/SmallHeading";
 import SubHeading from "./typography/SubHeading";
+import { useEffect } from "react";
 
 interface Props {
   containerClass?: string;
@@ -35,16 +35,50 @@ interface Props {
 enum FormNames {
   OFFICER_NUM = "officerNum",
   PASSED_TEST = "passedTest",
+  NOTE = "note",
+  FAILED_FEEDBACK = "failedFeedback",
 }
 
-interface FormValues {
-  [FormNames.OFFICER_NUM]: string;
-  [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
-}
+const passedSchema = z.object({
+  officerNum: z.string(),
+  usedEndo: z.string(),
+  passedTest: z.literal("true"),
+});
+
+// const FailedFeebackTypeSchema = z.union([
+//   z.literal("bring_to_washing_room"),
+//   z.literal("re_leak_test DEPOSIT"),
+//   z.literal("wait_repair"),
+// ]);
+
+const failedSchema = z.object({
+  officerNum: z.string(),
+  passedTest: z.literal("false"),
+  failedFeedback: z.union([
+    z.literal("bring_to_washing_room"),
+    z.literal("re_leak_test"),
+    z.literal("wait_repair"),
+  ]),
+  note: z.string(),
+});
+
+const schema = z.discriminatedUnion("passedTest", [passedSchema, failedSchema]);
+
+type FormValues = z.infer<typeof schema>; // for admin field type
+type FailedFormValues = z.infer<typeof failedSchema>; // for admin field type
+
+// interface FormValues {
+//   [FormNames.OFFICER_NUM]: string;
+//   [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
+//   [FormNames.FAILED_FEEDBACK]:
+//     | "bring_to_washing_room"
+//     | "re_leak_test"
+//     | "wait_repair";
+// }
 
 const initialData = {
   officerNum: "",
-  passedTest: false,
+  passedTest: "false" as const,
 };
 const LeakTestForm = ({
   refetchEndo,
@@ -65,15 +99,21 @@ const LeakTestForm = ({
     register,
     watch,
     setError,
-    formState: { errors },
+
+    setFocus,
+    formState: { errors, isValid, isDirty },
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
 
   const dispatch = useDispatch();
 
+  console.log("watch", watch());
   const { officerNum, passedTest } = watch();
+  const isFailedAndWaitRepair =
+    passedTest === "false" && watch("failedFeedback") === "wait_repair";
 
+  console.log("watch", watch());
   const testIsFailing = passedTest === "false";
 
   const onSubmit = async (data: FormValues) => {
@@ -85,13 +125,17 @@ const LeakTestForm = ({
 
     try {
       if (!sessionId) return;
+
       const input = {
         sessionId,
         type: "leak_test_and_prewash",
         officerNum: data.officerNum,
-        passed: true,
+        passed: data.passedTest === "true" ? true : false,
+        faildFeedback:
+          data.passedTest === "false" ? data.failedFeedback : undefined,
       };
 
+      console.log("input", input);
       const result = await createAction({
         variables: {
           input,
@@ -128,11 +172,15 @@ const LeakTestForm = ({
     }
   };
 
+  useEffect(() => {
+    setFocus("officerNum");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-        <SmallHeading heading={getActionLabel("leak_test_and_prewash")} />
-        <div className="flex items-end">
+        <div className="flex flex-col gap-4">
           <TextField
             required
             name={FormNames.OFFICER_NUM}
@@ -143,24 +191,52 @@ const LeakTestForm = ({
             error={errors[FormNames.OFFICER_NUM]}
           />
 
-          <Button
-            label="Save"
-            buttonType={HTMLButtonType.SUBMIT}
-            extraClass="ml-2.5 w-24"
-            disabled={testIsFailing}
-          />
-        </div>
-        <div className="mt-4">
           <RadioField
-            {...register(FormNames.PASSED_TEST, { required: true })}
+            key="leak-test-passed"
+            {...register(FormNames.PASSED_TEST)}
             options={[
               { value: "true", label: "Passed" },
               { value: "false", label: "Failed" },
             ]}
+            className="mt-4"
+          />
+          {testIsFailing && (
+            <RadioField
+              key="leak-test-failedFeedback"
+              {...register(FormNames.FAILED_FEEDBACK)}
+              options={[
+                {
+                  value: "bring_to_washing_room",
+                  label: "Bring back to the Washing Room",
+                },
+                { value: "re_leak_test", label: "Re Leak Test" },
+                { value: "wait_repair", label: "Wait Repair" },
+              ]}
+              className="mt-4"
+            />
+          )}
+
+          {testIsFailing && (
+            <TextField
+              name={FormNames.NOTE}
+              control={control as unknown as Control}
+              label="Additional Note"
+              placeholder="Please add some details"
+              type={TextFieldTypes.OUTLINED}
+              error={(errors as FieldErrorsImpl<FailedFormValues>).note}
+            />
+          )}
+
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="ml-2.5 w-24"
+            disabled={isFailedAndWaitRepair || !isValid || !isDirty}
           />
         </div>
       </form>
-      {testIsFailing && (
+
+      {isFailedAndWaitRepair && (
         <div className="mt-4">
           <SubHeading
             heading="Please fill in the form below"

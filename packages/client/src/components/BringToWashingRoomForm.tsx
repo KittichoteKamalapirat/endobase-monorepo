@@ -10,13 +10,11 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
-import SmallHeading from "./typography/SmallHeading";
 
 interface Props {
-  containerClass?: string;
+  className?: string;
   disabled: boolean;
   refetchEndo: (
     variables?:
@@ -42,7 +40,7 @@ const initialData = {
 };
 const BringToWashingRoomForm = ({
   refetchEndo,
-  containerClass,
+  className,
   disabled,
 }: Props) => {
   const { id: sessionId } = useParams();
@@ -76,7 +74,7 @@ const BringToWashingRoomForm = ({
         sessionId,
         type: "bring_to_washing_room",
         officerNum: data.officerNum,
-        passed: true,
+        // passed should be undefined so not cause by service
       };
 
       const result = await createAction({
@@ -119,13 +117,11 @@ const BringToWashingRoomForm = ({
   // If it's empty => mean that it's redirected from "Pick" button
   useEffect(() => {
     setFocus("officerNum");
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-      <SmallHeading heading={getActionLabel("bring_to_washing_room")} />
+    <form onSubmit={handleSubmit(onSubmit)} className={className}>
       <div className="flex items-end">
         <TextField
           required

@@ -7,7 +7,7 @@ interface Props {
   routeOfficerNum?: string;
   //   action: ActionsQuery["actions"][number];
   //   action: SessionQuery["session"]["actions"][number];
-  action: any; // TODO
+  action?: any; // TODO
 }
 
 const TakeoutFormWrapper = ({
@@ -16,7 +16,7 @@ const TakeoutFormWrapper = ({
   routeOfficerNum,
   action,
 }: Props) => {
-  const actionId = action.id;
+  const actionId = action?.id;
   return (
     <div className={className}>
       {actionId ? (

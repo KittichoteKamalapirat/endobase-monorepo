@@ -121,8 +121,12 @@ export class ActionsService {
         await this.endosService.updateStatus(
           session.endoId,
           input.passed
-            ? ENDO_STATUS_OBJ.LEAK_TEST_PASSED
-            : ENDO_STATUS_OBJ.LEAK_TEST_FAILED,
+            ? 'leak_test_passed'
+            : input.faildFeedback === 'bring_to_washing_room'
+            ? 'being_used' // have to bring to washing room again
+            : input.faildFeedback === 're_leak_test'
+            ? 'in_washing_room'
+            : 'being_used', // this can should not happended
         );
         break;
       case ACTION_TYPE_OBJ.DISINFECT:
@@ -130,7 +134,7 @@ export class ActionsService {
           session.endoId,
           input.passed
             ? ENDO_STATUS_OBJ.DISINFECTION_PASSED
-            : ENDO_STATUS_OBJ.DISINFECTION_FAILED,
+            : ENDO_STATUS_OBJ.IN_WASHING_ROOM, // have to leak test again
         );
         break;
 

@@ -1,9 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { Control, useForm } from "react-hook-form";
-import { TbBulb } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { ICON_SIZE } from "../constants";
 import {
   Endo,
   EndoQuery,
@@ -15,11 +13,9 @@ import {
   useWashWithoutStoringMutation,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import { primaryColor } from "../theme";
 import { getActionLabel } from "../utils/getActionStep";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
-import CheckboxField from "./forms/CheckboxField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
 

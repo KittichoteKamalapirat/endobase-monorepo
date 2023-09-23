@@ -31,7 +31,7 @@ type Officer {
 
 type Action {
   id: ID!
-  passed: Boolean!
+  passed: Boolean
   sessionId: String!
   session: Session!
   officerId: String!
@@ -125,6 +125,7 @@ type RepairRequest {
   id: ID!
   createdAt: DateTime!
   note: String!
+  source: String!
   endoId: String!
   endo: Endo!
   officerId: String!
@@ -334,7 +335,8 @@ input UpdateDryingTimeInput {
 input CreateActionInput {
   sessionId: String!
   type: String!
-  passed: Boolean!
+  faildFeedback: String
+  passed: Boolean
   officerNum: String!
   note: String
 }
@@ -342,6 +344,7 @@ input CreateActionInput {
 input UpdateActionInput {
   sessionId: String
   type: String
+  faildFeedback: String
   passed: Boolean
   officerNum: String
   note: String

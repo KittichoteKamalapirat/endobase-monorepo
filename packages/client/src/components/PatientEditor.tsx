@@ -87,6 +87,7 @@ const PatientEditor = ({
 
       <div className="flex flex-col gap-4">
         <RadioField
+          key="patient-usedEndo"
           {...register(FormNames.USED_ENDO, { required: true })}
           options={[
             { value: "true", label: "Use" },

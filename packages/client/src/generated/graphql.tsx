@@ -906,14 +906,14 @@ export type RepairRequestQuery = { __typename?: 'Query', repairRequest: { __type
 export type RepairRequestsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RepairRequestsQuery = { __typename?: 'Query', repairRequests: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } }> };
+export type RepairRequestsQuery = { __typename?: 'Query', repairRequests: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, source: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } }> };
 
 export type RepairRequestsByEndoQueryVariables = Exact<{
   endoId: Scalars['String'];
 }>;
 
 
-export type RepairRequestsByEndoQuery = { __typename?: 'Query', repairRequestsByEndo: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }, endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string } }> };
+export type RepairRequestsByEndoQuery = { __typename?: 'Query', repairRequestsByEndo: Array<{ __typename?: 'RepairRequest', id: string, note: string, officerId: string, source: string, endoId: string, createdAt: any, officer: { __typename?: 'Officer', id: string, officerNum: string, firstName: string, lastName: string }, endo: { __typename?: 'Endo', id: string, serialNum: string, dryingTime: number, status: string, brand: string, type: string, model: string, lastPutBackISO: string, position: string } }> };
 
 export type UpdateRepairRequestMutationVariables = Exact<{
   input: UpdateRepairRequestInput;
@@ -2129,6 +2129,7 @@ export const RepairRequestsDocument = gql`
     id
     note
     officerId
+    source
     officer {
       id
     }
@@ -2173,6 +2174,7 @@ export const RepairRequestsByEndoDocument = gql`
     id
     note
     officerId
+    source
     officer {
       id
       officerNum

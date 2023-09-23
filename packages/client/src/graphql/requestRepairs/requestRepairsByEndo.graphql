@@ -1,29 +1,27 @@
-query RepairRequestsByEndo ($endoId: String!) {
-  repairRequestsByEndo (endoId: $endoId) {
+query RepairRequestsByEndo($endoId: String!) {
+  repairRequestsByEndo(endoId: $endoId) {
     id
     note
     officerId
-    officer{
+    source
+    officer {
       id
       officerNum
       firstName
       lastName
-    
-
     }
     endoId
-    endo{
+    endo {
       id
-    serialNum
-    dryingTime
-    status
-    brand
-    type
-    model
-    lastPutBackISO
-    position
+      serialNum
+      dryingTime
+      status
+      brand
+      type
+      model
+      lastPutBackISO
+      position
     }
     createdAt
-
   }
 }

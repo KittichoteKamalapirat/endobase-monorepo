@@ -3,14 +3,14 @@ query RepairRequests {
     id
     note
     officerId
-    officer{
+    source
+    officer {
       id
     }
     endoId
-    endo{
+    endo {
       id
     }
     createdAt
-
   }
 }

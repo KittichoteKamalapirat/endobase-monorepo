@@ -9,7 +9,6 @@ import { showToast } from "../redux/slices/toastReducer";
 import PatientEditor, { PatientFormValues } from "./PatientEditor";
 
 interface Props {
-  disabled: boolean; // if Take Out Form is not completed yet
   className?: string;
   patient: Patient;
   patientUsedEndo: boolean;
@@ -17,7 +16,7 @@ interface Props {
 
 const EditPatientForm = ({
   patient,
-  disabled,
+
   patientUsedEndo,
   className,
 }: Props) => {
@@ -40,13 +39,6 @@ const EditPatientForm = ({
   const onSubmit = async (data: PatientFormValues) => {
     try {
       if (!sessionId) return;
-      if (disabled)
-        return dispatch(
-          showToast({
-            message: "Please fill in the Take Out Form first",
-            variant: "success",
-          })
-        );
 
       const result = await updatePatientInSession({
         variables: {
@@ -75,7 +67,6 @@ const EditPatientForm = ({
       <PatientEditor
         defaultValues={defaultValues}
         onSubmit={onSubmit}
-        disabled={disabled}
         isEditing
       />
     </div>

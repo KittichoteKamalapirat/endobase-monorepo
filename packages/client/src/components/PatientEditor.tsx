@@ -5,9 +5,9 @@ import { z } from "zod";
 import { InputType } from "../constants/inputType";
 import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
+import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
-import RadioField from "./forms/RadioField";
 
 export const validateAdminField = (value: string) => {
   if (value !== "Admin") return false;
@@ -17,7 +17,7 @@ interface Props {
   defaultValues: PatientFormValues;
   onSubmit: (data: PatientFormValues) => void;
   containerClass?: string;
-  disabled: boolean; // if Take Out Form is not completed yet
+
   isEditing?: boolean;
 }
 
@@ -61,7 +61,6 @@ const PatientEditor = ({
   onSubmit,
   isEditing = false,
   containerClass,
-  disabled,
 }: Props) => {
   const {
     control,
@@ -128,7 +127,7 @@ const PatientEditor = ({
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
           extraClass="w-24"
-          disabled={disabled || !isDirty || !isValid}
+          disabled={!isDirty || !isValid}
         />
       </div>
     </form>

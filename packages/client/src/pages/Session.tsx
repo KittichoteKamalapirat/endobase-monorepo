@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import ActivityItem from "../components/ActivityItem";
 import AddPatientForm from "../components/AddPatientForm";
@@ -17,6 +15,7 @@ import Layout from "../components/layouts/Layout";
 import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import PageHeading from "../components/typography/PageHeading";
+import SmallHeading from "../components/typography/SmallHeading";
 import {
   Action,
   Endo,
@@ -25,9 +24,7 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { useIsAuth } from "../hooks/useIsAuth";
-import { showToast } from "../redux/slices/toastReducer";
 import { CARD_CLASSNAMES } from "../theme";
-import SmallHeading from "../components/typography/SmallHeading";
 import { getActionLabel } from "../utils/getActionStep";
 
 const Session = () => {
@@ -56,99 +53,94 @@ const Session = () => {
   });
 
   const { actions, patient } = data?.session || {};
-
+  // 1. take out
   const takeOutAction = actions?.find((action) => action.type === "take_out");
-
-  const leakTestActions = actions?.filter(
-    (action) => action.type === "leak_test_and_prewash"
-  );
-  const hasLeakTestActions = leakTestActions && leakTestActions.length > 0;
-
-  const bringToWashingRoomActions = actions?.filter(
-    (action) => action.type === "bring_to_washing_room"
-  );
-
-  const hasBringToWashingRoomAction =
-    bringToWashingRoomActions && bringToWashingRoomActions.length > 0;
-
-  const disinfectActions = actions?.filter(
-    (action) => action.type === "disinfect"
-  );
-
-  const hasDisinfectActions = disinfectActions && disinfectActions.length > 0;
-
-  const storeAction = actions?.find((action) => action.type === "store");
-
-  const dispatch = useDispatch();
 
   const noNeedPatient =
     data?.session.endoWasExpired || data?.session.endoWasOutOfOrder;
-
-  // hide if (don't have patient when patient is needed)
-  // and no previous actions
 
   // 2. bring to washing room
   const showBringToWashingRoomSection = takeOutAction;
   const showBringToWashingRoomForm = data?.session.endo.status === "being_used";
 
+  const bringToWashingRoomActions = actions?.filter(
+    (action) => action.type === "bring_to_washing_room"
+  );
+
+  const hasBringToWashingRoomActions =
+    bringToWashingRoomActions && bringToWashingRoomActions.length > 0;
+
   // 3. patient
-  const disabledPatientForm =
-    noNeedPatient || !(takeOutAction && hasBringToWashingRoomAction);
+  const showPatientSection =
+    showBringToWashingRoomSection && hasBringToWashingRoomActions; // no need showPatientForm cause editable
 
   // 4. leak test
-  const showLeakTestSection =
-    (noNeedPatient || patient) && takeOutAction && hasBringToWashingRoomAction;
-
+  const showLeakTestSection = showPatientSection && (noNeedPatient || patient);
   const showLeakTestForm = data?.session.endo.status === "in_washing_room";
+
+  const passedLeakTestActions = actions?.filter(
+    (action) => action.type === "leak_test_and_prewash" && action.passed
+  );
+  const leakTestActions = actions?.filter(
+    (action) => action.type === "leak_test_and_prewash"
+  );
+  const hasPassedLeakTestActions =
+    passedLeakTestActions && passedLeakTestActions.length > 0;
 
   // 5. disinfect
   const showDisinfectionSection =
-    (noNeedPatient || patient) &&
-    takeOutAction &&
-    hasBringToWashingRoomAction &&
-    hasLeakTestActions;
+    showLeakTestSection && hasPassedLeakTestActions;
+
+  const disinfectActions = actions?.filter(
+    (action) => action.type === "disinfect"
+  );
+  const passedDisinfectActions = actions?.filter(
+    (action) => action.type === "disinfect" && action.passed
+  );
+
+  const hasPassedDisinfectActions =
+    passedDisinfectActions && passedDisinfectActions.length > 0;
 
   const showDisinfectionForm = data?.session.endo.status === "leak_test_passed";
 
+  // 6. store
+  const storeAction = actions?.find((action) => action.type === "store");
+
+  const showCompleteForm = showDisinfectionSection && hasPassedDisinfectActions;
   const disabledCompleteSessionForm =
     (!noNeedPatient && !patient) ||
     !(
       takeOutAction &&
-      hasBringToWashingRoomAction &&
-      hasLeakTestActions &&
-      hasDisinfectActions
+      hasBringToWashingRoomActions &&
+      hasPassedLeakTestActions &&
+      hasPassedDisinfectActions
     );
 
-  // 6. store
-  const showCompleteForm = Boolean(
-    actions?.find((action) => action.type === "disinfect" && action.passed)
-  );
-
-  useEffect(() => {
-    if (
-      !loading &&
-      !error &&
-      !takeOutAction &&
-      !hasLeakTestActions &&
-      !hasDisinfectActions &&
-      !storeAction
-    ) {
-      dispatch(
-        showToast({
-          message: "Please fill in your Officer Number",
-          variant: "success",
-        })
-      );
-    }
-  }, [
-    hasDisinfectActions,
-    dispatch,
-    error,
-    takeOutAction,
-    hasLeakTestActions,
-    loading,
-    storeAction,
-  ]);
+  // useEffect(() => {
+  //   if (
+  //     !loading &&
+  //     !error &&
+  //     !takeOutAction &&
+  //     !hasLeakTestActions &&
+  //     !hasDisinfectActions &&
+  //     !storeAction
+  //   ) {
+  //     dispatch(
+  //       showToast({
+  //         message: "Please fill in your Officer Number",
+  //         variant: "success",
+  //       })
+  //     );
+  //   }
+  // }, [
+  //   hasDisinfectActions,
+  //   dispatch,
+  //   error,
+  //   takeOutAction,
+  //   hasLeakTestActions,
+  //   loading,
+  //   storeAction,
+  // ]);
 
   if (loading || endoLoading)
     return (
@@ -214,30 +206,25 @@ const Session = () => {
 
         {/* 3 Patient Form*/}
 
-        {data?.session.endoWasExpired || data?.session.endoWasOutOfOrder ? (
-          takeOutAction &&
-          hasBringToWashingRoomAction && (
-            <NoPatientForm wasExpired={data.session.endoWasExpired} />
-          )
-        ) : (
-          <div id="patient-details">
-            {patient ? (
-              <EditPatientForm
-                patient={patient as Patient}
-                className="my-4"
-                disabled={disabledPatientForm}
-                patientUsedEndo={Boolean(data?.session.patientUsedEndo)}
-              />
-            ) : (
-              !disabledPatientForm && (
-                <AddPatientForm
+        {showPatientSection &&
+          (data?.session.endoWasExpired || data?.session.endoWasOutOfOrder ? (
+            takeOutAction &&
+            hasBringToWashingRoomActions && (
+              <NoPatientForm wasExpired={data.session.endoWasExpired} />
+            )
+          ) : (
+            <div id="patient-details">
+              {patient ? (
+                <EditPatientForm
+                  patient={patient as Patient}
                   className="my-4"
-                  disabled={disabledPatientForm}
+                  patientUsedEndo={Boolean(data?.session.patientUsedEndo)}
                 />
-              )
-            )}
-          </div>
-        )}
+              ) : (
+                <AddPatientForm className="my-4" />
+              )}
+            </div>
+          ))}
 
         {/* 4 Leak Test*/}
         {showLeakTestSection && (

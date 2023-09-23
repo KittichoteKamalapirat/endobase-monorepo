@@ -25,6 +25,9 @@ class UrlResolver {
   requestRepair(id: string) {
     return `/endo/${id}/request-repair`;
   }
+  waitRequestRepair(id: string) {
+    return `/endo/${id}/wait-repair`;
+  }
 
   endo(id: string) {
     return `/endo/${id}`;

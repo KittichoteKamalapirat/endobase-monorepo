@@ -10,7 +10,7 @@ import Layout from "./layouts/Layout";
 import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
 
-const CreateRequestRepairPage = () => {
+const CreateWaitRequestRepairPage = () => {
   useIsAuth();
   const { id } = useParams();
 
@@ -19,10 +19,6 @@ const CreateRequestRepairPage = () => {
   const { data, loading, error } = useEndoQuery({
     variables: { id: id || "" },
   });
-
-  const status = data?.endo.status;
-
-  const isWaitingRepair = status === "waiting_for_repair";
 
   if (loading) {
     return <Loading />;
@@ -40,17 +36,17 @@ const CreateRequestRepairPage = () => {
           type={ButtonTypes.OUTLINED}
         />
       </div>
-      <div className="flex flex-col-reverse lg:flex-row gap-4">
+      <div className="flex gap-4">
         <EndoDetail endo={data?.endo as Endo} canBeClicked={false} />
         <div className="w-full">
           <CreateRequestRepairForm
             source="request_repair"
             endoId={id}
-            isWaitRepairRequest={false}
+            isWaitRepairRequest
           />
         </div>
       </div>
     </Layout>
   );
 };
-export default CreateRequestRepairPage;
+export default CreateWaitRequestRepairPage;

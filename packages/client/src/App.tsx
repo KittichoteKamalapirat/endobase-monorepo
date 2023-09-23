@@ -25,6 +25,7 @@ import Session from "./pages/Session";
 import { closeAlertModal } from "./redux/slices/alertModalReducer";
 import { closeConfirm } from "./redux/slices/confirmModalReducer";
 import { RootState } from "./redux/store";
+import CreateWaitRequestRepairPage from "./components/CreateWaitRequestRepair.page";
 
 function App() {
   const { data, isOpen } = useSelector((state: RootState) => state.alertModal);
@@ -58,6 +59,10 @@ function App() {
           <Route
             path={urlResolver.requestRepair(":id")}
             element={<CreateRequestRepairPage />}
+          />
+          <Route
+            path={urlResolver.waitRequestRepair(":id")}
+            element={<CreateWaitRequestRepairPage />}
           />
           <Route path="containers" element={<Containers />} />
           <Route path="/login" element={<LoginPage />} />

@@ -15,7 +15,7 @@ import TextField, { TextFieldTypes } from "./forms/TextField";
 
 interface Props {
   className?: string;
-  disabled: boolean;
+
   refetchEndo: (
     variables?:
       | Partial<
@@ -38,11 +38,7 @@ interface FormValues {
 const initialData = {
   officerNum: "",
 };
-const BringToWashingRoomForm = ({
-  refetchEndo,
-  className,
-  disabled,
-}: Props) => {
+const BringToWashingRoomForm = ({ refetchEndo, className }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
@@ -53,21 +49,14 @@ const BringToWashingRoomForm = ({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
     setFocus,
-    setError,
   } = useForm<FormValues>({
     defaultValues: initialData,
   });
 
   const dispatch = useDispatch();
   const onSubmit = async (data: FormValues) => {
-    if (disabled)
-      return setError("officerNum", {
-        type: "custom",
-        message: "Please fill in the take out form first",
-      });
-
     try {
       if (!sessionId) return;
       const input = {
@@ -122,7 +111,7 @@ const BringToWashingRoomForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={className}>
-      <div className="flex items-end">
+      <div className="flex flex-col gap-4">
         <TextField
           required
           name={FormNames.OFFICER_NUM}
@@ -136,8 +125,8 @@ const BringToWashingRoomForm = ({
         <Button
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
-          extraClass="ml-2.5 w-24"
-          disabled={disabled}
+          extraClass="w-24"
+          disabled={!isValid || !isDirty}
         />
       </div>
     </form>

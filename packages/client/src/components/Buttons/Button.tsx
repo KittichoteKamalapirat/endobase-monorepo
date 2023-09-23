@@ -15,7 +15,7 @@ export enum HTMLButtonType {
   BUTTON = "button",
 }
 
-interface Props {
+export interface ButtonProps {
   onClick?: () => void;
   label: string;
   ariaLabel?: string;
@@ -104,7 +104,7 @@ const Button = ({
   endIcon,
   fontColor,
   loading,
-}: Props) => {
+}: ButtonProps) => {
   const className = useClassName({
     type,
     disabled,

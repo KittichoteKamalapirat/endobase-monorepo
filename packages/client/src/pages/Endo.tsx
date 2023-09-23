@@ -1,3 +1,4 @@
+import { TbNurse } from "react-icons/tb";
 import { IoMdBuild } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -31,6 +32,7 @@ const EndoPage = () => {
   const endoId = id || "";
   const { data, loading, error } = useEndoQuery({ variables: { id: endoId } });
 
+  const status = data?.endo.status;
   const { refetch: refetchEndos } = useEndosQuery();
 
   const [deleteEndo] = useDeleteEndoMutation();
@@ -144,13 +146,31 @@ const EndoPage = () => {
                 startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
               />
             ) : (
-              <LinkButton
-                label="Request repair"
-                href={`${urlResolver.requestRepair(id)}?prev=${urlResolver.endo(
-                  id
-                )}`}
-                type={ButtonTypes.OUTLINED}
-              />
+              <div className="flex gap-2">
+                <LinkButton
+                  label={`Wait repair ${
+                    status === "waiting_for_repair" && "(Current)"
+                  }`}
+                  href={`${urlResolver.waitRequestRepair(
+                    id
+                  )}?prev=${urlResolver.endo(id)}`}
+                  type={ButtonTypes.OUTLINED}
+                  startIcon={
+                    <TbNurse size={ICON_SIZE + 4} color={primaryColor} />
+                  }
+                  disabled={status === "waiting_for_repair"}
+                />
+                <LinkButton
+                  label="Request repair"
+                  href={`${urlResolver.requestRepair(
+                    id
+                  )}?prev=${urlResolver.endo(id)}`}
+                  type={ButtonTypes.OUTLINED}
+                  startIcon={
+                    <IoMdBuild size={ICON_SIZE} color={primaryColor} />
+                  }
+                />
+              </div>
             )}
 
             <Button

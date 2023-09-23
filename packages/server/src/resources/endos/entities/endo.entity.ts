@@ -28,6 +28,7 @@ export const ENDO_STATUS_OBJ = {
   DISINFECTION_FAILED: 'disinfection_failed',
   DRYING: 'drying',
   NO_ENDO: 'no_endo', // No endo in a tray (for writing color)
+  WAITING_FOR_REPAIR: 'waiting_for_repair',
   OUT_OF_ORDER: 'out_of_order',
   FIXED: 'fixed',
   FIXED_AND_OUT: 'fixed_and_out', // for "take out and wash"
@@ -65,6 +66,7 @@ export const statusToColor: Record<ENDO_STATUS, number> = {
   [ENDO_STATUS_OBJ.DISINFECTION_FAILED]: 0,
   [ENDO_STATUS_OBJ.DRYING]: 4, // blue
   [ENDO_STATUS_OBJ.NO_ENDO]: 0,
+  [ENDO_STATUS_OBJ.WAITING_FOR_REPAIR]: 7, // white
   [ENDO_STATUS_OBJ.OUT_OF_ORDER]: 7, // white
   [ENDO_STATUS_OBJ.FIXED]: 5, // pink
   [ENDO_STATUS_OBJ.FIXED_AND_OUT]: 5,

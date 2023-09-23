@@ -335,7 +335,7 @@ input UpdateDryingTimeInput {
 input CreateActionInput {
   sessionId: String!
   type: String!
-  faildFeedback: String
+  failedFeedback: String
   passed: Boolean
   officerNum: String!
   note: String
@@ -344,7 +344,7 @@ input CreateActionInput {
 input UpdateActionInput {
   sessionId: String
   type: String
-  faildFeedback: String
+  failedFeedback: String
   passed: Boolean
   officerNum: String
   note: String
@@ -428,12 +428,16 @@ input CreateRepairRequestInput {
   endoId: String!
   note: String!
   officerNum: String!
+  source: String!
+  toBeEndoStatus: String!
 }
 
 input UpdateRepairRequestInput {
   endoId: String
   note: String
   officerNum: String
+  source: String
+  toBeEndoStatus: String
   id: String!
 }
 

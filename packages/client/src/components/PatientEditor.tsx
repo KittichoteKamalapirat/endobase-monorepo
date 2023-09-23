@@ -129,7 +129,7 @@ const PatientEditor = ({
         <Button
           label="Save"
           buttonType={HTMLButtonType.SUBMIT}
-          extraClass="ml-2.5 w-24"
+          extraClass="w-24"
           disabled={disabled || !isDirty || !isValid}
         />
       </div>

@@ -1,5 +1,5 @@
 import { ApolloQueryResult } from "@apollo/client";
-import { Control, useForm } from "react-hook-form";
+import { Control, FieldErrorsImpl, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
@@ -9,19 +9,21 @@ import {
   useSessionQuery,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
-import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
-import CreateRequestRepairAction from "./CreateRequestRepair";
+import CreateRequestRepairForm from "./CreateRequestRepairForm";
+import {
+  FailedLeakTestFormValues,
+  LeakTestFormNames,
+  LeakTestFormValues,
+  initialLeakTestData,
+} from "./LeakTestForm";
 import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
-import { Error } from "./skeletons/Error";
-import { Loading } from "./skeletons/Loading";
-import SmallHeading from "./typography/SmallHeading";
 import SubHeading from "./typography/SubHeading";
 
 interface Props {
   containerClass?: string;
-  disabled: boolean; // if Leak Test and Prewash are not filled in
+  endoId: string;
   refetchEndo: (
     variables?:
       | Partial<
@@ -33,28 +35,9 @@ interface Props {
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
 
-enum FormNames {
-  OFFICER_NUM = "officerNum",
-  PASSED_TEST = "passedTest",
-}
-
-interface FormValues {
-  [FormNames.OFFICER_NUM]: string;
-  [FormNames.PASSED_TEST]: string | boolean;
-}
-
-const initialData = {
-  officerNum: "",
-  passedTest: false,
-};
-const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
+const DisinfectForm = ({ endoId, refetchEndo, containerClass }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
-  const { data, loading, error } = useSessionQuery({
-    variables: { id: sessionId || "" },
-  });
-
-  const endoId = data?.session.endoId || "";
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -62,35 +45,36 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
     handleSubmit,
     watch,
-    setError,
     register,
-  } = useForm<FormValues>({
-    defaultValues: initialData,
+  } = useForm<LeakTestFormValues>({
+    defaultValues: initialLeakTestData,
   });
 
   const { officerNum, passedTest } = watch();
 
   const testIsFailing = passedTest === "false";
 
+  const isFailedAndWaitRepair =
+    testIsFailing && watch("failedFeedback") === "wait_repair";
+
   const dispatch = useDispatch();
 
-  const onSubmit = async (data: FormValues) => {
-    if (disabled)
-      return setError("officerNum", {
-        type: "custom",
-        message: "Please fill in the Leak Test Form first",
-      });
-
+  const onSubmit = async (data: LeakTestFormValues) => {
     try {
       if (!sessionId) return;
+
+      const isFailed = data.passedTest === "false";
       const input = {
         sessionId,
         type: "disinfect",
         officerNum: data.officerNum,
-        passed: true,
+        passed: data.passedTest === "true" ? true : false,
+        note: isFailed ? data.note : undefined,
+        failedFeedback:
+          data.passedTest === "false" ? data.failedFeedback : undefined,
       };
 
       const result = await createAction({
@@ -129,50 +113,75 @@ const DisinfectForm = ({ refetchEndo, containerClass, disabled }: Props) => {
     }
   };
 
-  if (loading) return <Loading />;
-  if (error) return <Error text="Error retrieving endoscope" />;
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-        <SmallHeading heading={getActionLabel("disinfect")} />
-        <div className="flex items-end">
+        <div className="flex flex-col gap-4">
           <TextField
             required
-            name={FormNames.OFFICER_NUM}
+            name={LeakTestFormNames.OFFICER_NUM}
             control={control as unknown as Control}
             label="Officer Number"
             placeholder="Please insert officer number"
             type={TextFieldTypes.OUTLINED}
-            error={errors[FormNames.OFFICER_NUM]}
+            error={errors[LeakTestFormNames.OFFICER_NUM]}
           />
 
-          <Button
-            label="Save"
-            buttonType={HTMLButtonType.SUBMIT}
-            extraClass="ml-2.5 w-24"
-            disabled={!passedTest}
-          />
-        </div>
-        <div className="mt-4">
           <RadioField
-            {...register(FormNames.PASSED_TEST, { required: true })}
+            {...register(LeakTestFormNames.PASSED_TEST)}
             options={[
               { value: "true", label: "Passed" },
               { value: "false", label: "Failed" },
             ]}
           />
+
+          {testIsFailing && (
+            <>
+              <RadioField
+                key="leak-test-failedFeedback"
+                {...register(LeakTestFormNames.FAILED_FEEDBACK)}
+                options={[
+                  {
+                    value: "bring_to_washing_room",
+                    label: "Bring back to the Washing Room",
+                  },
+                  { value: "re_disinfection", label: "Re Disinfection" },
+                  { value: "wait_repair", label: "Wait Repair" },
+                ]}
+                className="mt-4"
+              />
+              <TextField
+                name={LeakTestFormNames.NOTE}
+                control={control as unknown as Control}
+                label="Additional Note"
+                placeholder="Please add some details"
+                type={TextFieldTypes.OUTLINED}
+                error={
+                  (errors as FieldErrorsImpl<FailedLeakTestFormValues>).note
+                }
+              />
+            </>
+          )}
+
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="w-24"
+            disabled={isFailedAndWaitRepair || !isValid || !isDirty}
+          />
         </div>
       </form>
-      {testIsFailing && (
+      {isFailedAndWaitRepair && (
         <div className="mt-4">
           <SubHeading
             heading="Please fill in the form below"
             fontColor="text-red"
           />
-          <CreateRequestRepairAction
+          <CreateRequestRepairForm
             officerNum={officerNum}
             isCritical
             endoId={endoId}
+            source="disinfection"
           />
         </div>
       )}

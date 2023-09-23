@@ -32,7 +32,7 @@ export class RepairRequest {
   @Field()
   note: string;
 
-  @Column({ nullable: true }) // TODO remove this
+  @Column()
   @Field(() => String)
   source: REPAIR_REQUEST_SRC;
 

@@ -142,6 +142,16 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
         />
       );
 
+    case ENDO_STATUS.WAITING_FOR_REPAIR:
+      return (
+        <LinkButton
+          label="Request Repair"
+          href={urlResolver.requestRepair(endoId)}
+          type={ButtonTypes.SECONDARY}
+          startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
+        />
+      );
+
     case ENDO_STATUS.OUT_OF_ORDER:
       return (
         <Button
@@ -157,7 +167,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.FIXED_AND_OUT:
       return (
         <LinkButton
-          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
           label="Take out"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
@@ -167,7 +177,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.BEING_USED:
       return (
         <LinkButton
-          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
           label="Bring to Washing Room"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
@@ -178,7 +188,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
     case ENDO_STATUS.LEAK_TEST_FAILED:
       return (
         <LinkButton
-          leftIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
+          startIcon={<GiWaterRecycling size={ICON_SIZE} color={primaryColor} />}
           label="Leak Test"
           href={`/session/${row.original.currentSessionId}`}
           type={ButtonTypes.SECONDARY}
@@ -202,7 +212,7 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
             label="Store"
             href={`/session/${row.original.currentSessionId}`}
             type={ButtonTypes.SECONDARY}
-            leftIcon={
+            startIcon={
               <BsInboxesFill size={ICON_SIZE - 2} color={primaryColor} />
             }
           />

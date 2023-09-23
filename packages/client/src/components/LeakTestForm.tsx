@@ -11,16 +11,17 @@ import {
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
-import CreateRequestRepairAction from "./CreateRequestRepair";
+import CreateRequestRepairForm from "./CreateRequestRepairForm";
 import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SubHeading from "./typography/SubHeading";
 import { useEffect } from "react";
+import { Loading } from "./skeletons/Loading";
+import { Error } from "./skeletons/Error";
 
 interface Props {
   containerClass?: string;
   endoId: string;
-  disabled: boolean; // if Take Out Form is not completed yet
   refetchEndo: (
     variables?:
       | Partial<
@@ -32,7 +33,7 @@ interface Props {
   ) => Promise<ApolloQueryResult<EndoQuery>>;
 }
 
-enum FormNames {
+export enum LeakTestFormNames {
   OFFICER_NUM = "officerNum",
   PASSED_TEST = "passedTest",
   NOTE = "note",
@@ -64,32 +65,27 @@ const failedSchema = z.object({
 
 const schema = z.discriminatedUnion("passedTest", [passedSchema, failedSchema]);
 
-type FormValues = z.infer<typeof schema>; // for admin field type
-type FailedFormValues = z.infer<typeof failedSchema>; // for admin field type
+export type LeakTestFormValues = z.infer<typeof schema>; // for admin field type
+export type FailedLeakTestFormValues = z.infer<typeof failedSchema>; // for admin field type
 
-// interface FormValues {
-//   [FormNames.OFFICER_NUM]: string;
-//   [FormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
-//   [FormNames.FAILED_FEEDBACK]:
+// interface LeakTestFormValues {
+//   [LeakTestFormNames.OFFICER_NUM]: string;
+//   [LeakTestFormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
+//   [LeakTestFormNames.FAILED_FEEDBACK]:
 //     | "bring_to_washing_room"
 //     | "re_leak_test"
 //     | "wait_repair";
 // }
 
-const initialData = {
+export const initialLeakTestData = {
   officerNum: "",
-  passedTest: "false" as const,
+  passedTest: "true" as const,
 };
-const LeakTestForm = ({
-  refetchEndo,
-  containerClass,
-  disabled,
-  endoId,
-}: Props) => {
+const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
-  const { refetch } = useSessionQuery({
+  const { data, loading, error, refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
   });
 
@@ -102,40 +98,34 @@ const LeakTestForm = ({
 
     setFocus,
     formState: { errors, isValid, isDirty },
-  } = useForm<FormValues>({
-    defaultValues: initialData,
+  } = useForm<LeakTestFormValues>({
+    defaultValues: initialLeakTestData,
   });
 
   const dispatch = useDispatch();
 
-  console.log("watch", watch());
   const { officerNum, passedTest } = watch();
-  const isFailedAndWaitRepair =
-    passedTest === "false" && watch("failedFeedback") === "wait_repair";
 
-  console.log("watch", watch());
   const testIsFailing = passedTest === "false";
+  const isFailedAndWaitRepair =
+    testIsFailing && watch("failedFeedback") === "wait_repair";
 
-  const onSubmit = async (data: FormValues) => {
-    if (disabled)
-      return setError("officerNum", {
-        type: "custom",
-        message: "Please fill in the Patient Form first",
-      });
-
+  const onSubmit = async (data: LeakTestFormValues) => {
     try {
       if (!sessionId) return;
+
+      const isFailed = data.passedTest === "false";
 
       const input = {
         sessionId,
         type: "leak_test_and_prewash",
         officerNum: data.officerNum,
         passed: data.passedTest === "true" ? true : false,
-        faildFeedback:
+        note: isFailed ? data.note : undefined,
+        failedFeedback:
           data.passedTest === "false" ? data.failedFeedback : undefined,
       };
 
-      console.log("input", input);
       const result = await createAction({
         variables: {
           input,
@@ -177,60 +167,65 @@ const LeakTestForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (loading) return <Loading />;
+  if (error) return <Error text="Error retrieving endoscope" />;
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
         <div className="flex flex-col gap-4">
           <TextField
             required
-            name={FormNames.OFFICER_NUM}
+            name={LeakTestFormNames.OFFICER_NUM}
             control={control as unknown as Control}
             label="Officer Number"
             placeholder="Please insert officer number"
             type={TextFieldTypes.OUTLINED}
-            error={errors[FormNames.OFFICER_NUM]}
+            error={errors[LeakTestFormNames.OFFICER_NUM]}
           />
 
           <RadioField
             key="leak-test-passed"
-            {...register(FormNames.PASSED_TEST)}
+            {...register(LeakTestFormNames.PASSED_TEST)}
             options={[
               { value: "true", label: "Passed" },
               { value: "false", label: "Failed" },
             ]}
             className="mt-4"
           />
-          {testIsFailing && (
-            <RadioField
-              key="leak-test-failedFeedback"
-              {...register(FormNames.FAILED_FEEDBACK)}
-              options={[
-                {
-                  value: "bring_to_washing_room",
-                  label: "Bring back to the Washing Room",
-                },
-                { value: "re_leak_test", label: "Re Leak Test" },
-                { value: "wait_repair", label: "Wait Repair" },
-              ]}
-              className="mt-4"
-            />
-          )}
 
           {testIsFailing && (
-            <TextField
-              name={FormNames.NOTE}
-              control={control as unknown as Control}
-              label="Additional Note"
-              placeholder="Please add some details"
-              type={TextFieldTypes.OUTLINED}
-              error={(errors as FieldErrorsImpl<FailedFormValues>).note}
-            />
+            <>
+              <RadioField
+                key="leak-test-failedFeedback"
+                {...register(LeakTestFormNames.FAILED_FEEDBACK)}
+                options={[
+                  {
+                    value: "bring_to_washing_room",
+                    label: "Bring back to the Washing Room",
+                  },
+                  { value: "re_leak_test", label: "Re Leak Test" },
+                  { value: "wait_repair", label: "Wait Repair" },
+                ]}
+                className="mt-4"
+              />
+              <TextField
+                name={LeakTestFormNames.NOTE}
+                control={control as unknown as Control}
+                label="Additional Note"
+                placeholder="Please add some details"
+                type={TextFieldTypes.OUTLINED}
+                error={
+                  (errors as FieldErrorsImpl<FailedLeakTestFormValues>).note
+                }
+              />
+            </>
           )}
 
           <Button
             label="Save"
             buttonType={HTMLButtonType.SUBMIT}
-            extraClass="ml-2.5 w-24"
+            extraClass="w-24"
             disabled={isFailedAndWaitRepair || !isValid || !isDirty}
           />
         </div>
@@ -242,10 +237,11 @@ const LeakTestForm = ({
             heading="Please fill in the form below"
             fontColor="text-red"
           />
-          <CreateRequestRepairAction
+          <CreateRequestRepairForm
             officerNum={officerNum}
             isCritical
             endoId={endoId}
+            source="leak_test"
           />
         </div>
       )}

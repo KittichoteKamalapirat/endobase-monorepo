@@ -41,14 +41,12 @@ export class RepairRequestService {
       }
 
       await this.sessionsService.endSessionByEndoId(input.endoId);
-      await this.endosService.updateStatus(
-        input.endoId,
-        ENDO_STATUS_OBJ.OUT_OF_ORDER,
-      );
+      await this.endosService.updateStatus(input.endoId, 'waiting_for_repair');
 
       const newRR = this.repairRequestsRepository.create({
         endoId: input.endoId,
         note: input.note,
+        source: input.source,
         officerId: existingOfficer.id,
       });
 

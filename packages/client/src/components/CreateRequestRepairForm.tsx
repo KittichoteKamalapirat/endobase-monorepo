@@ -14,16 +14,26 @@ import {
 } from "../theme";
 import RequestRepairEditor, { ActionFormValues } from "./RequestRepairEditor";
 
+export type REPAIR_REQUEST_SRC =
+  | "leak_test" // รั่วเลยเรียกช่าง (from session page)
+  | "disinfection" // // เฟลเลยเรียกช่าง (from session page)
+  | "wait_repair" // เป็นไรไม่รู้ รอช่างมาดู
+  | "request_repair"; // ช่างเอากล้องไปแล้ว
+
 interface Props {
   officerNum?: string;
   endoId: string;
   isCritical?: boolean;
+  source: REPAIR_REQUEST_SRC;
+  isWaitRepairRequest?: boolean; // current status is waiting_for_repair
 }
 
-const CreateRequestRepair = ({
+const CreateRequestRepairForm = ({
   officerNum,
   isCritical = false,
   endoId,
+  source,
+  isWaitRepairRequest = true,
 }: Props) => {
   useIsAuth();
   const { refetch } = useRepairRequestsByEndoQuery({ variables: { endoId } });
@@ -44,6 +54,10 @@ const CreateRequestRepair = ({
         endoId,
         officerNum: data.officerNum,
         note: data.note,
+        source,
+        toBeEndoStatus: isWaitRepairRequest
+          ? "waiting_for_repair"
+          : "out_of_order",
       };
 
       const result = await createRepairRequest({
@@ -91,8 +105,9 @@ const CreateRequestRepair = ({
           isCritical ? CRITICAL_CARD_CLASSNAMES : UNCLICKABLE_CARD_CLASSNAMES,
           "w-full"
         )}
+        isWaitRepairRequest={isWaitRepairRequest}
       />
     </div>
   );
 };
-export default CreateRequestRepair;
+export default CreateRequestRepairForm;

@@ -10,39 +10,43 @@ interface Props {
   defaultValues: ActionFormValues;
   onSubmit: (data: ActionFormValues) => void;
   containerClass?: string;
+  isWaitRepairRequest: boolean;
 }
 
 enum FormNames {
   OFFICER_NUM = "officerNum",
-  NOTE = "note"
+  NOTE = "note",
 }
 
 export interface ActionFormValues {
   [FormNames.OFFICER_NUM]: string;
-  [FormNames.NOTE]: string
+  [FormNames.NOTE]: string;
 }
 
-
-const RequestRepairEditor = ({ containerClass, onSubmit, defaultValues }: Props) => {
+const RequestRepairEditor = ({
+  isWaitRepairRequest,
+  containerClass,
+  onSubmit,
+  defaultValues,
+}: Props) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<ActionFormValues>({
-    defaultValues
+    defaultValues,
   });
-
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
-
       <div className="flex gap-2 items-center">
         <IoMdBuild color="000" size={ICON_SIZE} />
-        <SmallHeading heading="Request repair" />
+        <SmallHeading
+          heading={isWaitRepairRequest ? "Wait Repair" : "Request repair"}
+        />
       </div>
 
-      <div className={classNames("flex gap-4 mt-4 flex-col items-start")} >
+      <div className={classNames("flex gap-4 mt-4 flex-col items-start")}>
         <TextField
           required
           name={FormNames.OFFICER_NUM}
@@ -67,7 +71,6 @@ const RequestRepairEditor = ({ containerClass, onSubmit, defaultValues }: Props)
           extraClass="w-24"
         />
       </div>
-
     </form>
   );
 };

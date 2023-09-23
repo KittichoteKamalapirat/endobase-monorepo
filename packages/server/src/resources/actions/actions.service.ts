@@ -52,13 +52,13 @@ export class ActionsService {
       passed: input.passed,
     });
 
-    // can only pass 1 time
-    // but can fail many times
-    if (action && input.passed)
+    // for bring_to_washing_room, leak_test and disinfect => can do many times
+    //
+    if (action && (action.type === 'store' || action.type === 'take_out'))
       return {
         errors: [
           {
-            message: `${input.type} has already been completed`,
+            message: `${input.type} has already been completed`, // store, take_out
             field: 'action',
           },
         ],
@@ -87,6 +87,7 @@ export class ActionsService {
       type: input.type,
       passed: input.passed,
       officerId: officer.id,
+      note: input.note,
     };
 
     // find session to get the endoId
@@ -122,19 +123,23 @@ export class ActionsService {
           session.endoId,
           input.passed
             ? 'leak_test_passed'
-            : input.faildFeedback === 'bring_to_washing_room'
+            : input.failedFeedback === 'bring_to_washing_room'
             ? 'being_used' // have to bring to washing room again
-            : input.faildFeedback === 're_leak_test'
+            : input.failedFeedback === 're_leak_test'
             ? 'in_washing_room'
-            : 'being_used', // this can should not happended
+            : 'being_used', // this case should not happended
         );
         break;
       case ACTION_TYPE_OBJ.DISINFECT:
         await this.endosService.updateStatus(
           session.endoId,
           input.passed
-            ? ENDO_STATUS_OBJ.DISINFECTION_PASSED
-            : ENDO_STATUS_OBJ.IN_WASHING_ROOM, // have to leak test again
+            ? 'disinfection_passed'
+            : input.failedFeedback === 'bring_to_washing_room'
+            ? 'being_used' // have to bring to washing room again
+            : input.failedFeedback === 're_disinfection'
+            ? 'leak_test_passed' // have to disinfect again
+            : 'being_used', // this case should not happended
         );
         break;
 

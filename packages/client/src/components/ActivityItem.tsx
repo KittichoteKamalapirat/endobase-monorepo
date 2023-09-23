@@ -17,7 +17,7 @@ const ActivityItem = ({
   showPassed = true,
   action,
 }: Props) => {
-  const { officer, passed, createdAt, type } = action || {};
+  const { officer, passed, createdAt, type, note } = action || {};
 
   return (
     <div>
@@ -28,10 +28,11 @@ const ActivityItem = ({
         />
       )}
       <div className="flex gap-10 mt-2">
-        <div id="left" className="font-bold">
+        <div id="left" className="font-semibold">
           <div>Officer Number</div>
           <div>Timestamp</div>
           {showPassed && <div>Status</div>}
+          {note && <div>Note</div>}
         </div>
 
         <div id="right">
@@ -45,13 +46,14 @@ const ActivityItem = ({
           {showPassed && (
             <div
               className={clsx(
-                "font-bold",
+                "font-semibold",
                 passed ? "text-green-500" : "text-red-500"
               )}
             >
               {passed ? "Passed" : "Failed"}
             </div>
           )}
+          {note && <span className="text-grey-500">{note}</span>}
         </div>
       </div>
 

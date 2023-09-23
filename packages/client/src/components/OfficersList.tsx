@@ -69,7 +69,7 @@ const OfficersList = () => {
       <div className="flex justify-between items-end">
         <SubHeading heading="Officers" />
         <LinkButton
-          leftIcon={<AiOutlinePlus size={ICON_SIZE} color={grey0} />}
+          startIcon={<AiOutlinePlus size={ICON_SIZE} color={grey0} />}
           label="Add an officer"
           href={urlResolver.createOfficer()}
         />

@@ -7,7 +7,11 @@ import { ACTION_TYPE } from '../entities/action.entity';
 // what kinda of aciton? => type
 // which officerId
 
-type FailedFeedback = 'bring_to_washing_room' | 're_leak_test' | 'wait_repair';
+type FailedFeedback =
+  | 'bring_to_washing_room'
+  | 're_leak_test'
+  | 're_disinfection'
+  | 'wait_repair';
 
 @InputType()
 export class CreateActionInput {
@@ -19,7 +23,7 @@ export class CreateActionInput {
 
   // for leak test and disinfection
   @Field(() => String, { nullable: true })
-  faildFeedback?: FailedFeedback;
+  failedFeedback?: FailedFeedback;
 
   @Field(() => Boolean, { nullable: true })
   passed?: boolean;

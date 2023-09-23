@@ -33,6 +33,10 @@ export class Session {
   @Field(() => String)
   status: SESSION_STATUS;
 
+  @Column({ default: true })
+  @Field(() => Boolean)
+  patientUsedEndo: boolean;
+
   @Column({ default: false })
   @Field(() => Boolean)
   endoWasExpired: boolean; // no patient data required
@@ -40,7 +44,6 @@ export class Session {
   @Column({ default: false })
   @Field(() => Boolean)
   endoWasOutOfOrder: boolean; // no patient data required
-
 
   // Endo
   @Column()

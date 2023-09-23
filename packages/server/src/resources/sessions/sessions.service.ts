@@ -5,6 +5,7 @@ import { PatientsService } from '../patients/patients.service';
 import { CreateSessionInput } from './dto/create-session.input';
 import { UpdateSessionInput } from './dto/update-session.input';
 import { Session, SESSION_STATUS_OBJ } from './entities/session.entity';
+import { UpdateSessionPatientInput } from './dto/update-session-patient.input';
 
 @Injectable()
 export class SessionsService {
@@ -103,7 +104,8 @@ export class SessionsService {
     }
   }
 
-  async updatePatient(id: string, patientHN: string) {
+  async updatePatientSession(id: string, input: UpdateSessionPatientInput) {
+    const { patientHN, patientUsedEndo } = input;
     // use patientId if this hosNum is already in the db
     // otherwise create one
     try {
@@ -118,9 +120,13 @@ export class SessionsService {
         patient = existingPatient;
       }
       const session = await this.sessionsRepository.findOneBy({ id });
-      const newSession = { ...session, patientId: patient.id }; // MAKE SURE this is no relation nested
-      await this.sessionsRepository.save(newSession);
-      return newSession;
+      const updatedSession = {
+        ...session,
+        patientId: patient.id,
+        patientUsedEndo,
+      }; // MAKE SURE this is no relation nested
+      await this.sessionsRepository.save(updatedSession);
+      return updatedSession;
     } catch (error) {
       return new Error(error);
     }

@@ -53,7 +53,7 @@ const Session = () => {
     skip: !data?.session.endoId,
   });
 
-  const { patientId, actions, patient } = data?.session || {};
+  const { actions, patient } = data?.session || {};
 
   const takeOutAction = actions?.find((action) => action.type === "take_out");
 
@@ -79,6 +79,7 @@ const Session = () => {
   const disabledBringToWashingRoom = !takeOutAction;
   const disabledPatientForm =
     noNeedPatient || !(takeOutAction && bringToWashingRoomAction);
+
   const disabledLeakTestForm =
     (!noNeedPatient && !patient) ||
     !(takeOutAction && bringToWashingRoomAction);
@@ -136,7 +137,6 @@ const Session = () => {
       </Layout>
     );
 
-  console.log("takeOutAction,takeOutAction", takeOutAction);
   return (
     <Layout>
       <div className="flex justify-start my-4">
@@ -198,6 +198,7 @@ const Session = () => {
                 patient={patient as Patient}
                 className="my-4"
                 disabled={disabledPatientForm}
+                patientUsedEndo={Boolean(data?.session.patientUsedEndo)}
               />
             ) : (
               !disabledPatientForm && (

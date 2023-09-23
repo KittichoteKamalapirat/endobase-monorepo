@@ -586,6 +586,7 @@ export type Session = {
   isoEndTime?: Maybe<Scalars['String']>;
   patient?: Maybe<Patient>;
   patientId?: Maybe<Scalars['String']>;
+  patientUsedEndo: Scalars['Boolean'];
   status: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
@@ -687,6 +688,7 @@ export type UpdateSessionInput = {
 export type UpdateSessionPatientInput = {
   id?: InputMaybe<Scalars['String']>;
   patientHN: Scalars['String'];
+  patientUsedEndo: Scalars['Boolean'];
 };
 
 export type UpdateSettingInput = {
@@ -946,7 +948,7 @@ export type SessionQueryVariables = Exact<{
 }>;
 
 
-export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
+export type SessionQuery = { __typename?: 'Query', session: { __typename?: 'Session', id: string, endoId: string, status: string, patientUsedEndo: boolean, endoWasExpired: boolean, endoWasOutOfOrder: boolean, patientId?: string | null, endo: { __typename?: 'Endo', id: string, status: string }, patient?: { __typename?: 'Patient', id: string, hosNum: string } | null, actions?: Array<{ __typename?: 'Action', id: string, passed: boolean, type: string, note: string, createdAt: any, officerId: string, officer: { __typename?: 'Officer', id: string, officerNum: string } }> | null } };
 
 export type UpdateSettingMutationVariables = Exact<{
   input: UpdateSettingInput;
@@ -2422,6 +2424,7 @@ export const SessionDocument = gql`
       status
     }
     status
+    patientUsedEndo
     endoWasExpired
     endoWasOutOfOrder
     patientId

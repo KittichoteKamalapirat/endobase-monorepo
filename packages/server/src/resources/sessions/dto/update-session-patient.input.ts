@@ -10,4 +10,7 @@ export class UpdateSessionPatientInput {
 
   @Field(() => String)
   patientHN: string;
+
+  @Field()
+  patientUsedEndo: boolean;
 }

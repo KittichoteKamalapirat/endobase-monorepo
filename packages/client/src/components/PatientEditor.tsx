@@ -7,6 +7,7 @@ import { getActionLabel } from "../utils/getActionStep";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
+import RadioField from "./forms/RadioField";
 
 export const validateAdminField = (value: string) => {
   if (value !== "Admin") return false;
@@ -23,6 +24,7 @@ interface Props {
 enum FormNames {
   PATIENT_HN_NUM = "patientHnNum",
   ADMIN_CREDENTIAL = "adminCredential",
+  USED_ENDO = "usedEndo",
 }
 
 // export interface PatientFormValues {
@@ -35,6 +37,7 @@ const isCreateSchema = z.object({
   patientHnNum: z
     .string()
     .length(7, { message: "Must be exactly 7 characters long" }),
+  usedEndo: z.string(),
 });
 
 const isEditSchema = z.object({
@@ -45,6 +48,7 @@ const isEditSchema = z.object({
   patientHnNum: z
     .string()
     .length(7, { message: "Must be exactly 7 characters long" }),
+  usedEndo: z.string(),
 });
 
 const schema = z.discriminatedUnion("method", [isCreateSchema, isEditSchema]);
@@ -62,6 +66,7 @@ const PatientEditor = ({
   const {
     control,
     handleSubmit,
+    register,
     formState: { errors, isDirty, isValid },
   } = useForm<PatientFormValues>({
     defaultValues,
@@ -69,6 +74,8 @@ const PatientEditor = ({
     mode: "onChange",
   });
 
+  console.log("isvalid", isValid);
+  console.log("errors", errors);
   const validatePatientField = (value: string) => {
     if (value.length !== 7) return false;
     return true;
@@ -78,7 +85,16 @@ const PatientEditor = ({
     <form onSubmit={handleSubmit(onSubmit)} className={containerClass}>
       <SmallHeading heading={getActionLabel("patient")} />
 
-      <div className="flex flex-col md:flex-row md:items-center gap-4 items-end">
+      <div className="flex flex-col gap-4">
+        <RadioField
+          {...register(FormNames.USED_ENDO, { required: true })}
+          options={[
+            { value: "true", label: "Use" },
+            { value: "false", label: "No Use" },
+          ]}
+          className="mt-4"
+        />
+
         <TextField
           required
           name={FormNames.PATIENT_HN_NUM}

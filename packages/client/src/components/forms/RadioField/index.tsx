@@ -17,15 +17,24 @@ interface Props {
   name?: string;
   onBlur?: ChangeHandler;
   onChange?: ChangeHandler;
+  className?: string;
 }
 
 const RadioField = forwardRef(
   (
-    { name, options, onChange, onBlur, label, labelClass = "mb-2" }: Props,
+    {
+      name,
+      options,
+      onChange,
+      onBlur,
+      label,
+      className,
+      labelClass = "mb-2",
+    }: Props,
     ref
   ) => {
     return (
-      <>
+      <div className={className}>
         <FormFieldLabel label={label} extraClass={`${labelClass} `} />
 
         <div className="flex gap-4">
@@ -49,7 +58,7 @@ const RadioField = forwardRef(
             </div>
           ))}
         </div>
-      </>
+      </div>
     );
   }
 );

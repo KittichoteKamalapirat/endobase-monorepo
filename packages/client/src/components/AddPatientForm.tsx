@@ -15,6 +15,7 @@ interface Props {
 const defaultValues: PatientFormValues = {
   patientHnNum: "",
   method: "create",
+  usedEndo: "true",
 };
 
 const AddPatientForm = ({ disabled, className }: Props) => {
@@ -43,6 +44,7 @@ const AddPatientForm = ({ disabled, className }: Props) => {
           input: {
             id: sessionId,
             patientHN: data.patientHnNum,
+            patientUsedEndo: data.usedEndo === "true" ? true : false,
           },
         },
       });

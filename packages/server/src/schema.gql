@@ -53,6 +53,7 @@ type Patient {
 type Session {
   id: ID!
   status: String!
+  patientUsedEndo: Boolean!
   endoWasExpired: Boolean!
   endoWasOutOfOrder: Boolean!
   endoId: String!
@@ -366,6 +367,7 @@ input UpdateSessionInput {
 input UpdateSessionPatientInput {
   id: String
   patientHN: String!
+  patientUsedEndo: Boolean!
 }
 
 input CreatePatientInput {

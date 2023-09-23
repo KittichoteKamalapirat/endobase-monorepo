@@ -12,13 +12,20 @@ interface Props {
   disabled: boolean; // if Take Out Form is not completed yet
   className?: string;
   patient: Patient;
+  patientUsedEndo: boolean;
 }
 
-const EditPatientForm = ({ patient, disabled, className }: Props) => {
+const EditPatientForm = ({
+  patient,
+  disabled,
+  patientUsedEndo,
+  className,
+}: Props) => {
   const defaultValues: PatientFormValues = {
     patientHnNum: patient.hosNum,
     method: "edit",
     adminCredential: "",
+    usedEndo: patientUsedEndo ? "true" : "false",
   };
 
   const { id: sessionId } = useParams();
@@ -46,6 +53,7 @@ const EditPatientForm = ({ patient, disabled, className }: Props) => {
           input: {
             id: sessionId,
             patientHN: data.patientHnNum,
+            patientUsedEndo: data.usedEndo === "true" ? true : false,
           },
         },
       });

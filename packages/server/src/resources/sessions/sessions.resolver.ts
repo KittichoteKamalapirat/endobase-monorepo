@@ -36,7 +36,7 @@ export class SessionsResolver {
 
   @Mutation(() => Session)
   updateSessionPatient(@Args('input') input: UpdateSessionPatientInput) {
-    return this.sessionsService.updatePatient(input.id, input.patientHN);
+    return this.sessionsService.updatePatientSession(input.id, input);
   }
 
   @Mutation(() => Session)

@@ -74,8 +74,6 @@ const PatientEditor = ({
     mode: "onChange",
   });
 
-  console.log("isvalid", isValid);
-  console.log("errors", errors);
   const validatePatientField = (value: string) => {
     if (value.length !== 7) return false;
     return true;

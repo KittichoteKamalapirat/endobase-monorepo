@@ -40,7 +40,7 @@ const UpdateTakeOutActionForm = ({
         sessionId,
         type: "take_out",
         officerNum: data.officerNum,
-        // passed should be undefined so not cause by service
+
         note: data.note,
       };
 

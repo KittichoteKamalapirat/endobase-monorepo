@@ -38,7 +38,6 @@ const CreateTakeOutActionForm = ({ initialValues, endoId }: Props) => {
         sessionId,
         type: "take_out",
         officerNum: data.officerNum,
-        // passed should be undefined so not cause by service
       };
 
       const result = await createAction({

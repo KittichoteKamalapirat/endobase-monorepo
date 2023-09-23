@@ -63,7 +63,6 @@ const BringToWashingRoomForm = ({ refetchEndo, className }: Props) => {
         sessionId,
         type: "bring_to_washing_room",
         officerNum: data.officerNum,
-        // passed should be undefined so not cause by service
       };
 
       const result = await createAction({

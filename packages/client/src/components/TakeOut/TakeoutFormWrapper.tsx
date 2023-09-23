@@ -5,8 +5,6 @@ interface Props {
   endoId: string; // for refetch
   className?: string;
   routeOfficerNum?: string;
-  //   action: ActionsQuery["actions"][number];
-  //   action: SessionQuery["session"]["actions"][number];
   action?: any; // TODO
 }
 

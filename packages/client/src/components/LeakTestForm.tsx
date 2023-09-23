@@ -46,12 +46,6 @@ const passedSchema = z.object({
   passedTest: z.literal("true"),
 });
 
-// const FailedFeebackTypeSchema = z.union([
-//   z.literal("bring_to_washing_room"),
-//   z.literal("re_leak_test DEPOSIT"),
-//   z.literal("wait_repair"),
-// ]);
-
 const failedSchema = z.object({
   officerNum: z.string(),
   passedTest: z.literal("false"),
@@ -68,15 +62,6 @@ const schema = z.discriminatedUnion("passedTest", [passedSchema, failedSchema]);
 export type LeakTestFormValues = z.infer<typeof schema>; // for admin field type
 export type FailedLeakTestFormValues = z.infer<typeof failedSchema>; // for admin field type
 
-// interface LeakTestFormValues {
-//   [LeakTestFormNames.OFFICER_NUM]: string;
-//   [LeakTestFormNames.PASSED_TEST]: string | boolean; // if no checked (boolean false), if checked (string true)
-//   [LeakTestFormNames.FAILED_FEEDBACK]:
-//     | "bring_to_washing_room"
-//     | "re_leak_test"
-//     | "wait_repair";
-// }
-
 export const initialLeakTestData = {
   officerNum: "",
   passedTest: "true" as const,
@@ -85,7 +70,7 @@ const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
   const { id: sessionId } = useParams();
   const [createAction] = useCreateActionMutation();
 
-  const { data, loading, error, refetch } = useSessionQuery({
+  const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
   });
 
@@ -94,8 +79,6 @@ const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
     handleSubmit,
     register,
     watch,
-    setError,
-
     setFocus,
     formState: { errors, isValid, isDirty },
   } = useForm<LeakTestFormValues>({
@@ -166,9 +149,6 @@ const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
     setFocus("officerNum");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (loading) return <Loading />;
-  if (error) return <Error text="Error retrieving endoscope" />;
 
   return (
     <div>

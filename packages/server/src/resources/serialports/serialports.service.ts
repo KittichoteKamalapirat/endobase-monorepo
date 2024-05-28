@@ -53,11 +53,13 @@ export class SerialportsService implements OnModuleInit {
         (process.env.NODE_ENV as Env) !== 'showcase' &&
         (process.env.NODE_ENV as Env) !== 'localhost'
       ) {
+
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
+        console.log('✅ Successfully init modbus')
         await this.settingService.initSetting();
       }
     } catch (error) {
-      console.log('error init modbus in serialport.server', error)
+      console.log('❌ error init modbus in serialport.server', error)
     }
 
   }
@@ -70,9 +72,14 @@ export class SerialportsService implements OnModuleInit {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
         this.modbus.setID(arduinoId);
-        const val = await this.modbus.readInputRegisters(0, 3);
-        if (val) activeSerialportObj[key] = true;
-        else activeSerialportObj[key] = false;
+        try {
+          const val = await this.modbus.readInputRegisters(0, 3);
+          if (val) activeSerialportObj[key] = true;
+          else activeSerialportObj[key] = false;
+        } catch (error) {
+          console.log('⚠️ Cannot set active:', key)
+        }
+
       }
 
       return activeSerialportObj;

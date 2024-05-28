@@ -40,6 +40,7 @@ const envPath = getEnvPath();
         origin: [
           'http://localhost:3000',
           'http://localhost:3001',
+          'http://localhost',
           process.env.CORS_ORIGIN,
         ],
         credentials: true,

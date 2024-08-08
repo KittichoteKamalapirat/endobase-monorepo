@@ -237,7 +237,7 @@ export class EndoCronsService implements OnModuleInit {
 
       let next;
       try {
-        next = value.nextDates().toJSDate();
+        next = value.nextDate().toJSDate();
       } catch (e) {
         next = 'error: next fire date is in the past!';
       }

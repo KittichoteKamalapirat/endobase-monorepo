@@ -24,7 +24,7 @@ console.log('-----------------');
 
 export const typeormConfigNest = {
   type: 'postgres' as const,
-  url: 'postgresql://postgres:awBHusoLbuHYLMCtHniLMHdbKfKBXwpL@:5432/railway',
+  url: 'postgresql://postgres:awBHusoLbuHYLMCtHniLMHdbKfKBXwpL@monorail.proxy.rlwy.net:30563/railway',
   // host: process.env.PGHOST,
   // port: Number(process.env.PGPORT),
   // username: process.env.PGUSER,

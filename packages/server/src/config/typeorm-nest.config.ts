@@ -11,6 +11,17 @@ import { Tray } from '../resources/trays/entities/tray.entity';
 import { User } from '../resources/users/entities/user.entity';
 import { Setting } from '../setting/entities/setting.entity';
 
+console.log('-----------------');
+console.log('env', process.env.NODE_ENV);
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log('PGDATABASE', process.env.PGDATABASE);
+console.log('PGHOST', process.env.PGHOST);
+console.log('PGPASSWORD', process.env.PGPASSWORD);
+console.log('PGPORT', process.env.PGPORT);
+console.log('PGUSER', process.env.PGUSER);
+console.log('REDIS_URL', process.env.REDIS_URL);
+console.log('-----------------');
+
 export const typeormConfigNest = {
   type: 'postgres' as const,
   host: process.env.PGHOST,

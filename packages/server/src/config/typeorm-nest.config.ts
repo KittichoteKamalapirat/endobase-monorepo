@@ -24,11 +24,13 @@ console.log('-----------------');
 
 export const typeormConfigNest = {
   type: 'postgres' as const,
-  host: process.env.PGHOST,
-  port: Number(process.env.PGPORT),
-  username: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
+  url: 'postgresql://postgres:awBHusoLbuHYLMCtHniLMHdbKfKBXwpL@:5432/railway',
+  // host: process.env.PGHOST,
+  // port: Number(process.env.PGPORT),
+  // username: process.env.PGUSER,
+  // password: process.env.PGPASSWORD,
+  // database: process.env.PGDATABASE,
+
   entities: [
     Endo,
     Container,

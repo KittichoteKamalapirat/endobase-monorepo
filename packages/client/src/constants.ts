@@ -27,5 +27,13 @@ const dev = {
   // graphqlSocketEndpoint: "ws://localhost:4001/graphql"
 };
 
+console.log("-----------------");
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+console.log("PGDATABASE", process.env.PGDATABASE);
+console.log("PGHOST", process.env.PGHOST);
+console.log("PGPASSWORD", process.env.PGPASSWORD);
+console.log("PGPORT", process.env.PGPORT);
+console.log("PGUSER", process.env.PGUSER);
+console.log("REDIS_URL", process.env.REDIS_URL);
+console.log("-----------------");
 export const config = process.env.NODE_ENV === "development" ? dev : prod;

@@ -41,7 +41,7 @@ export class SerialportsService implements OnModuleInit {
     @Inject(forwardRef(() => ContainersService))
     private containersService: ContainersService,
     private settingService: SettingService,
-  ) { }
+  ) {}
 
   async onModuleInit() {
     Object.keys(CONTAINER_TYPE_OBJ).forEach(
@@ -53,15 +53,13 @@ export class SerialportsService implements OnModuleInit {
         (process.env.NODE_ENV as Env) !== 'showcase' &&
         (process.env.NODE_ENV as Env) !== 'localhost'
       ) {
-
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
-        console.log('✅ Successfully init modbus')
+        console.log('✅ Successfully init modbus');
         await this.settingService.initSetting();
       }
     } catch (error) {
-      console.log('❌ error init modbus in serialport.server', error)
+      console.log('❌ error init modbus in serialport.server', error);
     }
-
   }
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
@@ -77,9 +75,8 @@ export class SerialportsService implements OnModuleInit {
           if (val) activeSerialportObj[key] = true;
           else activeSerialportObj[key] = false;
         } catch (error) {
-          console.log('⚠️ Cannot set active:', key)
+          console.log('⚠️ Cannot set active:', key);
         }
-
       }
 
       return activeSerialportObj;
@@ -153,6 +150,7 @@ export class SerialportsService implements OnModuleInit {
   }
 
   async updateContainerStatus() {
+    if ((process.env.NODE_ENV as Env) === 'showcase') return;
     const syncUpdateContainers = async () => {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
@@ -178,9 +176,8 @@ export class SerialportsService implements OnModuleInit {
 
           await this.containersService.updateStats(input);
         } catch (error) {
-          console.error('error in synUpdateContainers', error)
+          console.error('error in synUpdateContainers', error);
         }
-
       }
     };
     try {

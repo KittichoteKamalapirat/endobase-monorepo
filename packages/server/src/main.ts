@@ -25,7 +25,9 @@ async function bootstrap() {
   // session so auth works
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_PUBLIC_URL);
+  const redis = new Redis(
+    'redis://default:GmBVkBYegRosFJGlEHKhZdCnxnLlcnDP@roundhouse.proxy.rlwy.net:44310',
+  );
   app.set('trust proxy', 1); //IMPORTANT: (when dev, not sure about prod) endo supply need this! otherwise, refresh and cookie is gone
 
   app.use(

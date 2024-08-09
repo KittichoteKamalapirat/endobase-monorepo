@@ -13,7 +13,7 @@ import { Setting } from '../setting/entities/setting.entity';
 
 export const typeormConfigNest = {
   type: 'postgres' as const,
-  url: process.env.DATABASE_PUBLIC_URL,
+  url: 'postgresql://postgres:awBHusoLbuHYLMCtHniLMHdbKfKBXwpL@monorail.proxy.rlwy.net:30563/railway',
   // host: process.env.PGHOST,
   // port: Number(process.env.PGPORT),
   // username: process.env.PGUSER,

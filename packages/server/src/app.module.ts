@@ -25,7 +25,16 @@ import { AdminModule } from './resources/admin/admin.module';
 import { getEnvPath } from './utils/getEnvPath';
 import { RepairRequestModule } from './resources/repair-request/repair-request.module';
 
+console.log('-----------------');
 console.log('env', process.env.NODE_ENV);
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log('PGDATABASE', process.env.PGDATABASE);
+console.log('PGHOST', process.env.PGHOST);
+console.log('PGPASSWORD', process.env.PGPASSWORD);
+console.log('PGPORT', process.env.PGPORT);
+console.log('PGUSER', process.env.PGUSER);
+console.log('REDIS_URL', process.env.REDIS_URL);
+console.log('-----------------');
 const envPath = getEnvPath();
 
 @Module({
@@ -80,4 +89,4 @@ const envPath = getEnvPath();
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

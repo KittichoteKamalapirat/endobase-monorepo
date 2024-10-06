@@ -45,3 +45,6 @@ export const colorToNumber = {
     "blue": 0,
     "white": 0,
 }
+
+export const SLAVE_ADDRESS = 0
+export const INPUT_REGISTER_LENGTH = 3

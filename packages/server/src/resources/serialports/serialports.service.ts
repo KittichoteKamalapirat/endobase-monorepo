@@ -8,6 +8,8 @@ import {
   CREATE_SNAPSHOT_TIMEOUT,
   SET_ACTIVE_MODBUS_TIMEOUT,
   UPDATE_CONTAINER_STATS_TIMEOUT,
+  SLAVE_ADDRESS,
+  INPUT_REGISTER_LENGTH
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
@@ -64,22 +66,39 @@ export class SerialportsService implements OnModuleInit {
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
   async setActiveSerialport() {
+    console.log('setActiveSerialport')
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
+    
+        
         const arduinoId = columnToArduinoIdMapper[key];
+        
         this.modbus.setID(arduinoId);
+        
         try {
-          const val = await this.modbus.readInputRegisters(0, 3);
+      
+          // Timeout handling
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
+          );
+      
+          const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
+        
+          
           if (val) activeSerialportObj[key] = true;
           else activeSerialportObj[key] = false;
         } catch (error) {
-          console.log('⚠️ Cannot set active:', key);
+          console.error('⚠️ Cannot set container active:', key);
+          console.error('Error:', error);
         }
+        
+      
       }
-
+      
       return activeSerialportObj;
+      
     };
     try {
       const activeSerialportObj = (await syncSetActiveSerialport()) as Record<
@@ -116,7 +135,7 @@ export class SerialportsService implements OnModuleInit {
           key as CONTAINER_TYPE_VALUES,
         );
 
-        const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
+        const val = await this.modbus.readInputRegisters(SLAVE_ADDRESS, INPUT_REGISTER_LENGTH); // read 3 registers starting from  at address 0 (first register)
 
         const systemStatus = String(val.data[1]);
         const temp = String(val.data[2] / 10);

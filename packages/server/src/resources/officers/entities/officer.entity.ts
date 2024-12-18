@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { RepairRequest } from 'src/resources/repair-request/entities/repair-request.entity';
+import { RepairRequest } from '../../repair-request/entities/repair-request.entity';
 
 import {
   Column,

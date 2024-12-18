@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Endo } from 'src/resources/endos/entities/endo.entity';
-import { Officer } from 'src/resources/officers/entities/officer.entity';
+import { Endo } from '../../endos/entities/endo.entity';
+import { Officer } from '../../officers/entities/officer.entity';
 import {
   Column,
   CreateDateColumn,

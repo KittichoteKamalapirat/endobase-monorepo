@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { ENDO_STATUS } from 'src/resources/endos/entities/endo.entity';
+import { ENDO_STATUS } from '../../endos/entities/endo.entity';
 import {
     CONTAINER_TYPE_VALUES
 } from '../../../types/CONTAINER_TYPE';

@@ -112,8 +112,8 @@ const EndosTable = () => {
 
     return endoColumns({
       pickEndo,
-      loadingPickEndo: loading,
-      errorPickEndo: error,
+      loadingPickEndo,
+      errorPickEndo,
       refetchEndos: refetch,
       isLargerThanBreakpoint,
       currentPageIndex,

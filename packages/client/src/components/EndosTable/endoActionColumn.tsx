@@ -141,16 +141,7 @@ const ActionColumn = ({
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
     case ENDO_STATUS.READY:
-      return (
-        <div className="flex flex-col gap-2">
-          <Button
-            label="Select"
-            onClick={() => handleUseEndo(endoId)}
-            loading={loadingPickEndo}
-          />
-          {errorPickEndo && <Error text={errorPickEndo.message} />}
-        </div>
-      );
+      return <Button label="Select" onClick={() => handleUseEndo(endoId)} />;
 
     case ENDO_STATUS.EXPIRED:
     case ENDO_STATUS.FIXED:

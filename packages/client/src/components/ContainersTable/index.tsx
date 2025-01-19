@@ -60,7 +60,7 @@ const ContainersTable = () => {
             <TR {...group.getHeaderGroupProps} key={index}>
               {group.headers.map((col, index) => (
                 <TH {...col.getHeaderProps()} key={index}>
-                  {col.render("Header")}
+                  {col.render("Header") as any}
                 </TH>
               ))}
             </TR>

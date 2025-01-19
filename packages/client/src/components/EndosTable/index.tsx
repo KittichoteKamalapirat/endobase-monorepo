@@ -332,14 +332,15 @@ const EndosTable = () => {
                   key={index}
                 >
                   <div className="flex gap-2 items-center">
+                    <>
                       {col.render("Header")}
                       <SortHeader
                         isSorted={col.isSorted}
                         isSortedDesc={col.isSortedDesc}
                       />
-                    {col.canFilter ? col?.render("Filter") : null}
+                      {col.canFilter ? col?.render("Filter") : null}
+                    </>
                   </div>
-                  
                 </TH>
               ))}
             </TR>

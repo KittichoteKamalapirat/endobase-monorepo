@@ -9,7 +9,10 @@ export const ICON_SIZE = 15;
 export const HOSPITAL_NAME = "Songkhla Hospital";
 export const brandName = "Endo Supply";
 
-export const CONTAINER_NUM = 7;
+// Use just for pagination in table
+// TODO
+export const CONTAINER_NUM = Number(process.env.CONTAINER_NUM as string) || 7;
+// TODO: Leave like this for now since chonburi has 8 trays which will still fit in 16 trays/page
 export const CONTAINER_CAPACITY = 16;
 
 // localhost

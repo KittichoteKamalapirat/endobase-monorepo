@@ -29,6 +29,7 @@ export class AdminService {
   ) {}
 
   async deleteAllData() {
+    console.log('deleteAllData');
     try {
       await this.usersService.removeAllRows();
       await this.containersService.removeAllRows();
@@ -42,6 +43,7 @@ export class AdminService {
       await this.sessionsService.removeAllRows();
       await this.snapshotsService.removeAllRows();
 
+      console.log('deleteAllData: success');
       return { value: true };
     } catch (error) {
       console.error('error delete all data', error);
@@ -53,13 +55,20 @@ export class AdminService {
   }
 
   async populateAllData() {
+    console.log('populateAllData');
     try {
       await this.containersService.populateRows();
+      console.log('containers created');
       await this.traysService.populateRows();
-
+      console.log('trays created');
       await this.settingService.populateRows();
+      console.log('settings created');
       await this.usersService.populateRows();
+      console.log('users created');
       await this.endosService.populateRows();
+      console.log('endos created');
+
+      console.log('populateAllData: success');
       return { value: true };
     } catch (error) {
       console.error('error delete all data', error);

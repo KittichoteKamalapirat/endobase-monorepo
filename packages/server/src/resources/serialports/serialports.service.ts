@@ -1,15 +1,15 @@
+import { getColumnToArduinoIdMapper } from './../../constants';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
 import {
   colorToNumber,
-  columnToArduinoIdMapper,
   COM_PORT,
   CREATE_SNAPSHOT_TIMEOUT,
   SET_ACTIVE_MODBUS_TIMEOUT,
   UPDATE_CONTAINER_STATS_TIMEOUT,
   SLAVE_ADDRESS,
-  INPUT_REGISTER_LENGTH
+  INPUT_REGISTER_LENGTH,
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import {
@@ -27,6 +27,10 @@ import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
 import { Env } from '../../utils/getEnvPath';
+
+const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
+  process.env.NODE_ENV as Env,
+);
 
 @Injectable()
 export class SerialportsService implements OnModuleInit {
@@ -51,10 +55,7 @@ export class SerialportsService implements OnModuleInit {
     ); // make all fale by default
 
     try {
-      if (
-        (process.env.NODE_ENV as Env) !== 'showcase' &&
-        (process.env.NODE_ENV as Env) !== 'localhost'
-      ) {
+      if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
         console.log('✅ Successfully init modbus');
         await this.settingService.initSetting();
@@ -66,39 +67,35 @@ export class SerialportsService implements OnModuleInit {
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
   async setActiveSerialport() {
-    console.log('setActiveSerialport')
+    console.log('setActiveSerialport');
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
-    
-        
         const arduinoId = columnToArduinoIdMapper[key];
-        
+
         this.modbus.setID(arduinoId);
-        
+
         try {
-      
           // Timeout handling
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
+          const timeoutPromise = new Promise(
+            (_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000), // 5 seconds timeout
           );
-      
-          const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
-        
-          
+
+          const val = await Promise.race([
+            this.modbus.readInputRegisters(0, 3),
+            timeoutPromise,
+          ]);
+
           if (val) activeSerialportObj[key] = true;
           else activeSerialportObj[key] = false;
         } catch (error) {
           console.error('⚠️ Cannot set container active:', key);
           console.error('Error:', error);
         }
-        
-      
       }
-      
+
       return activeSerialportObj;
-      
     };
     try {
       const activeSerialportObj = (await syncSetActiveSerialport()) as Record<
@@ -135,7 +132,10 @@ export class SerialportsService implements OnModuleInit {
           key as CONTAINER_TYPE_VALUES,
         );
 
-        const val = await this.modbus.readInputRegisters(SLAVE_ADDRESS, INPUT_REGISTER_LENGTH); // read 3 registers starting from  at address 0 (first register)
+        const val = await this.modbus.readInputRegisters(
+          SLAVE_ADDRESS,
+          INPUT_REGISTER_LENGTH,
+        ); // read 3 registers starting from  at address 0 (first register)
 
         const systemStatus = String(val.data[1]);
         const temp = String(val.data[2] / 10);

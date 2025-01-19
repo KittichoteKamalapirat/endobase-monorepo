@@ -11,23 +11,9 @@ import {
 import { Container } from '../../containers/entities/container.entity';
 import { Endo } from '../../endos/entities/endo.entity';
 
-export type RowType =
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16;
+// TODO: Should cleanup this since chonburi has 8?
+export type RowType = number;
+
 @Entity()
 @ObjectType()
 export class Tray {

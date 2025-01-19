@@ -267,7 +267,6 @@ type Mutation {
   updateOfficer(input: UpdateOfficerInput!): OfficerResponse!
   deleteOfficer(id: String!): BooleanResponse!
   createTray(input: CreateTrayInput!): Tray!
-  updateTray(updateTrayInput: UpdateTrayInput!): Tray!
   removeTray(id: Int!): Tray!
   register(input: CreateUserInput!): UserResponse!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -398,14 +397,6 @@ input CreateTrayInput {
 
   """row inside a container"""
   row: Int!
-}
-
-input UpdateTrayInput {
-  containerId: String
-
-  """row inside a container"""
-  row: Int
-  id: Int!
 }
 
 input CreateUserInput {

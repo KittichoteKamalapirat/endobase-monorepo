@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CONTAINER_TO_TRAY_NUM_MAPPER } from '../../types/CONTAINER_TYPE';
 import { ContainersService } from '../containers/containers.service';
 import { CreateTrayInput } from './dto/create-tray.input';
-import { UpdateTrayInput } from './dto/update-tray.input';
 import { RowType, Tray } from './entities/tray.entity';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class TraysService {
     return `This action returns a #${id} container`;
   }
 
-  update(id: number, updateTrayInput: UpdateTrayInput) {
+  update(id: number) {
     return `This action updates a #${id} tray`;
   }
 
@@ -68,7 +68,11 @@ export class TraysService {
       const containers = await this.containersService.findAll();
 
       containers.map(async (container) => {
-        const rows = Array.from({ length: 16 }, (_, i) => i + 1) as RowType[];
+        const traysNum = CONTAINER_TO_TRAY_NUM_MAPPER[container.col];
+        const rows = Array.from(
+          { length: traysNum },
+          (_, i) => i + 1,
+        ) as RowType[];
         await Promise.all(
           rows.map(async (row) => {
             const input = {

@@ -20,7 +20,7 @@ export default class CreateSettings implements Seeder {
 
     await factory(Setting)().create({
       name: 'hospitalName',
-      value: 'NKC Institute of Gastroenterology and Hepatology',
+      value: process.env.HOSPITAL_NAME,
       label: 'Institution Name',
       description: 'ชื่อสำหรับแสดงที่หน้าโฮม',
     });

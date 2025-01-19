@@ -44,11 +44,6 @@ export class TraysResolver {
   }
 
   @Mutation(() => Tray)
-  updateTray(@Args('updateTrayInput') updateTrayInput: UpdateTrayInput) {
-    return this.traysService.update(updateTrayInput.id, updateTrayInput);
-  }
-
-  @Mutation(() => Tray)
   removeTray(@Args('id', { type: () => Int }) id: number) {
     return this.traysService.remove(id);
   }

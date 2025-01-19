@@ -117,7 +117,7 @@ export class SettingService {
 
       const input3 = {
         name: 'hospitalName' as SETTING_TYPE_VALUES,
-        value: 'NKC Institute of Gastroenterology and Hepatology',
+        value: process.env.HOSPITAL_NAME,
         label: 'Institution Name',
         description: 'ชื่อสำหรับแสดงที่หน้าโฮม',
       };

@@ -3,20 +3,21 @@ export type Env =
   | 'production'
   | 'localhost'
   | 'showcase'
-  | 'hadyai';
+  | 'hadyai'
+  | 'chonburi';
 
 export const getEnvPath = () => {
   const env = process.env.NODE_ENV as Env;
-  console.log(`NODE_ENV=${env}...`)
   switch (env) {
     case 'hadyai':
       return '.env.hadyai';
+    case 'chonburi':
+      return '.env.chonburi';
     case 'development':
       return '.env.development';
     case 'production':
       return '.env.production';
     case 'localhost':
-      console.log('in')
       return '.env.localhost';
     case 'showcase':
       return '.env.showcase';

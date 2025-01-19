@@ -70,49 +70,39 @@ export class SerialportsService implements OnModuleInit {
 
   @Timeout(SET_ACTIVE_MODBUS_TIMEOUT)
   async setActiveSerialport() {
-    console.log('setActiveSerialport');
     const syncSetActiveSerialport = async () => {
       const activeSerialportObj = {};
 
-      const activeSerialportPromises = Object.keys(CONTAINER_TYPE_OBJ).map(
-        async (key) => {
-          const arduinoId = columnToArduinoIdMapper[key];
-          this.modbus.setID(arduinoId);
+      for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
+    
+        
+        const arduinoId = columnToArduinoIdMapper[key];
+        
+        this.modbus.setID(arduinoId);
+        
+        try {
+      
+          // Timeout handling
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
+          );
+      
+          const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
+        
+          
+          if (val) activeSerialportObj[key] = true;
+          else activeSerialportObj[key] = false;
+        } catch (error) {
+          console.error('⚠️ Cannot set container active:', key);
+          console.error('Error:', error);
+        }
 
-          try {
-            // Timeout handling
-            const timeoutPromise = new Promise(
-              (_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 5000), // 5 seconds timeout
-            );
-
-            const val = await Promise.race([
-              this.modbus.readInputRegisters(0, 3),
-              timeoutPromise,
-            ]);
-
-            return { key, isActive: !!val }; // Return the result
-          } catch (error) {
-            console.error('⚠️ Cannot set container active:', key);
-            console.error('Error:', error);
-            return { key, isActive: false }; // Return false if there's an error
-          }
-        },
-      );
-
-      // Wait for all promises to resolve
-      const activeSerialportResults = await Promise.all(
-        activeSerialportPromises,
-      );
-
-      // Update the activeSerialportObj based on results
-      activeSerialportResults.forEach(({ key, isActive }) => {
-        activeSerialportObj[key] = isActive;
-      });
-
-      console.log('active ports', activeSerialportObj);
-
+        // modbus can only accepts 1 request at a time, so wait a bit
+        await new Promise(resolve => setTimeout(resolve,1000))
+      }
+      
       return activeSerialportObj;
+      
     };
     try {
       const activeSerialportObj = (await syncSetActiveSerialport()) as Record<
@@ -120,6 +110,7 @@ export class SerialportsService implements OnModuleInit {
         boolean
       >;
       this.activeSerialportObj = activeSerialportObj;
+      console.log('active ports', this.activeSerialportObj);
     } catch (error) {
       console.error(error);
     }

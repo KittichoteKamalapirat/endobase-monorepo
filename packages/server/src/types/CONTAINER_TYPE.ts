@@ -16,8 +16,9 @@ export const HADYAI_CONTAINER_TYPE_OBJ = {
 } as const;
 
 export const CHONBURI_CONTAINER_TYPE_OBJ = {
-  a: 'A', // 8 trays
+
   b: 'B', // 16 trays
+  a: 'A', // 8 trays
 } as const;
 
 export const CONTAINER_TYPE_OBJ =

@@ -230,7 +230,7 @@ const EndosTable = () => {
               // setGlobalFilterValue={setGlobalFilterValue}
               filter={globalFilter}
               setFilter={setGlobalFilter}
-            // data={data}
+              // data={data}
             />
           </div>
 
@@ -257,18 +257,20 @@ const EndosTable = () => {
               key={`container-${index}`}
               onClick={() => handleSelectContainer(index)}
               size="lg"
-              content={`${container.col.toUpperCase()}: ${endosData?.endos.filter(
-                (endo) =>
-                  (locations[index].toLowerCase() ===
-                    endo.tray.container.col &&
-                    filterEndoByStatus(
-                      endo.status as ENDO_STATUS_VALUES,
-                      activeStatus
-                    )) ||
-                  (locations[index].toLowerCase() ===
-                    endo.tray.container.col && activeStatus === "")
-              ).length
-                } `}
+              content={`${container.col.toUpperCase()}: ${
+                endosData?.endos.filter(
+                  (endo) =>
+                    (locations[index].toLowerCase() ===
+                      endo.tray.container.col &&
+                      filterEndoByStatus(
+                        endo.status as ENDO_STATUS_VALUES,
+                        activeStatus
+                      )) ||
+                    (locations[index].toLowerCase() ===
+                      endo.tray.container.col &&
+                      activeStatus === "")
+                ).length
+              } `}
               color={
                 currentPageIndex === -1 || index === currentPageIndex
                   ? "text-grey-0 border-primary"
@@ -330,14 +332,14 @@ const EndosTable = () => {
                   key={index}
                 >
                   <div className="flex gap-2 items-center">
-                    {col.render("Header")}
-
-                    <SortHeader
-                      isSorted={col.isSorted}
-                      isSortedDesc={col.isSortedDesc}
-                    />
+                      {col.render("Header")}
+                      <SortHeader
+                        isSorted={col.isSorted}
+                        isSortedDesc={col.isSortedDesc}
+                      />
+                    {col.canFilter ? col?.render("Filter") : null}
                   </div>
-                  {col.canFilter ? col?.render("Filter") : null}
+                  
                 </TH>
               ))}
             </TR>
@@ -368,11 +370,11 @@ const EndosTable = () => {
                     onClick={
                       // if col is action or others => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action" &&
-                        cell.column.id !== "others"
+                      cell.column.id !== "others"
                         ? () =>
-                          navigate(`/endo/${(row.original as Endo).id}`, {
-                            state: { prev: "/" },
-                          })
+                            navigate(`/endo/${(row.original as Endo).id}`, {
+                              state: { prev: "/" },
+                            })
                         : undefined
                     }
                   >

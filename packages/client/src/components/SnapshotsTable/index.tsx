@@ -8,7 +8,10 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { usePaginatedSnapshotsQuery, useSettingsQuery } from "../../generated/graphql";
+import {
+  usePaginatedSnapshotsQuery,
+  useSettingsQuery,
+} from "../../generated/graphql";
 import CounterIndicator from "../CounterIndicator";
 import { GlobalFilter } from "../EndosTable/GlobalFilter";
 import { Error } from "../skeletons/Error";
@@ -28,12 +31,20 @@ const SnapshotsTable = () => {
   const [currPage, setCurrPage] = useState(1);
   const [localPageSize, setLocalPageSize] = useState(10);
 
+  const {
+    data: settingsData,
+    loading: settingsLoading,
+    error: settingsError,
+  } = useSettingsQuery();
 
-  const { data: settingsData, loading: settingsLoading, error: settingsError } = useSettingsQuery();
-
-
-  const tempThresholdStr = settingsData?.settings.find(setting => setting.name === "temperatureThreshold")?.value || '100' // make high so it's dark
-  const humThresholdStr = settingsData?.settings.find(setting => setting.name === "humidityThreshold")?.value || '100'
+  const tempThresholdStr =
+    settingsData?.settings.find(
+      (setting) => setting.name === "temperatureThreshold"
+    )?.value || "100"; // make high so it's dark
+  const humThresholdStr =
+    settingsData?.settings.find(
+      (setting) => setting.name === "humidityThreshold"
+    )?.value || "100";
 
   const {
     data: pagSnapshotsData,
@@ -46,7 +57,14 @@ const SnapshotsTable = () => {
   });
 
   // the lib recommedns to use useMemo
-  const columns = useMemo<Column[]>(() => snapshotColumns({ humThreshold: parseFloat(humThresholdStr), tempThreshold: parseFloat(tempThresholdStr) }), []);
+  const columns = useMemo<Column[]>(
+    () =>
+      snapshotColumns({
+        humThreshold: parseFloat(humThresholdStr),
+        tempThreshold: parseFloat(tempThresholdStr),
+      }),
+    []
+  );
 
   const data = useMemo(() => {
     if (
@@ -156,11 +174,13 @@ const SnapshotsTable = () => {
                   key={`header--${index}-${subIndex}`}
                 >
                   <div className="flex gap-2 items-center">
-                    {col.render("Header")}
-                    <SortHeader
-                      isSorted={col.isSorted}
-                      isSortedDesc={col.isSortedDesc}
-                    />
+                    <>
+                      {col.render("Header")}
+                      <SortHeader
+                        isSorted={col.isSorted}
+                        isSortedDesc={col.isSortedDesc}
+                      />
+                    </>
                   </div>
                 </TH>
               ))}

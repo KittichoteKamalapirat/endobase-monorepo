@@ -4,7 +4,7 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from "react-table";
 
 import classNames from "classnames";
@@ -57,10 +57,7 @@ const ActionsTable = () => {
         return dateSort || 0;
       }) || []
     );
-
   }, [loading, pagActionsData, error]);
-
-
 
   const nextPage = () => {
     const toFetchIndex = currPage + 1;
@@ -149,11 +146,13 @@ const ActionsTable = () => {
                   key={index}
                 >
                   <div className="flex gap-2 items-center">
-                    {col.render("Header")}
-                    <SortHeader
-                      isSorted={col.isSorted}
-                      isSortedDesc={col.isSortedDesc}
-                    />
+                    <>
+                      {col.render("Header")}
+                      <SortHeader
+                        isSorted={col.isSorted}
+                        isSortedDesc={col.isSortedDesc}
+                      />
+                    </>
                   </div>
                 </TH>
               ))}

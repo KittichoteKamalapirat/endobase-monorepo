@@ -1,11 +1,13 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, ComponentType } from "react";
 import { IoMdClose } from "react-icons/io";
-import ReactModal from "react-modal";
+import MyModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
 import { AlertType } from "../../redux/types/AlertModalType";
 import { green, grey500, grey900, red, yellow } from "../../theme";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
+
+const ModalSafeForReact18 = MyModal as ComponentType<ReactModal["props"]>;
 
 interface Props {
   contentLabel: string;
@@ -64,7 +66,7 @@ const Modal = ({
   };
 
   return (
-    <ReactModal
+    <ModalSafeForReact18
       isOpen={isOpen}
       onAfterOpen={onAfterOpen}
       onRequestClose={onRequestClose}
@@ -90,7 +92,7 @@ const Modal = ({
         </div>
         <div> {children}</div>
       </div>
-    </ReactModal>
+    </ModalSafeForReact18>
   );
 };
 

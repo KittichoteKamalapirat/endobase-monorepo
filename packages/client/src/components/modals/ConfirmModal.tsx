@@ -1,12 +1,14 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, ComponentType } from "react";
 import { IoMdClose } from "react-icons/io";
-import ReactModal from "react-modal";
+import Modal from "react-modal";
 import { ICON_SIZE } from "../../constants";
 import { ConfirmType } from "../../redux/types/ConfirmModalType";
 import { grey100, grey500, grey900, red, yellow } from "../../theme";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
+
+const ModalSafeForReact18 = Modal as ComponentType<ReactModal["props"]>;
 
 interface Props {
   contentLabel: string;
@@ -67,7 +69,7 @@ const ConfirmModal = ({
   };
 
   return (
-    <ReactModal
+    <ModalSafeForReact18
       isOpen={isOpen}
       onAfterOpen={onAfterOpen}
       onRequestClose={onRequestClose}
@@ -107,7 +109,7 @@ const ConfirmModal = ({
           />
         </div>
       </div>
-    </ReactModal>
+    </ModalSafeForReact18>
   );
 };
 

@@ -1,11 +1,13 @@
 const Service = require('node-windows').Service;
+const path = require('path')
 
+
+const scriptPath = path.resolve(__dirname, 'main.js');
 // Create a new service object
 const svc = new Service({
   name: 'endo_supply_server_38',
   description: 'An endoscope data management system iOT',
-  script:
-    'C:\\Program Files\\endobase-monorepo\\packages\\server\\dist\\main.js',
+  script: scriptPath,
   nodeOptions: ['--harmony', '--max_old_space_size=4096'],
   //, workingDirectory: '...'
   //, allowServiceLogon: true

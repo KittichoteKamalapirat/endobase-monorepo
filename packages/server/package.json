@@ -9,7 +9,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:showcase": "NODE_ENV=showcase && nest start",
-    "dev:mac": "NODE_ENV=chonburi nest start --watch",
+    "dev:mac": "NODE_ENV=localhost nest start --watch",
     "dev:showcase": "NODE_ENV=showcase nest start --watch",
     "dev:win": "set NODE_ENV=hadyai&& nest start --watch",
     "dev:hadyai": "set NODE_ENV=hadyai&& nest start --watch",

@@ -225,7 +225,6 @@ export type Mutation = {
   updateSession: Session;
   updateSessionPatient: Session;
   updateSetting: Setting;
-  updateTray: Tray;
   updateUser: User;
   washWithoutStoring: Session;
 };
@@ -399,11 +398,6 @@ export type MutationUpdateSessionPatientArgs = {
 
 export type MutationUpdateSettingArgs = {
   input: UpdateSettingInput;
-};
-
-
-export type MutationUpdateTrayArgs = {
-  updateTrayInput: UpdateTrayInput;
 };
 
 
@@ -701,13 +695,6 @@ export type UpdateSessionPatientInput = {
 export type UpdateSettingInput = {
   name: Scalars['String'];
   value: Scalars['String'];
-};
-
-export type UpdateTrayInput = {
-  containerId?: InputMaybe<Scalars['String']>;
-  id: Scalars['Int'];
-  /** row inside a container */
-  row?: InputMaybe<Scalars['Int']>;
 };
 
 export type UpdateUserInput = {

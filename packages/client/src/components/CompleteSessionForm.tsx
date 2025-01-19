@@ -18,6 +18,7 @@ import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Button, { ButtonTypes, HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
+import { Error } from "./skeletons/Error";
 
 interface Props {
   containerClass?: string;
@@ -53,8 +54,11 @@ const CompleteSessionForm = ({
   disabled,
 }: Props) => {
   const { id: sessionId } = useParams();
-  const [washWithoutStoring] = useWashWithoutStoringMutation();
-  const [createAction] = useCreateActionMutation();
+  const [
+    washWithoutStoring,
+    { loading: useWithoutStoringLoading, error: useWithoutStoringError },
+  ] = useWashWithoutStoringMutation();
+  const [createAction, { loading, error }] = useCreateActionMutation();
   const [blinkLocation] = useBlinkLocationMutation();
   const { refetch: refetchEndos } = useEndosQuery();
   const navigate = useNavigate();
@@ -174,38 +178,33 @@ const CompleteSessionForm = ({
           error={errors[FormNames.OFFICER_NUM]}
         />
 
-        {/* <div className="my-2">
-          <CheckboxField
-            {...register(FormNames.PASSED_TEST, { required: true })}
-            option={{ value: "no need this", label: "Passed" }}
-            isChecked={testPassed}
-          />
-        </div> */}
-
         <div className="flex gap-2 mt-4">
-          {/* <Button
-            label="Blink location"
-            buttonType={HTMLButtonType.BUTTON}
-            type={ButtonTypes.OUTLINED}
-            onClick={() => handleBlinkLocation("ready")}
-            startIcon={<TbBulb color={primaryColor} size={ICON_SIZE + 10} />}
-          /> */}
+          <div className="flex-col gap-4">
+            {data?.session.endoId && (
+              <Button
+                label="Use Again"
+                buttonType={HTMLButtonType.BUTTON}
+                disabled={!isValid}
+                type={ButtonTypes.OUTLINED}
+                onClick={() => handleUseWithoutStoring(data.session.endoId)}
+                loading={useWithoutStoringLoading}
+              />
+            )}
+            {useWithoutStoringError && (
+              <Error text={useWithoutStoringError.message} />
+            )}
+          </div>
 
-          {data?.session.endoId && (
+          <div className="flex-col gap-4">
             <Button
-              label="Use Again"
-              buttonType={HTMLButtonType.BUTTON}
+              label="Store"
+              buttonType={HTMLButtonType.SUBMIT}
               disabled={!isValid}
-              type={ButtonTypes.OUTLINED}
-              onClick={() => handleUseWithoutStoring(data.session.endoId)}
+              loading={loading}
             />
-          )}
 
-          <Button
-            label="Store"
-            buttonType={HTMLButtonType.SUBMIT}
-            disabled={!isValid}
-          />
+            {error && <Error text={error.message} />}
+          </div>
         </div>
       </div>
     </form>

@@ -13,6 +13,7 @@ import {
 } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 import snakeToCamelCase from "../utils/snakeToCamelCase";
+import { Error } from "../components/skeletons/Error";
 
 enum FormNames {
   USERNAME = "username",
@@ -45,7 +46,7 @@ const useLoginForm = (user: FormValues, navigate: NavigateFunction) => {
   });
 
   // Login User
-  const [login] = useLoginMutation();
+  const [login, { loading, error }] = useLoginMutation();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     // prevent page-navigation-modal from showing as this is the login page
@@ -83,6 +84,8 @@ const useLoginForm = (user: FormValues, navigate: NavigateFunction) => {
 
   const submitForm = handleSubmit(onSubmit);
   return {
+    loading,
+    error,
     register,
     submitForm,
     errors,
@@ -93,12 +96,18 @@ const useLoginForm = (user: FormValues, navigate: NavigateFunction) => {
 };
 
 const LoginPage = () => {
-  const { data, loading } = useMeQuery();
+  const { data, loading: meLoading } = useMeQuery();
 
   const navigate = useNavigate();
 
   // setup form
-  const { errors, submitForm, control } = useLoginForm(
+  const {
+    errors,
+    submitForm,
+    control,
+    loading: loginLoading,
+    error: loginError,
+  } = useLoginForm(
     {
       username: "",
       password: "",
@@ -111,7 +120,8 @@ const LoginPage = () => {
     if (data?.me) {
       navigate("/");
     }
-  }, [data?.me, loading, navigate]);
+  }, [data?.me, meLoading, navigate]);
+
   return (
     <div className="flex flex-row items-center h-[70vh] absolute top-0 bottom-0 left-0 right-0">
       <main className="overflow-auto flex-1">
@@ -147,11 +157,16 @@ const LoginPage = () => {
                   error={errors[FormNames.PASSWORD]}
                 />
                 <br />
-                <Button
-                  buttonType={HTMLButtonType.SUBMIT}
-                  label="Login"
-                  extraClass="w-full"
-                />
+
+                <div className="flex-col gap-2">
+                  <Button
+                    buttonType={HTMLButtonType.SUBMIT}
+                    label="Login"
+                    extraClass="w-full"
+                    loading={loginLoading}
+                  />
+                  {loginError && <Error text={loginError.message} />}
+                </div>
               </div>
             </form>
           </div>

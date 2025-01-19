@@ -7,6 +7,8 @@ import {
   officerTypeOptions,
 } from "../utils/officerTypeToLabel";
 import FormFieldLabel from "./forms/FormFieldLabel";
+import { Error } from "./skeletons/Error";
+import { ApolloError } from "@apollo/client";
 
 export enum FormNames {
   OFFICER_NUM = "officerNum",
@@ -29,12 +31,16 @@ interface Props {
     data: FormValues,
     setError: UseFormSetError<FormValues>
   ) => void;
+  loading?: boolean;
+  error?: ApolloError;
 }
 
 const OfficerEditor = ({
   defaultValues,
   isUpdate = false,
   onSubmitRHF,
+  loading,
+  error,
 }: Props) => {
   const {
     control,
@@ -94,11 +100,15 @@ const OfficerEditor = ({
         </div>
       </div>
 
-      <Button
-        label={isUpdate ? "Update" : "Create"}
-        buttonType={HTMLButtonType.SUBMIT}
-        extraClass="w-36 mt-8"
-      />
+      <div className="flex-col gap-4">
+        <Button
+          label={isUpdate ? "Update" : "Create"}
+          buttonType={HTMLButtonType.SUBMIT}
+          extraClass="w-36 mt-8"
+          loading={loading}
+        />
+        {error && <Error text={error.message} />}
+      </div>
     </form>
   );
 };

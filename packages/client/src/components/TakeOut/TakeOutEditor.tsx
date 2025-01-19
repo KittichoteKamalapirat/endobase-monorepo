@@ -5,11 +5,15 @@ import Button, { HTMLButtonType } from "../Buttons/Button";
 import TextField, { TextFieldTypes } from "../forms/TextField";
 import { validateAdminField } from "../PatientEditor";
 import { InputType } from "../../constants/inputType";
+import { Error } from "../skeletons/Error";
+import { ApolloError } from "@apollo/client";
 
 interface Props {
   onSubmit: (data: TakeOutFormValues) => void;
   initialValues: TakeOutFormValues;
   isUpdate?: boolean; // for cta label
+  loading?: boolean;
+  error?: ApolloError;
 }
 
 enum FormNames {
@@ -43,7 +47,13 @@ const schema = z.discriminatedUnion("method", [createSchema, updateSchema]);
 export type TakeOutFormValues = z.infer<typeof schema>;
 type UpdateFormValues = z.infer<typeof updateSchema>; // for admin type assertion
 
-const TakeOutEditor = ({ initialValues, onSubmit, isUpdate }: Props) => {
+const TakeOutEditor = ({
+  initialValues,
+  onSubmit,
+  isUpdate,
+  loading,
+  error,
+}: Props) => {
   const {
     control,
     handleSubmit,
@@ -100,12 +110,16 @@ const TakeOutEditor = ({ initialValues, onSubmit, isUpdate }: Props) => {
           />
         )}
 
-        <Button
-          label={isUpdate ? "Update" : "Save"}
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="w-24"
-          disabled={!isDirty || !isValid}
-        />
+        <div className="flex-col gap-4">
+          <Button
+            label={isUpdate ? "Update" : "Save"}
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="w-24"
+            disabled={!isDirty || !isValid}
+            loading={loading}
+          />
+          {error && <Error text={error.message} />}
+        </div>
       </div>
     </form>
   );

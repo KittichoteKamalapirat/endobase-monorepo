@@ -23,7 +23,7 @@ const EditPatientForm = ({
   const defaultValues: PatientFormValues = {
     patientHnNum: patient.hosNum,
     method: "edit",
-    adminCredential: "",
+    adminCredential: "" as any, // TODO: fix type casting
     usedEndo: patientUsedEndo ? "true" : "false",
   };
 
@@ -34,7 +34,8 @@ const EditPatientForm = ({
 
   const dispatch = useDispatch();
 
-  const [updatePatientInSession] = useUpdateSessionPatientMutation();
+  const [updatePatientInSession, { loading, error }] =
+    useUpdateSessionPatientMutation();
 
   const onSubmit = async (data: PatientFormValues) => {
     try {
@@ -68,6 +69,8 @@ const EditPatientForm = ({
         defaultValues={defaultValues}
         onSubmit={onSubmit}
         isEditing
+        loading={loading}
+        error={error}
       />
     </div>
   );

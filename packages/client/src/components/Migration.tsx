@@ -5,11 +5,16 @@ import {
   usePopulateAllDataMutation,
 } from "../generated/graphql";
 import { showToast } from "../redux/slices/toastReducer";
+import { Error } from "./skeletons/Error";
 
 const Migration = () => {
   const dispatch = useDispatch();
-  const [deleteAllData] = useDeleteAllDataMutation();
-  const [populateAllData] = usePopulateAllDataMutation();
+  const [deleteAllData, { loading: deleteAllLoading, error: deleteAllError }] =
+    useDeleteAllDataMutation();
+  const [
+    populateAllData,
+    { loading: populateAllLoading, error: populateAllError },
+  ] = usePopulateAllDataMutation();
   const handleDeleteAllData = async () => {
     try {
       const result = await deleteAllData();
@@ -67,12 +72,23 @@ const Migration = () => {
   };
   return (
     <div className="flex gap-2 mt-4">
-      <Button
-        label="Delete all data"
-        type={ButtonTypes.SECONDARY}
-        onClick={handleDeleteAllData}
-      />
-      <Button label="Populate data" onClick={handlePopulateData} />
+      <div className="flex-col gap-2">
+        <Button
+          label="Delete all data"
+          type={ButtonTypes.SECONDARY}
+          onClick={handleDeleteAllData}
+          loading={deleteAllLoading}
+        />
+        {deleteAllError && <Error text={deleteAllError.message} />}
+      </div>
+      <div className="flex-col gap-2">
+        <Button
+          label="Populate data"
+          onClick={handlePopulateData}
+          loading={populateAllLoading}
+        />
+        {populateAllError && <Error text={populateAllError.message} />}
+      </div>
     </div>
   );
 };

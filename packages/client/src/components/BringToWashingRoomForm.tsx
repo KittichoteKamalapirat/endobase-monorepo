@@ -12,6 +12,7 @@ import {
 import { showToast } from "../redux/slices/toastReducer";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
+import { Error } from "./skeletons/Error";
 
 interface Props {
   className?: string;
@@ -40,7 +41,7 @@ const initialData = {
 };
 const BringToWashingRoomForm = ({ refetchEndo, className }: Props) => {
   const { id: sessionId } = useParams();
-  const [createAction] = useCreateActionMutation();
+  const [createAction, { loading, error }] = useCreateActionMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -121,12 +122,16 @@ const BringToWashingRoomForm = ({ refetchEndo, className }: Props) => {
           error={errors[FormNames.OFFICER_NUM]}
         />
 
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="w-24"
-          disabled={!isValid || !isDirty}
-        />
+        <div className="flex-col gap-4">
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="w-24"
+            disabled={!isValid || !isDirty}
+            loading={loading}
+          />
+          {error && <Error text={error.message} />}
+        </div>
       </div>
     </form>
   );

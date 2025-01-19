@@ -91,7 +91,8 @@ const EndosTable = () => {
   const sortedEndos = sortEndosByPosition(endosData?.endos as Endo[]);
 
   // const refetchCounter = useRefetchCounter(refetch);
-  const [pickEndo] = usePickEndoMutation();
+  const [pickEndo, { loading: loadingPickEndo, error: errorPickEndo }] =
+    usePickEndoMutation();
   const refetchCounter = useRefetchCounter(refetch);
 
   // the lib recommedns to use useMemo
@@ -99,6 +100,8 @@ const EndosTable = () => {
     if (refetchCounter === 0) {
       return endoColumns({
         pickEndo,
+        loadingPickEndo,
+        errorPickEndo,
         refetchEndos: refetch,
         isLargerThanBreakpoint,
         currentPageIndex,
@@ -109,6 +112,8 @@ const EndosTable = () => {
 
     return endoColumns({
       pickEndo,
+      loadingPickEndo: loading,
+      errorPickEndo: error,
       refetchEndos: refetch,
       isLargerThanBreakpoint,
       currentPageIndex,
@@ -117,6 +122,8 @@ const EndosTable = () => {
     }) as any;
   }, [
     pickEndo,
+    loadingPickEndo,
+    errorPickEndo,
     refetch,
     isLargerThanBreakpoint,
     currentPageIndex,
@@ -135,17 +142,17 @@ const EndosTable = () => {
     headerGroups,
     // pagination starts
     page,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions, // for getting all pages num
-    setPageSize, // for customize pageSize
+    // nextPage,
+    // previousPage,
+    // canNextPage,
+    // canPreviousPage,
+    // pageOptions, // for getting all pages num
+    // setPageSize, // for customize pageSize
     // pagination ends
     rows,
     gotoPage,
     prepareRow,
-    state: { pageIndex, globalFilter, pageSize }, // table state
+    state: { pageIndex, globalFilter }, // table state
     setGlobalFilter, // for setting global filter text value
   } = useTable(
     {
@@ -230,7 +237,7 @@ const EndosTable = () => {
               // setGlobalFilterValue={setGlobalFilterValue}
               filter={globalFilter}
               setFilter={setGlobalFilter}
-            // data={data}
+              // data={data}
             />
           </div>
 
@@ -257,18 +264,20 @@ const EndosTable = () => {
               key={`container-${index}`}
               onClick={() => handleSelectContainer(index)}
               size="lg"
-              content={`${container.col.toUpperCase()}: ${endosData?.endos.filter(
-                (endo) =>
-                  (locations[index].toLowerCase() ===
-                    endo.tray.container.col &&
-                    filterEndoByStatus(
-                      endo.status as ENDO_STATUS_VALUES,
-                      activeStatus
-                    )) ||
-                  (locations[index].toLowerCase() ===
-                    endo.tray.container.col && activeStatus === "")
-              ).length
-                } `}
+              content={`${container.col.toUpperCase()}: ${
+                endosData?.endos.filter(
+                  (endo) =>
+                    (locations[index].toLowerCase() ===
+                      endo.tray.container.col &&
+                      filterEndoByStatus(
+                        endo.status as ENDO_STATUS_VALUES,
+                        activeStatus
+                      )) ||
+                    (locations[index].toLowerCase() ===
+                      endo.tray.container.col &&
+                      activeStatus === "")
+                ).length
+              } `}
               color={
                 currentPageIndex === -1 || index === currentPageIndex
                   ? "text-grey-0 border-primary"
@@ -310,12 +319,14 @@ const EndosTable = () => {
             previousPage={() => {
               dispatch(updateFilter({ pageIndex: currentPageIndex - 1 }));
             }}
-            canNextPage={currentPageIndex + 1 < CONTAINER_NUM}
+            canNextPage={currentPageIndex + 1 < CONTAINER_NUM} // TODO: refactor to not rely on fixed variables
             canPreviousPage={currentPageIndex > 0}
-            pageNum={CONTAINER_NUM}
+            pageNum={containersData?.containers.length || CONTAINER_NUM} // TODO: refactor to not rely on fixed variables
             currPage={currentPageIndex + 1}
-            pageSize={CONTAINER_CAPACITY}
-            totalItemsCount={CONTAINER_NUM * CONTAINER_CAPACITY}
+            pageSize={CONTAINER_CAPACITY} // TODO: refactor to not rely on fixed variables
+            totalItemsCount={
+              endosData?.endos.length || CONTAINER_NUM * CONTAINER_CAPACITY
+            }
             className="mt-4"
           />
         )}
@@ -368,11 +379,11 @@ const EndosTable = () => {
                     onClick={
                       // if col is action or others => don't navigate! (nested links are not allowed)
                       cell.column.Header !== "Action" &&
-                        cell.column.id !== "others"
+                      cell.column.id !== "others"
                         ? () =>
-                          navigate(`/endo/${(row.original as Endo).id}`, {
-                            state: { prev: "/" },
-                          })
+                            navigate(`/endo/${(row.original as Endo).id}`, {
+                              state: { prev: "/" },
+                            })
                         : undefined
                     }
                   >

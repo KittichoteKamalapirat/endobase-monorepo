@@ -20,7 +20,10 @@ const EditOfficer = () => {
     variables: { id: id || "" },
   });
 
-  const [updateOfficer] = useUpdateOfficerMutation();
+  const [
+    updateOfficer,
+    { loading: updateOfficerLoading, error: updateOfficerError },
+  ] = useUpdateOfficerMutation();
 
   const { refetch } = useOfficersQuery();
 
@@ -105,6 +108,8 @@ const EditOfficer = () => {
         onSubmitRHF={onSubmit}
         defaultValues={defaultValues}
         isUpdate
+        loading={updateOfficerLoading}
+        error={updateOfficerError}
       />
     </div>
   );

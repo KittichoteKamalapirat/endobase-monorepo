@@ -5,12 +5,16 @@ import { ICON_SIZE } from "../constants";
 import Button, { HTMLButtonType } from "./Buttons/Button";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
+import { Error } from "./skeletons/Error";
+import { ApolloError } from "@apollo/client";
 
 interface Props {
   defaultValues: ActionFormValues;
   onSubmit: (data: ActionFormValues) => void;
   containerClass?: string;
   isWaitRepairRequest: boolean;
+  loading?: boolean;
+  error?: ApolloError;
 }
 
 enum FormNames {
@@ -28,6 +32,8 @@ const RequestRepairEditor = ({
   containerClass,
   onSubmit,
   defaultValues,
+  loading,
+  error,
 }: Props) => {
   const {
     control,
@@ -65,11 +71,17 @@ const RequestRepairEditor = ({
           type={TextFieldTypes.OUTLINED}
           error={errors[FormNames.NOTE]}
         />
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="w-24"
-        />
+
+        <div className="flex-col gap-4">
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="w-24"
+            loading={loading}
+          />
+
+          {error && <Error text={error.message} />}
+        </div>
       </div>
     </form>
   );

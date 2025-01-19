@@ -17,10 +17,13 @@ import { Link } from "react-router-dom";
 import { EndosQuery } from "../../generated/graphql";
 import { urlResolver } from "../../lib/UrlResolver";
 import { ButtonTypes } from "../Buttons/Button";
+import { ApolloError } from "@apollo/client";
 
 type EndosQueryEndo = EndosQuery["endos"][number];
 interface Props {
   pickEndo: any;
+  loadingPickEndo: boolean;
+  errorPickEndo?: ApolloError;
   refetchEndos: any;
   isLargerThanBreakpoint: boolean;
   currentPageIndex: number;
@@ -30,6 +33,8 @@ interface Props {
 
 export const endoColumns = ({
   pickEndo,
+  loadingPickEndo,
+  errorPickEndo,
   refetchEndos,
   isLargerThanBreakpoint,
   currentPageIndex,
@@ -43,6 +48,8 @@ export const endoColumns = ({
         <ActionColumn
           row={row}
           pickEndo={pickEndo}
+          loadingPickEndo={loadingPickEndo}
+          errorPickEndo={errorPickEndo}
           refetchEndos={refetchEndos}
         />
       ),

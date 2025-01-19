@@ -22,7 +22,7 @@ const UpdateTakeOutActionForm = ({
   endoId,
 }: Props) => {
   const { id: sessionId } = useParams();
-  const [updateAction] = useUpdateActionMutation();
+  const [updateAction, { loading, error }] = useUpdateActionMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -89,9 +89,11 @@ const UpdateTakeOutActionForm = ({
           initialValues={{
             ...initialValues,
             method: "update",
-            adminCredential: "",
+            adminCredential: "" as any, // TODO: fix type casting
           }}
           isUpdate
+          loading={loading}
+          error={error}
         />
       </div>
     </div>

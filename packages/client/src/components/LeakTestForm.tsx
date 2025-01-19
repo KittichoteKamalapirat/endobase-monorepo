@@ -1,4 +1,5 @@
 import { ApolloQueryResult } from "@apollo/client";
+import { useEffect } from "react";
 import { Control, FieldErrorsImpl, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -14,10 +15,8 @@ import Button, { HTMLButtonType } from "./Buttons/Button";
 import CreateRequestRepairForm from "./CreateRequestRepairForm";
 import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
-import SubHeading from "./typography/SubHeading";
-import { useEffect } from "react";
-import { Loading } from "./skeletons/Loading";
 import { Error } from "./skeletons/Error";
+import SubHeading from "./typography/SubHeading";
 
 interface Props {
   containerClass?: string;
@@ -68,7 +67,7 @@ export const initialLeakTestData = {
 };
 const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
   const { id: sessionId } = useParams();
-  const [createAction] = useCreateActionMutation();
+  const [createAction, { loading, error }] = useCreateActionMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -202,12 +201,17 @@ const LeakTestForm = ({ refetchEndo, containerClass, endoId }: Props) => {
             </>
           )}
 
-          <Button
-            label="Save"
-            buttonType={HTMLButtonType.SUBMIT}
-            extraClass="w-24"
-            disabled={isFailedAndWaitRepair || !isValid || !isDirty}
-          />
+          <div className="flex-col gap-4">
+            <Button
+              label="Save"
+              buttonType={HTMLButtonType.SUBMIT}
+              extraClass="w-24"
+              disabled={isFailedAndWaitRepair || !isValid || !isDirty}
+              loading={loading}
+            />
+
+            {error && <Error text={error.message} />}
+          </div>
         </div>
       </form>
 

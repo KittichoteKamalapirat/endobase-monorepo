@@ -16,13 +16,23 @@ import { primaryColor } from "../../theme";
 import { ENDO_STATUS } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
+import { ApolloError } from "@apollo/client";
+import { Error } from "../skeletons/Error";
 
 interface Props {
   pickEndo: any;
+  loadingPickEndo: boolean;
+  errorPickEndo?: ApolloError;
   refetchEndos: any;
   row: any;
 }
-const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
+const ActionColumn = ({
+  pickEndo,
+  loadingPickEndo,
+  errorPickEndo,
+  refetchEndos,
+  row,
+}: Props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -131,7 +141,16 @@ const ActionColumn = ({ pickEndo, refetchEndos, row }: Props) => {
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:
     case ENDO_STATUS.READY:
-      return <Button label="Select" onClick={() => handleUseEndo(endoId)} />;
+      return (
+        <div className="flex flex-col gap-2">
+          <Button
+            label="Select"
+            onClick={() => handleUseEndo(endoId)}
+            loading={loadingPickEndo}
+          />
+          {errorPickEndo && <Error text={errorPickEndo.message} />}
+        </div>
+      );
 
     case ENDO_STATUS.EXPIRED:
     case ENDO_STATUS.FIXED:

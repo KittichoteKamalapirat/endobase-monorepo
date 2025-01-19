@@ -20,7 +20,7 @@ interface Props {
 
 const CreateTakeOutActionForm = ({ initialValues, endoId }: Props) => {
   const { id: sessionId } = useParams();
-  const [createAction] = useCreateActionMutation();
+  const [createAction, { loading, error }] = useCreateActionMutation();
 
   const { refetch } = useSessionQuery({
     variables: { id: sessionId || "" },
@@ -84,6 +84,8 @@ const CreateTakeOutActionForm = ({ initialValues, endoId }: Props) => {
           onSubmit={onSubmit}
           initialValues={{ officerNum: "", note: "", method: "create" }}
           isUpdate={false}
+          loading={loading}
+          error={error}
         />
       </div>
     </div>

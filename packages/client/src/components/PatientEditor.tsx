@@ -8,6 +8,8 @@ import Button, { HTMLButtonType } from "./Buttons/Button";
 import RadioField from "./forms/RadioField";
 import TextField, { TextFieldTypes } from "./forms/TextField";
 import SmallHeading from "./typography/SmallHeading";
+import { ApolloError } from "@apollo/client";
+import { Error } from "./skeletons/Error";
 
 export const validateAdminField = (value: string) => {
   if (value !== "Admin") return false;
@@ -19,6 +21,9 @@ interface Props {
   containerClass?: string;
 
   isEditing?: boolean;
+
+  loading?: boolean;
+  error?: ApolloError;
 }
 
 enum FormNames {
@@ -61,6 +66,8 @@ const PatientEditor = ({
   onSubmit,
   isEditing = false,
   containerClass,
+  loading,
+  error,
 }: Props) => {
   const {
     control,
@@ -123,12 +130,17 @@ const PatientEditor = ({
           />
         )}
 
-        <Button
-          label="Save"
-          buttonType={HTMLButtonType.SUBMIT}
-          extraClass="w-24"
-          disabled={!isDirty || !isValid}
-        />
+        <div className="flex-col gap-4">
+          <Button
+            label="Save"
+            buttonType={HTMLButtonType.SUBMIT}
+            extraClass="w-24"
+            disabled={!isDirty || !isValid}
+            loading={loading}
+          />
+
+          {error && <Error text={error.message} />}
+        </div>
       </div>
     </form>
   );

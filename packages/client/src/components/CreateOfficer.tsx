@@ -17,7 +17,7 @@ const defaultValues: FormValues = {
   type: "hos_officer",
 };
 const CreateOfficer = () => {
-  const [createOfficer] = useCreateOfficerMutation();
+  const [createOfficer, { loading, error }] = useCreateOfficerMutation();
 
   const { refetch } = useOfficersQuery();
 
@@ -85,6 +85,8 @@ const CreateOfficer = () => {
         onSubmitRHF={onSubmit}
         defaultValues={defaultValues}
         isUpdate={false}
+        loading={loading}
+        error={error}
       />
     </div>
   );

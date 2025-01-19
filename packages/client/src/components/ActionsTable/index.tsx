@@ -4,7 +4,7 @@ import {
   useGlobalFilter,
   usePagination,
   useSortBy,
-  useTable
+  useTable,
 } from "react-table";
 
 import classNames from "classnames";
@@ -32,7 +32,7 @@ const ActionsTable = () => {
   const [localPageSize, setLocalPageSize] = useState(10);
 
   const {
-    data: pagActionsData,
+    data: pageActionsData,
     loading,
     error,
     fetchMore,
@@ -45,10 +45,14 @@ const ActionsTable = () => {
   const columns = useMemo<Column[]>(() => actionColumns(), []);
 
   const data = useMemo(() => {
-    if (error || loading || pagActionsData?.paginatedActions.items.length === 0)
+    if (
+      error ||
+      loading ||
+      pageActionsData?.paginatedActions.items.length === 0
+    )
       return [];
 
-    const actions = [...(pagActionsData?.paginatedActions.items || [])]; // TODO make this less confusing
+    const actions = [...(pageActionsData?.paginatedActions.items || [])]; // TODO make this less confusing
 
     return (
       actions.sort((prev, curr) => {
@@ -57,10 +61,7 @@ const ActionsTable = () => {
         return dateSort || 0;
       }) || []
     );
-
-  }, [loading, pagActionsData, error]);
-
-
+  }, [loading, pageActionsData, error]);
 
   const nextPage = () => {
     const toFetchIndex = currPage + 1;
@@ -83,7 +84,7 @@ const ActionsTable = () => {
   };
 
   const { totalItems, totalPages, currentPage } =
-    pagActionsData?.paginatedActions.meta || {};
+    pageActionsData?.paginatedActions.meta || {};
   const canNextPage = (currentPage || 1) < (totalPages || 1);
   const canPreviousPage = (currentPage || 1) > 1;
 
@@ -127,7 +128,7 @@ const ActionsTable = () => {
         previousPage={previousPage}
         canNextPage={canNextPage}
         canPreviousPage={canPreviousPage}
-        pageNum={pagActionsData?.paginatedActions.meta.totalPages || 1}
+        pageNum={pageActionsData?.paginatedActions.meta.totalPages || 1}
         setPageSize={setLocalPageSize}
         setCurrPage={setCurrPage}
         currPage={currPage}

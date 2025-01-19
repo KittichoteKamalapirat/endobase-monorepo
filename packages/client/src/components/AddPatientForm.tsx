@@ -21,7 +21,8 @@ const AddPatientForm = ({ className }: Props) => {
     variables: { id: sessionId || "" },
   }); // to update cache
 
-  const [updatePatientInSession] = useUpdateSessionPatientMutation();
+  const [updatePatientInSession, { loading, error }] =
+    useUpdateSessionPatientMutation();
 
   const onSubmit = async (data: PatientFormValues) => {
     try {
@@ -44,7 +45,12 @@ const AddPatientForm = ({ className }: Props) => {
   };
   return (
     <div className={className}>
-      <PatientEditor defaultValues={defaultValues} onSubmit={onSubmit} />
+      <PatientEditor
+        defaultValues={defaultValues}
+        onSubmit={onSubmit}
+        loading={loading}
+        error={error}
+      />
     </div>
   );
 };

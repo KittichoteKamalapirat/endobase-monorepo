@@ -13,6 +13,7 @@ import {
   UNCLICKABLE_CARD_CLASSNAMES,
 } from "../theme";
 import RequestRepairEditor, { ActionFormValues } from "./RequestRepairEditor";
+import { ApolloError } from "@apollo/client";
 
 export type REPAIR_REQUEST_SRC =
   | "leak_test" // รั่วเลยเรียกช่าง (from session page)
@@ -37,7 +38,8 @@ const CreateRequestRepairForm = ({
 }: Props) => {
   useIsAuth();
   const { refetch } = useRepairRequestsByEndoQuery({ variables: { endoId } });
-  const [createRepairRequest] = useCreateRepairRequestMutation();
+  const [createRepairRequest, { loading, error }] =
+    useCreateRepairRequestMutation();
 
   const defaultValues = {
     officerNum: officerNum || "",
@@ -106,6 +108,8 @@ const CreateRequestRepairForm = ({
           "w-full"
         )}
         isWaitRepairRequest={isWaitRepairRequest}
+        loading={loading}
+        error={error}
       />
     </div>
   );

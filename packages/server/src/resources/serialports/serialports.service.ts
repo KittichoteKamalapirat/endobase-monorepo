@@ -84,7 +84,7 @@ export class SerialportsService implements OnModuleInit {
       
           // Timeout handling
           const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
+            setTimeout(() => reject(new Error('Timeout')), 10000) // 5 seconds timeout
           );
       
           const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
@@ -98,7 +98,7 @@ export class SerialportsService implements OnModuleInit {
         }
 
         // modbus can only accepts 1 request at a time, so wait a bit
-        await new Promise(resolve => setTimeout(resolve,1000))
+        await new Promise(resolve => setTimeout(resolve,3000))
       }
       
       return activeSerialportObj;

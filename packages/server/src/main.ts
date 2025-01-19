@@ -26,7 +26,7 @@ async function bootstrap() {
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(
-    'redis://default:GmBVkBYegRosFJGlEHKhZdCnxnLlcnDP@roundhouse.proxy.rlwy.net:44310',
+    process.env.REDIS_URL,
   );
   app.set('trust proxy', 1); //IMPORTANT: (when dev, not sure about prod) endo supply need this! otherwise, refresh and cookie is gone
 

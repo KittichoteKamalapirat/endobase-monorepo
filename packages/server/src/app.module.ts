@@ -53,6 +53,7 @@ const envPath = getEnvPath();
         'graphql-ws': true,
         'subscriptions-transport-ws': true, // with   out this, it won't work since graphql playground does not support graphql-ws yet, so have to use both
       },
+      playground: true,
 
       context: ({ req, res }) => {
         return { req, res };

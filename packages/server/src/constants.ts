@@ -21,7 +21,7 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 export const snapshotTriggertName = 'snapshotAdded';
 
 // new serialport: modbus
-export const COM_PORT = 'COM7';
+export const COM_PORT = 'COM5';
 
 const HADYAI_CONTAINER_TO_ARDUINO_ID_MAPPER = {
   a: 6,

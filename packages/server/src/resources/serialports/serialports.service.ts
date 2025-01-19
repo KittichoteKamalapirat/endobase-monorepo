@@ -32,6 +32,8 @@ const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
   process.env.NODE_ENV as Env,
 );
 
+
+
 @Injectable()
 export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
@@ -55,6 +57,7 @@ export class SerialportsService implements OnModuleInit {
     ); // make all fale by default
 
     try {
+    
       if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
         console.log('✅ Successfully init modbus');

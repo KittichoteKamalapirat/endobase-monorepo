@@ -1,4 +1,4 @@
-import { ReactNode, useState, ComponentType } from "react";
+import { ReactNode, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import MyModal from "react-modal";
 import { ICON_SIZE } from "../../constants";
@@ -7,7 +7,7 @@ import { green, grey500, grey900, red, yellow } from "../../theme";
 import IconButton from "../Buttons/IconButton";
 import PageHeading from "../typography/PageHeading";
 
-const ModalSafeForReact18 = MyModal as ComponentType<ReactModal["props"]>;
+const ModalSafeForReact18 = MyModal as any;
 
 interface Props {
   contentLabel: string;

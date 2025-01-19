@@ -7,11 +7,11 @@ import { SerialPort } from 'serialport';
 export const CONTAINER_TYPE_OBJ = {
   a: 'A',
   b: 'B',
-  c: 'C',
-  d: 'D',
-  e: 'E',
-  f: 'F',
-  g: 'G',
+  // c: 'C',
+  // d: 'D',
+  // e: 'E',
+  // f: 'F',
+  // g: 'G',
 } as const;
 
 export type CONTAINER_TYPE_VALUES = keyof typeof CONTAINER_TYPE_OBJ;

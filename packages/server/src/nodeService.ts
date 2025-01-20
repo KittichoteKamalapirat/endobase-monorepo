@@ -4,16 +4,22 @@ const Service = require('node-windows').Service;
 const path = require('path')
 
 
+
 const scriptPath = path.resolve(__dirname, 'main.js');
 // Create a new service object
 const svc = new Service({
-  name: 'endo_supply_server_48',
+  name: 'endo_supply_server_76',
   description: 'An endoscope data management system iOT',
   script: scriptPath,
   nodeOptions: ['--harmony', '--max_old_space_size=4096'],
   //, workingDirectory: '...'
   //, allowServiceLogon: true
-  timeout: 60000
+  timeout: 60000,
+  env: {
+    name: "NODE_ENV",
+    value: process.env.NODE_ENV // service is now able to access the user who created its' home directory
+  }
+
 });
 
 
@@ -22,6 +28,7 @@ const svc = new Service({
 // Handle service install events
 svc.on('install', () => {
   console.log('Service installed. Starting...');
+  console.log('NODE_ENV',process.env.NODE_ENV)
   svc.start();
 });
 

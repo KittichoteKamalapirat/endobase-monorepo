@@ -8,7 +8,7 @@ const path = require('path')
 const scriptPath = path.resolve(__dirname, 'main.js');
 // Create a new service object
 const svc = new Service({
-  name: 'endo_supply_server_76',
+  name: 'endo_supply_server_77',
   description: 'An endoscope data management system iOT',
   script: scriptPath,
   nodeOptions: ['--harmony', '--max_old_space_size=4096'],

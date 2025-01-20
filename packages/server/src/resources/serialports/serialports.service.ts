@@ -32,8 +32,6 @@ const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
   process.env.NODE_ENV as Env,
 );
 
-
-
 @Injectable()
 export class SerialportsService implements OnModuleInit {
   private readonly logger = new Logger(AppService.name);
@@ -57,7 +55,6 @@ export class SerialportsService implements OnModuleInit {
     ); // make all fale by default
 
     try {
-    
       if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
         console.log('✅ Successfully init modbus');
@@ -74,22 +71,21 @@ export class SerialportsService implements OnModuleInit {
       const activeSerialportObj = {};
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
-    
-        
         const arduinoId = columnToArduinoIdMapper[key];
-        
+
         this.modbus.setID(arduinoId);
-        
+
         try {
-      
           // Timeout handling
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
+          const timeoutPromise = new Promise(
+            (_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000), // 5 seconds timeout
           );
-      
-          const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
-        
-          
+
+          const val = await Promise.race([
+            this.modbus.readInputRegisters(0, 3),
+            timeoutPromise,
+          ]);
+
           if (val) activeSerialportObj[key] = true;
           else activeSerialportObj[key] = false;
         } catch (error) {
@@ -98,11 +94,10 @@ export class SerialportsService implements OnModuleInit {
         }
 
         // modbus can only accepts 1 request at a time, so wait a bit
-        await new Promise(resolve => setTimeout(resolve,3000))
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       }
-      
+
       return activeSerialportObj;
-      
     };
     try {
       const activeSerialportObj = (await syncSetActiveSerialport()) as Record<
@@ -214,8 +209,8 @@ export class SerialportsService implements OnModuleInit {
   }
 
   getReversePosition(row: RowType) {
-    const reverseRow = 25 - row; // 9 => 16, 16 => 9
-    const calculatedRowNum = row <= 8 ? row : reverseRow;
+    // const reverseRow = 25 - row; // 9 => 16, 16 => 9
+    // const calculatedRowNum = row <= 8 ? row : reverseRow;
     // row
     return 99 + row; // 100 => row 1, 115 => row 16
   }
@@ -235,7 +230,6 @@ export class SerialportsService implements OnModuleInit {
       await this.modbus.setID(arduinoId);
 
       const position = this.getReversePosition(row);
-      console.log('position',row,position)
 
       // color
       const color = statusToColor[endoStatus];
@@ -255,7 +249,6 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
   }) {
     try {
-      console.log('turnLightsOff ',row,col)
       // col
       const arduinoId = columnToArduinoIdMapper[col];
       await this.modbus.setID(arduinoId);
@@ -267,7 +260,6 @@ export class SerialportsService implements OnModuleInit {
       const color = colorToNumber.off;
       await this.modbus.writeRegister(position, color); // 0 = off
 
-      console.log('turnLightsOff success')
       return true;
     } catch (error) {
       return false;
@@ -283,13 +275,11 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
     status: ENDO_STATUS;
   }) {
-    console.log('turnLightsOn',col,row,status)
     await this.writeColor({
       col: col,
       row: row,
       endoStatus: status,
     });
-    console.log('turnLightsOn success')
   }
 
   async blinkLocation({ col, row, status }: RowAndColInput) {

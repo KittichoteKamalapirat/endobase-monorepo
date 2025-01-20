@@ -14,8 +14,10 @@ interface Props {
   row: any;
 }
 const ContainerActionColumn = ({ row }: Props) => {
-  const [turnLightsOn, {loading: loadingTurnLightsOn}] = useTurnLightsOnMutation();
-  const [turnLightsOff, {loading: loadingTurnLightsOff}] = useTurnLightsOffMutation();
+  const [turnLightsOn, { loading: loadingTurnLightsOn }] =
+    useTurnLightsOnMutation();
+  const [turnLightsOff, { loading: loadingTurnLightsOff }] =
+    useTurnLightsOffMutation();
 
   const containerId = row.original.id as string;
 
@@ -101,12 +103,15 @@ const ContainerActionColumn = ({ row }: Props) => {
       <Button
         label="" // currently off
         onClick={handleToggleLights}
-        startIcon={ loadingTurnLightsOff || loadingTurnLightsOn ? 
-        <Spinner2 /> :
-          <TbBulb
-            color={!lightsAreOn ? grey300 : primaryColor}
-            size={ICON_SIZE + 10}
-          />
+        startIcon={
+          loadingTurnLightsOff || loadingTurnLightsOn ? (
+            <Spinner2 />
+          ) : (
+            <TbBulb
+              color={!lightsAreOn ? grey300 : primaryColor}
+              size={ICON_SIZE + 10}
+            />
+          )
         }
         type={ButtonTypes.TEXT}
         disabled={!isActive}

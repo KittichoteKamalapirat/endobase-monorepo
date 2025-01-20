@@ -8,13 +8,14 @@ import {
 import { showToast } from "../../redux/slices/toastReducer";
 import { grey300, primaryColor } from "../../theme";
 import Button, { ButtonTypes } from "../Buttons/Button";
+import Spinner2 from "../Spinner2";
 
 interface Props {
   row: any;
 }
 const ContainerActionColumn = ({ row }: Props) => {
-  const [turnLightsOn] = useTurnLightsOnMutation();
-  const [turnLightsOff] = useTurnLightsOffMutation();
+  const [turnLightsOn, {loading: loadingTurnLightsOn}] = useTurnLightsOnMutation();
+  const [turnLightsOff, {loading: loadingTurnLightsOff}] = useTurnLightsOffMutation();
 
   const containerId = row.original.id as string;
 
@@ -100,7 +101,8 @@ const ContainerActionColumn = ({ row }: Props) => {
       <Button
         label="" // currently off
         onClick={handleToggleLights}
-        startIcon={
+        startIcon={ loadingTurnLightsOff || loadingTurnLightsOn ? 
+        <Spinner2 /> :
           <TbBulb
             color={!lightsAreOn ? grey300 : primaryColor}
             size={ICON_SIZE + 10}

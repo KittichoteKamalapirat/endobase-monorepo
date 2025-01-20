@@ -65,6 +65,7 @@ export class ContainersService {
   }
 
   async turnLightsOff(id: string): Promise<ContainerResponse> {
+    console.log('turnLightsOff')
     const container = await this.findOne(id);
     if (!container)
       return {
@@ -84,18 +85,33 @@ export class ContainersService {
 
     const syncTurnlightsOff = async () => {
       for (const tray of container.trays) {
-        await this.serialportsService.turnLightsOff({
-          col: container.col,
-          row: tray.row,
-        });
+        try {
 
-        // DON"T RETURN inside the loop => immediately get out of the loop
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 100 + 200) // 5 seconds timeout
+          );
+
+          await Promise.race([
+            this.serialportsService.turnLightsOff({
+            col: container.col,
+            row: tray.row,
+          }), 
+          timeoutPromise]);
+    
+  
+          await new Promise(resolve => setTimeout(resolve,100))
+  
+          // DON"T RETURN inside the loop => immediately get out of the loop
+        } catch (error) {
+          console.error('syncTurnlightsOffLoop ',error);
+        }
+        
       }
     };
     try {
       await syncTurnlightsOff();
     } catch (error) {
-      console.error(error);
+      console.error('syncTurnlightsOff',error);
     }
     return {
       container: updatedContainer,
@@ -122,22 +138,38 @@ export class ContainersService {
     );
 
     // turn light off for every tray in that container
-
     const syncTurnlightsOn = async () => {
       for (const tray of container.trays) {
-        await this.serialportsService.turnLightsOn({
-          col: container.col,
-          row: tray.row,
-          status: tray.endo?.status || 'no_endo',
-        });
+       
+        if (!tray.endo) continue
+
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout')), 100 + 200) // 5 seconds timeout
+        );
+
+        console.log('try to turn light for', container.col, tray.row, 'to', tray.endo?.status)
+      
+
+        await Promise.race([
+          this.serialportsService.turnLightsOn({
+            col: container.col,
+            row: tray.row,
+            status: tray.endo?.status || 'no_endo',
+          }), 
+        timeoutPromise]);
+
+
+        console.log('success turn light for ', container.col, tray.row, 'to', tray.endo?.status)
+        await new Promise(resolve => setTimeout(resolve, 100))
       }
     };
     try {
       await syncTurnlightsOn();
     } catch (error) {
-      console.error(error);
+      console.error("Error syncTurnlightsOn", error);
     }
 
+    console.log('turnLightsOn success')
     return {
       container: updatedContainer,
     };

@@ -84,7 +84,7 @@ export class SerialportsService implements OnModuleInit {
       
           // Timeout handling
           const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 10000) // 5 seconds timeout
+            setTimeout(() => reject(new Error('Timeout')), 5000) // 5 seconds timeout
           );
       
           const val = await Promise.race([this.modbus.readInputRegisters(0, 3), timeoutPromise]);
@@ -217,7 +217,7 @@ export class SerialportsService implements OnModuleInit {
     const reverseRow = 25 - row; // 9 => 16, 16 => 9
     const calculatedRowNum = row <= 8 ? row : reverseRow;
     // row
-    return 99 + calculatedRowNum; // 100 => row 1, 115 => row 16
+    return 99 + row; // 100 => row 1, 115 => row 16
   }
 
   async writeColor({
@@ -235,6 +235,7 @@ export class SerialportsService implements OnModuleInit {
       await this.modbus.setID(arduinoId);
 
       const position = this.getReversePosition(row);
+      console.log('position',row,position)
 
       // color
       const color = statusToColor[endoStatus];
@@ -254,6 +255,7 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
   }) {
     try {
+      console.log('turnLightsOff ',row,col)
       // col
       const arduinoId = columnToArduinoIdMapper[col];
       await this.modbus.setID(arduinoId);
@@ -265,6 +267,7 @@ export class SerialportsService implements OnModuleInit {
       const color = colorToNumber.off;
       await this.modbus.writeRegister(position, color); // 0 = off
 
+      console.log('turnLightsOff success')
       return true;
     } catch (error) {
       return false;
@@ -280,11 +283,13 @@ export class SerialportsService implements OnModuleInit {
     row: RowType;
     status: ENDO_STATUS;
   }) {
+    console.log('turnLightsOn',col,row,status)
     await this.writeColor({
       col: col,
       row: row,
       endoStatus: status,
     });
+    console.log('turnLightsOn success')
   }
 
   async blinkLocation({ col, row, status }: RowAndColInput) {

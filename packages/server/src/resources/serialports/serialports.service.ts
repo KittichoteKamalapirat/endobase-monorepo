@@ -72,30 +72,44 @@ export class SerialportsService implements OnModuleInit {
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
-
+      
         this.modbus.setID(arduinoId);
-
+      
         try {
-          // Timeout handling
-          const timeoutPromise = new Promise(
-            (_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000), // 5 seconds timeout
-          );
+          for (let i = 0; i < 3; i++) {
+            console.log('Trying', key, "Attempt", i + 1);
+      
+            if (!activeSerialportObj[key]) {
+              try {
+                // Timeout handling must be inside the loop to reset the timeout each attempt
+                const timeoutPromise = new Promise(
+                  (_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000)
+                );
+      
+                const val = await Promise.race([
+                  this.modbus.readInputRegisters(0, 3),
+                  timeoutPromise,
+                ]);
 
-          const val = await Promise.race([
-            this.modbus.readInputRegisters(0, 3),
-            timeoutPromise,
-          ]);
-
-          if (val) activeSerialportObj[key] = true;
-          else activeSerialportObj[key] = false;
+               
+                if (val) {
+                  activeSerialportObj[key] = true;
+                  break; // Exit loop if successful
+                } else {
+                  activeSerialportObj[key] = false;
+                }
+              } catch (error) {
+                console.error(`Attempt ${i + 1} failed for`, key, '-', error);
+                if (i === 2) throw error; // Throw error only if all attempts fail
+              }
+            }
+          }
         } catch (error) {
           console.error('⚠️ Cannot set container active:', key);
           console.error('Error:', error);
         }
-
-        // modbus can only accepts 1 request at a time, so wait a bit
-        await new Promise((resolve) => setTimeout(resolve, 3000));
       }
+      
 
       return activeSerialportObj;
     };

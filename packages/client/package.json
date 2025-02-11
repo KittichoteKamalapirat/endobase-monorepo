@@ -48,8 +48,10 @@
     "eject": "react-scripts eject",
     "gen": "graphql-codegen --config codegen.ts",
     "build-image": "docker build . -t endobase",
+    "build-image:local": "docker build --build-arg ENV_FILE=.env.local -t endobase:local .",
     "build-image:chonburi": "docker build --build-arg ENV_FILE=.env.chonburi -t endobase:chonburi .",
     "build-image:hadyai": "docker build --build-arg ENV_FILE=.env.hadyai -t endobase:hadyai .",
+    "deploy:local": "docker container run -d -p 80:80 --name endobase_react_local 8c00a8cbc90e",
     "deploy-container": "docker container run -d -p 80:80 --name endobase_react 479e58ffd652aae802b30244ee640c8b287f82cb199d862120b623d449d52865",
     "deploy:chonburi": "docker container run -d -p 80:80 --name endobase_react b61e5f5accba"
   },

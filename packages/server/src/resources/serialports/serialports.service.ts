@@ -1,5 +1,5 @@
 import { getColumnToArduinoIdMapper } from './../../constants';
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
 import {
@@ -33,7 +33,7 @@ const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
 );
 
 @Injectable()
-export class SerialportsService implements OnModuleInit {
+export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   private readonly logger = new Logger(AppService.name);
   private modbus = new ModbusRTU();
 
@@ -47,7 +47,19 @@ export class SerialportsService implements OnModuleInit {
     @Inject(forwardRef(() => ContainersService))
     private containersService: ContainersService,
     private settingService: SettingService,
-  ) {}
+  ) {
+    process.on('SIGINT', async () => {
+      console.log('🛑 SIGINT received. Cleaning up...');
+      await this.closeModbus();
+      process.exit(0);
+    });
+
+    process.on('SIGTERM', async () => {
+      console.log('🛑 SIGTERM received. Cleaning up...');
+      await this.closeModbus();
+      process.exit(0);
+    });
+  }
 
   async onModuleInit() {
     Object.keys(CONTAINER_TYPE_OBJ).forEach(
@@ -56,12 +68,42 @@ export class SerialportsService implements OnModuleInit {
 
     try {
       if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
-        await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 }); // TODO
-        console.log('✅ Successfully init modbus');
+        console.log("trying to connect to port.", COM_PORT);
+
+        console.log('modbus is open', this.modbus.isOpen)
+        if (this.modbus.isOpen) {
+          await this.closeModbus();
+        }
+
+        await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
+        console.log('✅ Successfully init modbus..');
         await this.settingService.initSetting();
       }
     } catch (error) {
       console.log('❌ error init modbus in serialport.server', error);
+    }
+
+  }
+
+  async onApplicationShutdown(signal?: string) {
+    console.log(`Application is shutting down due to: ${signal}`);
+    await this.closeModbus();
+  }
+
+
+  private async closeModbus() {
+    if (this.modbus.isOpen) {
+      return new Promise<void>((resolve, reject) => {
+        this.modbus.close((err) => {
+          if (err) {
+            console.error('Error closing Modbus:', err);
+            reject(err);
+          } else {
+            console.log('✅ Successfully closed Modbus connection.');
+            resolve();
+          }
+        });
+      });
     }
   }
 
@@ -76,7 +118,8 @@ export class SerialportsService implements OnModuleInit {
         this.modbus.setID(arduinoId);
 
         try {
-          for (let i = 0; i < 3; i++) {
+          const RETRY = 5
+          for (let i = 0; i < RETRY; i++) {
             console.log('Trying', key, 'Attempt', i + 1);
 
             if (!activeSerialportObj[key]) {
@@ -91,15 +134,23 @@ export class SerialportsService implements OnModuleInit {
                   timeoutPromise,
                 ]);
 
+
+
                 if (val) {
+                  console.log('set', key, 'to true')
                   activeSerialportObj[key] = true;
                   break; // Exit loop if successful
                 } else {
+                  console.log('no val back from', key)
+                  console.log('wait 2 sec')
+                  await new Promise(resolve => setTimeout(resolve, 2000))
                   activeSerialportObj[key] = false;
                 }
               } catch (error) {
                 console.error(`Attempt ${i + 1} failed for`, key, '-', error);
-                if (i === 2) throw error; // Throw error only if all attempts fail
+                console.log('wait 2 sec')
+                await new Promise(resolve => setTimeout(resolve, 2000))
+                if (i === RETRY - 1) throw error; // Throw error only if all attempts fail
               }
             }
           }

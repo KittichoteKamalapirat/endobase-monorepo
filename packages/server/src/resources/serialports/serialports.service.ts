@@ -72,26 +72,25 @@ export class SerialportsService implements OnModuleInit {
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
-      
+
         this.modbus.setID(arduinoId);
-      
+
         try {
           for (let i = 0; i < 3; i++) {
-            console.log('Trying', key, "Attempt", i + 1);
-      
+            console.log('Trying', key, 'Attempt', i + 1);
+
             if (!activeSerialportObj[key]) {
               try {
                 // Timeout handling must be inside the loop to reset the timeout each attempt
-                const timeoutPromise = new Promise(
-                  (_, reject) => setTimeout(() => reject(new Error('Timeout')), 3000)
+                const timeoutPromise = new Promise((_, reject) =>
+                  setTimeout(() => reject(new Error('Timeout')), 3000),
                 );
-      
+
                 const val = await Promise.race([
                   this.modbus.readInputRegisters(0, 3),
                   timeoutPromise,
                 ]);
 
-               
                 if (val) {
                   activeSerialportObj[key] = true;
                   break; // Exit loop if successful
@@ -109,7 +108,6 @@ export class SerialportsService implements OnModuleInit {
           console.error('Error:', error);
         }
       }
-      
 
       return activeSerialportObj;
     };
@@ -223,10 +221,11 @@ export class SerialportsService implements OnModuleInit {
   }
 
   getReversePosition(row: RowType) {
-    // const reverseRow = 25 - row; // 9 => 16, 16 => 9
-    // const calculatedRowNum = row <= 8 ? row : reverseRow;
-    // row
-    return 99 + row; // 100 => row 1, 115 => row 16
+    if (process.env.NODE_ENV === 'chonburi') return 99 + row;
+
+    const reverseRow = 25 - row; // 9 => 16, 16 => 9
+    const calculatedRowNum = row <= 8 ? row : reverseRow;
+    return 99 + calculatedRowNum; // 100 => row 1, 115 => row 16
   }
 
   async writeColor({

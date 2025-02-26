@@ -1,3 +1,4 @@
+import { ApolloError } from "@apollo/client";
 import { BsInboxesFill } from "react-icons/bs";
 import { FaFan } from "react-icons/fa";
 import { GiWaterRecycling } from "react-icons/gi";
@@ -16,8 +17,6 @@ import { primaryColor } from "../../theme";
 import { ENDO_STATUS } from "../../utils/statusToColor";
 import Button, { ButtonTypes } from "../Buttons/Button";
 import LinkButton from "../Buttons/LinkButton";
-import { ApolloError } from "@apollo/client";
-import { Error } from "../skeletons/Error";
 
 interface Props {
   pickEndo: any;
@@ -129,14 +128,13 @@ const ActionColumn = ({
   const currentStatus = row.original.status;
   const endoId = row.original.id as string;
 
-  const isResponding = row.original.tray.container.isResponding;
+  // const isResponding = row.original.tray.container.isResponding;
 
-  if (
-    process.env.REACT_APP_ENVIRONMENT !== "showcase" &&
-    process.env.REACT_APP_ENVIRONMENT !== "localhost" &&
-    !isResponding
-  )
-    return <div className="text-grey-500">Offline</div>;
+  // if (
+  //   process.env.REACT_APP_ENVIRONMENT !== "showcase" &&
+  //   process.env.REACT_APP_ENVIRONMENT !== "localhost"
+  // )
+  //   return <div className="text-grey-500">Offline</div>;
 
   switch (currentStatus) {
     case ENDO_STATUS.EXPIRE_SOON:

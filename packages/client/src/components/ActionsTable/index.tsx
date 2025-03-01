@@ -30,7 +30,6 @@ const ActionsTable = () => {
   const [currPage, setCurrPage] = useState(1);
   const navigate = useNavigate();
   const [localPageSize, setLocalPageSize] = useState(10);
-  const didInitialUpdate = useRef<boolean>(false);
 
   const {
     data: pageActionsData,
@@ -101,12 +100,6 @@ const ActionsTable = () => {
     setPageSize(localPageSize); // without this, it only shows 10 by default (react-table)
   }, [setPageSize, localPageSize]);
 
-  useEffect(() => {
-    if (!didInitialUpdate.current) {
-      refetch(); // update every page mount
-      didInitialUpdate.current = true;
-    }
-  }, [refetch, didInitialUpdate]);
 
   if (loading) {
     return <RowsSkeleton />;

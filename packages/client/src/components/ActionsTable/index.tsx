@@ -51,7 +51,10 @@ const ActionsTable = () => {
     return pageActionsData.paginatedActions.items;
   }, [pageActionsData?.paginatedActions.items, loading, error]);
 
+
+  const pageNum = pageActionsData?.paginatedActions.meta.totalPages || 1
   const nextPage = () => {
+    if (currPage >= pageNum) return
     const toFetchIndex = currPage + 1;
     fetchMore({
       variables: {
@@ -62,6 +65,7 @@ const ActionsTable = () => {
   };
 
   const previousPage = () => {
+    if (currPage <= 1) return
     const toFetchIndex = currPage - 1;
     fetchMore({
       variables: {
@@ -96,9 +100,9 @@ const ActionsTable = () => {
     usePagination
   );
 
-  useEffect(() => {
-    setPageSize(localPageSize); // without this, it only shows 10 by default (react-table)
-  }, [setPageSize, localPageSize]);
+  // useEffect(() => {
+  //   setPageSize(localPageSize); // without this, it only shows 10 by default (react-table)
+  // }, [setPageSize, localPageSize]);
 
 
   if (loading) {

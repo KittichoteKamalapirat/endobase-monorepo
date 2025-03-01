@@ -1,5 +1,10 @@
 import { getColumnToArduinoIdMapper } from './../../constants';
-import { Injectable, Logger, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnApplicationShutdown,
+  OnModuleInit,
+} from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { AppService } from '../../app.service';
 import {
@@ -34,7 +39,6 @@ const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
 
 @Injectable()
 export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
-  private readonly logger = new Logger(AppService.name);
   private modbus = new ModbusRTU();
 
   // active serialport means those that are responding
@@ -68,9 +72,9 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
     try {
       if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
-        console.log("trying to connect to port.", COM_PORT);
+        console.log('trying to connect to port.', COM_PORT);
 
-        console.log('modbus is open', this.modbus.isOpen)
+        console.log('modbus is open', this.modbus.isOpen);
         if (this.modbus.isOpen) {
           await this.closeModbus();
         }
@@ -82,14 +86,12 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     } catch (error) {
       console.log('❌ error init modbus in serialport.server', error);
     }
-
   }
 
   async onApplicationShutdown(signal?: string) {
     console.log(`Application is shutting down due to: ${signal}`);
     await this.closeModbus();
   }
-
 
   private async closeModbus() {
     if (this.modbus.isOpen) {
@@ -118,7 +120,7 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
         this.modbus.setID(arduinoId);
 
         try {
-          const RETRY = 5
+          const RETRY = 5;
           for (let i = 0; i < RETRY; i++) {
             console.log('Trying', key, 'Attempt', i + 1);
 
@@ -134,22 +136,20 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
                   timeoutPromise,
                 ]);
 
-
-
                 if (val) {
-                  console.log('set', key, 'to true')
+                  console.log('set', key, 'to true');
                   activeSerialportObj[key] = true;
                   break; // Exit loop if successful
                 } else {
-                  console.log('no val back from', key)
-                  console.log('wait 2 sec')
-                  await new Promise(resolve => setTimeout(resolve, 2000))
+                  console.log('no val back from', key);
+                  console.log('wait 2 sec');
+                  await new Promise((resolve) => setTimeout(resolve, 2000));
                   activeSerialportObj[key] = false;
                 }
               } catch (error) {
                 console.error(`Attempt ${i + 1} failed for`, key, '-', error);
-                console.log('wait 2 sec')
-                await new Promise(resolve => setTimeout(resolve, 2000))
+                console.log('wait 2 sec');
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 if (i === RETRY - 1) throw error; // Throw error only if all attempts fail
               }
             }

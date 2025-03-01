@@ -5,7 +5,6 @@ import { urlResolver } from "../lib/UrlResolver";
 import { updateFilter } from "../redux/slices/filterReducer";
 import { ENDO_STATUS, ENDO_STATUS_VALUES } from "../utils/statusToColor";
 import Badge from "./Badge";
-import { filterEndoByStatus } from "../utils/filterEndoByStatus";
 
 interface Props {
   endos: Endo[];
@@ -22,48 +21,66 @@ const EndoStatusTable2 = ({
 
   const navigate = useNavigate();
 
-  const readyNum = endos.filter(
-    (endo) => filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "ready") // Added dyring just in case even thought it wouldn't exist
+  const readyNum = endos.filter((endo) => endo.status === "ready").length; // Added dyring just in case even thought it wouldn't exist
+
+  const selectedOutNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.SELECTED
   ).length;
 
-  const selectedOutNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "selected")
+  const beingUsedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.BEING_USED
   ).length;
 
-  const beingUsedNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "being_used")
+  const inWashingRoomNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.IN_WASHING_ROOM
   ).length;
 
-  const inWashingRoomNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "in_washing_room")
+  const leakTestPassedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.LEAK_TEST_PASSED
   ).length;
 
-  const leakTestPassedNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "leak_test_passed")
+  const disinfectionPassedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.DISINFECTION_PASSED
   ).length;
 
-  const disinfectionPassedNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "disinfection_passed")
+  const expireSoonNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.EXPIRE_SOON
+  ).length;
+  const expiredNum = endos.filter(
+    (endo) =>
+      endo.status === ENDO_STATUS.EXPIRED ||
+      endo.status === ENDO_STATUS.EXPIRED_AND_OUT
+  ).length; // See endo.entity.ts
+
+  const beingFixedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.OUT_OF_ORDER
   ).length;
 
-  const expireSoonNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "expire_soon")
-  ).length;
-  const expiredNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "expired")
+  const fixedNum = endos.filter(
+    (endo) =>
+      endo.status === ENDO_STATUS.FIXED ||
+      endo.status === ENDO_STATUS.FIXED_AND_OUT
+  ).length; // See endo.entity.ts
+
+  const dryingNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.DRYING
   ).length;
 
-  const beingFixedNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "out_of_order")
+  const leakTestFailedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.LEAK_TEST_FAILED
   ).length;
 
-  const fixedNum = endos.filter((endo) =>
-    filterEndoByStatus(endo.status as ENDO_STATUS_VALUES, "fixed")
+  const disinfectionFailedNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.DISINFECTION_FAILED
+  ).length;
+
+  const waitingForRepairNum = endos.filter(
+    (endo) => endo.status === ENDO_STATUS.WAITING_FOR_REPAIR
   ).length;
 
   const handleFilter = (status: ENDO_STATUS_VALUES | "") => {
     // clean container filter (pagination)
-    if (status !== "ready" && status !== "")
+    if (status !== ENDO_STATUS.READY && status !== "")
       dispatch(updateFilter({ pageIndex: -1 }));
 
     if (activeStatus === status) {
@@ -256,6 +273,74 @@ const EndoStatusTable2 = ({
           }
           isActive={activeStatus === ENDO_STATUS.FIXED}
           activeColor="bg-[#ffc2d1]"
+        />
+      </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.DRYING)}
+      >
+        <Badge
+          size="md"
+          content={`Drying: ${dryingNum}`}
+          color={
+            activeStatus === ENDO_STATUS.DRYING
+              ? "text-grey-0 border-blue"
+              : "text-blue border-blue"
+          }
+          isActive={activeStatus === ENDO_STATUS.DRYING}
+          activeColor="bg-blue"
+        />
+      </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.LEAK_TEST_FAILED)}
+      >
+        <Badge
+          size="md"
+          content={`Leak Test Failed: ${leakTestFailedNum}`}
+          color={
+            activeStatus === ENDO_STATUS.LEAK_TEST_FAILED
+              ? "text-grey-0 border-red"
+              : "text-red border-red"
+          }
+          isActive={activeStatus === ENDO_STATUS.LEAK_TEST_FAILED}
+          activeColor="bg-red"
+        />
+      </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.DISINFECTION_FAILED)}
+      >
+        <Badge
+          size="md"
+          content={`Disinfection Failed: ${disinfectionFailedNum}`}
+          color={
+            activeStatus === ENDO_STATUS.DISINFECTION_FAILED
+              ? "text-grey-0 border-red"
+              : "text-red border-red"
+          }
+          isActive={activeStatus === ENDO_STATUS.DISINFECTION_FAILED}
+          activeColor="bg-red"
+        />
+      </div>
+
+      <div
+        className="flex justify-between gap-2 hover:cursor-pointer"
+        onClick={() => handleFilter(ENDO_STATUS.WAITING_FOR_REPAIR)}
+      >
+        <Badge
+          size="md"
+          content={`Waiting for Repair: ${waitingForRepairNum}`}
+          color={
+            activeStatus === ENDO_STATUS.WAITING_FOR_REPAIR
+              ? "text-grey-0 border-grey-900"
+              : "text-grey-900 border-grey-900"
+          }
+          isActive={activeStatus === ENDO_STATUS.WAITING_FOR_REPAIR}
+          activeColor="bg-grey-900"
         />
       </div>
 

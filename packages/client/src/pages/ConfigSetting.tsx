@@ -1,13 +1,12 @@
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import Button, { ButtonTypes } from "../components/Buttons/Button";
 import Layout from "../components/layouts/Layout";
 import OtherSettings from "../components/settings/OtherSettings";
 import PageHeading from "../components/typography/PageHeading";
-import { useIsAuth } from "../hooks/useIsAuth";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { ICON_SIZE } from "../constants";
-import LinkButton from "../components/Buttons/LinkButton";
-import Button, { ButtonTypes } from "../components/Buttons/Button";
+import { useIsAuth } from "../hooks/useIsAuth";
 import { urlResolver } from "../lib/UrlResolver";
-import { useNavigate } from "react-router-dom";
 
 const ConfigSetting = () => {
   const navigate = useNavigate();

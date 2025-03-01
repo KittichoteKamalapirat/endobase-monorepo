@@ -1,4 +1,4 @@
-import { TbNurse } from "react-icons/tb";
+import { CgBandAid, CgHashtag } from "react-icons/cg";
 import { IoMdBuild } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -22,7 +22,7 @@ import { useIsAuth } from "../hooks/useIsAuth";
 import { urlResolver } from "../lib/UrlResolver";
 import { openConfirm } from "../redux/slices/confirmModalReducer";
 import { showToast } from "../redux/slices/toastReducer";
-import { primaryColor } from "../theme";
+import { primaryColor, red } from "../theme";
 import { ENDO_STATUS } from "../utils/statusToColor";
 
 const EndoPage = () => {
@@ -145,9 +145,19 @@ const EndoPage = () => {
                 type={ButtonTypes.OUTLINED}
                 startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
               />
+            ) : data?.endo.status === "waiting_for_repair" ? (
+              <div className="flex gap-2">
+                <Button
+                  label="Finish repairing"
+                  onClick={() => handleFinishRepair(endoId)}
+                  type={ButtonTypes.OUTLINED}
+                  startIcon={<CgBandAid size={ICON_SIZE} />}
+                />
+              </div>
             ) : (
               <div className="flex gap-2">
-                <LinkButton
+                {/* Forgot why I need this so uncomment for now */}
+                {/* <LinkButton
                   label={`Wait repair ${
                     status === "waiting_for_repair" ? "(Current)" : ""
                   }`}
@@ -159,7 +169,7 @@ const EndoPage = () => {
                     <TbNurse size={ICON_SIZE + 4} color={primaryColor} />
                   }
                   disabled={status === "waiting_for_repair"}
-                />
+                /> */}
                 <LinkButton
                   label="Request repair"
                   href={`${urlResolver.requestRepair(

@@ -81,7 +81,7 @@ const CreateRequestRepairForm = ({
         navigate(urlResolver.endo(endoId));
         dispatch(
           showToast({
-            message: "Successfully created an repair request",
+            message: "Successfully created a repair request",
             variant: "success",
           })
         );

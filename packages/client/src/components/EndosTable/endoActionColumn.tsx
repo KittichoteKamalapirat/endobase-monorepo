@@ -1,5 +1,6 @@
 import { ApolloError } from "@apollo/client";
 import { BsInboxesFill } from "react-icons/bs";
+import { CgBandAid } from "react-icons/cg";
 import { FaFan } from "react-icons/fa";
 import { GiWaterRecycling } from "react-icons/gi";
 import { IoMdBuild } from "react-icons/io";
@@ -152,12 +153,18 @@ const ActionColumn = ({
 
     case ENDO_STATUS.WAITING_FOR_REPAIR:
       return (
-        <LinkButton
-          label="Request Repair"
-          href={urlResolver.requestRepair(endoId)}
+        <Button
+          label="Finish repairing"
+          onClick={() => handleFinishRepair(endoId)}
           type={ButtonTypes.SECONDARY}
-          startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
+          startIcon={<CgBandAid size={ICON_SIZE} color={primaryColor} />}
         />
+        // <LinkButton
+        //   label="Request Repair"
+        //   href={urlResolver.requestRepair(endoId)}
+        //   type={ButtonTypes.SECONDARY}
+        //   startIcon={<IoMdBuild size={ICON_SIZE} color={primaryColor} />}
+        // />
       );
 
     case ENDO_STATUS.OUT_OF_ORDER:

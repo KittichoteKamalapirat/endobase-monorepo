@@ -267,10 +267,10 @@ export class ActionsService {
   // }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Action>> {
-    const paginatedResults = await paginate<Action>(
-      this.actionsRepository,
-      options,
-    );
+    const queryBuilder = this.actionsRepository.createQueryBuilder('action');
+    queryBuilder.orderBy('action.createdAt', 'DESC');
+
+    const paginatedResults = await paginate<Action>(queryBuilder, options);
 
     // attach session, inside session there is already other stuff!
     await Promise.all(

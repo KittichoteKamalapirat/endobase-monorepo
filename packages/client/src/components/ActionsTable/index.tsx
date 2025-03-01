@@ -46,23 +46,11 @@ const ActionsTable = () => {
   const columns = useMemo<Column[]>(() => actionColumns(), []);
 
   const data = useMemo(() => {
-    if (
-      error ||
-      loading ||
-      pageActionsData?.paginatedActions.items.length === 0
-    )
+    if (error || loading || !pageActionsData?.paginatedActions.items?.length) {
       return [];
-
-    const actions = [...(pageActionsData?.paginatedActions.items || [])]; // TODO make this less confusing
-
-    return (
-      actions.sort((prev, curr) => {
-        const dateSort: number =
-          dayjs(curr.createdAt).valueOf() - dayjs(prev.createdAt).valueOf();
-        return dateSort || 0;
-      }) || []
-    );
-  }, [loading, pageActionsData, error]);
+    }
+    return pageActionsData.paginatedActions.items;
+  }, [pageActionsData?.paginatedActions.items, loading, error]);
 
   const nextPage = () => {
     const toFetchIndex = currPage + 1;

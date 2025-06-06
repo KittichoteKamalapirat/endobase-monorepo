@@ -21,7 +21,17 @@ export const DAYJS_DATE_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss'; // save this in db 
 export const snapshotTriggertName = 'snapshotAdded';
 
 // new serialport: modbus
-export const COM_PORT =  process.env.NODE_ENV === "hadyai" ? 'COM7' : "COM5";
+export const COM_PORT = (() => {
+  switch (process.env.NODE_ENV) {
+    case 'hadyai':
+      return 'COM7';
+    case 'endo':
+      return 'COM3';
+    default:
+      return 'COM5';
+  }
+})();
+
 
 const HADYAI_CONTAINER_TO_ARDUINO_ID_MAPPER = {
   a: 1,
@@ -38,10 +48,18 @@ const CHONBURI_CONTAINER_TO_ARDUINO_ID_MAPPER = {
   b: 2,
 };
 
+const ENDO_CONTAINER_TO_ARDUINO_ID_MAPPER = {
+  a: 1,
+  b: 2,
+};
+
+
 export const getColumnToArduinoIdMapper = (env: Env) => {
   switch (env) {
     case 'chonburi':
       return CHONBURI_CONTAINER_TO_ARDUINO_ID_MAPPER;
+    case 'endo':
+      return ENDO_CONTAINER_TO_ARDUINO_ID_MAPPER;
     default:
       return HADYAI_CONTAINER_TO_ARDUINO_ID_MAPPER;
   }

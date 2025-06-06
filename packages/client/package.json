@@ -51,10 +51,12 @@
     "build-image:local": "docker build --build-arg ENV_FILE=.env.local -t endobase:local .",
     "build-image:chonburi": "docker build --build-arg ENV_FILE=.env.chonburi -t endobase:chonburi .",
     "build-image:hadyai": "docker build --build-arg ENV_FILE=.env.hadyai -t endobase:hadyai .",
+    "build-image:endo": "docker build --build-arg ENV_FILE=.env.endo -t endobase:endo .",
     "deploy:local": "docker container run -d -p 80:80 --name endobase_react_local 8c00a8cbc90e",
     "deploy-container": "docker container run -d -p 80:80 --name endobase_react 479e58ffd652aae802b30244ee640c8b287f82cb199d862120b623d449d52865",
     "deploy:chonburi": "docker container run -d -p 80:80 --name endobase_react e94f869daeb1",
-    "deploy:hadyai": "docker container run -d -p 80:80 --name endobase_react c93922ed783a"
+    "deploy:hadyai": "docker container run -d -p 80:80 --name endobase_react c93922ed783a",
+    "deploy:endo": "docker container run -d -p 80:80 --name endobase_react xxx"
   },
   "eslintConfig": {
     "extends": [

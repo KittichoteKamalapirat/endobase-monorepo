@@ -4,6 +4,7 @@ export type Env =
   | 'localhost'
   | 'showcase'
   | 'hadyai'
+  | 'endo'
   | 'chonburi';
 
 export const getEnvPath = () => {
@@ -27,6 +28,9 @@ export const getEnvPath = () => {
     case 'showcase':
       console.log('local env from .env.showcase')
       return '.env.showcase';
+    case 'endo':
+      console.log('local env from .env.endo')
+      return '.env.endo';
     default:
       console.log('local env from .env.hadyai cause default')
       return '.env.hadyai';

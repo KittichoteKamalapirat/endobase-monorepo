@@ -21,10 +21,22 @@ export const CHONBURI_CONTAINER_TYPE_OBJ = {
   a: 'A', // 8 trays
 } as const;
 
-export const CONTAINER_TYPE_OBJ =
-  process.env.NODE_ENV === 'chonburi'
-    ? CHONBURI_CONTAINER_TYPE_OBJ
-    : HADYAI_CONTAINER_TYPE_OBJ;
+export const ENDO_CONTAINER_TYPE_OBJ = {
+  b: 'B', // 16 trays
+  a: 'A', // 8 trays
+} as const;
+
+export const CONTAINER_TYPE_OBJ = (() => {
+  switch (process.env.NODE_ENV) {
+    case 'chonburi':
+      return CHONBURI_CONTAINER_TYPE_OBJ;
+    case 'endo':
+      return ENDO_CONTAINER_TYPE_OBJ;
+    default:
+      return HADYAI_CONTAINER_TYPE_OBJ;
+  }
+})();
+
 
 export type CONTAINER_TYPE_VALUES = keyof typeof CONTAINER_TYPE_OBJ;
 export type CONTAINER_TYPE_LABELS =
@@ -51,10 +63,27 @@ export const CHONBURI_CONTAINER_TO_TRAY_NUM_MAPPER: Record<
   b: 16,
 };
 
-export const CONTAINER_TO_TRAY_NUM_MAPPER =
-  process.env.NODE_ENV === 'chonburi'
-    ? CHONBURI_CONTAINER_TO_TRAY_NUM_MAPPER
-    : HADYAI_CONTAINER_TO_TRAY_NUM_MAPPER;
+export const ENDO_CONTAINER_TO_TRAY_NUM_MAPPER: Record<
+  keyof typeof CHONBURI_CONTAINER_TYPE_OBJ,
+  number
+> = {
+  a: 8,
+  b: 16,
+};
+
+
+
+export const CONTAINER_TO_TRAY_NUM_MAPPER = (() => {
+  switch (process.env.NODE_ENV) {
+    case 'chonburi':
+      return CHONBURI_CONTAINER_TO_TRAY_NUM_MAPPER;
+      case 'endo':
+      return ENDO_CONTAINER_TO_TRAY_NUM_MAPPER;
+    default:
+      return HADYAI_CONTAINER_TO_TRAY_NUM_MAPPER;
+  }
+})();
+
 
 interface ContainerTypeOption {
   value: CONTAINER_TYPE_VALUES;

@@ -36,10 +36,8 @@ export class ContainersResolver {
   }
 
   @Mutation(() => Container)
-  createContainer(
-    @Args('createContainerInput') createContainerInput: CreateContainerInput,
-  ) {
-    return this.containersService.create(createContainerInput);
+  createContainer() {
+    return this.containersService.create();
   }
 
   @Query(() => [Container], { name: 'containers' })

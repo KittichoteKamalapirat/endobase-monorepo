@@ -241,7 +241,7 @@ input PaginatedInput {
 type Mutation {
   blinkLocation(input: RowAndColInput!): Boolean!
   createSnapshot(input: CreateSnapshotInput!): Snapshot!
-  createContainer(createContainerInput: CreateContainerInput!): Container!
+  createContainer: Container!
   removeContainer(id: Int!): Container!
   turnLightsOff(id: String!): ContainerResponse!
   turnLightsOn(id: String!): ContainerResponse!
@@ -291,11 +291,6 @@ input CreateSnapshotInput {
   hum: String!
   temp: String!
   containerId: String!
-}
-
-input CreateContainerInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 input CreateSettingInput {

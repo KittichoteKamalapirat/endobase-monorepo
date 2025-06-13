@@ -1,42 +1,40 @@
 import {
-  CONTAINER_TYPE_OBJ,
-  getColumnToArduinoIdMapper,
-} from './../../constants';
-import {
   Injectable,
-  Logger,
   OnApplicationShutdown,
   OnModuleInit,
 } from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
-import { AppService } from '../../app.service';
 import {
   colorToNumber,
-  COM_PORT,
   CREATE_SNAPSHOT_TIMEOUT,
-  SET_ACTIVE_MODBUS_TIMEOUT,
-  UPDATE_CONTAINER_STATS_TIMEOUT,
-  SLAVE_ADDRESS,
   INPUT_REGISTER_LENGTH,
+  SET_ACTIVE_MODBUS_TIMEOUT,
+  SLAVE_ADDRESS,
+  UPDATE_CONTAINER_STATS_TIMEOUT,
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
 import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { ContainersService } from '../containers/containers.service';
+import {
+  CONTAINER_TYPE_OBJ,
+  getColumnToArduinoIdMapper,
+} from './../../constants';
 
 import { forwardRef, Inject } from '@nestjs/common';
 import ModbusRTU from 'modbus-serial';
+import { Env } from '../../utils/getEnvPath';
 import { UpdateContainerStatsInput } from '../containers/dto/update-container-stats.input';
 import { ENDO_STATUS, statusToColor } from '../endos/entities/endo.entity';
 import { CreateSnapshotInput } from '../snapshots/dto/create-snapshot.input';
 import { SnapshotsService } from '../snapshots/snapshots.service';
 import { RowType } from '../trays/entities/tray.entity';
 import { RowAndColInput } from './dto/row-and-col.input';
-import { Env } from '../../utils/getEnvPath';
 
 const columnToArduinoIdMapper = getColumnToArduinoIdMapper(
   process.env.NODE_ENV as Env,
 );
 
+const COM_PORT = process.env.COM_PORT;
 @Injectable()
 export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   private modbus = new ModbusRTU();

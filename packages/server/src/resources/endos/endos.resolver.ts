@@ -6,7 +6,6 @@ import {
   Resolver,
   Root,
 } from '@nestjs/graphql';
-import { CONTAINER_TYPE_OBJ } from '../../types/CONTAINER_TYPE';
 import BooleanResponse from './dto/boolean-response.input';
 import { CreateEndoInput } from './dto/create-endo.input';
 import { UpdateDryingTimeInput } from './dto/update-drying-time.input';
@@ -14,6 +13,7 @@ import { UpdateEndoInput } from './dto/update-endo.input';
 import { EndosService } from './endos.service';
 import { Endo } from './entities/endo.entity';
 import { Session } from '../sessions/entities/session.entity';
+import { CONTAINER_TYPE_OBJ } from '../../constants';
 
 @Resolver(() => Endo)
 export class EndosResolver {
@@ -58,10 +58,8 @@ export class EndosResolver {
   }
 
   @Mutation(() => Endo)
-  finishRepair(
-    @Args({ name: 'id'}) id: string,
-  ): Promise<Endo | Error> {
-    return this.endosService.updateStatus(id, "fixed");
+  finishRepair(@Args({ name: 'id' }) id: string): Promise<Endo | Error> {
+    return this.endosService.updateStatus(id, 'fixed');
   }
 
   @Mutation(() => BooleanResponse)
@@ -104,9 +102,6 @@ export class EndosResolver {
   ): Promise<Session | Error> {
     return this.endosService.washWithoutStoring(id);
   }
-
-
-
 
   //   @ResolveField()
   //   async posts(@Parent() author: Author) {

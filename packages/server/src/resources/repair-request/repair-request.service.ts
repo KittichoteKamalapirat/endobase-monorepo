@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import BooleanResponse from '../endos/dto/boolean-response.input';
 import { EndosService } from '../endos/endos.service';
-import { ENDO_STATUS_OBJ } from '../endos/entities/endo.entity';
 import { OfficersService } from '../officers/officers.service';
 import { SessionsService } from '../sessions/sessions.service';
 import { CreateRepairRequestInput } from './dto/create-repair-request.input';

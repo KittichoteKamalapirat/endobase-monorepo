@@ -1,11 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { OfficersService } from './officers.service';
 import { Officer } from './entities/officer.entity';
 import { CreateOfficerInput } from './dto/create-officer.input';
 import { UpdateOfficerInput } from './dto/update-officer.input';
 import OfficerResponse from './dto/officer-response';
 import BooleanResponse from '../endos/dto/boolean-response.input';
-import { MyContext } from '../../types/context.type';
 
 @Resolver(() => Officer)
 export class OfficersResolver {

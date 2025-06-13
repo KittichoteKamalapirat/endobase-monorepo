@@ -18,7 +18,6 @@ import { EndosService } from '../endos/endos.service';
 import { ENDO_STATUS } from '../endos/entities/endo.entity';
 import { AddScheduleInput } from './dto/add-schedule.input';
 import { CreateEndoCronInput } from './dto/create-endo-cron.input';
-import { UpdateEndoCronInput } from './dto/update-endo-cron.input';
 import { EndoCron } from './entities/endo-cron.entity';
 
 @Injectable()
@@ -164,7 +163,7 @@ export class EndoCronsService implements OnModuleInit {
     return `This action returns a #${id} endoCron`;
   }
 
-  update(id: number, updateEndoCronInput: UpdateEndoCronInput) {
+  update(id: number) {
     return `This action updates a #${id} endoCron`;
   }
 

@@ -245,7 +245,7 @@ export class ActionsService {
     return actions;
   }
 
-  findOneByX(id: string, type: string) {
+  findOneByX(id: string) {
     return `This action returns a #${id} action`;
   }
 

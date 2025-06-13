@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { AppService } from '../../app.service';
 import { RequestWithSession } from '../../types/context.type';
 import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 import UserResponse from './dto/user-response';
 import { User } from './entities/user.entity';
 
@@ -121,7 +120,7 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { username } });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
+  update(id: number) {
     return `This action updates a #${id} user`;
   }
 

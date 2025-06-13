@@ -1,4 +1,3 @@
-import { getManager } from 'typeorm';
 import { Seeder } from 'typeorm-seeding';
 
 export default class DropDatabase implements Seeder {

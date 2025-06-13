@@ -10,7 +10,6 @@ import {
 import { TraysService } from './trays.service';
 import { Tray } from './entities/tray.entity';
 import { CreateTrayInput } from './dto/create-tray.input';
-import { UpdateTrayInput } from './dto/update-tray.input';
 
 @Resolver(() => Tray)
 export class TraysResolver {

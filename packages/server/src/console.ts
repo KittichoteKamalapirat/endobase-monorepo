@@ -4,8 +4,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const application = await NestFactory.createApplicationContext(AppModule);
 
-  const command = process.argv[2];
-
   // switch (command) {
   //     case 'blink-serialport':
   //         const serialportsService = application.get(SerialportsService);

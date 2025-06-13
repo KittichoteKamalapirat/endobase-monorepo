@@ -132,7 +132,7 @@ export class SessionsService {
     }
   }
 
-  updateSessionPatientId(id: string, updateSessionInput: UpdateSessionInput) {
+  updateSessionPatientId(id: string) {
     // TODO
     return `This action updates a #${id} session`;
   }

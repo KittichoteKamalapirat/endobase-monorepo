@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const Service = require('node-windows').Service;
 const path = require('path');
 

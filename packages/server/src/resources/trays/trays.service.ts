@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CONTAINER_TO_TRAY_NUM_MAPPER } from '../../types/CONTAINER_TYPE';
 import { ContainersService } from '../containers/containers.service';
 import { CreateTrayInput } from './dto/create-tray.input';
 import { RowType, Tray } from './entities/tray.entity';
+import { CONTAINER_TO_TRAY_NUM_MAPPER } from '../../constants';
 
 @Injectable()
 export class TraysService {

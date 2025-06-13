@@ -1,15 +1,13 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  CONTAINER_TYPE_OBJ,
-  CONTAINER_TYPE_VALUES,
-} from '../../types/CONTAINER_TYPE';
+import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { SerialportsService } from '../serialports/serialports.service';
 import ContainerResponse from './dto/container-response';
 import { CreateContainerInput } from './dto/create-container.input';
 import { UpdateContainerStatsInput } from './dto/update-container-stats.input';
 import { Container } from './entities/container.entity';
+import { CONTAINER_TYPE_OBJ } from '../../constants';
 
 @Injectable()
 export class ContainersService {

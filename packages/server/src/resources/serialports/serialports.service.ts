@@ -1,4 +1,7 @@
-import { getColumnToArduinoIdMapper } from './../../constants';
+import {
+  CONTAINER_TYPE_OBJ,
+  getColumnToArduinoIdMapper,
+} from './../../constants';
 import {
   Injectable,
   Logger,
@@ -17,10 +20,7 @@ import {
   INPUT_REGISTER_LENGTH,
 } from '../../constants';
 import { SettingService } from '../../setting/setting.service';
-import {
-  CONTAINER_TYPE_OBJ,
-  CONTAINER_TYPE_VALUES,
-} from '../../types/CONTAINER_TYPE';
+import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { ContainersService } from '../containers/containers.service';
 
 import { forwardRef, Inject } from '@nestjs/common';

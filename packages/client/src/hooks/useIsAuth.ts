@@ -4,7 +4,7 @@ import { useMeQuery } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
 
 export const useIsAuth = () => {
-  const { data, loading, error } = useMeQuery();
+  const { data, loading } = useMeQuery();
 
   const navigate = useNavigate();
   const location = useLocation();

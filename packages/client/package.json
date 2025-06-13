@@ -37,6 +37,7 @@
     "zod": "^3.21.4"
   },
   "scripts": {
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "dev:win": "set REACT_APP_ENVIRONMENT=localhost&& react-scripts start",
     "dev:mac": "REACT_APP_ENVIRONMENT=localhost react-scripts start",
     "dev:showcase": "REACT_APP_ENVIRONMENT=showcase react-scripts start",

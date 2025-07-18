@@ -5,10 +5,6 @@ import { SerialportsService } from './serialports.service';
 
 @Resolver()
 export class SerialportsResolver {
-  constructor(private serialportsService: SerialportsService) {}
+  constructor(private serialportsService: SerialportsService) { }
 
-  // @Mutation(() => Boolean)
-  // blinkLocation(@Args('input') input: RowAndColInput): Promise<boolean> {
-  //   return this.serialportsService.blinkLocation(input);
-  // }
 }

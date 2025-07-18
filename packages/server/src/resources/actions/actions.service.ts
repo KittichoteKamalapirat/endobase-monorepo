@@ -188,7 +188,7 @@ export class ActionsService {
         this.serialportsService.writeColor({
           row: session.endo.tray.row,
           col: session.endo.tray.container.col,
-          endoStatus: ENDO_STATUS_OBJ.DRYING,
+          endoStatus: ENDO_STATUS_OBJ.READY, // instead of drying
         });
 
         break;

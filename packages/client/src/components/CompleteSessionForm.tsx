@@ -6,7 +6,6 @@ import {
   Endo,
   EndoQuery,
   Exact,
-  useBlinkLocationMutation,
   useCreateActionMutation,
   useEndosQuery,
   useSessionQuery,
@@ -59,7 +58,6 @@ const CompleteSessionForm = ({
     { loading: useWithoutStoringLoading, error: useWithoutStoringError },
   ] = useWashWithoutStoringMutation();
   const [createAction, { loading, error }] = useCreateActionMutation();
-  const [blinkLocation] = useBlinkLocationMutation();
   const { refetch: refetchEndos } = useEndosQuery();
   const navigate = useNavigate();
   const { refetch, data } = useSessionQuery({
@@ -68,13 +66,6 @@ const CompleteSessionForm = ({
 
   const dispatch = useDispatch();
 
-  const handleBlinkLocation = (status: ENDO_STATUS_VALUES) => {
-    blinkLocation({
-      variables: {
-        input: { col: endo.tray.container.col, row: endo.tray.row, status },
-      },
-    });
-  };
 
   const {
     control,
@@ -159,7 +150,6 @@ const CompleteSessionForm = ({
           variant: "success",
         })
       );
-      handleBlinkLocation(ENDO_STATUS.READY);
     } catch (error) {
       console.error("error", error);
     }

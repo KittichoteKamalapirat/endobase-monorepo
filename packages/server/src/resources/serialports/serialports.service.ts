@@ -344,36 +344,36 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     });
   }
 
-  async blinkLocation({ col, row, status }: RowAndColInput) {
-    const blinkSetting = await this.settingService.findByName(
-      'trayLocationBlinkingSec',
-    );
-    const secStr = blinkSetting.value;
+  // async blinkLocation({ col, row, status }: RowAndColInput) {
+  //   const blinkSetting = await this.settingService.findByName(
+  //     'trayLocationBlinkingSec',
+  //   );
+  //   const secStr = blinkSetting.value;
 
-    const frequencyInterval = 1000;
-    let toBlinkCounter = Number(secStr) / (frequencyInterval / 1000);
-    const blinkingInterval = setInterval(() => {
-      if (toBlinkCounter <= 0) {
-        clearInterval(blinkingInterval);
-        this.writeColor({
-          // write the last time so it's not dark
-          col: col,
-          row: row,
-          endoStatus: status,
-        });
-        return; // so it does not move to the next line
-      }
-      this.writeColor({
-        col: col,
-        row: row,
-        endoStatus: toBlinkCounter % 2 === 0 ? 'drying' : 'being_used', // ฟ้าสลับกับ
-      });
+  //   const frequencyInterval = 1000;
+  //   let toBlinkCounter = Number(secStr) / (frequencyInterval / 1000);
+  //   const blinkingInterval = setInterval(() => {
+  //     if (toBlinkCounter <= 0) {
+  //       clearInterval(blinkingInterval);
+  //       this.writeColor({
+  //         // write the last time so it's not dark
+  //         col: col,
+  //         row: row,
+  //         endoStatus: status,
+  //       });
+  //       return; // so it does not move to the next line
+  //     }
+  //     this.writeColor({
+  //       col: col,
+  //       row: row,
+  //       endoStatus: toBlinkCounter % 2 === 0 ? 'drying' : 'being_used', // ฟ้าสลับกับ
+  //     });
 
-      toBlinkCounter--;
-    }, frequencyInterval);
+  //     toBlinkCounter--;
+  //   }, frequencyInterval);
 
-    return true;
-  }
+  //   return true;
+  // }
 
   containerIsResponding(col: CONTAINER_TYPE_VALUES) {
     return this.activeSerialportObj[col];

@@ -7,8 +7,8 @@ import { SerialportsService } from './serialports.service';
 export class SerialportsResolver {
   constructor(private serialportsService: SerialportsService) {}
 
-  @Mutation(() => Boolean)
-  blinkLocation(@Args('input') input: RowAndColInput): Promise<boolean> {
-    return this.serialportsService.blinkLocation(input);
-  }
+  // @Mutation(() => Boolean)
+  // blinkLocation(@Args('input') input: RowAndColInput): Promise<boolean> {
+  //   return this.serialportsService.blinkLocation(input);
+  // }
 }

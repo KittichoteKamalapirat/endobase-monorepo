@@ -50,14 +50,19 @@
     "gen": "graphql-codegen --config codegen.ts",
     "build-image": "docker build . -t endobase",
     "build-image:local": "docker build --build-arg ENV_FILE=.env.local -t endobase:local .",
-    "build-image:chonburi": "docker build --build-arg ENV_FILE=.env.chonburi -t endobase:chonburi .",
+    "build-image:chonburi": "docker build --build-arg ENV_FILE=.env.chonburi -t endobase:chonburi3 .",
     "build-image:hadyai": "docker build --build-arg ENV_FILE=.env.hadyai -t endobase:hadyai .",
+    "build-image:bangplee": "docker build --build-arg ENV_FILE=.env.bangplee -t endobase:bangplee .",
     "build-image:endo": "docker build --build-arg ENV_FILE=.env.endo -t endobase:endo .",
     "deploy:local": "docker container run -d -p 80:80 --name endobase_react_local 8c00a8cbc90e",
     "deploy-container": "docker container run -d -p 80:80 --name endobase_react 479e58ffd652aae802b30244ee640c8b287f82cb199d862120b623d449d52865",
     "deploy:chonburi": "docker container run -d -p 80:80 --name endobase_react e94f869daeb1",
     "deploy:hadyai": "docker container run -d -p 80:80 --name endobase_react c93922ed783a",
-    "deploy:endo": "docker container run -d -p 80:80 --name endobase_react xxx"
+    "deploy:bangplee": "docker container run -d -p 80:80 --name endobase_react xxxxxxxxxx",
+    "deploy:endo": "docker container run -d -p 80:80 --name endobase_react xxx",
+    "upload:chonburi": "docker tag endobase:chonburi3 kittishane/endobase:chonburi3 && docker push kittishane/endobase:chonburi3",
+    "pull:chonburi": "docker pull kittishane/endobase:chonburi"
+
   },
   "eslintConfig": {
     "extends": [

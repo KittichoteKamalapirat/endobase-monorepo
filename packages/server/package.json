@@ -13,6 +13,7 @@
     "dev:showcase": "NODE_ENV=showcase nest start --watch",
     "dev:win": "cross-env NODE_ENV='chonburi' nest start --watch",
     "dev:hadyai": "set NODE_ENV=hadyai&& nest start",
+    "dev:bangplee": "set NODE_ENV=bangplee&& nest start",
     "dev:win:chonburi": "set NODE_ENV=chonburi&& nest start --watch",
     "prod:win:chonburi": "set NODE_ENV=chonburi&& node dist/nodeService.js",
     "prod:win:hadyai": "set NODE_ENV=hadyai&& node dist/nodeService.js",

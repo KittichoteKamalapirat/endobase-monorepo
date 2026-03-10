@@ -239,7 +239,6 @@ input PaginatedInput {
 }
 
 type Mutation {
-  blinkLocation(input: RowAndColInput!): Boolean!
   createSnapshot(input: CreateSnapshotInput!): Snapshot!
   createContainer: Container!
   removeContainer(id: Int!): Container!
@@ -278,12 +277,6 @@ type Mutation {
   createRepairRequest(input: CreateRepairRequestInput!): RepairRequestResponse!
   updateRepairRequest(input: UpdateRepairRequestInput!): RepairRequestResponse!
   removeRepairRequest(id: String!): BooleanResponse!
-}
-
-input RowAndColInput {
-  col: String!
-  row: Int!
-  status: String!
 }
 
 input CreateSnapshotInput {

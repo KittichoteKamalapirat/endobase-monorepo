@@ -5,7 +5,8 @@ export type Env =
   | 'showcase'
   | 'hadyai'
   | 'endo'
-  | 'chonburi';
+  | 'chonburi'
+  | 'bangplee';
 
 export const getEnvPath = () => {
   const env = process.env.NODE_ENV as Env;
@@ -16,6 +17,10 @@ export const getEnvPath = () => {
     case 'chonburi':
       console.log('local env from .env.chonburi')
       return '.env.chonburi';
+    case 'bangplee':
+      console.log('local env from .env.bangplee')
+      return '.env.bangplee';
+      
     case 'development':
       console.log('local env from .env.development')
       return '.env.development';

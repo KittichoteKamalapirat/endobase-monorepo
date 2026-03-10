@@ -41,12 +41,18 @@ const ENDO_CONTAINER_TO_ARDUINO_ID_MAPPER = {
   b: 2,
 };
 
+const BANGPLEE_CONTAINER_TO_ARDUINO_ID_MAPPER = {
+  a: 1,
+};
+
 export const getColumnToArduinoIdMapper = (env: Env) => {
   switch (env) {
     case 'chonburi':
       return CHONBURI_CONTAINER_TO_ARDUINO_ID_MAPPER;
     case 'endo':
       return ENDO_CONTAINER_TO_ARDUINO_ID_MAPPER;
+    case 'bangplee':
+      return BANGPLEE_CONTAINER_TO_ARDUINO_ID_MAPPER;
     case 'hadyai':
       return HADYAI_CONTAINER_TO_ARDUINO_ID_MAPPER;
     default:
@@ -86,12 +92,18 @@ export const ENDO_CONTAINER_TYPE_OBJ = {
   b: 'B', // 16 trays
 } as const;
 
+export const BANGPLEE_CONTAINER_TYPE_OBJ = {
+  a: 'A',
+} as const;
+
 export const CONTAINER_TYPE_OBJ = (() => {
   switch (env) {
     case 'chonburi':
       return CHONBURI_CONTAINER_TYPE_OBJ;
     case 'endo':
       return ENDO_CONTAINER_TYPE_OBJ;
+    case 'bangplee':
+      return BANGPLEE_CONTAINER_TYPE_OBJ;
     case 'hadyai':
       return HADYAI_CONTAINER_TYPE_OBJ;
     default:
@@ -128,12 +140,21 @@ export const ENDO_CONTAINER_TO_TRAY_NUM_MAPPER: Record<
   b: 16,
 };
 
+export const BANGPLEE_CONTAINER_TO_TRAY_NUM_MAPPER: Record<
+  keyof typeof BANGPLEE_CONTAINER_TYPE_OBJ,
+  number
+> = {
+  a: 8,
+};
+
 export const CONTAINER_TO_TRAY_NUM_MAPPER = (() => {
   switch (env) {
     case 'chonburi':
       return CHONBURI_CONTAINER_TO_TRAY_NUM_MAPPER;
     case 'endo':
       return ENDO_CONTAINER_TO_TRAY_NUM_MAPPER;
+    case 'bangplee':
+      return BANGPLEE_CONTAINER_TO_TRAY_NUM_MAPPER;
     case 'hadyai':
       return HADYAI_CONTAINER_TO_TRAY_NUM_MAPPER;
     default:

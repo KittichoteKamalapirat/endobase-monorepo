@@ -58,7 +58,7 @@
     "deploy-container": "docker container run -d -p 80:80 --name endobase_react 479e58ffd652aae802b30244ee640c8b287f82cb199d862120b623d449d52865",
     "deploy:chonburi": "docker container run -d -p 80:80 --name endobase_react e94f869daeb1",
     "deploy:hadyai": "docker container run -d -p 80:80 --name endobase_react c93922ed783a",
-    "deploy:bangplee": "docker container run -d -p 80:80 --name endobase_react xxxxxxxxxx",
+    "deploy:bangplee": "docker container run -d -p 80:80 --name endobase_react sha256:40c0afc9350b13b431aabf15b625aa3b3fbde26b6a6bc54bbd0c9a0a9f5f5798",
     "deploy:endo": "docker container run -d -p 80:80 --name endobase_react xxx",
     "upload:chonburi": "docker tag endobase:chonburi3 kittishane/endobase:chonburi3 && docker push kittishane/endobase:chonburi3",
     "pull:chonburi": "docker pull kittishane/endobase:chonburi"

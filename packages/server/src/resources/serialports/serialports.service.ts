@@ -72,13 +72,20 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
       if (process.env.SHOULD_CONNECT_MODBUS === 'true') {
         console.log('trying to connect to port.', COM_PORT);
 
-        console.log('modbus is open', this.modbus.isOpen);
+        console.log('modbus is open (before connect)', this.modbus.isOpen);
         if (this.modbus.isOpen) {
           await this.closeModbus();
         }
 
         await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
-        console.log('✅ Successfully init modbus..');
+        console.log('modbus is open (after connect)', this.modbus.isOpen);
+        if (!this.modbus.isOpen) {
+          console.error(
+            `❌ Modbus did not open after connect attempt on ${COM_PORT}.`,
+          );
+        } else {
+          console.log('✅ Successfully init modbus..');
+        }
         await this.settingService.initSetting();
       }
     } catch (error) {

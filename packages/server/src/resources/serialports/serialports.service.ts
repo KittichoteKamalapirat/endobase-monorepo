@@ -121,6 +121,7 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
+        console.log('Using Modbus slave id', arduinoId, 'for', key);
 
         this.modbus.setID(arduinoId);
 

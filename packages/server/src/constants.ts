@@ -5,6 +5,7 @@ const env = process.env.NODE_ENV as Env;
 export const SET_ACTIVE_MODBUS_TIMEOUT = 2000;
 export const UPDATE_CONTAINER_STATS_TIMEOUT = 4000;
 export const CREATE_SNAPSHOT_TIMEOUT = 6000;
+export const MODBUS_READ_TIMEOUT = 3000;
 
 // crons
 // - storage days

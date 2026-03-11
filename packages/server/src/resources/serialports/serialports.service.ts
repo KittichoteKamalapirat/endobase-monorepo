@@ -8,6 +8,7 @@ import {
   colorToNumber,
   CREATE_SNAPSHOT_TIMEOUT,
   INPUT_REGISTER_LENGTH,
+  MODBUS_READ_TIMEOUT,
   SET_ACTIVE_MODBUS_TIMEOUT,
   SLAVE_ADDRESS,
   UPDATE_CONTAINER_STATS_TIMEOUT,
@@ -134,7 +135,10 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
               try {
                 // Timeout handling must be inside the loop to reset the timeout each attempt
                 const timeoutPromise = new Promise((_, reject) =>
-                  setTimeout(() => reject(new Error('Timeout')), 3000),
+                  setTimeout(
+                    () => reject(new Error('Timeout')),
+                    MODBUS_READ_TIMEOUT,
+                  ),
                 );
 
                 const val = await Promise.race([

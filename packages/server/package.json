@@ -36,7 +36,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm:gen:dev": "ts-node node_modules/typeorm/cli.js migration:generate -n migrationName -p -d src/migrations/stag -c forMigrationOfRemoteStagingDb",
     "typeorm:run:dev": "ts-node node_modules/typeorm/cli.js migration:run -c forMigrationOfRemoteStagingDb",
-    "seed:run": "ts-node node_modules/typeorm-seeding/dist/cli.js seed --configName src/config/typeorm.config.migrations"
+    "seed:run": "ts-node node_modules/typeorm-seeding/dist/cli.js seed --configName src/config/typeorm.config.migrations",
+    "start-redis": "docker run -d --name redis -p 6379:6379 --restart unless-stopped redis:7"
   },
   "dependencies": {
     "@nestjs/apollo": "^10.1.3",

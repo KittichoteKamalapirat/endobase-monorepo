@@ -184,11 +184,11 @@ export class ContainersService {
     try {
       await Promise.all(
         Object.keys(CONTAINER_TYPE_OBJ).map(async (key) => {
-          const input = {
-            col: key as CONTAINER_TYPE_VALUES,
-          };
+          const col = key as CONTAINER_TYPE_VALUES;
+          const existing = await this.findOneByContainerChar(col);
+          if (existing) return existing;
 
-          const newRow = this.containersRepository.create(input);
+          const newRow = this.containersRepository.create({ col });
           return await this.containersRepository.save(newRow);
         }),
       );

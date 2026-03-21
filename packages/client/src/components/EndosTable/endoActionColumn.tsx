@@ -243,11 +243,7 @@ const ActionColumn = ({
         </div>
       );
     case ENDO_STATUS.DRYING:
-      return (
-        <div className="flex items-center gap-1">
-          <FaFan className="animate-spin-slow" /> <p>Drying</p>
-        </div>
-      );
+      return <Button label="Select" onClick={() => handleUseEndo(endoId)} />;
 
     default:
       return null;

@@ -13,6 +13,7 @@ import {
 import { EndoCron } from '../../endo-crons/entities/endo-cron.entity';
 import { Session } from '../../sessions/entities/session.entity';
 import { Tray } from '../../trays/entities/tray.entity';
+import { DEFAULT_DRYING_TIME_MINS } from '../../../constants';
 
 export const ENDO_STATUS_OBJ = {
   READY: 'ready',
@@ -95,7 +96,7 @@ export class Endo {
   model: string;
 
   // in minutes
-  @Column({ default: '30' })
+  @Column({ default: String(DEFAULT_DRYING_TIME_MINS) })
   @Field(() => Int)
   dryingTime: number;
 

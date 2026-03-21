@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
+import { DEFAULT_DRYING_TIME_MINS } from "../constants";
 import { Error } from "../components/skeletons/Error";
 import RowsSkeleton from "../components/skeletons/RowsSkeleton";
 import {
@@ -43,7 +44,7 @@ const EditEndo = () => {
       serialNum,
       type,
       model,
-      dryingTime: 30,
+      dryingTime: DEFAULT_DRYING_TIME_MINS,
     };
     try {
       const result = await updateEndo({

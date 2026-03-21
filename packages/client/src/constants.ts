@@ -1,6 +1,7 @@
 // config
 export const UPDATE_CLIENT_DATA_MINUTE_INTERVAL = 1; // min
 export const SEARCH_DEBOUNCE = 200; // millisec
+export const DEFAULT_DRYING_TIME_MINS = 3; // drying time in minutes
 
 // stying (should be in theme but leave it here for now)
 export const ICON_SIZE = 15;

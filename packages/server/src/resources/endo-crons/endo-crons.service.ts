@@ -86,6 +86,10 @@ export class EndoCronsService implements OnModuleInit {
     if (toBeStatus === 'expired') {
       this.endosService.setExpired(endoId);
     }
+    if (toBeStatus === 'drying') {
+      // drying is not a "to be" status — it's the current state.
+      // This case should not happen in runPastCallbacks, but handle gracefully.
+    }
     // delete when it is already called
     await this.removeInDbByEndoIdAndStatus({ endoId, toBeStatus });
     return;

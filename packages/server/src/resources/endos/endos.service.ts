@@ -110,12 +110,13 @@ export class EndosService {
     if (!endo) return new Error('Cannot find the endoscope');
     if (
       endo.status !== 'ready' &&
+      endo.status !== 'drying' &&
       endo.status !== 'expire_soon' &&
       endo.status !== 'expired' &&
       endo.status !== 'fixed'
     )
       return new Error(
-        'You cannot pick this endo because its status is neither ready, expire_soon, fixed, nor expired',
+        'You cannot pick this endo because its status is neither ready, drying, expire_soon, fixed, nor expired',
       );
     const existingSession = await this.findCurrentSessionByEndoId(id);
     if (existingSession) return new Error('This endoscope is already in use'); // TODO handle this
@@ -235,6 +236,17 @@ export class EndosService {
 
   // update db
   // change lightbox
+  async setDrying(endoId: string) {
+    this.updateStatus(endoId, ENDO_STATUS_OBJ.DRYING);
+
+    const endo = await this.findOne(endoId);
+    this.serialportsService.writeColor({
+      col: endo.tray.container.col,
+      row: endo.tray.row,
+      endoStatus: ENDO_STATUS_OBJ.DRYING,
+    });
+  }
+
   async setExpired(endoId: string) {
     this.updateStatus(endoId, ENDO_STATUS_OBJ.EXPIRED);
 

@@ -144,29 +144,29 @@ export class ActionsService {
         break;
 
       case ACTION_TYPE_OBJ.STORE:
+        // Set status to drying (blue LED) first
         await this.endosService.updateStatus(
           session.endoId,
-          ENDO_STATUS_OBJ.READY, // Used to be drying
+          ENDO_STATUS_OBJ.DRYING,
         );
+
         // update session
         await this.sessionsService.endSession(input.sessionId);
 
         // update endo's lastPutBackISO
         await this.endosService.updateLastPutBackISO(session.endoId);
 
-        // Add 3 schedules
         const endoId = session.endoId;
-        // 1. create schedule to ready in 30 mins
-        // No need this anymore
-        // await this.endoCronsService.addSchedule({
-        //   endoId,
-        //   toBeStatus: 'ready',
-        //   // seconds: minToSec(session.endo.dryingTime),
-        //   jsDate: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
-        //   saveToDb: true,
-        // });
 
-        // // 2. create a schedule to expire_soon in 30 days
+        // 1. Schedule transition from drying (blue) to ready (green)
+        await this.endoCronsService.addSchedule({
+          endoId,
+          toBeStatus: 'ready',
+          jsDate: dayjs().add(session.endo.dryingTime, 'minute').toDate(),
+          saveToDb: true,
+        });
+
+        // 2. create a schedule to expire_soon in 30 days
         await this.endoCronsService.addSchedule({
           endoId,
           toBeStatus: 'expire_soon',
@@ -184,11 +184,11 @@ export class ActionsService {
           saveToDb: true,
         });
 
-        // update color on lightbox
+        // update color on lightbox to blue (drying)
         this.serialportsService.writeColor({
           row: session.endo.tray.row,
           col: session.endo.tray.container.col,
-          endoStatus: ENDO_STATUS_OBJ.READY, // instead of drying
+          endoStatus: ENDO_STATUS_OBJ.DRYING,
         });
 
         break;

@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EndoEditor, { EndoFormValues } from "../components/EndoEditor";
 import Layout from "../components/layouts/Layout";
+import { DEFAULT_DRYING_TIME_MINS } from "../constants";
 import {
   CreateEndoInput,
   useCreateEndoMutation,
@@ -32,7 +33,7 @@ const CreateEndo = () => {
       serialNum,
       type,
       model,
-      dryingTime: 30, // Not used but just keep it here
+      dryingTime: DEFAULT_DRYING_TIME_MINS,
     };
 
     try {

@@ -11,6 +11,8 @@ export const MODBUS_READ_TIMEOUT = 3000;
 // - storage days
 export const MAX_STORAGE_DAYS = 31;
 export const EXPIRE_SOON_DAYS = 1;
+// - drying time (in minutes)
+export const DEFAULT_DRYING_TIME_MINS = 3;
 
 // config
 export const IS_PROD = env === 'production';

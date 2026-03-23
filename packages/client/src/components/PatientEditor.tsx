@@ -39,9 +39,7 @@ enum FormNames {
 
 const isCreateSchema = z.object({
   method: z.literal("create"),
-  patientHnNum: z
-    .string()
-    .length(7, { message: "Must be exactly 7 characters long" }),
+  patientHnNum: z.string().min(1, { message: "Patient HN is required" }),
   usedEndo: z.string(),
 });
 
@@ -50,9 +48,7 @@ const isEditSchema = z.object({
   adminCredential: z.string().refine((value) => value === "Admin", {
     message: "Invalid admin credential",
   }),
-  patientHnNum: z
-    .string()
-    .length(7, { message: "Must be exactly 7 characters long" }),
+  patientHnNum: z.string().min(1, { message: "Patient HN is required" }),
   usedEndo: z.string(),
 });
 
@@ -81,7 +77,7 @@ const PatientEditor = ({
   });
 
   const validatePatientField = (value: string) => {
-    if (value.length !== 7) return false;
+    if (value.length < 1) return false;
     return true;
   };
 

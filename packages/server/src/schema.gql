@@ -242,6 +242,7 @@ type Mutation {
   createSnapshot(input: CreateSnapshotInput!): Snapshot!
   createContainer: Container!
   removeContainer(id: Int!): Container!
+  reconnectContainer(id: String!): ContainerResponse!
   turnLightsOff(id: String!): ContainerResponse!
   turnLightsOn(id: String!): ContainerResponse!
   createSetting(input: CreateSettingInput!): Setting!

@@ -64,6 +64,13 @@ export class ContainersResolver {
   }
 
   @Mutation(() => ContainerResponse)
+  reconnectContainer(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<ContainerResponse> {
+    return this.containersService.reconnectContainer(id);
+  }
+
+  @Mutation(() => ContainerResponse)
   turnLightsOff(
     @Args('id', { type: () => String }) id: string,
   ): Promise<ContainerResponse> {

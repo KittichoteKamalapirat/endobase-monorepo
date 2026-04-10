@@ -1,0 +1,16 @@
+mutation ReconnectContainer($id: String!) {
+  reconnectContainer(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+      isResponding
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

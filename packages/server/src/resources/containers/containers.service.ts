@@ -165,6 +165,32 @@ export class ContainersService {
     };
   }
 
+  async reconnectContainer(id: string): Promise<ContainerResponse> {
+    const container = await this.findOne(id);
+    if (!container) {
+      return {
+        errors: [{ field: 'Container', message: 'Cannot find a container' }],
+      };
+    }
+
+    const success = await this.serialportsService.reconnectContainer(
+      container.col,
+    );
+
+    if (!success) {
+      return {
+        errors: [
+          {
+            field: 'Container',
+            message: `Failed to reconnect container ${container.col.toUpperCase()}`,
+          },
+        ],
+      };
+    }
+
+    return { container };
+  }
+
   // for admin
   async removeAllRows() {
     try {

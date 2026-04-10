@@ -769,6 +769,13 @@ export type TurnLightsOnMutationVariables = Exact<{
 
 export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
+export type ReconnectContainerMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ReconnectContainerMutation = { __typename?: 'Mutation', reconnectContainer: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean, isResponding: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1378,6 +1385,32 @@ export function useTurnLightsOnMutation(baseOptions?: Apollo.MutationHookOptions
 export type TurnLightsOnMutationHookResult = ReturnType<typeof useTurnLightsOnMutation>;
 export type TurnLightsOnMutationResult = Apollo.MutationResult<TurnLightsOnMutation>;
 export type TurnLightsOnMutationOptions = Apollo.BaseMutationOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
+export const ReconnectContainerDocument = gql`
+    mutation ReconnectContainer($id: String!) {
+  reconnectContainer(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+      isResponding
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type ReconnectContainerMutationFn = Apollo.MutationFunction<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
+export function useReconnectContainerMutation(baseOptions?: Apollo.MutationHookOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReconnectContainerMutation, ReconnectContainerMutationVariables>(ReconnectContainerDocument, options);
+      }
+export type ReconnectContainerMutationHookResult = ReturnType<typeof useReconnectContainerMutation>;
+export type ReconnectContainerMutationResult = Apollo.MutationResult<ReconnectContainerMutation>;
+export type ReconnectContainerMutationOptions = Apollo.BaseMutationOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
 export const ContainersDocument = gql`
     query Containers {
   containers {

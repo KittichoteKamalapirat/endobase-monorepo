@@ -270,6 +270,7 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
           await this.containersService.updateStats(input);
         } catch (error) {
+          this.activeSerialportObj[key] = false;
           console.error('error in synUpdateContainers', error);
         }
       }
@@ -360,5 +361,51 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
   containerIsResponding(col: CONTAINER_TYPE_VALUES) {
     return this.activeSerialportObj[col];
+  }
+
+  async reconnectContainer(col: CONTAINER_TYPE_VALUES): Promise<boolean> {
+    const arduinoId = columnToArduinoIdMapper[col];
+
+    // Close and reopen the modbus connection
+    try {
+      await this.closeModbus();
+    } catch (error) {
+      console.error('Error closing modbus during reconnect:', error);
+    }
+
+    try {
+      await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
+    } catch (error) {
+      console.error('Error reopening modbus during reconnect:', error);
+      this.activeSerialportObj[col] = false;
+      return false;
+    }
+
+    // Probe the specific container
+    this.modbus.setID(arduinoId);
+    const RETRY = 5;
+    for (let i = 0; i < RETRY; i++) {
+      try {
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Timeout')), MODBUS_READ_TIMEOUT),
+        );
+
+        const val = await Promise.race([
+          this.modbus.readInputRegisters(0, 3),
+          timeoutPromise,
+        ]);
+
+        if (val) {
+          this.activeSerialportObj[col] = true;
+          return true;
+        }
+      } catch (error) {
+        console.error(`Reconnect attempt ${i + 1} failed for ${col}:`, error);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    this.activeSerialportObj[col] = false;
+    return false;
   }
 }

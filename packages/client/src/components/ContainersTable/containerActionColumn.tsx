@@ -1,7 +1,9 @@
+import { IoReload } from "react-icons/io5";
 import { TbBulb } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { ICON_SIZE } from "../../constants";
 import {
+  useReconnectContainerMutation,
   useTurnLightsOffMutation,
   useTurnLightsOnMutation,
 } from "../../generated/graphql";
@@ -18,6 +20,8 @@ const ContainerActionColumn = ({ row }: Props) => {
     useTurnLightsOnMutation();
   const [turnLightsOff, { loading: loadingTurnLightsOff }] =
     useTurnLightsOffMutation();
+  const [reconnectContainer, { loading: loadingReconnect }] =
+    useReconnectContainerMutation();
 
   const containerId = row.original.id as string;
 
@@ -97,11 +101,49 @@ const ContainerActionColumn = ({ row }: Props) => {
       );
   };
 
+  const handleReconnect = async () => {
+    try {
+      const result = await reconnectContainer({
+        variables: { id: containerId },
+        refetchQueries: ["Containers"],
+      });
+
+      const resultValue = result.data?.reconnectContainer.container;
+      const resultErrors = result.data?.reconnectContainer.errors || [];
+
+      if (resultValue && resultErrors.length === 0) {
+        dispatch(
+          showToast({ message: "Reconnected successfully", variant: "success" })
+        );
+      } else {
+        const errorMessage = resultErrors
+          .map(({ field, message }) => `${field} ${message}`)
+          .join("\n");
+        dispatch(showToast({ message: errorMessage, variant: "error" }));
+      }
+    } catch (error) {
+      console.error("error reconnecting container", error);
+    }
+  };
+
   const isActive = row.original.isResponding;
   return (
     <div className="flex gap-2">
       <Button
-        label="" // currently off
+        label=""
+        onClick={handleReconnect}
+        startIcon={
+          loadingReconnect ? (
+            <Spinner2 />
+          ) : (
+            <IoReload color={primaryColor} size={ICON_SIZE + 6} />
+          )
+        }
+        type={ButtonTypes.TEXT}
+        extraClass="hover:scale-125"
+      />
+      <Button
+        label=""
         onClick={handleToggleLights}
         startIcon={
           loadingTurnLightsOff || loadingTurnLightsOn ? (

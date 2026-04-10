@@ -71,11 +71,6 @@ export type CreateActionInput = {
   type: Scalars['String'];
 };
 
-export type CreateContainerInput = {
-  /** Example field (placeholder) */
-  exampleField: Scalars['Int'];
-};
-
 export type CreateEndoInput = {
   brand: Scalars['String'];
   dryingTime: Scalars['Int'];
@@ -188,7 +183,6 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  blinkLocation: Scalars['Boolean'];
   createAction: ActionResponse;
   createContainer: Container;
   createEndo: Endo;
@@ -207,6 +201,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   pickEndo: Endo;
   populateAllData: BooleanResponse;
+  reconnectContainer: ContainerResponse;
   register: UserResponse;
   removeAction: Action;
   removeContainer: Container;
@@ -230,18 +225,8 @@ export type Mutation = {
 };
 
 
-export type MutationBlinkLocationArgs = {
-  input: RowAndColInput;
-};
-
-
 export type MutationCreateActionArgs = {
   input: CreateActionInput;
-};
-
-
-export type MutationCreateContainerArgs = {
-  createContainerInput: CreateContainerInput;
 };
 
 
@@ -306,6 +291,11 @@ export type MutationLoginArgs = {
 
 
 export type MutationPickEndoArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationReconnectContainerArgs = {
   id: Scalars['String'];
 };
 
@@ -566,12 +556,6 @@ export type RepairRequestResponse = {
   repairRequest?: Maybe<RepairRequest>;
 };
 
-export type RowAndColInput = {
-  col: Scalars['String'];
-  row: Scalars['Int'];
-  status: Scalars['String'];
-};
-
 export type Session = {
   __typename?: 'Session';
   actions?: Maybe<Array<Action>>;
@@ -755,6 +739,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string } | null };
 
+export type ReconnectContainerMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ReconnectContainerMutation = { __typename?: 'Mutation', reconnectContainer: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean, isResponding: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+
 export type TurnLightsOffMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -768,13 +759,6 @@ export type TurnLightsOnMutationVariables = Exact<{
 
 
 export type TurnLightsOnMutation = { __typename?: 'Mutation', turnLightsOn: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
-
-export type ReconnectContainerMutationVariables = Exact<{
-  id: Scalars['String'];
-}>;
-
-
-export type ReconnectContainerMutation = { __typename?: 'Mutation', reconnectContainer: { __typename?: 'ContainerResponse', container?: { __typename?: 'Container', id: string, col: string, currTemp: string, currHum: string, lightsAreOn: boolean, isResponding: boolean } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
 
 export type ContainersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -915,13 +899,6 @@ export type UpdateRepairRequestMutationVariables = Exact<{
 
 
 export type UpdateRepairRequestMutation = { __typename?: 'Mutation', updateRepairRequest: { __typename?: 'RepairRequestResponse', repairRequest?: { __typename?: 'RepairRequest', id: string, note: string, officerId: string, endoId: string, officer: { __typename?: 'Officer', id: string }, endo: { __typename?: 'Endo', id: string } } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
-
-export type BlinkLocationMutationVariables = Exact<{
-  input: RowAndColInput;
-}>;
-
-
-export type BlinkLocationMutation = { __typename?: 'Mutation', blinkLocation: boolean };
 
 export type CreateActionMutationVariables = Exact<{
   input: CreateActionInput;
@@ -1299,6 +1276,50 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ReconnectContainerDocument = gql`
+    mutation ReconnectContainer($id: String!) {
+  reconnectContainer(id: $id) {
+    container {
+      id
+      col
+      currTemp
+      currHum
+      lightsAreOn
+      isResponding
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+export type ReconnectContainerMutationFn = Apollo.MutationFunction<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
+
+/**
+ * __useReconnectContainerMutation__
+ *
+ * To run a mutation, you first call `useReconnectContainerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReconnectContainerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [reconnectContainerMutation, { data, loading, error }] = useReconnectContainerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useReconnectContainerMutation(baseOptions?: Apollo.MutationHookOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReconnectContainerMutation, ReconnectContainerMutationVariables>(ReconnectContainerDocument, options);
+      }
+export type ReconnectContainerMutationHookResult = ReturnType<typeof useReconnectContainerMutation>;
+export type ReconnectContainerMutationResult = Apollo.MutationResult<ReconnectContainerMutation>;
+export type ReconnectContainerMutationOptions = Apollo.BaseMutationOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
 export const TurnLightsOffDocument = gql`
     mutation TurnLightsOff($id: String!) {
   turnLightsOff(id: $id) {
@@ -1385,32 +1406,6 @@ export function useTurnLightsOnMutation(baseOptions?: Apollo.MutationHookOptions
 export type TurnLightsOnMutationHookResult = ReturnType<typeof useTurnLightsOnMutation>;
 export type TurnLightsOnMutationResult = Apollo.MutationResult<TurnLightsOnMutation>;
 export type TurnLightsOnMutationOptions = Apollo.BaseMutationOptions<TurnLightsOnMutation, TurnLightsOnMutationVariables>;
-export const ReconnectContainerDocument = gql`
-    mutation ReconnectContainer($id: String!) {
-  reconnectContainer(id: $id) {
-    container {
-      id
-      col
-      currTemp
-      currHum
-      lightsAreOn
-      isResponding
-    }
-    errors {
-      field
-      message
-    }
-  }
-}
-    `;
-export type ReconnectContainerMutationFn = Apollo.MutationFunction<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
-export function useReconnectContainerMutation(baseOptions?: Apollo.MutationHookOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ReconnectContainerMutation, ReconnectContainerMutationVariables>(ReconnectContainerDocument, options);
-      }
-export type ReconnectContainerMutationHookResult = ReturnType<typeof useReconnectContainerMutation>;
-export type ReconnectContainerMutationResult = Apollo.MutationResult<ReconnectContainerMutation>;
-export type ReconnectContainerMutationOptions = Apollo.BaseMutationOptions<ReconnectContainerMutation, ReconnectContainerMutationVariables>;
 export const ContainersDocument = gql`
     query Containers {
   containers {
@@ -2293,37 +2288,6 @@ export function useUpdateRepairRequestMutation(baseOptions?: Apollo.MutationHook
 export type UpdateRepairRequestMutationHookResult = ReturnType<typeof useUpdateRepairRequestMutation>;
 export type UpdateRepairRequestMutationResult = Apollo.MutationResult<UpdateRepairRequestMutation>;
 export type UpdateRepairRequestMutationOptions = Apollo.BaseMutationOptions<UpdateRepairRequestMutation, UpdateRepairRequestMutationVariables>;
-export const BlinkLocationDocument = gql`
-    mutation BlinkLocation($input: RowAndColInput!) {
-  blinkLocation(input: $input)
-}
-    `;
-export type BlinkLocationMutationFn = Apollo.MutationFunction<BlinkLocationMutation, BlinkLocationMutationVariables>;
-
-/**
- * __useBlinkLocationMutation__
- *
- * To run a mutation, you first call `useBlinkLocationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useBlinkLocationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [blinkLocationMutation, { data, loading, error }] = useBlinkLocationMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useBlinkLocationMutation(baseOptions?: Apollo.MutationHookOptions<BlinkLocationMutation, BlinkLocationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BlinkLocationMutation, BlinkLocationMutationVariables>(BlinkLocationDocument, options);
-      }
-export type BlinkLocationMutationHookResult = ReturnType<typeof useBlinkLocationMutation>;
-export type BlinkLocationMutationResult = Apollo.MutationResult<BlinkLocationMutation>;
-export type BlinkLocationMutationOptions = Apollo.BaseMutationOptions<BlinkLocationMutation, BlinkLocationMutationVariables>;
 export const CreateActionDocument = gql`
     mutation createAction($input: CreateActionInput!) {
   createAction(input: $input) {

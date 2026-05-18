@@ -1,13 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CONTAINER_TYPE_OBJ, LIGHT_COMMAND_TIMEOUT } from '../../constants';
-import { FieldError } from '../../types/field-error';
 import { CONTAINER_TYPE_VALUES } from '../../types/CONTAINER_TYPE';
 import { SerialportsService } from '../serialports/serialports.service';
 import ContainerResponse from './dto/container-response';
 import { UpdateContainerStatsInput } from './dto/update-container-stats.input';
 import { Container } from './entities/container.entity';
+import { CONTAINER_TYPE_OBJ } from '../../constants';
 
 @Injectable()
 export class ContainersService {
@@ -20,27 +19,6 @@ export class ContainersService {
 
   create() {
     return 'This action adds a new container';
-  }
-
-  private delay(ms: number) {
-    return new Promise<void>((resolve) => setTimeout(resolve, ms));
-  }
-
-  private async withTimeout<T>(
-    operation: Promise<T>,
-    timeoutMs: number,
-    message: string,
-  ): Promise<T> {
-    let timeout: ReturnType<typeof setTimeout> | undefined;
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      timeout = setTimeout(() => reject(new Error(message)), timeoutMs);
-    });
-
-    try {
-      return await Promise.race([operation, timeoutPromise]);
-    } finally {
-      if (timeout) clearTimeout(timeout);
-    }
   }
 
   async findAll() {
@@ -101,43 +79,37 @@ export class ContainersService {
       updatedInput,
     );
 
-    const syncTurnLightsOff = async () => {
-      const errors: FieldError[] = [];
-
+    const syncTurnlightsOff = async () => {
       for (const tray of container.trays) {
         try {
-          const didSync = await this.withTimeout(
+          const timeoutPromise = new Promise(
+            (_, reject) =>
+              setTimeout(() => reject(new Error('Timeout')), 100 + 200), // 5 seconds timeout
+          );
+
+          await Promise.race([
             this.serialportsService.turnLightsOff({
               col: container.col,
               row: tray.row,
             }),
-            LIGHT_COMMAND_TIMEOUT,
-            `Timeout turning lights off for tray ${tray.row}`,
-          );
+            timeoutPromise,
+          ]);
 
-          if (!didSync) throw new Error('Serial command failed');
+          await new Promise((resolve) => setTimeout(resolve, 100));
 
-          await this.delay(100);
+          // DON"T RETURN inside the loop => immediately get out of the loop
         } catch (error) {
-          console.error('syncTurnLightsOffLoop ', error);
-          errors.push({
-            field: 'Container',
-            message: `Failed to turn lights off for tray ${tray.row}`,
-          });
+          console.error('syncTurnlightsOffLoop ', error);
         }
       }
-
-      return errors;
     };
-    let errors: FieldError[] = [];
     try {
-      errors = await syncTurnLightsOff();
+      await syncTurnlightsOff();
     } catch (error) {
-      console.error('syncTurnLightsOff', error);
+      console.error('syncTurnlightsOff', error);
     }
     return {
       container: updatedContainer,
-      errors: errors.length > 0 ? errors : undefined,
     };
   }
 
@@ -160,48 +132,36 @@ export class ContainersService {
       updatedInput,
     );
 
-    // turn light on for every tray in that container
-    const syncTurnLightsOn = async () => {
-      const errors: FieldError[] = [];
-
+    // turn light off for every tray in that container
+    const syncTurnlightsOn = async () => {
       for (const tray of container.trays) {
         if (!tray.endo) continue;
 
-        try {
-          const didSync = await this.withTimeout(
-            this.serialportsService.turnLightsOn({
-              col: container.col,
-              row: tray.row,
-              status: tray.endo?.status || 'no_endo',
-            }),
-            LIGHT_COMMAND_TIMEOUT,
-            `Timeout turning lights on for tray ${tray.row}`,
-          );
+        const timeoutPromise = new Promise(
+          (_, reject) =>
+            setTimeout(() => reject(new Error('Timeout')), 100 + 200), // 5 seconds timeout
+        );
 
-          if (!didSync) throw new Error('Serial command failed');
+        await Promise.race([
+          this.serialportsService.turnLightsOn({
+            col: container.col,
+            row: tray.row,
+            status: tray.endo?.status || 'no_endo',
+          }),
+          timeoutPromise,
+        ]);
 
-          await this.delay(100);
-        } catch (error) {
-          console.error('syncTurnLightsOnLoop ', error);
-          errors.push({
-            field: 'Container',
-            message: `Failed to turn lights on for tray ${tray.row}`,
-          });
-        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
-
-      return errors;
     };
-    let errors: FieldError[] = [];
     try {
-      errors = await syncTurnLightsOn();
+      await syncTurnlightsOn();
     } catch (error) {
-      console.error('Error syncTurnLightsOn', error);
+      console.error('Error syncTurnlightsOn', error);
     }
 
     return {
       container: updatedContainer,
-      errors: errors.length > 0 ? errors : undefined,
     };
   }
 

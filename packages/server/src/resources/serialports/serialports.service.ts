@@ -145,15 +145,15 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
             if (!activeSerialportObj[key]) {
               try {
-                // Timeout handling must be inside the loop to reset the timeout each attempt
-                const timeoutPromise = new Promise((_, reject) =>
-                  setTimeout(
-                    () => reject(new Error('Timeout')),
-                    MODBUS_READ_TIMEOUT,
-                  ),
-                );
-
                 const val = await this.runModbusTask(async () => {
+                  // Timeout handling must start with the queued Modbus task.
+                  const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(
+                      () => reject(new Error('Timeout')),
+                      MODBUS_READ_TIMEOUT,
+                    ),
+                  );
+
                   this.modbus.setID(arduinoId);
                   return Promise.race([
                     this.modbus.readInputRegisters(0, 3),

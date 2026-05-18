@@ -40,6 +40,7 @@ const COM_PORT = process.env.COM_PORT;
 export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   private modbus = new ModbusRTU();
   private modbusQueue: Promise<void> = Promise.resolve();
+  private lightSyncDepth = 0;
 
   // active serialport means those that are responding
   private activeSerialportObj = {} as {
@@ -76,6 +77,18 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     );
 
     return run;
+  }
+
+  beginLightSync() {
+    this.lightSyncDepth += 1;
+  }
+
+  endLightSync() {
+    this.lightSyncDepth = Math.max(0, this.lightSyncDepth - 1);
+  }
+
+  private isLightSyncActive() {
+    return this.lightSyncDepth > 0;
   }
 
   async onModuleInit() {
@@ -211,6 +224,8 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   }
 
   async createSnapshot() {
+    if (this.isLightSyncActive()) return;
+
     const syncCreateSnapshots = async () => {
       // do not return anything inside a loop => exit immediately
       // If I need any data => create empty array and push or reassign
@@ -261,6 +276,8 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
 
   async updateContainerStatus() {
     if ((process.env.NODE_ENV as Env) === 'showcase') return;
+    if (this.isLightSyncActive()) return;
+
     const syncUpdateContainers = async () => {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];

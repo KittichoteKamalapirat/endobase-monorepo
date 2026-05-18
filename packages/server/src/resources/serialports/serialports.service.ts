@@ -350,7 +350,7 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     row: RowType;
     status: ENDO_STATUS;
   }) {
-    await this.writeColor({
+    return this.writeColor({
       col: col,
       row: row,
       endoStatus: status,

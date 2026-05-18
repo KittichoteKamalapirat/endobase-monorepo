@@ -39,6 +39,7 @@ const COM_PORT = process.env.COM_PORT;
 @Injectable()
 export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   private modbus = new ModbusRTU();
+  private modbusQueue: Promise<void> = Promise.resolve();
 
   // active serialport means those that are responding
   private activeSerialportObj = {} as {
@@ -51,6 +52,8 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     private containersService: ContainersService,
     private settingService: SettingService,
   ) {
+    this.modbus.setTimeout(MODBUS_READ_TIMEOUT);
+
     process.on('SIGINT', async () => {
       console.log('🛑 SIGINT received. Cleaning up...');
       await this.closeModbus();
@@ -62,6 +65,17 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
       await this.closeModbus();
       process.exit(0);
     });
+  }
+
+  private async runModbusTask<T>(task: () => Promise<T>): Promise<T> {
+    const run = this.modbusQueue.then(task, task);
+
+    this.modbusQueue = run.then(
+      () => undefined,
+      () => undefined,
+    );
+
+    return run;
   }
 
   async onModuleInit() {
@@ -124,8 +138,6 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
         const arduinoId = columnToArduinoIdMapper[key];
         console.log('Using Modbus slave id', arduinoId, 'for', key);
 
-        this.modbus.setID(arduinoId);
-
         try {
           const RETRY = 5;
           for (let i = 0; i < RETRY; i++) {
@@ -141,10 +153,13 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
                   ),
                 );
 
-                const val = await Promise.race([
-                  this.modbus.readInputRegisters(0, 3),
-                  timeoutPromise,
-                ]);
+                const val = await this.runModbusTask(async () => {
+                  this.modbus.setID(arduinoId);
+                  return Promise.race([
+                    this.modbus.readInputRegisters(0, 3),
+                    timeoutPromise,
+                  ]);
+                });
 
                 if (val) {
                   console.log('set', key, 'to true');
@@ -201,16 +216,17 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
       // If I need any data => create empty array and push or reassign
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
-        this.modbus.setID(arduinoId);
-
         const container = await this.containersService.findOneByContainerChar(
           key as CONTAINER_TYPE_VALUES,
         );
 
-        const val = await this.modbus.readInputRegisters(
-          SLAVE_ADDRESS,
-          INPUT_REGISTER_LENGTH,
-        ); // read 3 registers starting from  at address 0 (first register)
+        const val = await this.runModbusTask(async () => {
+          this.modbus.setID(arduinoId);
+          return this.modbus.readInputRegisters(
+            SLAVE_ADDRESS,
+            INPUT_REGISTER_LENGTH,
+          );
+        }); // read 3 registers starting from  at address 0 (first register)
 
         const systemStatus = String(val.data[1]);
         const temp = String(val.data[2] / 10);
@@ -249,10 +265,11 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
       for (const key of Object.keys(CONTAINER_TYPE_OBJ)) {
         const arduinoId = columnToArduinoIdMapper[key];
 
-        this.modbus.setID(arduinoId);
-
         try {
-          const val = await this.modbus.readInputRegisters(0, 4); // read 3 registers starting from  at address 0 (first register)
+          const val = await this.runModbusTask(async () => {
+            this.modbus.setID(arduinoId);
+            return this.modbus.readInputRegisters(0, 4);
+          }); // read 3 registers starting from  at address 0 (first register)
           // update just in case the sp did not init correctly when server starts
           if (typeof val.data[1] === 'number') {
             // got value back
@@ -302,14 +319,16 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     try {
       // col
       const arduinoId = columnToArduinoIdMapper[col];
-      await this.modbus.setID(arduinoId);
+      await this.runModbusTask(async () => {
+        this.modbus.setID(arduinoId);
 
-      const position = this.getReversePosition(row);
+        const position = this.getReversePosition(row);
 
-      // color
-      const color = statusToColor[endoStatus];
+        // color
+        const color = statusToColor[endoStatus];
 
-      await this.modbus.writeRegister(position, color); // 0 = off
+        await this.modbus.writeRegister(position, color); // 0 = off
+      });
       return true;
     } catch (error) {
       return false;
@@ -326,14 +345,16 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
     try {
       // col
       const arduinoId = columnToArduinoIdMapper[col];
-      await this.modbus.setID(arduinoId);
+      await this.runModbusTask(async () => {
+        this.modbus.setID(arduinoId);
 
-      // row
-      const position = this.getReversePosition(row);
+        // row
+        const position = this.getReversePosition(row);
 
-      // color
-      const color = colorToNumber.off;
-      await this.modbus.writeRegister(position, color); // 0 = off
+        // color
+        const color = colorToNumber.off;
+        await this.modbus.writeRegister(position, color); // 0 = off
+      });
 
       return true;
     } catch (error) {
@@ -366,46 +387,49 @@ export class SerialportsService implements OnModuleInit, OnApplicationShutdown {
   async reconnectContainer(col: CONTAINER_TYPE_VALUES): Promise<boolean> {
     const arduinoId = columnToArduinoIdMapper[col];
 
-    // Close and reopen the modbus connection
-    try {
-      await this.closeModbus();
-    } catch (error) {
-      console.error('Error closing modbus during reconnect:', error);
-    }
+    return this.runModbusTask(async () => {
+      // Close and reopen the modbus connection
+      try {
+        await this.closeModbus();
+      } catch (error) {
+        console.error('Error closing modbus during reconnect:', error);
+      }
 
-    try {
-      await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
-    } catch (error) {
-      console.error('Error reopening modbus during reconnect:', error);
+      try {
+        await this.modbus.connectRTUBuffered(COM_PORT, { baudRate: 9600 });
+        this.modbus.setTimeout(MODBUS_READ_TIMEOUT);
+      } catch (error) {
+        console.error('Error reopening modbus during reconnect:', error);
+        this.activeSerialportObj[col] = false;
+        return false;
+      }
+
+      // Probe the specific container
+      this.modbus.setID(arduinoId);
+      const RETRY = 5;
+      for (let i = 0; i < RETRY; i++) {
+        try {
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout')), MODBUS_READ_TIMEOUT),
+          );
+
+          const val = await Promise.race([
+            this.modbus.readInputRegisters(0, 3),
+            timeoutPromise,
+          ]);
+
+          if (val) {
+            this.activeSerialportObj[col] = true;
+            return true;
+          }
+        } catch (error) {
+          console.error(`Reconnect attempt ${i + 1} failed for ${col}:`, error);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+
       this.activeSerialportObj[col] = false;
       return false;
-    }
-
-    // Probe the specific container
-    this.modbus.setID(arduinoId);
-    const RETRY = 5;
-    for (let i = 0; i < RETRY; i++) {
-      try {
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout')), MODBUS_READ_TIMEOUT),
-        );
-
-        const val = await Promise.race([
-          this.modbus.readInputRegisters(0, 3),
-          timeoutPromise,
-        ]);
-
-        if (val) {
-          this.activeSerialportObj[col] = true;
-          return true;
-        }
-      } catch (error) {
-        console.error(`Reconnect attempt ${i + 1} failed for ${col}:`, error);
-      }
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-    }
-
-    this.activeSerialportObj[col] = false;
-    return false;
+    });
   }
 }
